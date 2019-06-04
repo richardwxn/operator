@@ -1,0 +1,8 @@
+# Format:
+# <package or filename>{=<threshold in float64>}
+#
+# If threshold is not specified, codecov check will be skipped for the package
+# or go file.
+
+# Istio wide default
+istio.io=5

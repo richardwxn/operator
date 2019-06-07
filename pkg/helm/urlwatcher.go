@@ -24,30 +24,33 @@ import (
 	"istio.io/pkg/log"
 )
 
-// poller is used to poll files from remote url at specific internal
-type poller struct {
+// Poller is used to poll files from remote url at specific internal
+type Poller struct {
 	// url is remote target url to poll from
 	url string
-	// minInterval is time intervals in minutes for polling
-	minInterval time.Duration
 	// existingHash records last sha value of polled files
 	existingHash string
-	// time ticker
+	// ticker helps to tick at interval
 	ticker *time.Ticker
+	// urlFetcher fetches resources from url
+	urlFetcher *URLFetcher
 }
 
 const (
-	// Charts filename to fetch
+	// InstallationChartsFileName is the name of the installation package to fetch.
 	InstallationChartsFileName = "istio-installer.tar.gz"
-	// Sha filename to verify
+	// InstallationShaFileName is Sha filename to verify
 	InstallationShaFileName = "istio-installer.tar.gz.sha256"
-	// Temporary Files prefix
-	ChartsTempFilePrefix = "charts-"
+	// VersionsFileName is version file's name
+	VersionsFileName = "VERSIONS.yaml"
+	// ChartsTempFilePrefix is temporary Files prefix
+	ChartsTempFilePrefix = "istio-install-package-"
 )
 
-// checkUpdate checks whether sha file being updated or not
-// fetch latest charts if yes
-func (p *poller) checkUpdate(uf *URLFetcher) error {
+// checkUpdate checks a SHA URL to determine if the installation package has been updated
+// and fetches the new version if necessary.
+func (p *Poller) checkUpdate() error {
+	uf := p.urlFetcher
 	shaF, err := uf.fetchSha()
 	if err != nil {
 		return err
@@ -58,47 +61,45 @@ func (p *poller) checkUpdate(uf *URLFetcher) error {
 	}
 	// Original sha file name is formatted with "HashValue filename"
 	newHash := strings.Fields(string(hashAll))[0]
-	// compare with existing hash
-	// if sha file updated then fetch latest charts
+
 	if !strings.EqualFold(newHash, p.existingHash) {
 		p.existingHash = newHash
-		err := uf.fetchChart(shaF)
-		log.Errorf("Error fetching charts and verify: %v", err)
-		return err
+		return uf.fetchChart(shaF)
 	}
 	return nil
 }
 
-func (p *poller) poll(uf *URLFetcher) {
+func (p *Poller) poll() {
 	for t := range p.ticker.C {
 		// When the ticker fires
-		fmt.Println("Tick at", t)
-		err := p.checkUpdate(uf)
-		log.Errorf("Error polling charts: %v", err)
+		log.Debugf("Tick at: %s", t)
+		if err := p.checkUpdate(); err != nil {
+			log.Errorf("Error polling charts: %v", err)
+		}
 	}
 }
 
-// Run the polling job with target directory at specific interval
-func Run(dirURL string, interval time.Duration) error {
-	po := &poller{
-		url:         dirURL,
-		minInterval: interval,
-		ticker:      time.NewTicker(time.Minute * interval),
+// NewPoller returns a poller pointing to given url with specified interval
+func NewPoller(dirURL string, destDir string, interval time.Duration) *Poller {
+	uf := NewURLFetcher(dirURL, destDir, InstallationChartsFileName, InstallationShaFileName)
+	return &Poller{
+		url:        dirURL,
+		ticker:     time.NewTicker(time.Minute * interval),
+		urlFetcher: uf,
 	}
+}
+
+//PollURL continuously polls the given url, which points to a directory containing an
+//installation package at the given interval and fetches a new copy if it is updated.
+func PollURL(dirURL string, interval time.Duration) error {
 	destDir, err := ioutil.TempDir("", ChartsTempFilePrefix)
 	if err != nil {
-		log.Fatal("failed to create temp directory for charts")
+		log.Error("failed to create temp directory for charts")
 		return err
 	}
-	uf := &URLFetcher{
-		url:        po.url + "/" + InstallationChartsFileName,
-		verifyURL:  po.url + "/" + InstallationShaFileName,
-		verify:     true,
-		destDir:    destDir,
-		downloader: NewFileDownloader(),
-	}
 
-	go po.poll(uf)
+	po := NewPoller(dirURL, destDir, interval)
+	go po.poll()
 
 	os.RemoveAll(destDir)
 	return nil

@@ -44,7 +44,7 @@ if [[ -n "${CIRCLE_PR_NUMBER:-}" ]]; then
   # Backup codecov.sh since the base SHA may not have this copy.
   TMP_CODECOV_SH=$(mktemp /tmp/XXXXX.codecov)
   cp ./scripts/codecov.sh "${TMP_CODECOV_SH}"
-
+  
   go get -u istio.io/test-infra/toolbox/githubctl
   BASE_SHA=$("${GOPATH}"/bin/githubctl --token_file="${TMP_GITHUB_TOKEN}" --op=getBaseSHA --repo=operator --pr_num="${CIRCLE_PR_NUMBER}")
   git reset HEAD --hard

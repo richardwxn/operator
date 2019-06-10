@@ -22,7 +22,9 @@ set -o pipefail
 OUT_DIR=${OUT_DIR:-"${GOPATH}/out/codecov"}
 
 SCRIPTPATH="$(cd "$(dirname "$0")" ; pwd -P)"
+echo $SCRIPTPATH
 ROOTDIR="$(dirname "${SCRIPTPATH}")"
+echo $ROOTDIR
 DIR="./..."
 CODECOV_SKIP=${CODECOV_SKIP:-"${ROOTDIR}/codecov.skip"}
 SKIPPED_TESTS_GREP_ARGS=
@@ -42,7 +44,6 @@ mkdir -p "$COVERAGEDIR"
 
 # TODO:Setup environment needed by some tests.
 
-
 # coverage test needs to run one package per command.
 # This script runs nproc/2 in parallel.
 # Script fails if any one of the tests fail.
@@ -51,8 +52,6 @@ mkdir -p "$COVERAGEDIR"
 if [[ -z ${MAXPROCS:-} ]];then
   MAXPROCS=$(($(getconf _NPROCESSORS_ONLN)/2))
 fi
-
-cd "${ROOTDIR}"
 
 function parse_skipped_tests() {
   while read -r entry; do
@@ -144,8 +143,6 @@ echo "Final reports are stored in ${OUT_DIR}"
 
 if ls "${COVERAGEDIR}"/*.err 1> /dev/null 2>&1; then
   echo "The following tests had failed:"
-  cat "${COVERAGEDIR}"/*.err
+  cat "${COVERAGEDIR}"/*.err 
   exit 1
 fi
-
-

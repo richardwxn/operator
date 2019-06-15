@@ -2,21 +2,34 @@ package helm
 
 import (
 	"fmt"
-	"github.com/jasonlvhit/gocron"
 	"io/ioutil"
-	"istio.io/pkg/log"
 	"os"
 	"strings"
+	"time"
+
+	"istio.io/pkg/log"
 )
 
+// poller is used to poll files from remote url at specific internal
 type poller struct {
-	// polling target
+	// url is remote target url to poll from
 	url string
-	// polling interval in minutes
+	// minInterval is time intervals in minutes for polling
 	minInterval uint64
-	// existing sha value
+	// existingHash records last sha value of polled files
 	existingHash string
+	// time ticker
+	ticker *time.Ticker
 }
+
+const (
+	// Charts filename to fetch
+	InstallationChartsFileName = "istio-installer.tar.gz"
+	// Sha filename to verify
+	InstallationShaFileName = "istio-installer.tar.gz.sha256"
+	// Temporary Files prefix
+	ChartsTempFilePrefix = "charts-"
+)
 
 // Check whether sha file being updated or not
 // Fetch latest charts if yes
@@ -29,40 +42,52 @@ func (p *poller) checkUpdate(uf *URLFetcher) error {
 	if err != nil {
 		return fmt.Errorf("failed to read sha file: %s", err)
 	}
+	// Original sha file name is formatted with "HashValue filename"
 	newHash := strings.Fields(string(hashAll))[0]
 	// compare with existing hash
 	// if sha file updated then fetch latest charts
 	if !strings.EqualFold(newHash, p.existingHash) {
 		p.existingHash = newHash
-		err := uf.fetchChartAndVerify(shaF)
+		err := uf.fetchChart(shaF)
 		log.Errorf("Error fetching charts and verify: %v", err)
 		return err
 	}
 	return nil
 }
 
+func (p *poller) poll(uf *URLFetcher) {
+	for {
+		select {
+		case <-p.ticker.C:
+			// When the ticker fires
+			err := p.checkUpdate(uf)
+			log.Errorf("Error polling charts: %v", err)
+		}
+	}
+}
+
 // Run the polling job with target directory at specific interval
-func Run(udir string, interval uint64) {
+func Run(dirURL string, interval uint64) error {
 	po := &poller{
-		url:         udir,
+		url:         dirURL,
 		minInterval: interval,
 	}
-	destDir, err := ioutil.TempDir("", "charts-")
+	destDir, err := ioutil.TempDir("", ChartsTempFilePrefix)
 	if err != nil {
 		log.Fatal("failed to create temp directory for charts")
-		return
+		return err
 	}
 	uf := &URLFetcher{
-		url:        po.url + "/istio-installer.tar.gz",
-		verifyUrl:  po.url + "/istio-installer.tar.gz.sha256",
-		untar:      true,
+		url:        po.url + "/" + InstallationChartsFileName,
+		verifyUrl:  po.url + "/" + InstallationShaFileName,
 		untarDir:   "untar",
 		verify:     true,
 		destDir:    destDir,
 		downloader: newFileDownloader(),
 	}
-	gocron.Every(interval).Minutes().Do(po.checkUpdate, uf)
-	<-gocron.Start()
 
-	defer os.RemoveAll(destDir)
+	go po.poll(uf)
+
+	os.RemoveAll(destDir)
+	return nil
 }

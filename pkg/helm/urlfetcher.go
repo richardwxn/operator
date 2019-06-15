@@ -1,3 +1,17 @@
+// Copyright 2019 Istio Authors
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 package helm
 
 import (
@@ -8,39 +22,41 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
-	"istio.io/istio/pkg/log"
-	"k8s.io/helm/pkg/chartutil"
 	"net/http"
 	"net/url"
 	"os"
 	"path/filepath"
 	"strings"
+
+	"github.com/mholt/archiver"
+
+	"istio.io/istio/pkg/log"
 )
 
+// FileDownloader is wrapper of HTTP client to download files
 type FileDownloader struct {
-	// HTTP/HTTPS Client
+	// client is a HTTP/HTTPS client.
 	client *http.Client
 }
 
+// URLFetcher is used to fetch and manipulate charts from remote url
 type URLFetcher struct {
-	// url to download the charts
+	// url is url to download the charts
 	url string
-	// url to download the verification file
+	// verifyUrl is url to download the verification file
 	verifyUrl string
-	// whether to verify downloaded tar
+	// verify indicates whether the downloaded tar should be verified
 	verify bool
-	// whether need to untar
-	untar bool
-	// dir of charts downloaded to, empty as default to temp dir
+	// destDir is path of charts downloaded to, empty as default to temp dir
 	destDir string
-	// untar destination
+	// untarDir is destination of untar
 	untarDir string
 	// downloader
 	downloader *FileDownloader
 }
 
-// fetch charts and verify with sha file
-func (f *URLFetcher) fetchChartAndVerify(shaF string) error {
+// fetchChart fetches the charts and verifies charts against shaF if required
+func (f *URLFetcher) fetchChart(shaF string) error {
 	c := f.downloader
 
 	// fetch to default temp dir
@@ -53,7 +69,6 @@ func (f *URLFetcher) fetchChartAndVerify(shaF string) error {
 		return err
 	}
 	defer file.Close()
-
 	if f.verify {
 		// verify with sha file
 		hashAll, err := ioutil.ReadFile(shaF)
@@ -61,7 +76,6 @@ func (f *URLFetcher) fetchChartAndVerify(shaF string) error {
 			return fmt.Errorf("failed to read sha file: %s", err)
 		}
 		hash := strings.Fields(string(hashAll))[0]
-		// Verify downloaded tar
 		h := sha256.New()
 		if _, err := io.Copy(h, file); err != nil {
 			log.Error(err.Error())
@@ -73,30 +87,12 @@ func (f *URLFetcher) fetchChartAndVerify(shaF string) error {
 	}
 
 	// After verification, untar the chart into the requested directory.
-	if f.untar {
-		ud := f.untarDir
-		if !filepath.IsAbs(ud) {
-			ud = filepath.Join(f.destDir, ud)
-		}
-		if fi, err := os.Stat(ud); err != nil {
-			if err := os.MkdirAll(ud, 0755); err != nil {
-				return fmt.Errorf("failed to untar (mkdir): %s", err)
-			}
-
-		} else if !fi.IsDir() {
-			return fmt.Errorf("failed to untar: %s is not a directory", ud)
-		}
-
-		return chartutil.ExpandFile(ud, saved)
-	}
-	return nil
+	return archiver.Unarchive(saved, f.untarDir)
 }
 
 // fetch sha file
 func (f *URLFetcher) fetchSha() (string, error) {
-	c := f.downloader
-	// fetch to default temp dir
-	shaF, err := c.DownloadTo(f.verifyUrl, f.destDir)
+	shaF, err := f.downloader.DownloadTo(f.verifyUrl, f.destDir)
 	if err != nil {
 		return "", err
 	}
@@ -104,13 +100,23 @@ func (f *URLFetcher) fetchSha() (string, error) {
 }
 
 func newFileDownloader() *FileDownloader {
-	tr := &http.Transport{
-		DisableCompression: true,
-		Proxy:              http.ProxyFromEnvironment,
-	}
 	return &FileDownloader{
-		client: &http.Client{Transport: tr},
+		client: &http.Client{
+			Transport: &http.Transport{
+				DisableCompression: true,
+				Proxy:              http.ProxyFromEnvironment,
+			}},
 	}
+}
+
+// ExpandFile expands the src file into the dest directory.
+func ExtractFile(dest, src string) error {
+	h, err := os.Open(src)
+	if err != nil {
+		return err
+	}
+	defer h.Close()
+	return
 }
 
 // Send GET Request
@@ -119,22 +125,22 @@ func (c *FileDownloader) Get(href string) (*bytes.Buffer, error) {
 
 	req, err := http.NewRequest("GET", href, nil)
 	if err != nil {
-		return buf, err
+		return nil, err
 	}
 	resp, err := c.client.Do(req)
+	defer resp.Body.Close()
 	if err != nil {
-		return buf, err
+		return nil, err
 	}
 	if resp.StatusCode != 200 {
-		return buf, fmt.Errorf("failed to fetch URL %s : %s", href, resp.Status)
+		return nil, fmt.Errorf("failed to fetch URL %s : %s", href, resp.Status)
 	}
 
 	_, err = io.Copy(buf, resp.Body)
-	resp.Body.Close()
 	return buf, err
 }
 
-// Download from URL to dest
+// Ref is remote url to download from, dest is local file path to download to
 func (c *FileDownloader) DownloadTo(ref, dest string) (string, error) {
 	u, err := url.Parse(ref)
 	if err != nil {

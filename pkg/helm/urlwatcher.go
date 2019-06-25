@@ -1,3 +1,17 @@
+// Copyright 2019 Istio Authors
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 package helm
 
 import (
@@ -15,7 +29,7 @@ type poller struct {
 	// url is remote target url to poll from
 	url string
 	// minInterval is time intervals in minutes for polling
-	minInterval uint64
+	minInterval time.Duration
 	// existingHash records last sha value of polled files
 	existingHash string
 	// time ticker
@@ -56,21 +70,20 @@ func (p *poller) checkUpdate(uf *URLFetcher) error {
 }
 
 func (p *poller) poll(uf *URLFetcher) {
-	for {
-		select {
-		case <-p.ticker.C:
-			// When the ticker fires
-			err := p.checkUpdate(uf)
-			log.Errorf("Error polling charts: %v", err)
-		}
+	for t := range p.ticker.C {
+		// When the ticker fires
+		fmt.Println("Tick at", t)
+		err := p.checkUpdate(uf)
+		log.Errorf("Error polling charts: %v", err)
 	}
 }
 
 // Run the polling job with target directory at specific interval
-func Run(dirURL string, interval uint64) error {
+func Run(dirURL string, interval time.Duration) error {
 	po := &poller{
 		url:         dirURL,
 		minInterval: interval,
+		ticker:      time.NewTicker(time.Minute * interval),
 	}
 	destDir, err := ioutil.TempDir("", ChartsTempFilePrefix)
 	if err != nil {
@@ -79,7 +92,7 @@ func Run(dirURL string, interval uint64) error {
 	}
 	uf := &URLFetcher{
 		url:        po.url + "/" + InstallationChartsFileName,
-		verifyUrl:  po.url + "/" + InstallationShaFileName,
+		verifyURL:  po.url + "/" + InstallationShaFileName,
 		untarDir:   "untar",
 		verify:     true,
 		destDir:    destDir,

@@ -30,7 +30,7 @@ import (
 
 	"github.com/mholt/archiver"
 
-	"istio.io/istio/pkg/log"
+	"istio.io/pkg/log"
 )
 
 // FileDownloader is wrapper of HTTP client to download files
@@ -43,15 +43,15 @@ type FileDownloader struct {
 type URLFetcher struct {
 	// url is url to download the charts
 	url string
-	// verifyUrl is url to download the verification file
-	verifyUrl string
+	// verifyURL is url to download the verification file
+	verifyURL string
 	// verify indicates whether the downloaded tar should be verified
 	verify bool
 	// destDir is path of charts downloaded to, empty as default to temp dir
 	destDir string
 	// untarDir is destination of untar
 	untarDir string
-	// downloader
+	// downloader downloads files from remote url
 	downloader *FileDownloader
 }
 
@@ -75,7 +75,7 @@ func (f *URLFetcher) fetchChart(shaF string) error {
 		if err != nil {
 			return fmt.Errorf("failed to read sha file: %s", err)
 		}
-		hash := strings.Fields(string(hashAll))[0]
+		hash := string(hashAll)
 		h := sha256.New()
 		if _, err := io.Copy(h, file); err != nil {
 			log.Error(err.Error())
@@ -92,7 +92,10 @@ func (f *URLFetcher) fetchChart(shaF string) error {
 
 // fetch sha file
 func (f *URLFetcher) fetchSha() (string, error) {
-	shaF, err := f.downloader.DownloadTo(f.verifyUrl, f.destDir)
+	if f.verifyURL == "" {
+		return "", fmt.Errorf("SHA file url is empty")
+	}
+	shaF, err := f.downloader.DownloadTo(f.verifyURL, f.destDir)
 	if err != nil {
 		return "", err
 	}
@@ -109,16 +112,6 @@ func newFileDownloader() *FileDownloader {
 	}
 }
 
-// ExpandFile expands the src file into the dest directory.
-func ExtractFile(dest, src string) error {
-	h, err := os.Open(src)
-	if err != nil {
-		return err
-	}
-	defer h.Close()
-	return
-}
-
 // Send GET Request
 func (c *FileDownloader) Get(href string) (*bytes.Buffer, error) {
 	buf := bytes.NewBuffer(nil)
@@ -128,10 +121,10 @@ func (c *FileDownloader) Get(href string) (*bytes.Buffer, error) {
 		return nil, err
 	}
 	resp, err := c.client.Do(req)
-	defer resp.Body.Close()
 	if err != nil {
 		return nil, err
 	}
+	defer resp.Body.Close()
 	if resp.StatusCode != 200 {
 		return nil, fmt.Errorf("failed to fetch URL %s : %s", href, resp.Status)
 	}

@@ -477,6 +477,9 @@ func getValuesPathMapping(mappings map[string]*Translation, path util.Path) (str
 	p := path
 	var m *Translation
 	for ; len(p) > 0; p = p[0 : len(p)-1] {
+		if p.String() == "mixer.policy.enabled" {
+			fmt.Printf("test")
+		}
 		m = mappings[p.String()]
 		if m != nil {
 			break

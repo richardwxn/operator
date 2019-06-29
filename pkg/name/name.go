@@ -46,7 +46,7 @@ const (
 	PolicyFeatureName            FeatureName = "Policy"
 	TelemetryFeatureName         FeatureName = "Telemetry"
 	SecurityFeatureName          FeatureName = "Security"
-	ConfigManagementFeatureName  FeatureName = "ConfigManagement"
+	ConfigManagementFeatureName  FeatureName = "Config_Management"
 	AutoInjectionFeatureName     FeatureName = "AutoInjection"
 	GatewayFeatureName           FeatureName = "Gateway"
 )
@@ -64,8 +64,8 @@ const (
 	PolicyComponentName          ComponentName = "Policy"
 	TelemetryComponentName       ComponentName = "Telemetry"
 	CitadelComponentName         ComponentName = "Citadel"
-	CertManagerComponentName     ComponentName = "CertManager"
-	NodeAgentComponentName       ComponentName = "NodeAgent"
+	CertManagerComponentName     ComponentName = "Cert_Manager"
+	NodeAgentComponentName       ComponentName = "Node_Agent"
 	IngressComponentName         ComponentName = "Ingress"
 	EgressComponentName          ComponentName = "Egress"
 )

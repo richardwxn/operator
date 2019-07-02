@@ -15,17 +15,13 @@
 package translate
 
 import (
-	"bytes"
 	"fmt"
-	"html/template"
-
 	"github.com/ghodss/yaml"
 
 	"istio.io/operator/pkg/apis/istio/v1alpha2"
 	"istio.io/operator/pkg/name"
 	"istio.io/operator/pkg/util"
 	"istio.io/operator/pkg/version"
-	"istio.io/pkg/log"
 )
 
 // ValueYAMLTranslator is a set of mappings to translate between values.yaml and API paths, charts, k8s paths.
@@ -52,14 +48,6 @@ type FeatureComponent struct {
 	featureName   name.FeatureName
 	componentName name.ComponentName
 }
-
-type mappingType string
-
-const (
-	K8SMappingType      mappingType = "k8sMapping"
-	APIMappingType      mappingType = "APIMapping"
-	NSENABLEMappingType mappingType = "NamespaceEnableMapping"
-)
 
 var (
 	ValueTranslators = map[version.MinorVersion]*ValueYAMLTranslator{
@@ -89,8 +77,6 @@ var (
 				"citadel":                       {name.SecurityFeatureName, name.CitadelComponentName},
 				"nodeagent":                     {name.SecurityFeatureName, name.NodeAgentComponentName},
 				"certmanager":                   {name.SecurityFeatureName, name.CertManagerComponentName},
-				"gateways.istio-ingressgateway": {"", name.IngressComponentName},
-				"gateways.istio-egressgateway":  {"", name.EgressComponentName},
 			},
 			ComponentDirLayout: map[string]name.ComponentName{
 				"istio-control/istio-discovery":  name.PilotComponentName,
@@ -106,18 +92,18 @@ var (
 			},
 			NamespaceMapping: map[string]*Translation{
 				// only security components use it
-				"global.istioNamespace":     {"security.Components.Namespace", nil},
-				"global.telemetryNamespace": {"telemetry.Components.Namespace", nil},
-				"global.policyNamespace":    {"policy.Components.Namespace", nil},
-				"global.configNamespace":    {"configManagement.Components.Namespace", nil},
+				"global.istioNamespace":     {"security.components.namespace", nil},
+				"global.telemetryNamespace": {"telemetry.components.namespace", nil},
+				"global.policyNamespace":    {"policy.components.namespace", nil},
+				"global.configNamespace":    {"configManagement.components.namespace", nil},
 			},
-			// Ex: "{{.ValueComponent}}.enabled": {"{{.FeatureName}}.enabled.value}", nil},
+			// Ex: "{{.ValueComponent}}.enabled": {"{{.FeatureName}}.enabled}", nil},
 			FeatureEnablementMapping: map[string]*Translation{},
-			// Ex "{{.ValueComponent}}.enabled": {"{{.FeatureName}}.Components.{{.ComponentName}}.Common.enabled.value}", nil},
+			// Ex "{{.ValueComponent}}.enabled": {"{{.FeatureName}}.Components.{{.ComponentName}}.Common.enabled}", nil},
 			ComponentEnablementMapping: map[string]*Translation{},
 		},
 	}
-	ComponentEnablementPattern = "{{.FeatureName}}.Components.{{.ComponentName}}.Common.enabled.value"
+	ComponentEnablementPattern = "{{.FeatureName}}.components.{{.ComponentName}}.common.enabled"
 )
 
 // init initialize different mappings
@@ -160,7 +146,7 @@ func (t *ValueYAMLTranslator) initEnablementMapping() {
 	for valKey, featureComponent := range t.ValuesToFeatureComponentName {
 		// construct feature enablement mapping
 		newKey := valKey + ".enabled"
-		newFEVal := string(featureComponent.featureName) + ".enabled.value"
+		newFEVal := string(featureComponent.featureName) + ".enabled"
 		feMapping[newKey] = &Translation{newFEVal, nil}
 		// construct component enablement mapping
 		newCEVal := featureComponentString(ComponentEnablementPattern, featureComponent.featureName, featureComponent.componentName)
@@ -193,49 +179,89 @@ func (t *ValueYAMLTranslator) TranslateFromValueToSpec(values *v1alpha2.Values) 
 	if err != nil {
 		return nil, err
 	}
-	var cpSpec = &v1alpha2.IstioControlPlaneSpec{}
-	err = yaml.Unmarshal(outputVal, &cpSpec)
+	//var cpSpec = &v1alpha2.IstioControlPlaneSpec{}
+	//err = yaml.Unmarshal(outputVal, &cpSpec)
+
+	var cpSpec2 = &v1alpha2.IstioControlPlaneSpec{}
+	err = UnmarshalWithJSONPB(string(outputVal), cpSpec2)
 
 	if err != nil {
 		return nil, fmt.Errorf("error when unmarshalling into control plane spec %v", err.Error())
 	}
 
-	return cpSpec, nil
+	return cpSpec2, nil
 }
 
 // TranslateTree translates input value.yaml Tree to ControlPlaneSpec Tree
 func (t *ValueYAMLTranslator) TranslateTree(valueTree map[string]interface{}, cpSpecTree map[string]interface{}, path util.Path) error {
 
 	// translate with api mapping
-	err := t.translateTree(valueTree, cpSpecTree, path, t.APIMapping, APIMappingType)
+	err := t.translateTree(valueTree, cpSpecTree, path, t.APIMapping)
 	if err != nil {
 		return fmt.Errorf("error when translating value.yaml tree with global mapping %v", err.Error())
 	}
 	// translate with k8s mapping
-	err = t.translateTree(valueTree, cpSpecTree, path, t.KubernetesMapping, K8SMappingType)
+	err = t.translateTree(valueTree, cpSpecTree, path, t.KubernetesMapping)
 	if err != nil {
 		return fmt.Errorf("error when translating value.yaml tree with kubernetes mapping %v", err.Error())
 	}
-	// translate with namespace and enablement mapping
-	err = t.translateTree(valueTree, cpSpecTree, path, t.NamespaceMapping, NSENABLEMappingType)
+	// translate enablement and namespace
+	err = t.setEnablementAndNamespacesFromValue(cpSpecTree, valueTree)
 	if err != nil {
-		return fmt.Errorf("error when translating value.yaml tree with kubernetes mapping %v", err.Error())
+		return fmt.Errorf("error when translating enablement and namespace from value.yaml tree %v", err.Error())
 	}
-	err = t.translateTree(valueTree, cpSpecTree, path, t.FeatureEnablementMapping, NSENABLEMappingType)
-	if err != nil {
-		return fmt.Errorf("error when translating value.yaml tree with kubernetes mapping %v", err.Error())
+	return nil
+}
+
+func firstCharToLowerPath(input string) util.Path {
+	var path util.Path
+	for _, p := range util.PathFromString(input) {
+		p = firstCharToLower(p)
+		path = append(path, p)
 	}
-	err = t.translateTree(valueTree, cpSpecTree, path, t.ComponentEnablementMapping, NSENABLEMappingType)
-	if err != nil {
-		return fmt.Errorf("error when translating value.yaml tree with kubernetes mapping %v", err.Error())
+	return path
+}
+
+// setEnablementAndNamespaces translates the enablement and namespace value of each component in the baseYAML values
+// tree, based on feature/component inheritance relationship.
+func (t *ValueYAMLTranslator) setEnablementAndNamespacesFromValue(root map[string]interface{}, valueSpec map[string]interface{}) error {
+	for vp, fe := range t.FeatureEnablementMapping {
+		enabled := name.IsComponentEnabledFromValue(vp, valueSpec)
+		// set feature enablement
+		if fe.outPath == "" {
+			continue
+		}
+		newP := firstCharToLowerPath(fe.outPath)
+		// Value.yaml component to IstioFeature is N:1, so if the feature is enabled by other component already, skip setting
+		curEnabled, found, _ := name.GetFromValuePath(root, newP)
+		if !found || curEnabled == false {
+			if err := setTree(root, newP, enabled); err != nil {
+				return err
+			}
+		}
+		// set component enablement
+		ce := t.ComponentEnablementMapping[vp]
+		if ce == nil || ce.outPath == "" {
+			continue
+		}
+		outP := firstCharToLowerPath(ce.outPath)
+		if err := setTree(root, outP, enabled); err != nil {
+			return err
+		}
 	}
 
+	for vp, ns := range t.NamespaceMapping {
+		namespace := name.NamespaceFromValue(vp, valueSpec)
+		if err := setTree(root, util.PathFromString(ns.outPath), namespace); err != nil {
+			return err
+		}
+	}
 	return nil
 }
 
 //internal method for TranslateTree
 func (t *ValueYAMLTranslator) translateTree(valueTree map[string]interface{},
-	cpSpecTree map[string]interface{}, path util.Path, mapping map[string]*Translation, mpType mappingType) error {
+	cpSpecTree map[string]interface{}, path util.Path, mapping map[string]*Translation) error {
 	// translate input valueTree
 	for key, val := range valueTree {
 		newPath := append(path, key)
@@ -248,7 +274,7 @@ func (t *ValueYAMLTranslator) translateTree(valueTree map[string]interface{},
 		} else {
 			switch test := val.(type) {
 			case map[string]interface{}:
-				err := t.translateTree(test, cpSpecTree, newPath, mapping, mpType)
+				err := t.translateTree(test, cpSpecTree, newPath, mapping)
 				if err != nil {
 					return err
 				}
@@ -272,32 +298,12 @@ func (t *ValueYAMLTranslator) insertLeaf(root map[string]interface{}, newPath ut
 		break
 	case m.translationFunc == nil:
 		// Use default translation which just maps to a different part of the tree.
-		errs = util.AppendErr(errs, defaultValueTranslationFunc(m, root, valuesPath, val))
+		errs = util.AppendErr(errs, defaultTranslationFunc(m, root, valuesPath, val, true))
 	default:
 		// Use a custom translation function.
 		errs = util.AppendErr(errs, m.translationFunc(m, root, valuesPath, val))
 	}
 	return errs
-}
-
-// defaultTranslationFunc is the default translation to values. It maps a Go data path into a YAML path.
-func defaultValueTranslationFunc(m *Translation, root map[string]interface{}, valuesPath string, value interface{}) error {
-	var path []string
-
-	if util.IsEmptyString(value) {
-		dbgPrint("Skip empty string value for path %s", m.outPath)
-		return nil
-	}
-	if valuesPath == "" {
-		dbgPrint("Not mapping to values, resources path is %s", m.outPath)
-		return nil
-	}
-
-	for _, p := range util.PathFromString(valuesPath) {
-		path = append(path, firstCharToLower(p))
-	}
-
-	return setUntypedTree(root, path, value)
 }
 
 // componentString renders a template of the form <path>{{.ComponentName}}<path> with
@@ -307,36 +313,4 @@ func componentString(tmpl string, componentName string) string {
 		ValueComponentName string
 	}
 	return renderTemplate(tmpl, temp{componentName})
-}
-
-// helper method to render template
-func renderTemplate(tmpl string, ts interface{}) string {
-	t, err := template.New("").Parse(tmpl)
-	if err != nil {
-		log.Error(err.Error())
-		return err.Error()
-	}
-	buf := new(bytes.Buffer)
-	err = t.Execute(buf, ts)
-	if err != nil {
-		log.Error(err.Error())
-		return err.Error()
-	}
-	return buf.String()
-}
-
-// setTree sets the YAML path in the given Tree to the given value, creating any required intermediate nodes.
-func setUntypedTree(root map[string]interface{}, path util.Path, value interface{}) error {
-	dbgPrint("setTree %s:%v", path, value)
-	if len(path) == 0 {
-		return fmt.Errorf("path cannot be empty")
-	}
-	if len(path) == 1 {
-		root[path[0]] = value
-		return nil
-	}
-	if root[path[0]] == nil {
-		root[path[0]] = make(map[string]interface{})
-	}
-	return setUntypedTree(root[path[0]].(map[string]interface{}), path[1:], value)
 }

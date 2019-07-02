@@ -46,7 +46,7 @@ const (
 	PolicyFeatureName            FeatureName = "Policy"
 	TelemetryFeatureName         FeatureName = "Telemetry"
 	SecurityFeatureName          FeatureName = "Security"
-	ConfigManagementFeatureName  FeatureName = "Config_Management"
+	ConfigManagementFeatureName  FeatureName = "ConfigManagement"
 	AutoInjectionFeatureName     FeatureName = "AutoInjection"
 	GatewayFeatureName           FeatureName = "Gateways"
 )
@@ -60,14 +60,14 @@ const (
 	IstioBaseComponentName       ComponentName = "crds"
 	PilotComponentName           ComponentName = "Pilot"
 	GalleyComponentName          ComponentName = "Galley"
-	SidecarInjectorComponentName ComponentName = "SidecarInjector"
+	SidecarInjectorComponentName ComponentName = "Injector"
 	PolicyComponentName          ComponentName = "Policy"
 	TelemetryComponentName       ComponentName = "Telemetry"
 	CitadelComponentName         ComponentName = "Citadel"
-	CertManagerComponentName     ComponentName = "Cert_Manager"
-	NodeAgentComponentName       ComponentName = "Node_Agent"
-	IngressComponentName         ComponentName = "Ingress"
-	EgressComponentName          ComponentName = "Egress"
+	CertManagerComponentName     ComponentName = "CertManager"
+	NodeAgentComponentName       ComponentName = "NodeAgent"
+	IngressComponentName         ComponentName = "IngressGateway"
+	EgressComponentName          ComponentName = "EgressGateway"
 )
 
 // ManifestMap is a map of ComponentName to its manifest string.
@@ -114,6 +114,54 @@ func IsComponentEnabledInSpec(featureName FeatureName, componentName ComponentNa
 		return featureNode.Value, nil
 	}
 	return componentNode.Value, nil
+}
+
+// IsComponentEnabledFromValue get whether component is enabled from value.yaml tree
+func IsComponentEnabledFromValue(valuePath string, valueSpec map[string]interface{}) bool {
+	enableNodeI, found, err := GetFromValuePath(valueSpec, util.PathFromString(valuePath))
+	if err != nil {
+		log.Error(err.Error())
+		return false
+	}
+	if !found || enableNodeI == nil {
+		return false
+	}
+	enableNode, ok := enableNodeI.(bool)
+	if !ok {
+		log.Errorf("node at valuePath %s has bad type %T, expect bool", valuePath, enableNodeI)
+	}
+	return enableNode
+}
+
+func NamespaceFromValue(valuePath string, valueSpec map[string]interface{}) string{
+	nsNodeI, found, err := GetFromValuePath(valueSpec, util.PathFromString(valuePath))
+	if err != nil {
+		log.Error(err.Error())
+		return ""
+	}
+	if !found || nsNodeI == nil {
+		return ""
+	}
+	nsNode, ok := nsNodeI.(string)
+	if !ok {
+		log.Errorf("node at valuePath %s has bad type %T, expect string", valuePath, nsNodeI)
+	}
+	return nsNode
+}
+
+// GetFromValuePath returns the value at path from the given tree, or false if the path does not exist.
+func GetFromValuePath(inputTree map[string]interface{}, path util.Path) (interface{}, bool, error) {
+		if len(path) == 0 {
+			return nil, false, fmt.Errorf("cannot find path from inputTree, path is empty")
+		}
+		val := inputTree[path[0]]
+		if val == nil {
+			return nil, false, fmt.Errorf("cannot find path from inputTree")
+		}
+		if len(path) == 1 {
+			return val, true, nil
+		}
+		return GetFromValuePath(val.(map[string]interface{}), path[1:])
 }
 
 // Namespace returns the namespace for the component. It follows these rules:

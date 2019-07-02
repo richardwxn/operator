@@ -26,6 +26,7 @@ import (
 )
 
 func TestValueToProto(t *testing.T) {
+
 	tests := []struct {
 		desc      string
 		valueYAML string
@@ -76,6 +77,12 @@ security:
           value: true
   enabled:
     value: true
+auto_injection:
+  components:
+    injector:
+      common:
+        enabled: {}
+  enabled: {}
 `,
 			valueYAML: `
 certManager:
@@ -107,23 +114,21 @@ telemetry:
     namespace: istio-telemetry
     telemetry:
       common:
-        enabled:  {}
-  enabled:  {}
+        enabled: {}
+  enabled: {}
 policy:
   components:
     namespace: istio-policy
     policy:
       common:
-        enabled:
-          value: true
-  enabled:
-    value: true
+        enabled: true
+  enabled: true
 config_management:
   components:
     galley:
       common:
-        enabled:  {}
-  enabled:  {} 
+        enabled: {}
+  enabled: {} 
 security:
   components:
     namespace: istio-system

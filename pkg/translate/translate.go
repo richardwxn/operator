@@ -27,7 +27,8 @@ import (
 	"istio.io/operator/pkg/tpath"
 
 	"github.com/ghodss/yaml"
-
+	"github.com/gogo/protobuf/proto"
+	"github.com/golang/protobuf/jsonpb"
 	"istio.io/operator/pkg/apis/istio/v1alpha2"
 	"istio.io/operator/pkg/name"
 	"istio.io/operator/pkg/util"
@@ -472,7 +473,7 @@ func (t *Translator) insertLeaf(root map[string]interface{}, path util.Path, val
 		break
 	case m.translationFunc == nil:
 		// Use default translation which just maps to a different part of the tree.
-		errs = util.AppendErr(errs, defaultTranslationFunc(m, root, valuesPath, v))
+		errs = util.AppendErr(errs, defaultTranslationFunc(m, root, valuesPath, v, true))
 	default:
 		// Use a custom translation function.
 		errs = util.AppendErr(errs, m.translationFunc(m, root, valuesPath, v))
@@ -487,9 +488,6 @@ func getValuesPathMapping(mappings map[string]*Translation, path util.Path) (str
 	p := path
 	var m *Translation
 	for ; len(p) > 0; p = p[0 : len(p)-1] {
-		if p.String() == "mixer.policy.enabled" {
-			fmt.Printf("test")
-		}
 		m = mappings[p.String()]
 		if m != nil {
 			break
@@ -519,18 +517,7 @@ func renderFeatureComponentPathTemplate(tmpl string, featureName name.FeatureNam
 		FeatureName:   featureName,
 		ComponentName: componentName,
 	}
-	t, err := template.New("").Parse(tmpl)
-	if err != nil {
-		log.Errorf("Failed to create template object, Error: %v. Template string: \n%s\n", err.Error(), tmpl)
-		return err.Error()
-	}
-	buf := new(bytes.Buffer)
-	err = t.Execute(buf, ts)
-	if err != nil {
-		log.Errorf("Failed to execute template: %v", err.Error())
-		return err.Error()
-	}
-	return buf.String()
+	return renderTemplate(tmpl, ts)
 }
 
 // renderResourceComponentPathTemplate renders a template of the form <path>{{.ResourceName}}<path>{{.ContainerName}}<path> with
@@ -543,23 +530,27 @@ func (t *Translator) renderResourceComponentPathTemplate(tmpl string, componentN
 		ResourceName:  t.ComponentMaps[componentName].ResourceName,
 		ContainerName: t.ComponentMaps[componentName].ContainerName,
 	}
-	// TODO: address comment
-	// Can extract the template execution part to a common method, so for each
-	// rendering method just need to create a template struct and call this common method
-	tm, err := template.New("").Parse(tmpl)
+	return renderTemplate(tmpl, ts)
+}
+
+// helper method to render template
+func renderTemplate(tmpl string, ts interface{}) string {
+	t, err := template.New("").Parse(tmpl)
 	if err != nil {
+		log.Error(err.Error())
 		return err.Error()
 	}
 	buf := new(bytes.Buffer)
-	err = tm.Execute(buf, ts)
+	err = t.Execute(buf, ts)
 	if err != nil {
+		log.Error(err.Error())
 		return err.Error()
 	}
 	return buf.String()
 }
 
 // defaultTranslationFunc is the default translation to values. It maps a Go data path into a YAML path.
-func defaultTranslationFunc(m *Translation, root map[string]interface{}, valuesPath string, value interface{}) error {
+func defaultTranslationFunc(m *Translation, root map[string]interface{}, valuesPath string, value interface{}, toLower bool) error {
 	var path []string
 
 	if util.IsEmptyString(value) {
@@ -572,10 +563,27 @@ func defaultTranslationFunc(m *Translation, root map[string]interface{}, valuesP
 	}
 
 	for _, p := range util.PathFromString(valuesPath) {
-		path = append(path, firstCharToLower(p))
+		if toLower {
+			p = firstCharToLower(p)
+		}
+		path = append(path, p)
 	}
 
 	return tpath.WriteNode(root, path, value)
+}
+
+func UnmarshalWithJSONPB(y string, out proto.Message) error {
+	jb, err := yaml.YAMLToJSON([]byte(y))
+	if err != nil {
+		return err
+	}
+
+	u := jsonpb.Unmarshaler{}
+	err = u.Unmarshal(bytes.NewReader(jb), out)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func dbgPrint(v ...interface{}) {

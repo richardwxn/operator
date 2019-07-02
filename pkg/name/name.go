@@ -164,6 +164,54 @@ func GetFromValuePath(inputTree map[string]interface{}, path util.Path) (interfa
 		return GetFromValuePath(val.(map[string]interface{}), path[1:])
 }
 
+// IsComponentEnabledFromValue get whether component is enabled from value.yaml tree
+func IsComponentEnabledFromValue(valuePath string, valueSpec map[string]interface{}) bool {
+	enableNodeI, found, err := GetFromValuePath(valueSpec, util.PathFromString(valuePath))
+	if err != nil {
+		log.Error(err.Error())
+		return false
+	}
+	if !found || enableNodeI == nil {
+		return false
+	}
+	enableNode, ok := enableNodeI.(bool)
+	if !ok {
+		log.Errorf("node at valuePath %s has bad type %T, expect bool", valuePath, enableNodeI)
+	}
+	return enableNode
+}
+
+func NamespaceFromValue(valuePath string, valueSpec map[string]interface{}) string {
+	nsNodeI, found, err := GetFromValuePath(valueSpec, util.PathFromString(valuePath))
+	if err != nil {
+		log.Error(err.Error())
+		return ""
+	}
+	if !found || nsNodeI == nil {
+		return ""
+	}
+	nsNode, ok := nsNodeI.(string)
+	if !ok {
+		log.Errorf("node at valuePath %s has bad type %T, expect string", valuePath, nsNodeI)
+	}
+	return nsNode
+}
+
+// GetFromValuePath returns the value at path from the given tree, or false if the path does not exist.
+func GetFromValuePath(inputTree map[string]interface{}, path util.Path) (interface{}, bool, error) {
+	if len(path) == 0 {
+		return nil, false, fmt.Errorf("cannot find path from inputTree, path is empty")
+	}
+	val := inputTree[path[0]]
+	if val == nil {
+		return nil, false, fmt.Errorf("cannot find path from inputTree")
+	}
+	if len(path) == 1 {
+		return val, true, nil
+	}
+	return GetFromValuePath(val.(map[string]interface{}), path[1:])
+}
+
 // Namespace returns the namespace for the component. It follows these rules:
 // 1. If CustomPackagePath is unset, log and error and return the empty string.
 // 2. If the feature and component namespaces are unset, return CustomPackagePath.

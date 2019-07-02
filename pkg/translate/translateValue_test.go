@@ -38,6 +38,7 @@ func TestValueToProto(t *testing.T) {
 			want: `
 hub: docker.io/istio
 tag: 1.2.3
+default_namespace_prefix: istio-system
 telemetry:
   components:
     namespace: istio-telemetry
@@ -75,8 +76,19 @@ security:
       common:
         enabled:
           value: true
+    citadel:
+      common:
+        enabled: {}
   enabled:
     value: true
+traffic_management:
+   components:
+     pilot:
+       common:
+         enabled: 
+           value: true
+   enabled: 
+     value: true
 auto_injection:
   components:
     injector:
@@ -100,6 +112,8 @@ mixer:
     enabled: true
   telemetry:
     enabled: true
+pilot:
+  enabled: true
 nodeAgent:
   enabled: true
 `,
@@ -109,6 +123,7 @@ nodeAgent:
 			want: `
 hub: docker.io/istio
 tag: 1.2.3
+default_namespace_prefix: istio-system
 telemetry:
   components:
     namespace: istio-telemetry
@@ -128,10 +143,34 @@ config_management:
     galley:
       common:
         enabled: {}
-  enabled: {} 
+  enabled: {}
 security:
   components:
     namespace: istio-system
+    cert_manager:
+      common:
+        enabled: {}
+    node_agent:
+      common:
+        enabled: {}
+    citadel:
+      common:
+        enabled: {}
+  enabled: {}
+traffic_management:
+   components:
+     pilot:
+       common:
+         enabled: 
+           value: true
+   enabled: 
+     value: true
+auto_injection:
+  components:
+    injector:
+      common:
+        enabled: {}
+  enabled: {}
 `,
 			valueYAML: `
 galley:

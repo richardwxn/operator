@@ -16,6 +16,7 @@ package translate
 
 import (
 	"fmt"
+
 	"github.com/ghodss/yaml"
 
 	"istio.io/operator/pkg/apis/istio/v1alpha2"
@@ -69,14 +70,14 @@ var (
 				"{{.ValueComponentName}}.resources":      {"{{.FeatureName}}.Components.{{.ComponentName}}.Common.K8S.Resources", nil},
 			},
 			ValuesToFeatureComponentName: map[string]FeatureComponent{
-				"pilot":                         {name.TrafficManagementFeatureName, name.PilotComponentName},
-				"galley":                        {name.ConfigManagementFeatureName, name.GalleyComponentName},
-				"sidecarInjectorWebhook":        {name.AutoInjectionFeatureName, name.SidecarInjectorComponentName},
-				"mixer.policy":                  {name.PolicyFeatureName, name.PolicyComponentName},
-				"mixer.telemetry":               {name.TelemetryFeatureName, name.TelemetryComponentName},
-				"citadel":                       {name.SecurityFeatureName, name.CitadelComponentName},
-				"nodeagent":                     {name.SecurityFeatureName, name.NodeAgentComponentName},
-				"certmanager":                   {name.SecurityFeatureName, name.CertManagerComponentName},
+				"pilot":                  {name.TrafficManagementFeatureName, name.PilotComponentName},
+				"galley":                 {name.ConfigManagementFeatureName, name.GalleyComponentName},
+				"sidecarInjectorWebhook": {name.AutoInjectionFeatureName, name.SidecarInjectorComponentName},
+				"mixer.policy":           {name.PolicyFeatureName, name.PolicyComponentName},
+				"mixer.telemetry":        {name.TelemetryFeatureName, name.TelemetryComponentName},
+				"citadel":                {name.SecurityFeatureName, name.CitadelComponentName},
+				"nodeagent":              {name.SecurityFeatureName, name.NodeAgentComponentName},
+				"certmanager":            {name.SecurityFeatureName, name.CertManagerComponentName},
 			},
 			ComponentDirLayout: map[string]name.ComponentName{
 				"istio-control/istio-discovery":  name.PilotComponentName,

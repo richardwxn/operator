@@ -87,9 +87,9 @@ type Translation struct {
 }
 
 var (
-	// translators is a map of minor versions to Translator for that version.
+	// Translators is a map of minor versions to Translator for that version.
 	// TODO: this should probably be moved out to a config file that's versioned.
-	translators = map[version.MinorVersion]*Translator{
+	Translators = map[version.MinorVersion]*Translator{
 		version.NewMinorVersion(1, 3): {
 			APIMapping: map[string]*Translation{
 				"Hub":              {"global.hub", nil},
@@ -208,7 +208,7 @@ var (
 
 // NewTranslator creates a new Translator for minorVersion and returns a ptr to it.
 func NewTranslator(minorVersion version.MinorVersion) (*Translator, error) {
-	t := translators[minorVersion]
+	t := Translators[minorVersion]
 	if t == nil {
 		return nil, fmt.Errorf("no translator available for version %s", minorVersion)
 	}
@@ -484,9 +484,6 @@ func getValuesPathMapping(mappings map[string]*Translation, path util.Path) (str
 	p := path
 	var m *Translation
 	for ; len(p) > 0; p = p[0 : len(p)-1] {
-		if p.String() == "mixer.policy.enabled" {
-			fmt.Printf("test")
-		}
 		m = mappings[p.String()]
 		if m != nil {
 			break

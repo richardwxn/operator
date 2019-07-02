@@ -144,6 +144,12 @@ gateways:
             enabled: {}
   enabled:
     value: true
+auto_injection:
+  components:
+    injector:
+      common:
+        enabled: {}
+  enabled: {}
 `,
 		},
 		{
@@ -284,10 +290,8 @@ policy:
     namespace: istio-policy
     policy:
       common:
-        enabled:
-          value: true
-  enabled:
-    value: true
+        enabled: true
+  enabled: true
 config_management:
   components:
     galley:

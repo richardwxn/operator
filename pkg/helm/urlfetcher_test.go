@@ -15,12 +15,15 @@
 package helm
 
 import (
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
 	"os"
 	"path/filepath"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 type Server struct {
@@ -72,6 +75,7 @@ func TestFetch(t *testing.T) {
 		shaFileName    string
 		expectFile     string
 		verify         bool
+		verifyFail     bool
 	}{
 		{
 			name:           "Charts download only",
@@ -85,6 +89,14 @@ func TestFetch(t *testing.T) {
 			shaFileName:    InstallationShaFileName,
 			expectFile:     "./istio-installer.tar.gz",
 			verify:         true,
+		},
+		{
+			name:           "Charts download but verification fail",
+			chartsFileName: InstallationChartsFileName,
+			shaFileName:    InstallationShaFileName,
+			expectFile:     "./istio-installer.tar.gz",
+			verify:         true,
+			verifyFail:     true,
 		},
 	}
 	tmp, err := ioutil.TempDir("", ChartsTempFilePrefix)
@@ -102,8 +114,7 @@ func TestFetch(t *testing.T) {
 
 	fq := &URLFetcher{
 		destDir:    tmp + "/testout",
-		untarDir:   tmp + "/testout",
-		downloader: newFileDownloader(),
+		downloader: NewFileDownloader(),
 	}
 
 	for _, test := range tests {
@@ -119,7 +130,18 @@ func TestFetch(t *testing.T) {
 				t.Error(err)
 				return
 			}
+			if test.verifyFail {
+				f, _ := os.OpenFile(savedShaF, os.O_APPEND|os.O_WRONLY, os.ModeAppend)
+				_, err := f.Write([]byte{115, 111})
+				if err != nil {
+					fmt.Println("failed to modify sha file")
+				}
+			}
 			err = fq.fetchChart(savedShaF)
+			if test.verifyFail {
+				assert.NotNil(t, err)
+				continue
+			}
 			if err != nil {
 				t.Error(err)
 				return

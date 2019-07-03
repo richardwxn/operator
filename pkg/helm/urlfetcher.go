@@ -33,8 +33,8 @@ import (
 	"istio.io/pkg/log"
 )
 
-// FileDownloader is wrapper of HTTP client to download files
-type FileDownloader struct {
+// fileDownloader is wrapper of HTTP client to download files
+type fileDownloader struct {
 	// client is a HTTP/HTTPS client.
 	client *http.Client
 }
@@ -49,10 +49,8 @@ type URLFetcher struct {
 	verify bool
 	// destDir is path of charts downloaded to, empty as default to temp dir
 	destDir string
-	// untarDir is destination of untar
-	untarDir string
 	// downloader downloads files from remote url
-	downloader *FileDownloader
+	downloader *fileDownloader
 }
 
 // fetchChart fetches the charts and verifies charts against shaF if required
@@ -87,10 +85,10 @@ func (f *URLFetcher) fetchChart(shaF string) error {
 	}
 
 	// After verification, untar the chart into the requested directory.
-	return archiver.Unarchive(saved, f.untarDir)
+	return archiver.Unarchive(saved, f.destDir)
 }
 
-// fetch sha file
+// fetchsha download the sha file from url
 func (f *URLFetcher) fetchSha() (string, error) {
 	if f.verifyURL == "" {
 		return "", fmt.Errorf("SHA file url is empty")
@@ -102,8 +100,9 @@ func (f *URLFetcher) fetchSha() (string, error) {
 	return shaF, nil
 }
 
-func newFileDownloader() *FileDownloader {
-	return &FileDownloader{
+// NewFileDownloader create a wrapper for download files
+func NewFileDownloader() *fileDownloader {
+	return &fileDownloader{
 		client: &http.Client{
 			Transport: &http.Transport{
 				DisableCompression: true,
@@ -112,8 +111,8 @@ func newFileDownloader() *FileDownloader {
 	}
 }
 
-// Send GET Request
-func (c *FileDownloader) Get(href string) (*bytes.Buffer, error) {
+// SendGet makes http GET request to url
+func (c *fileDownloader) SendGet(href string) (*bytes.Buffer, error) {
 	buf := bytes.NewBuffer(nil)
 
 	req, err := http.NewRequest("GET", href, nil)
@@ -133,13 +132,13 @@ func (c *FileDownloader) Get(href string) (*bytes.Buffer, error) {
 	return buf, err
 }
 
-// Ref is remote url to download from, dest is local file path to download to
-func (c *FileDownloader) DownloadTo(ref, dest string) (string, error) {
+// DownloadTo downloads from remote url to dest local file path
+func (c *fileDownloader) DownloadTo(ref, dest string) (string, error) {
 	u, err := url.Parse(ref)
 	if err != nil {
 		return "", fmt.Errorf("invalid chart URL: %s", ref)
 	}
-	data, err := c.Get(u.String())
+	data, err := c.SendGet(u.String())
 	if err != nil {
 		return "", err
 	}

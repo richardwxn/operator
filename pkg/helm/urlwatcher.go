@@ -45,8 +45,8 @@ const (
 	ChartsTempFilePrefix = "charts-"
 )
 
-// Check whether sha file being updated or not
-// Fetch latest charts if yes
+// checkUpdate checks whether sha file being updated or not
+// fetch latest charts if yes
 func (p *poller) checkUpdate(uf *URLFetcher) error {
 	shaF, err := uf.fetchSha()
 	if err != nil {
@@ -93,10 +93,9 @@ func Run(dirURL string, interval time.Duration) error {
 	uf := &URLFetcher{
 		url:        po.url + "/" + InstallationChartsFileName,
 		verifyURL:  po.url + "/" + InstallationShaFileName,
-		untarDir:   "untar",
 		verify:     true,
 		destDir:    destDir,
-		downloader: newFileDownloader(),
+		downloader: NewFileDownloader(),
 	}
 
 	go po.poll(uf)

@@ -45,7 +45,7 @@ const (
 
 var (
 	// DebugPackage controls detailed debug output for this package.
-	DebugPackage = false
+	DebugPackage = true
 )
 
 // Translator is a set of mappings to translate between API paths, charts, values.yaml and k8s paths.
@@ -572,6 +572,7 @@ func defaultTranslationFunc(m *Translation, root map[string]interface{}, valuesP
 	return tpath.WriteNode(root, path, value)
 }
 
+// UnmarshalWithJSONPB unmarshal yaml string to pb
 func UnmarshalWithJSONPB(y string, out proto.Message) error {
 	jb, err := yaml.YAMLToJSON([]byte(y))
 	if err != nil {

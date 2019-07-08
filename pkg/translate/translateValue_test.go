@@ -95,6 +95,19 @@ auto_injection:
       common:
         enabled: {}
   enabled: {}
+gateways:
+  components:
+    ingress_gateway:
+      - gateway:
+          common:
+           enabled:
+             value: true
+    egress_gateway:
+      - gateway:
+          common:
+           enabled: {} 
+  enabled:
+    value: true
 `,
 			valueYAML: `
 certManager:
@@ -116,6 +129,12 @@ pilot:
   enabled: true
 nodeAgent:
   enabled: true
+gateways:
+  enabled: true
+  istio-ingressgateway:
+    enabled: true
+sidecarInjectorWebhook:
+  enabled: false
 `,
 		},
 		{
@@ -136,8 +155,10 @@ policy:
     namespace: istio-policy
     policy:
       common:
-        enabled: true
-  enabled: true
+        enabled:
+          value: true
+  enabled:
+    value: true
 config_management:
   components:
     galley:
@@ -157,18 +178,29 @@ security:
       common:
         enabled: {}
   enabled: {}
+gateways:
+  components:
+    ingress_gateway:
+      - gateway:
+          common:
+           enabled: {}
+    egress_gateway:
+      - gateway:
+          common:
+           enabled: {}
+  enabled: {}
 traffic_management:
-   components:
-     pilot:
-       common:
-         enabled: 
-           value: true
-   enabled: 
-     value: true
+  components:
+    pilot:
+      common:
+        enabled:
+          value: true
+  enabled:
+    value: true
 auto_injection:
   components:
     injector:
-      common:
+       common:
         enabled: {}
   enabled: {}
 `,
@@ -200,7 +232,7 @@ mixer:
 			if err != nil {
 				t.Fatalf("unmarshal(%s): got error %s", tt.desc, err)
 			}
-			dbgPrint("ispec: \n%s\n", pretty.Sprint(valueStruct))
+			dbgPrint("value struct: \n%s\n", pretty.Sprint(valueStruct))
 			got, err := tr.TranslateFromValueToSpec(&valueStruct)
 			if gotErr, wantErr := errToString(err), tt.wantErr; gotErr != wantErr {
 				t.Errorf("ValuesToProto(%s)(%v): gotErr:%s, wantErr:%s", tt.desc, tt.valueYAML, gotErr, wantErr)

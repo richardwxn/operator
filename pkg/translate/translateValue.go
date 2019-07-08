@@ -16,6 +16,7 @@ package translate
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/ghodss/yaml"
 
@@ -36,7 +37,7 @@ type ValueYAMLTranslator struct {
 	// ValuesToFeatureComponentName defines mapping from value path to feature and component name in API paths.
 	ValuesToFeatureComponentName map[string]FeatureComponent
 	// NamespaceMapping maps namespace defined in value.yaml to that in API spec.
-	NamespaceMapping map[string]*Translation
+	NamespaceMapping map[string][]string
 	// FeatureEnablementMapping maps component enablement in value.yaml to feature enablement in API spec.
 	FeatureEnablementMapping map[string]*Translation
 	// ComponentEnablementMapping maps component enablement in value.yaml to component enablement in API spec.
@@ -45,12 +46,14 @@ type ValueYAMLTranslator struct {
 	ComponentDirLayout map[string]name.ComponentName
 }
 
+// FeatureComponent represent featureName and componentName
 type FeatureComponent struct {
 	featureName   name.FeatureName
 	componentName name.ComponentName
 }
 
 var (
+	// ValueTranslators is Translator for value.yaml
 	ValueTranslators = map[version.MinorVersion]*ValueYAMLTranslator{
 		version.NewMinorVersion(1, 2): {
 			APIMapping: map[string]*Translation{},
@@ -78,6 +81,9 @@ var (
 				"citadel":                {name.SecurityFeatureName, name.CitadelComponentName},
 				"nodeagent":              {name.SecurityFeatureName, name.NodeAgentComponentName},
 				"certmanager":            {name.SecurityFeatureName, name.CertManagerComponentName},
+				// TODO
+				"gateways.istio-ingressgateway": {name.GatewayFeatureName, name.IngressComponentName},
+				"gateways.istio-egressgateway":  {name.GatewayFeatureName, name.EgressComponentName},
 			},
 			ComponentDirLayout: map[string]name.ComponentName{
 				"istio-control/istio-discovery":  name.PilotComponentName,
@@ -91,20 +97,22 @@ var (
 				"gateways/istio-ingress":         name.IngressComponentName,
 				"gateways/istio-egress":          name.EgressComponentName,
 			},
-			NamespaceMapping: map[string]*Translation{
-				// only security components use it
-				"global.istioNamespace":     {"security.components.namespace", nil},
-				"global.telemetryNamespace": {"telemetry.components.namespace", nil},
-				"global.policyNamespace":    {"policy.components.namespace", nil},
-				"global.configNamespace":    {"configManagement.components.namespace", nil},
+			// 1:N mapping possible for ns
+			NamespaceMapping: map[string][]string{
+				"global.istioNamespace":     {"security.components.namespace"},
+				"global.telemetryNamespace": {"telemetry.components.namespace"},
+				"global.policyNamespace":    {"policy.components.namespace"},
+				"global.configNamespace":    {"configManagement.components.namespace"},
 			},
 			// Ex: "{{.ValueComponent}}.enabled": {"{{.FeatureName}}.enabled}", nil},
 			FeatureEnablementMapping: map[string]*Translation{},
 			// Ex "{{.ValueComponent}}.enabled": {"{{.FeatureName}}.Components.{{.ComponentName}}.Common.enabled}", nil},
+			// For gateway Ex "{{.ValueComponent}}.enabled": {"{{.FeatureName}}.Components.{{.ComponentName}}.Gateway.Common.enabled}", nil},
 			ComponentEnablementMapping: map[string]*Translation{},
 		},
 	}
-	ComponentEnablementPattern = "{{.FeatureName}}.components.{{.ComponentName}}.common.enabled"
+	componentEnablementPattern   = "{{.FeatureName}}.Components.{{.ComponentName}}.Common.Enabled"
+	gWComponentEnablementPattern = "{{.FeatureName}}.Components.{{.ComponentName}}.Gateway.Common.Enabled"
 )
 
 // init initialize different mappings
@@ -149,9 +157,17 @@ func (t *ValueYAMLTranslator) initEnablementMapping() {
 		newKey := valKey + ".enabled"
 		newFEVal := string(featureComponent.featureName) + ".enabled"
 		feMapping[newKey] = &Translation{newFEVal, nil}
-		// construct component enablement mapping
-		newCEVal := featureComponentString(ComponentEnablementPattern, featureComponent.featureName, featureComponent.componentName)
-		ceMapping[newKey] = &Translation{newCEVal, nil}
+		if strings.HasPrefix(valKey, "gateways") {
+			// one more mapping for gateway
+			feMapping["gateways.enabled"] = &Translation{newFEVal, nil}
+			// construct component enablement mapping
+			newCEVal := featureComponentString(gWComponentEnablementPattern, featureComponent.featureName, featureComponent.componentName)
+			ceMapping[newKey] = &Translation{newCEVal, nil}
+		} else {
+			// construct component enablement mapping
+			newCEVal := featureComponentString(componentEnablementPattern, featureComponent.featureName, featureComponent.componentName)
+			ceMapping[newKey] = &Translation{newCEVal, nil}
+		}
 	}
 	t.FeatureEnablementMapping = feMapping
 	t.ComponentEnablementMapping = ceMapping
@@ -229,7 +245,7 @@ func (t *ValueYAMLTranslator) setEnablementAndNamespacesFromValue(root map[strin
 	for vp, fe := range t.FeatureEnablementMapping {
 		enabled := name.IsComponentEnabledFromValue(vp, valueSpec)
 		// set feature enablement
-		if fe.outPath == "" {
+		if fe == nil || fe.outPath == "" {
 			continue
 		}
 		newP := firstCharToLowerPath(fe.outPath)
@@ -246,21 +262,23 @@ func (t *ValueYAMLTranslator) setEnablementAndNamespacesFromValue(root map[strin
 			continue
 		}
 		outP := firstCharToLowerPath(ce.outPath)
-		if err := setTree(root, outP, enabled); err != nil {
+		if err := setTreeFromValue(root, outP, enabled); err != nil {
 			return err
 		}
 	}
 
-	for vp, ns := range t.NamespaceMapping {
+	for vp, nsList := range t.NamespaceMapping {
 		namespace := name.NamespaceFromValue(vp, valueSpec)
-		if err := setTree(root, util.PathFromString(ns.outPath), namespace); err != nil {
-			return err
+		for _, ns := range nsList {
+			if err := setTreeFromValue(root, util.PathFromString(ns), namespace); err != nil {
+				return err
+			}
 		}
 	}
 	return nil
 }
 
-//internal method for TranslateTree
+//translateTree is internal method for translating value.yaml tree
 func (t *ValueYAMLTranslator) translateTree(valueTree map[string]interface{},
 	cpSpecTree map[string]interface{}, path util.Path, mapping map[string]*Translation) error {
 	// translate input valueTree
@@ -273,12 +291,24 @@ func (t *ValueYAMLTranslator) translateTree(valueTree map[string]interface{},
 				return err
 			}
 		} else {
-			switch test := val.(type) {
+			switch node := val.(type) {
 			case map[string]interface{}:
-				err := t.translateTree(test, cpSpecTree, newPath, mapping)
+				err := t.translateTree(node, cpSpecTree, newPath, mapping)
 				if err != nil {
 					return err
 				}
+			case []interface{}:
+				for _, newNode := range node {
+					newMap, ok := newNode.(map[string]interface{})
+					if !ok {
+						return fmt.Errorf("fail to translate slice")
+					}
+					err := t.translateTree(newMap, cpSpecTree, newPath, mapping)
+					if err != nil {
+						return err
+					}
+				}
+			// leaf
 			default:
 				err := t.insertLeaf(cpSpecTree, newPath, val, mapping)
 				if err != nil {

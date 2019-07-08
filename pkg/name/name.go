@@ -283,6 +283,7 @@ func NamespaceFromValue(valuePath string, valueSpec map[string]interface{}) stri
 
 // GetFromValuePath returns the value at path from the given tree, or false if the path does not exist.
 func GetFromValuePath(inputTree map[string]interface{}, path util.Path) (interface{}, bool, error) {
+	dbgPrint("getFromValuePath path=%s", path)
 	if len(path) == 0 {
 		return nil, false, fmt.Errorf("cannot find path from inputTree, path is empty")
 	}
@@ -292,6 +293,22 @@ func GetFromValuePath(inputTree map[string]interface{}, path util.Path) (interfa
 	}
 	if len(path) == 1 {
 		return val, true, nil
+	}
+	switch newRoot := val.(type) {
+	case map[string]interface{}:
+		return GetFromValuePath(newRoot, path[1:])
+	case []interface{}:
+		for _, test := range newRoot {
+			nextVal, found, err := GetFromValuePath(test.(map[string]interface{}), path[1:])
+			if err != nil {
+				log.Error("fail to get from one of the value path")
+				continue
+			}
+			if found {
+				return nextVal, true, nil
+			}
+		}
+		return nil, false, fmt.Errorf("cannot find path from inputTree")
 	}
 	return GetFromValuePath(val.(map[string]interface{}), path[1:])
 }

@@ -23,8 +23,7 @@ import (
 	"strings"
 
 	"github.com/ghodss/yaml"
-	"github.com/gogo/protobuf/proto"
-	"github.com/golang/protobuf/jsonpb"
+
 	"istio.io/operator/pkg/apis/istio/v1alpha2"
 	"istio.io/operator/pkg/name"
 	"istio.io/operator/pkg/object"

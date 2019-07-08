@@ -185,7 +185,7 @@ sidecarInjectorWebhook:
 	for _, tt := range tests {
 		t.Run(tt.desc, func(t *testing.T) {
 			ispec := &v1alpha2.IstioControlPlaneSpec{}
-			err := UnmarshalWithJSONPB(tt.yamlStr, ispec)
+			err := util.UnmarshalWithJSONPB(tt.yamlStr, ispec)
 			if err != nil {
 				t.Fatalf("unmarshalWithJSONPB(%s): got error %s", tt.desc, err)
 			}

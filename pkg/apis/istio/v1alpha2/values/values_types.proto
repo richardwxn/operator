@@ -15,6 +15,9 @@
 
 syntax = 'proto3';
 
+import "google/protobuf/duration.proto";
+import "k8s.io/api/core/v1/generated.proto";
+
 package values;
 
 // Package-wide variables from generator "generated".
@@ -56,7 +59,7 @@ message CertManagerConfig {
   string hub = 2;
 
   // 	NodeSelector map[string]interface{} `json:"nodeSelector"`
-  ResourcesConfig resources = 3;
+  k8s.io.api.core.v1.ResourceRequirements resources = 3;
 
   string tag = 4;
 }
@@ -97,7 +100,7 @@ message EgressGatewayConfig {
 
   CPUTargetUtilizationConfig cpu = 5;
 
-  string drainDuration = 6;
+  google.protobuf.Duration drainDuration = 6;
 
   bool enabled = 7;
 
@@ -112,7 +115,7 @@ message EgressGatewayConfig {
   // 	PodAntiAffinityTermLabelSelector []map[string]interface{}    `json:"podAntiAffinityTermLabelSelector"`
   repeated PortsConfig ports = 11;
 
-  ResourcesConfig resources = 12;
+  k8s.io.api.core.v1.ResourceRequirements resources = 12;
 
   repeated SecretVolume secretVolumes = 13;
 
@@ -145,7 +148,7 @@ message GalleyConfig {
   // 	PodAntiAffinityTermLabelSelector []map[string]interface{} `json:"podAntiAffinityTermLabelSelector"`
   uint32 replicaCount = 4;
 
-  ResourcesConfig resources = 5;
+  k8s.io.api.core.v1.ResourceRequirements resources = 5;
 }
 
 // GatewayLabelsConfig is described in istio.io documentation.
@@ -280,11 +283,11 @@ message ILBGatewayConfig {
   // 	PodAnnotations     map[string]interface{}      `json:"podAnnotations,omitempty"`
   repeated PortsConfig ports = 8;
 
-  ResourcesConfig resources = 9;
+  k8s.io.api.core.v1.ResourceRequirements resources = 9;
 
   repeated SecretVolume secretVolumes = 10;
   //    ServiceAnnotations map[string]interface{}      `json:"serviceAnnotations,omitempty"`
-  //    Type               corev1.ServiceType          `json:"type,omitempty"`
+//      Type               corev1.ServiceType          `json:"type,omitempty"`
 }
 
 // IngressGatewayConfig is described in istio.io documentation.
@@ -305,7 +308,7 @@ message IngressGatewayConfig {
 
   string domain = 8;
 
-  string drainDuration = 9;
+  google.protobuf.Duration drainDuration = 9;
 
   bool enabled = 10;
 
@@ -374,11 +377,15 @@ message KubernetesIngressConfig {
   string gatewayName = 3;
 }
 
-// LoadSheddingConfig is described in istio.io documentation.
+// LoadSheddingConfig configs when mixer starts rejecting grpc requests.
 message LoadSheddingConfig {
   string latencyThreshold = 1;
 
-  string mode = 2;
+  enum mode {
+    DISABLED = 0;
+    LOG_ONLY = 1;
+    ENFORCE = 2;
+  }
 }
 
 // MTLSConfig is described in istio.io documentation.
@@ -464,7 +471,7 @@ message MixerTelemetryConfig {
   // 	PodAnnotations         map[string]interface{}     `json:"podAnnotations,omitempty"`
   uint32 replicaCount = 10;
 
-  ResourcesConfig resources = 11;
+  k8s.io.api.core.v1.ResourceRequirements resources = 11;
 
   bool sessionAffinityEnabled = 12;
 }
@@ -486,7 +493,12 @@ message NodeAgentConfig {
 // OutboundTrafficPolicyConfig is described in istio.io documentation.
 message OutboundTrafficPolicyConfig {
   // Specifies the sidecar's default behavior when handling outbound traffic from the application.
-  string mode = 1;
+  enum mode {
+    //outbound traffic to unknown destinations will be allowed, in case there are no services or ServiceEntries for the destination port
+    ALLOW_ANY = 0;
+    //restrict outbound traffic to services defined in the service registry as well as those defined through ServiceEntries
+    REGISTRY_ONLY = 1;
+  }
 }
 
 // PilotConfig is described in istio.io documentation.
@@ -507,14 +519,14 @@ message PilotConfig {
 
   double traceSampling = 8;
 
-  ResourcesConfig resources = 9;
+  k8s.io.api.core.v1.ResourceRequirements resources = 9;
 
   string configNamespace = 10;
 
   CPUTargetUtilizationConfig cpu = 11;
 
   // 	NodeSelector                     map[string]interface{}      `json:"nodeSelector,omitempty"`
-  string keepaliveMaxServerConnectionAge = 12;
+  google.protobuf.Duration keepaliveMaxServerConnectionAge = 12;
 
   map<string, string> deploymentLabels = 13;
 
@@ -538,8 +550,15 @@ message PilotConfig {
 message PilotIngressConfig {
   string ingressService = 1;
 
-  string ingressControllerMode = 2;
-
+  enum ingressControllerMode {
+    //all Ingress resources without annotation or with istio annotation.
+    DEFAULT = 0;
+    //only with istio annotation.
+    STRICT = 1;
+    //no ingress or sync.
+    OFF = 2;
+  }
+  //Value to set on "kubernetes.io/ingress.class" annotations to activate, if mode is STRICT
   string ingressClass = 3;
 }
 
@@ -579,7 +598,7 @@ message PrometheusConfig {
   string retention = 6;
 
   // 	NodeSelector             map[string]interface{}    `json:"nodeSelector,omitempty"`
-  string scrapeInterval = 7;
+  google.protobuf.Duration scrapeInterval = 7;
 
   string contextPath = 8;
 
@@ -594,7 +613,7 @@ message PrometheusConfig {
 message PrometheusMixerAdapterConfig {
   bool enabled = 1;
 
-  string metricsExpiryDuration = 2;
+  google.protobuf.Duration metricsExpiryDuration = 2;
 }
 
 // PrometheusSecurityConfig is described in istio.io documentation.
@@ -623,9 +642,16 @@ message ProxyConfig {
   // Configures how and what fields are displayed in sidecar access log.
   string accessLogFormat = 2;
 
-  string accessLogEncoding = 3;
+  // Configure the access log for sidecar to JSON or TEXT
+  enum accessLogEncoding {
+    JSON = 0;
+    TEXT = 1;
+  }
 
-  string autoInject = 4;
+  enum autoInject {
+    ENABLED = 0;
+    DISABLED = 1;
+  }
 
   // Domain for the cluster - defaults to .cluster.local, but k8s allows this to be customized, can be prod.example.com
   string clusterDomain = 5;
@@ -636,7 +662,7 @@ message ProxyConfig {
   uint32 concurrency = 7;
 
   // Configures the DNS refresh rate for Envoy cluster of type STRICT_DNS.
-  string dnsRefreshRate = 8;
+  google.protobuf.Duration dnsRefreshRate = 8;
 
   // Enables core dumps for newly injected sidecars.
   bool enableCoreDump = 9;
@@ -678,22 +704,19 @@ message ProxyConfig {
   // Default port used for the Pilot agent's health checks.
   uint32 statusPort = 23;
 
-  ResourcesConfig resources = 24;
+  k8s.io.api.core.v1.ResourceRequirements resources = 24;
 
   // Specifies which tracer to use.
-  string tracer = 25;
+  enum tracer {
+    ZIPKIN = 0;
+    LIGHTSTEP = 1;
+    DATADOG = 2;
+  }
 }
 
 // ProxyInitConfig is described in istio.io documentation.
 message ProxyInitConfig {
   string image = 1;
-}
-
-// ResourcesConfig is described in istio.io documentation.
-message ResourcesConfig {
-  ResourcesRequestsConfig requests = 1;
-
-  ResourcesRequestsConfig limits = 2;
 }
 
 // ResourcesRequestsConfig is described in istio.io documentation.
@@ -846,7 +869,7 @@ message TracingJaegerConfig {
 
 // TracingJaegerMemoryConfig is described in istio.io documentation.
 message TracingJaegerMemoryConfig {
-  string max_traces = 1;
+  uint32 max_traces = 1;
 }
 
 // TracingZipkinConfig is described in istio.io documentation.
@@ -859,11 +882,11 @@ message TracingZipkinConfig {
 
   uint32 queryPort = 4;
 
-  ResourcesConfig resources = 5;
+  k8s.io.api.core.v1.ResourceRequirements resources = 5;
 
   string javaOptsHeap = 6;
 
-  string maxSpans = 7;
+  uint32 maxSpans = 7;
 
   TracingZipkinNodeConfig node = 8;
 }

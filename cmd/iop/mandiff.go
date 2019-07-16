@@ -36,9 +36,9 @@ const YamlSuffix = "yaml"
 
 func manifestDiffCmd(rootArgs *rootArgs, diffArgs *manDiffArgs) *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "manifestsDiff",
+		Use:   "diff-manifest",
 		Short: "Compare manifests and generate diff.",
-		Long:  "The mandiff subcommand is used to compare manifest from two files or directories.",
+		Long:  "The diff-manifest subcommand is used to compare manifest from two files or directories.",
 		Args:  cobra.ExactArgs(2),
 		Run: func(cmd *cobra.Command, args []string) {
 			if diffArgs.compareDir {

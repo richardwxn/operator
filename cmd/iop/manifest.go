@@ -16,8 +16,9 @@ package iop
 
 import (
 	"fmt"
-	"github.com/spf13/cobra"
 	"os"
+
+	"github.com/spf13/cobra"
 
 	"istio.io/operator/pkg/manifest"
 

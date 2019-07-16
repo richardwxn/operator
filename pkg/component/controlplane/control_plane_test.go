@@ -17,7 +17,6 @@ package controlplane
 import (
 	"bytes"
 	"io/ioutil"
-	"istio.io/operator/pkg/util"
 	"os"
 	"path/filepath"
 	"testing"
@@ -25,9 +24,9 @@ import (
 	"github.com/ghodss/yaml"
 	"github.com/gogo/protobuf/proto"
 	"github.com/golang/protobuf/jsonpb"
-	"github.com/kylelemons/godebug/diff"
 
 	"istio.io/operator/pkg/apis/istio/v1alpha2"
+	"istio.io/operator/pkg/manifest"
 	"istio.io/operator/pkg/name"
 	"istio.io/operator/pkg/translate"
 	"istio.io/operator/pkg/version"
@@ -190,7 +189,7 @@ trafficManagement:
 			if err != nil {
 				t.Fatal(err)
 			}
-			diff, err := util.ManifestDiff(manifestMapToStr(got), want)
+			diff, err := manifest.ManifestsDiff(manifestMapToStr(got), want)
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -228,28 +227,6 @@ func readFile(path string) (string, error) {
 	b, err := ioutil.ReadFile(filepath.Join(testDataDir, path))
 	return string(b), err
 }
-
-func YAMLDiff(a, b string) string {
-	ao, bo := make(map[string]interface{}), make(map[string]interface{})
-	if err := yaml.Unmarshal([]byte(a), &ao); err != nil {
-		return err.Error()
-	}
-	if err := yaml.Unmarshal([]byte(b), &bo); err != nil {
-		return err.Error()
-	}
-
-	ay, err := yaml.Marshal(ao)
-	if err != nil {
-		return err.Error()
-	}
-	by, err := yaml.Marshal(bo)
-	if err != nil {
-		return err.Error()
-	}
-
-	return diff.Diff(string(ay), string(by))
-}
-
 
 /*func ObjectsInManifest(mstr string) string {
 	ao, err := manifest.ParseObjectsFromYAMLManifest(mstr)

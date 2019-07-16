@@ -18,7 +18,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"istio.io/operator/pkg/manifest"
 	"math/rand"
 	"strings"
 	"time"
@@ -100,53 +99,6 @@ func YAMLDiff(a, b string) string {
 	}
 
 	return diff.Diff(string(ay), string(by))
-}
-
-func ManifestDiff(a, b string) (string, error) {
-	ao, err := manifest.ParseK8sObjectsFromYAMLManifest(a)
-	if err != nil {
-		return "", err
-	}
-	bo, err := manifest.ParseK8sObjectsFromYAMLManifest(b)
-	if err != nil {
-		return "", err
-	}
-	aom, bom := ao.ToMap(), bo.ToMap()
-	var sb strings.Builder
-	for ak, av := range aom {
-		ay, err := av.YAML()
-		if err != nil {
-			return "", err
-		}
-		dif := ""
-		if bom[ak] == nil {
-			dif = YAMLDiff(string(ay), "")
-		} else {
-			by, err := bom[ak].YAML()
-			if err != nil {
-				return "", err
-			}
-			dif = YAMLDiff(string(ay), string(by))
-		}
-		if dif != "" {
-			sb.WriteString("\n\nObject " + ak + " has diffs:\n\n")
-			sb.WriteString(dif)
-		}
-	}
-	for bk, bv := range bom {
-		if aom[bk] == nil {
-			by, err := bv.YAML()
-			if err != nil {
-				return "", err
-			}
-			dif := YAMLDiff(string(by), "")
-			if dif != "" {
-				sb.WriteString("\n\nObject " + bk + " is missing:\n\n")
-				sb.WriteString(dif)
-			}
-		}
-	}
-	return sb.String(), err
 }
 
 // ToYAML returns a YAML string representation of val, or the error string if an error occurs.

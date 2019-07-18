@@ -223,7 +223,10 @@ mixer:
 `,
 		},
 	}
-	tr := ValueTranslators[version.NewMinorVersion(1, 2)]
+	tr, err := NewValueYAMLTranslator(version.NewMinorVersion(1, 2))
+	if err != nil {
+		t.Fatal("fail to get value.yaml translator")
+	}
 
 	for _, tt := range tests {
 		t.Run(tt.desc, func(t *testing.T) {

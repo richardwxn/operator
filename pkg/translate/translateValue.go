@@ -16,9 +16,8 @@ package translate
 
 import (
 	"fmt"
-	"strings"
-
 	"github.com/ghodss/yaml"
+	"istio.io/operator/pkg/tpath"
 
 	"istio.io/operator/pkg/apis/istio/v1alpha2"
 	"istio.io/operator/pkg/name"
@@ -35,15 +34,13 @@ type ValueYAMLTranslator struct {
 	// KubernetesMapping defines mappings from an  k8s resource paths to IstioControlPlane API paths.
 	KubernetesMapping map[string]*Translation
 	// ValuesToFeatureComponentName defines mapping from value path to feature and component name in API paths.
-	ValuesToFeatureComponentName map[string]FeatureComponent
+	ValuesToComponentName map[string]name.ComponentName
 	// NamespaceMapping maps namespace defined in value.yaml to that in API spec.
 	NamespaceMapping map[string][]string
 	// FeatureEnablementMapping maps component enablement in value.yaml to feature enablement in API spec.
 	FeatureEnablementMapping map[string]*Translation
 	// ComponentEnablementMapping maps component enablement in value.yaml to component enablement in API spec.
 	ComponentEnablementMapping map[string]*Translation
-	// ComponentDirLayout is a mapping between the subdirectory of the component Chart a component name.
-	ComponentDirLayout map[string]name.ComponentName
 }
 
 // FeatureComponent represent featureName and componentName
@@ -53,8 +50,8 @@ type FeatureComponent struct {
 }
 
 var (
-	// ValueTranslators is Translator for value.yaml
-	ValueTranslators = map[version.MinorVersion]*ValueYAMLTranslator{
+	// ValueYAMLTranslators is Translator for value.yaml
+	ValueYAMLTranslators = map[version.MinorVersion]*ValueYAMLTranslator{
 		version.NewMinorVersion(1, 2): {
 			APIMapping: map[string]*Translation{},
 			KubernetesMapping: map[string]*Translation{
@@ -72,30 +69,17 @@ var (
 				"{{.ValueComponentName}}.replicaCount":   {"{{.FeatureName}}.Components.{{.ComponentName}}.Common.K8S.ReplicaCount", nil},
 				"{{.ValueComponentName}}.resources":      {"{{.FeatureName}}.Components.{{.ComponentName}}.Common.K8S.Resources", nil},
 			},
-			ValuesToFeatureComponentName: map[string]FeatureComponent{
-				"pilot":                  {name.TrafficManagementFeatureName, name.PilotComponentName},
-				"galley":                 {name.ConfigManagementFeatureName, name.GalleyComponentName},
-				"sidecarInjectorWebhook": {name.AutoInjectionFeatureName, name.SidecarInjectorComponentName},
-				"mixer.policy":           {name.PolicyFeatureName, name.PolicyComponentName},
-				"mixer.telemetry":        {name.TelemetryFeatureName, name.TelemetryComponentName},
-				"citadel":                {name.SecurityFeatureName, name.CitadelComponentName},
-				"nodeagent":              {name.SecurityFeatureName, name.NodeAgentComponentName},
-				"certmanager":            {name.SecurityFeatureName, name.CertManagerComponentName},
-				// TODO
-				"gateways.istio-ingressgateway": {name.GatewayFeatureName, name.IngressComponentName},
-				"gateways.istio-egressgateway":  {name.GatewayFeatureName, name.EgressComponentName},
-			},
-			ComponentDirLayout: map[string]name.ComponentName{
-				"istio-control/istio-discovery":  name.PilotComponentName,
-				"istio-control/istio-config":     name.GalleyComponentName,
-				"istio-control/istio-autoinject": name.SidecarInjectorComponentName,
-				"istio-policy":                   name.PolicyComponentName,
-				"istio-telemetry":                name.TelemetryComponentName,
-				"security/citadel":               name.CitadelComponentName,
-				"security/nodeagent":             name.NodeAgentComponentName,
-				"security/certmanager":           name.CertManagerComponentName,
-				"gateways/istio-ingress":         name.IngressComponentName,
-				"gateways/istio-egress":          name.EgressComponentName,
+			ValuesToComponentName: map[string]name.ComponentName{
+				"pilot":                         name.PilotComponentName,
+				"galley":                        name.GalleyComponentName,
+				"sidecarInjectorWebhook":        name.SidecarInjectorComponentName,
+				"mixer.policy":                  name.PolicyComponentName,
+				"mixer.telemetry":               name.TelemetryComponentName,
+				"citadel":                       name.CitadelComponentName,
+				"nodeagent":                     name.NodeAgentComponentName,
+				"certmanager":                   name.CertManagerComponentName,
+				"gateways.istio-ingressgateway": name.IngressComponentName,
+				"gateways.istio-egressgateway":  name.EgressComponentName,
 			},
 			// 1:N mapping possible for ns
 			NamespaceMapping: map[string][]string{
@@ -115,62 +99,54 @@ var (
 	gWComponentEnablementPattern = "{{.FeatureName}}.Components.{{.ComponentName}}.Gateway.Common.Enabled"
 )
 
-// init initialize different mappings
-func init() {
-	vs := version.NewMinorVersion(1, 2)
-	vTranslator := ValueTranslators[vs]
-	vTranslator.initAPIMapping(vs)
-	vTranslator.initK8SMapping()
-	vTranslator.initEnablementMapping()
-}
-
-// initAPIMapping generate the reverse mapping from original translator apimapping
+// initAPIMapping generate the reverse mapping from original translator apiMapping
 func (t *ValueYAMLTranslator) initAPIMapping(vs version.MinorVersion) {
-	originalAPIMap := Translators[vs].APIMapping
-	for valKey, outVal := range originalAPIMap {
+	for valKey, outVal := range Translators[vs].APIMapping {
 		t.APIMapping[outVal.outPath] = &Translation{valKey, nil}
 	}
 }
 
 // initK8SMapping generates the k8s settings mapping for all components based on templates
 func (t *ValueYAMLTranslator) initK8SMapping() {
-	outPutMapping := make(map[string]*Translation)
-	for valKey, featureComponent := range t.ValuesToFeatureComponentName {
-		if featureComponent.featureName == "" {
+	outputMapping := make(map[string]*Translation)
+	for valKey, componentName := range t.ValuesToComponentName {
+		featureName := name.ComponentNameToFeatureName[componentName]
+		if featureName == "" {
 			continue
 		}
 		for K8SValKey, outPathTmpl := range t.KubernetesMapping {
-			newKey := componentString(K8SValKey, valKey)
-			newVal := featureComponentString(outPathTmpl.outPath, featureComponent.featureName, featureComponent.componentName)
-			outPutMapping[newKey] = &Translation{newVal, nil}
+			newKey := renderComponentName(K8SValKey, valKey)
+			newVal := renderFeatureComponentPathTemplate(outPathTmpl.outPath, featureName, componentName)
+			outputMapping[newKey] = &Translation{newVal, nil}
 		}
 	}
-	t.KubernetesMapping = outPutMapping
+	t.KubernetesMapping = outputMapping
 }
 
 // initEnablementMapping generates the feature and component enablement mapping based on templates
 func (t *ValueYAMLTranslator) initEnablementMapping() {
-	feMapping := make(map[string]*Translation)
 	ceMapping := make(map[string]*Translation)
-	for valKey, featureComponent := range t.ValuesToFeatureComponentName {
-		// construct feature enablement mapping
+	for valKey, componentName := range t.ValuesToComponentName {
+		featureName := name.ComponentNameToFeatureName[componentName]
+		// construct component enablement mapping
 		newKey := valKey + ".enabled"
-		newFEVal := string(featureComponent.featureName) + ".enabled"
-		feMapping[newKey] = &Translation{newFEVal, nil}
-		if strings.HasPrefix(valKey, "gateways") {
-			// one more mapping for gateway
-			feMapping["gateways.enabled"] = &Translation{newFEVal, nil}
-			// construct component enablement mapping
-			newCEVal := featureComponentString(gWComponentEnablementPattern, featureComponent.featureName, featureComponent.componentName)
-			ceMapping[newKey] = &Translation{newCEVal, nil}
-		} else {
-			// construct component enablement mapping
-			newCEVal := featureComponentString(componentEnablementPattern, featureComponent.featureName, featureComponent.componentName)
-			ceMapping[newKey] = &Translation{newCEVal, nil}
-		}
+		newCEVal := renderFeatureComponentPathTemplate(componentEnablementPattern, featureName, componentName)
+		ceMapping[newKey] = &Translation{newCEVal, nil}
 	}
-	t.FeatureEnablementMapping = feMapping
 	t.ComponentEnablementMapping = ceMapping
+}
+
+// NewValueYAMLTranslator creates a new ValueYAMLTranslator for minorVersion and returns a ptr to it.
+func NewValueYAMLTranslator(minorVersion version.MinorVersion) (*ValueYAMLTranslator, error) {
+	t := ValueYAMLTranslators[minorVersion]
+	if t == nil {
+		return nil, fmt.Errorf("no translator available for version %s", minorVersion)
+	}
+
+	t.initAPIMapping(minorVersion)
+	t.initK8SMapping()
+	t.initEnablementMapping()
+	return t, nil
 }
 
 // TranslateFromValueToSpec translates from values struct to IstioControlPlaneSpec
@@ -196,29 +172,27 @@ func (t *ValueYAMLTranslator) TranslateFromValueToSpec(values *v1alpha2.Values) 
 	if err != nil {
 		return nil, err
 	}
-	//var cpSpec = &v1alpha2.IstioControlPlaneSpec{}
-	//err = yaml.Unmarshal(outputVal, &cpSpec)
 
-	var cpSpec2 = &v1alpha2.IstioControlPlaneSpec{}
-	err = UnmarshalWithJSONPB(string(outputVal), cpSpec2)
+	var cpSpec = &v1alpha2.IstioControlPlaneSpec{}
+	err = util.UnmarshalWithJSONPB(string(outputVal), cpSpec)
 
 	if err != nil {
 		return nil, fmt.Errorf("error when unmarshalling into control plane spec %v", err.Error())
 	}
 
-	return cpSpec2, nil
+	return cpSpec, nil
 }
 
 // TranslateTree translates input value.yaml Tree to ControlPlaneSpec Tree
 func (t *ValueYAMLTranslator) TranslateTree(valueTree map[string]interface{}, cpSpecTree map[string]interface{}, path util.Path) error {
 
 	// translate with api mapping
-	err := t.translateTree(valueTree, cpSpecTree, path, t.APIMapping)
+	err := translateTree(valueTree, cpSpecTree, path, t.APIMapping)
 	if err != nil {
 		return fmt.Errorf("error when translating value.yaml tree with global mapping %v", err.Error())
 	}
 	// translate with k8s mapping
-	err = t.translateTree(valueTree, cpSpecTree, path, t.KubernetesMapping)
+	err = translateTree(valueTree, cpSpecTree, path, t.KubernetesMapping)
 	if err != nil {
 		return fmt.Errorf("error when translating value.yaml tree with kubernetes mapping %v", err.Error())
 	}
@@ -252,7 +226,7 @@ func (t *ValueYAMLTranslator) setEnablementAndNamespacesFromValue(root map[strin
 		// Value.yaml component to IstioFeature is N:1, so if the feature is enabled by other component already, skip setting
 		curEnabled, found, _ := name.GetFromValuePath(root, newP)
 		if !found || curEnabled == false {
-			if err := setTree(root, newP, enabled); err != nil {
+			if err := tpath.WriteNode(root, newP, enabled); err != nil {
 				return err
 			}
 		}
@@ -262,15 +236,15 @@ func (t *ValueYAMLTranslator) setEnablementAndNamespacesFromValue(root map[strin
 			continue
 		}
 		outP := firstCharToLowerPath(ce.outPath)
-		if err := setTreeFromValue(root, outP, enabled); err != nil {
+		if err := tpath.WriteNode(root, outP, enabled); err != nil {
 			return err
 		}
 	}
-
+	// set namespace
 	for vp, nsList := range t.NamespaceMapping {
 		namespace := name.NamespaceFromValue(vp, valueSpec)
 		for _, ns := range nsList {
-			if err := setTreeFromValue(root, util.PathFromString(ns), namespace); err != nil {
+			if err := tpath.WriteNode(root, util.PathFromString(ns), namespace); err != nil {
 				return err
 			}
 		}
@@ -279,21 +253,21 @@ func (t *ValueYAMLTranslator) setEnablementAndNamespacesFromValue(root map[strin
 }
 
 //translateTree is internal method for translating value.yaml tree
-func (t *ValueYAMLTranslator) translateTree(valueTree map[string]interface{},
+func translateTree(valueTree map[string]interface{},
 	cpSpecTree map[string]interface{}, path util.Path, mapping map[string]*Translation) error {
 	// translate input valueTree
 	for key, val := range valueTree {
 		newPath := append(path, key)
 		// leaf
 		if val == nil {
-			err := t.insertLeaf(cpSpecTree, newPath, val, mapping)
+			err := insertLeaf(cpSpecTree, newPath, val, mapping)
 			if err != nil {
 				return err
 			}
 		} else {
 			switch node := val.(type) {
 			case map[string]interface{}:
-				err := t.translateTree(node, cpSpecTree, newPath, mapping)
+				err := translateTree(node, cpSpecTree, newPath, mapping)
 				if err != nil {
 					return err
 				}
@@ -303,14 +277,14 @@ func (t *ValueYAMLTranslator) translateTree(valueTree map[string]interface{},
 					if !ok {
 						return fmt.Errorf("fail to translate slice")
 					}
-					err := t.translateTree(newMap, cpSpecTree, newPath, mapping)
+					err := translateTree(newMap, cpSpecTree, newPath, mapping)
 					if err != nil {
 						return err
 					}
 				}
 			// leaf
 			default:
-				err := t.insertLeaf(cpSpecTree, newPath, val, mapping)
+				err := insertLeaf(cpSpecTree, newPath, val, mapping)
 				if err != nil {
 					return err
 				}
@@ -320,7 +294,7 @@ func (t *ValueYAMLTranslator) translateTree(valueTree map[string]interface{},
 	return nil
 }
 
-func (t *ValueYAMLTranslator) insertLeaf(root map[string]interface{}, newPath util.Path,
+func insertLeaf(root map[string]interface{}, newPath util.Path,
 	val interface{}, mapping map[string]*Translation) (errs util.Errors) {
 	// Must be a scalar leaf. See if we have a mapping.
 	valuesPath, m := getValuesPathMapping(mapping, newPath)
@@ -329,7 +303,7 @@ func (t *ValueYAMLTranslator) insertLeaf(root map[string]interface{}, newPath ut
 		break
 	case m.translationFunc == nil:
 		// Use default translation which just maps to a different part of the tree.
-		errs = util.AppendErr(errs, defaultTranslationFunc(m, root, valuesPath, val, true))
+		errs = util.AppendErr(errs, defaultTranslationFunc(m, root, valuesPath, val))
 	default:
 		// Use a custom translation function.
 		errs = util.AppendErr(errs, m.translationFunc(m, root, valuesPath, val))
@@ -337,9 +311,9 @@ func (t *ValueYAMLTranslator) insertLeaf(root map[string]interface{}, newPath ut
 	return errs
 }
 
-// componentString renders a template of the form <path>{{.ComponentName}}<path> with
+// renderComponentName renders a template of the form <path>{{.ComponentName}}<path> with
 // the supplied parameters.
-func componentString(tmpl string, componentName string) string {
+func renderComponentName(tmpl string, componentName string) string {
 	type temp struct {
 		ValueComponentName string
 	}

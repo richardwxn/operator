@@ -469,7 +469,7 @@ func (t *Translator) insertLeaf(root map[string]interface{}, path util.Path, val
 		break
 	case m.translationFunc == nil:
 		// Use default translation which just maps to a different part of the tree.
-		errs = util.AppendErr(errs, defaultTranslationFunc(m, root, valuesPath, v, true))
+		errs = util.AppendErr(errs, defaultTranslationFunc(m, root, valuesPath, v))
 	default:
 		// Use a custom translation function.
 		errs = util.AppendErr(errs, m.translationFunc(m, root, valuesPath, v))
@@ -546,7 +546,7 @@ func renderTemplate(tmpl string, ts interface{}) string {
 }
 
 // defaultTranslationFunc is the default translation to values. It maps a Go data path into a YAML path.
-func defaultTranslationFunc(m *Translation, root map[string]interface{}, valuesPath string, value interface{}, toLower bool) error {
+func defaultTranslationFunc(m *Translation, root map[string]interface{}, valuesPath string, value interface{}) error {
 	var path []string
 
 	if util.IsEmptyString(value) {
@@ -559,10 +559,7 @@ func defaultTranslationFunc(m *Translation, root map[string]interface{}, valuesP
 	}
 
 	for _, p := range util.PathFromString(valuesPath) {
-		if toLower {
-			p = firstCharToLower(p)
-		}
-		path = append(path, p)
+		path = append(path, firstCharToLower(p))
 	}
 
 	return tpath.WriteNode(root, path, value)

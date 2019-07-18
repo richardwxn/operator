@@ -89,6 +89,22 @@ var (
 >>>>>>> Rebase with master, refactor
 )
 
+var (
+	ComponentNameToFeatureName = map[ComponentName]FeatureName{
+		IstioBaseComponentName:       IstioBaseFeatureName,
+		PilotComponentName:           TrafficManagementFeatureName,
+		GalleyComponentName:          ConfigManagementFeatureName,
+		SidecarInjectorComponentName: AutoInjectionFeatureName,
+		PolicyComponentName:          PolicyFeatureName,
+		TelemetryComponentName:       TelemetryFeatureName,
+		CitadelComponentName:         SecurityFeatureName,
+		CertManagerComponentName:     SecurityFeatureName,
+		NodeAgentComponentName:       SecurityFeatureName,
+		IngressComponentName:         GatewayFeatureName,
+		EgressComponentName:          GatewayFeatureName,
+	}
+)
+
 // ManifestMap is a map of ComponentName to its manifest string.
 type ManifestMap map[ComponentName]string
 
@@ -216,6 +232,7 @@ func IsComponentEnabledFromValue(valuePath string, valueSpec map[string]interfac
 	return enableNode
 }
 
+<<<<<<< HEAD
 func NamespaceFromValue(valuePath string, valueSpec map[string]interface{}) string{
 	nsNodeI, found, err := GetFromValuePath(valueSpec, util.PathFromString(valuePath))
 	if err != nil {
@@ -265,6 +282,8 @@ func IsComponentEnabledFromValue(valuePath string, valueSpec map[string]interfac
 	return enableNode
 }
 
+=======
+>>>>>>> refactor
 func NamespaceFromValue(valuePath string, valueSpec map[string]interface{}) string {
 	nsNodeI, found, err := GetFromValuePath(valueSpec, util.PathFromString(valuePath))
 	if err != nil {

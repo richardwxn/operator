@@ -1,25 +1,15 @@
-diff --git a/pkg/apis/istio/v1alpha2/values/values_types.orig.pb.go b/pkg/apis/istio/v1alpha2/values/values_types.pb.go
-index 12dbf191..a6bdda3a 100644
---- a/pkg/apis/istio/v1alpha2/values/values_types.orig.pb.go
-+++ b/pkg/apis/istio/v1alpha2/values/values_types.pb.go
-@@ -21,6 +21,7 @@ import (
- 	fmt "fmt"
- 	proto "github.com/golang/protobuf/proto"
- 	math "math"
-+	corev1 "k8s.io/api/core/v1"
- )
- 
- // Reference imports to suppress errors if they are not otherwise used.
-@@ -225,7 +226,7 @@ func (m *CPUTargetUtilizationConfig) GetTargetAverageUtilization() int32 {
+--- pkg/apis/istio/v1alpha2/values/values_types.pb.go.orig	2019-07-18 16:09:53.143141543 -0700
++++ pkg/apis/istio/v1alpha2/values/values_types.pb.go	2019-07-18 16:08:42.807952401 -0700
+@@ -380,7 +380,7 @@
  type CertManagerConfig struct {
  	Enabled bool   `protobuf:"varint,1,opt,name=enabled,proto3" json:"enabled,omitempty"`
  	Hub     string `protobuf:"bytes,2,opt,name=hub,proto3" json:"hub,omitempty"`
 -	// 	NodeSelector map[string]interface{} `json:"nodeSelector"`
 +	NodeSelector map[string]interface{} `json:"nodeSelector"`
- 	Resources            *ResourcesConfig `protobuf:"bytes,3,opt,name=resources,proto3" json:"resources,omitempty"`
- 	Tag                  string           `protobuf:"bytes,4,opt,name=tag,proto3" json:"tag,omitempty"`
- 	XXX_NoUnkeyedLiteral struct{}         `json:"-"`
-@@ -291,7 +292,7 @@ type CoreDNSConfig struct {
+ 	Resources            *v1.ResourceRequirements `protobuf:"bytes,3,opt,name=resources,proto3" json:"resources,omitempty"`
+ 	Tag                  string                   `protobuf:"bytes,4,opt,name=tag,proto3" json:"tag,omitempty"`
+ 	XXX_NoUnkeyedLiteral struct{}                 `json:"-"`
+@@ -446,7 +446,7 @@
  	CoreDNSImage       string `protobuf:"bytes,1,opt,name=coreDNSImage,proto3" json:"coreDNSImage,omitempty"`
  	CoreDNSPluginImage string `protobuf:"bytes,2,opt,name=coreDNSPluginImage,proto3" json:"coreDNSPluginImage,omitempty"`
  	Enabled            bool   `protobuf:"varint,3,opt,name=enabled,proto3" json:"enabled,omitempty"`
@@ -28,7 +18,7 @@ index 12dbf191..a6bdda3a 100644
  	ReplicaCount         uint32   `protobuf:"varint,4,opt,name=replicaCount,proto3" json:"replicaCount,omitempty"`
  	XXX_NoUnkeyedLiteral struct{} `json:"-"`
  	XXX_unrecognized     []byte   `json:"-"`
-@@ -445,14 +446,14 @@ type EgressGatewayConfig struct {
+@@ -600,14 +600,14 @@
  	Env              map[string]string           `protobuf:"bytes,8,rep,name=env,proto3" json:"env,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
  	Labels           *GatewayLabelsConfig        `protobuf:"bytes,9,opt,name=labels,proto3" json:"labels,omitempty"`
  	NodeSelector     map[string]string           `protobuf:"bytes,10,rep,name=nodeSelector,proto3" json:"nodeSelector,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
@@ -38,17 +28,17 @@ index 12dbf191..a6bdda3a 100644
 +	PodAnnotations                   map[string]interface{}      `json:"podAnnotations,omitempty"`
 +	PodAntiAffinityLabelSelector     []map[string]interface{}    `json:"podAntiAffinityLabelSelector"`
 +	PodAntiAffinityTermLabelSelector []map[string]interface{}    `json:"podAntiAffinityTermLabelSelector"`
- 	Ports         []*PortsConfig   `protobuf:"bytes,11,rep,name=ports,proto3" json:"ports,omitempty"`
- 	Resources     *ResourcesConfig `protobuf:"bytes,12,opt,name=resources,proto3" json:"resources,omitempty"`
- 	SecretVolumes []*SecretVolume  `protobuf:"bytes,13,rep,name=secretVolumes,proto3" json:"secretVolumes,omitempty"`
+ 	Ports         []*PortsConfig           `protobuf:"bytes,11,rep,name=ports,proto3" json:"ports,omitempty"`
+ 	Resources     *v1.ResourceRequirements `protobuf:"bytes,12,opt,name=resources,proto3" json:"resources,omitempty"`
+ 	SecretVolumes []*SecretVolume          `protobuf:"bytes,13,rep,name=secretVolumes,proto3" json:"secretVolumes,omitempty"`
 -	// 	ServiceAnnotations               map[string]interface{}      `json:"serviceAnnotations,omitempty"`
--	//  Type                             corev1.ServiceType          `json:"type,omitempty"`
+-	//    Type                             v1.ServiceType          `json:"type,omitempty"`
 +	ServiceAnnotations               map[string]interface{}      `json:"serviceAnnotations,omitempty"`
-+    Type                             corev1.ServiceType          `json:"type,omitempty"`
++	Type                             v1.ServiceType          `json:"type,omitempty"`
  	Zvpn                 *ZeroVPNConfig `protobuf:"bytes,14,opt,name=zvpn,proto3" json:"zvpn,omitempty"`
  	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
  	XXX_unrecognized     []byte         `json:"-"`
-@@ -646,8 +647,8 @@ type GalleyConfig struct {
+@@ -801,8 +801,8 @@
  	Enabled bool              `protobuf:"varint,1,opt,name=enabled,proto3" json:"enabled,omitempty"`
  	Image   string            `protobuf:"bytes,2,opt,name=image,proto3" json:"image,omitempty"`
  	Mesh    map[string]string `protobuf:"bytes,3,rep,name=mesh,proto3" json:"mesh,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
@@ -56,19 +46,19 @@ index 12dbf191..a6bdda3a 100644
 -	// 	PodAntiAffinityTermLabelSelector []map[string]interface{} `json:"podAntiAffinityTermLabelSelector"`
 +	PodAntiAffinityLabelSelector     []map[string]interface{} `json:"podAntiAffinityLabelSelector"`
 +	PodAntiAffinityTermLabelSelector []map[string]interface{} `json:"podAntiAffinityTermLabelSelector"`
- 	ReplicaCount         uint32           `protobuf:"varint,4,opt,name=replicaCount,proto3" json:"replicaCount,omitempty"`
- 	Resources            *ResourcesConfig `protobuf:"bytes,5,opt,name=resources,proto3" json:"resources,omitempty"`
- 	XXX_NoUnkeyedLiteral struct{}         `json:"-"`
-@@ -848,7 +849,7 @@ type GlobalConfig struct {
+ 	ReplicaCount         uint32                   `protobuf:"varint,4,opt,name=replicaCount,proto3" json:"replicaCount,omitempty"`
+ 	Resources            *v1.ResourceRequirements `protobuf:"bytes,5,opt,name=resources,proto3" json:"resources,omitempty"`
+ 	XXX_NoUnkeyedLiteral struct{}                 `json:"-"`
+@@ -1003,7 +1003,7 @@
  	EnableTracing bool `protobuf:"varint,8,opt,name=enableTracing,proto3" json:"enableTracing,omitempty"`
  	// Root for docker image paths.
  	Hub string `protobuf:"bytes,9,opt,name=hub,proto3" json:"hub,omitempty"`
--	// ImagePullPolicy             corev1.PullPolicy                 `json:"imagePullPolicy,omitempty"`
-+    ImagePullPolicy             corev1.PullPolicy                 `json:"imagePullPolicy,omitempty"`
+-	// ImagePullPolicy             v1.PullPolicy                 `json:"imagePullPolicy,omitempty"`
++	ImagePullPolicy             v1.PullPolicy                 `json:"imagePullPolicy,omitempty"`
  	// Default namespace.
  	IstioNamespace    string                   `protobuf:"bytes,10,opt,name=istioNamespace,proto3" json:"istioNamespace,omitempty"`
  	LocalityLbSetting map[string]string        `protobuf:"bytes,32,rep,name=localityLbSetting,proto3" json:"localityLbSetting,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
-@@ -1192,11 +1193,12 @@ type ILBGatewayConfig struct {
+@@ -1347,11 +1347,12 @@
  	Cpu              *CPUTargetUtilizationConfig `protobuf:"bytes,5,opt,name=cpu,proto3" json:"cpu,omitempty"`
  	Labels           *GatewayLabelsConfig        `protobuf:"bytes,6,opt,name=labels,proto3" json:"labels,omitempty"`
  	LoadBalancerIP   string                      `protobuf:"bytes,7,opt,name=loadBalancerIP,proto3" json:"loadBalancerIP,omitempty"`
@@ -76,14 +66,14 @@ index 12dbf191..a6bdda3a 100644
 -	// 	PodAnnotations     map[string]interface{}      `json:"podAnnotations,omitempty"`
 +	NodeSelector       map[string]interface{}      `json:"nodeSelector,omitempty"`
 +	PodAnnotations     map[string]interface{}      `json:"podAnnotations,omitempty"`
- 	Ports                []*PortsConfig   `protobuf:"bytes,8,rep,name=ports,proto3" json:"ports,omitempty"`
- 	Resources            *ResourcesConfig `protobuf:"bytes,9,opt,name=resources,proto3" json:"resources,omitempty"`
- 	SecretVolumes        []*SecretVolume  `protobuf:"bytes,10,rep,name=secretVolumes,proto3" json:"secretVolumes,omitempty"`
-+	Type                 corev1.ServiceType          `json:"type,omitempty"`
- 	XXX_NoUnkeyedLiteral struct{}         `json:"-"`
- 	XXX_unrecognized     []byte           `json:"-"`
- 	XXX_sizecache        int32            `json:"-"`
-@@ -1317,17 +1319,17 @@ type IngressGatewayConfig struct {
+ 	Ports                []*PortsConfig           `protobuf:"bytes,8,rep,name=ports,proto3" json:"ports,omitempty"`
+ 	Resources            *v1.ResourceRequirements `protobuf:"bytes,9,opt,name=resources,proto3" json:"resources,omitempty"`
+ 	SecretVolumes        []*SecretVolume          `protobuf:"bytes,10,rep,name=secretVolumes,proto3" json:"secretVolumes,omitempty"`
++	Type                 v1.ServiceType       `json:"type,omitempty"`
+ 	XXX_NoUnkeyedLiteral struct{}                 `json:"-"`
+ 	XXX_unrecognized     []byte                   `json:"-"`
+ 	XXX_sizecache        int32                    `json:"-"`
+@@ -1472,17 +1473,17 @@
  	LoadBalancerIP           string                      `protobuf:"bytes,16,opt,name=loadBalancerIP,proto3" json:"loadBalancerIP,omitempty"`
  	LoadBalancerSourceRanges []string                    `protobuf:"bytes,17,rep,name=loadBalancerSourceRanges,proto3" json:"loadBalancerSourceRanges,omitempty"`
  	MeshExpansionPorts       []*PortsConfig              `protobuf:"bytes,18,rep,name=meshExpansionPorts,proto3" json:"meshExpansionPorts,omitempty"`
@@ -102,13 +92,13 @@ index 12dbf191..a6bdda3a 100644
  	Sds           *IngressGatewaySdsConfig `protobuf:"bytes,21,opt,name=sds,proto3" json:"sds,omitempty"`
  	SecretVolumes []*SecretVolume          `protobuf:"bytes,22,rep,name=secretVolumes,proto3" json:"secretVolumes,omitempty"`
 -	// 	ServiceAnnotations               map[string]interface{}      `json:"serviceAnnotations,omitempty"`
--	//  Type                             corev1.ServiceType          `json:"type,omitempty"`
+-	//    Type                             v1.ServiceType          `json:"type,omitempty"`
 +	ServiceAnnotations               map[string]interface{}      `json:"serviceAnnotations,omitempty"`
-+    Type                             corev1.ServiceType          `json:"type,omitempty"`
++	Type                             v1.ServiceType          `json:"type,omitempty"`
  	Zvpn                 *IngressGatewayZvpnConfig `protobuf:"bytes,23,opt,name=zvpn,proto3" json:"zvpn,omitempty"`
  	XXX_NoUnkeyedLiteral struct{}                  `json:"-"`
  	XXX_unrecognized     []byte                    `json:"-"`
-@@ -2006,7 +2008,7 @@ type MixerPolicyConfig struct {
+@@ -2153,7 +2154,7 @@
  	Cpu              *CPUTargetUtilizationConfig `protobuf:"bytes,4,opt,name=cpu,proto3" json:"cpu,omitempty"`
  	Enabled          bool                        `protobuf:"varint,5,opt,name=enabled,proto3" json:"enabled,omitempty"`
  	Image            string                      `protobuf:"bytes,6,opt,name=image,proto3" json:"image,omitempty"`
@@ -117,7 +107,7 @@ index 12dbf191..a6bdda3a 100644
  	ReplicaCount         uint32   `protobuf:"varint,7,opt,name=replicaCount,proto3" json:"replicaCount,omitempty"`
  	XXX_NoUnkeyedLiteral struct{} `json:"-"`
  	XXX_unrecognized     []byte   `json:"-"`
-@@ -2098,8 +2100,8 @@ type MixerTelemetryConfig struct {
+@@ -2245,8 +2246,8 @@
  	Env              map[string]string           `protobuf:"bytes,7,rep,name=env,proto3" json:"env,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
  	Image            string                      `protobuf:"bytes,8,opt,name=image,proto3" json:"image,omitempty"`
  	Loadshedding     *LoadSheddingConfig         `protobuf:"bytes,9,opt,name=loadshedding,proto3" json:"loadshedding,omitempty"`
@@ -125,10 +115,10 @@ index 12dbf191..a6bdda3a 100644
 -	// 	PodAnnotations         map[string]interface{}     `json:"podAnnotations,omitempty"`
 +	NodeSelector           map[string]interface{}     `json:"nodeSelector,omitempty"`
 +	PodAnnotations         map[string]interface{}     `json:"podAnnotations,omitempty"`
- 	ReplicaCount           uint32           `protobuf:"varint,10,opt,name=replicaCount,proto3" json:"replicaCount,omitempty"`
- 	Resources              *ResourcesConfig `protobuf:"bytes,11,opt,name=resources,proto3" json:"resources,omitempty"`
- 	SessionAffinityEnabled bool             `protobuf:"varint,12,opt,name=sessionAffinityEnabled,proto3" json:"sessionAffinityEnabled,omitempty"`
-@@ -2261,7 +2263,7 @@ func (m *MultiClusterConfig) GetEnabled() bool {
+ 	ReplicaCount           uint32                   `protobuf:"varint,10,opt,name=replicaCount,proto3" json:"replicaCount,omitempty"`
+ 	Resources              *v1.ResourceRequirements `protobuf:"bytes,11,opt,name=resources,proto3" json:"resources,omitempty"`
+ 	SessionAffinityEnabled bool                     `protobuf:"varint,12,opt,name=sessionAffinityEnabled,proto3" json:"sessionAffinityEnabled,omitempty"`
+@@ -2408,7 +2409,7 @@
  // NodeAgentConfig is described in istio.io documentation.
  type NodeAgentConfig struct {
  	Enabled bool `protobuf:"varint,1,opt,name=enabled,proto3" json:"enabled,omitempty"`
@@ -137,14 +127,14 @@ index 12dbf191..a6bdda3a 100644
  	Image                string   `protobuf:"bytes,2,opt,name=image,proto3" json:"image,omitempty"`
  	XXX_NoUnkeyedLiteral struct{} `json:"-"`
  	XXX_unrecognized     []byte   `json:"-"`
-@@ -2361,12 +2363,12 @@ type PilotConfig struct {
- 	Resources        *ResourcesConfig            `protobuf:"bytes,9,opt,name=resources,proto3" json:"resources,omitempty"`
+@@ -2499,12 +2500,12 @@
+ 	Resources        *v1.ResourceRequirements    `protobuf:"bytes,9,opt,name=resources,proto3" json:"resources,omitempty"`
  	ConfigNamespace  string                      `protobuf:"bytes,10,opt,name=configNamespace,proto3" json:"configNamespace,omitempty"`
  	Cpu              *CPUTargetUtilizationConfig `protobuf:"bytes,11,opt,name=cpu,proto3" json:"cpu,omitempty"`
 -	// 	NodeSelector                     map[string]interface{}      `json:"nodeSelector,omitempty"`
 +	NodeSelector                     map[string]interface{}      `json:"nodeSelector,omitempty"`
- 	KeepaliveMaxServerConnectionAge string            `protobuf:"bytes,12,opt,name=keepaliveMaxServerConnectionAge,proto3" json:"keepaliveMaxServerConnectionAge,omitempty"`
- 	DeploymentLabels                map[string]string `protobuf:"bytes,13,rep,name=deploymentLabels,proto3" json:"deploymentLabels,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+ 	KeepaliveMaxServerConnectionAge *duration.Duration `protobuf:"bytes,12,opt,name=keepaliveMaxServerConnectionAge,proto3" json:"keepaliveMaxServerConnectionAge,omitempty"`
+ 	DeploymentLabels                map[string]string  `protobuf:"bytes,13,rep,name=deploymentLabels,proto3" json:"deploymentLabels,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 -	// 	MeshNetworks                     map[string]interface{}      `json:"meshNetworks,omitempty"`
 -	// 	PodAntiAffinityLabelSelector     []map[string]interface{}    `json:"podAntiAffinityLabelSelector"`
 -	// 	PodAntiAffinityTermLabelSelector []map[string]interface{}    `json:"podAntiAffinityTermLabelSelector"`
@@ -154,16 +144,16 @@ index 12dbf191..a6bdda3a 100644
  	ConfigMap            bool                  `protobuf:"varint,14,opt,name=configMap,proto3" json:"configMap,omitempty"`
  	Ingress              *PilotIngressConfig   `protobuf:"bytes,15,opt,name=ingress,proto3" json:"ingress,omitempty"`
  	UseMCP               bool                  `protobuf:"varint,16,opt,name=useMCP,proto3" json:"useMCP,omitempty"`
-@@ -2744,7 +2746,7 @@ type PrometheusConfig struct {
+@@ -2875,7 +2876,7 @@
  	Hub                      string `protobuf:"bytes,4,opt,name=hub,proto3" json:"hub,omitempty"`
  	Tag                      string `protobuf:"bytes,5,opt,name=tag,proto3" json:"tag,omitempty"`
  	Retention                string `protobuf:"bytes,6,opt,name=retention,proto3" json:"retention,omitempty"`
 -	// 	NodeSelector             map[string]interface{}    `json:"nodeSelector,omitempty"`
 +	NodeSelector             map[string]interface{}    `json:"nodeSelector,omitempty"`
- 	ScrapeInterval       string                    `protobuf:"bytes,7,opt,name=scrapeInterval,proto3" json:"scrapeInterval,omitempty"`
+ 	ScrapeInterval       *duration.Duration        `protobuf:"bytes,7,opt,name=scrapeInterval,proto3" json:"scrapeInterval,omitempty"`
  	ContextPath          string                    `protobuf:"bytes,8,opt,name=contextPath,proto3" json:"contextPath,omitempty"`
  	Ingress              *AddonIngressConfig       `protobuf:"bytes,9,opt,name=ingress,proto3" json:"ingress,omitempty"`
-@@ -2947,7 +2949,7 @@ func (m *PrometheusSecurityConfig) GetEnabled() bool {
+@@ -3078,7 +3079,7 @@
  
  // PrometheusServiceConfig is described in istio.io documentation.
  type PrometheusServiceConfig struct {
@@ -172,7 +162,7 @@ index 12dbf191..a6bdda3a 100644
  	NodePort             *PrometheusServiceNodePortConfig `protobuf:"bytes,1,opt,name=nodePort,proto3" json:"nodePort,omitempty"`
  	XXX_NoUnkeyedLiteral struct{}                         `json:"-"`
  	XXX_unrecognized     []byte                           `json:"-"`
-@@ -3631,9 +3633,10 @@ func (m *SecurityConfig) GetCreateMeshPolicy() bool {
+@@ -3689,9 +3690,10 @@
  
  // ServiceConfig is described in istio.io documentation.
  type ServiceConfig struct {
@@ -180,11 +170,11 @@ index 12dbf191..a6bdda3a 100644
 +	Annotations  map[string]interface{} `json:"annotations,omitempty"`
  	ExternalPort         uint32   `protobuf:"varint,1,opt,name=externalPort,proto3" json:"externalPort,omitempty"`
  	Name                 string   `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
-+	Type                 corev1.ServiceType     `json:"type,omitempty"`
++	Type                 v1.ServiceType     `json:"type,omitempty"`
  	XXX_NoUnkeyedLiteral struct{} `json:"-"`
  	XXX_unrecognized     []byte   `json:"-"`
  	XXX_sizecache        int32    `json:"-"`
-@@ -3680,14 +3683,14 @@ func (m *ServiceConfig) GetName() string {
+@@ -3738,14 +3740,14 @@
  
  // SidecarInjectorConfig is described in istio.io documentation.
  type SidecarInjectorConfig struct {
@@ -204,7 +194,7 @@ index 12dbf191..a6bdda3a 100644
  	ReplicaCount         uint32   `protobuf:"varint,4,opt,name=replicaCount,proto3" json:"replicaCount,omitempty"`
  	RewriteAppHTTPProbe  bool     `protobuf:"varint,5,opt,name=rewriteAppHTTPProbe,proto3" json:"rewriteAppHTTPProbe,omitempty"`
  	SelfSigned           bool     `protobuf:"varint,6,opt,name=selfSigned,proto3" json:"selfSigned,omitempty"`
-@@ -4021,7 +4024,7 @@ type TracingConfig struct {
+@@ -4079,7 +4081,7 @@
  	Enabled bool                  `protobuf:"varint,1,opt,name=enabled,proto3" json:"enabled,omitempty"`
  	Ingress *TracingIngressConfig `protobuf:"bytes,2,opt,name=ingress,proto3" json:"ingress,omitempty"`
  	Jaeger  *TracingJaegerConfig  `protobuf:"bytes,3,opt,name=jaeger,proto3" json:"jaeger,omitempty"`
@@ -213,7 +203,7 @@ index 12dbf191..a6bdda3a 100644
  	Provider             string               `protobuf:"bytes,4,opt,name=provider,proto3" json:"provider,omitempty"`
  	Service              *ServiceConfig       `protobuf:"bytes,5,opt,name=service,proto3" json:"service,omitempty"`
  	Zipkin               *TracingZipkinConfig `protobuf:"bytes,6,opt,name=zipkin,proto3" json:"zipkin,omitempty"`
-@@ -4376,7 +4379,7 @@ type Values struct {
+@@ -4434,7 +4436,7 @@
  	Galley       *GalleyConfig      `protobuf:"bytes,4,opt,name=galley,proto3" json:"galley,omitempty"`
  	Gateways     *GatewaysConfig    `protobuf:"bytes,5,opt,name=gateways,proto3" json:"gateways,omitempty"`
  	Global       *GlobalConfig      `protobuf:"bytes,6,opt,name=global,proto3" json:"global,omitempty"`

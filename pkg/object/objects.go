@@ -60,6 +60,7 @@ func NewK8sObject(u *unstructured.Unstructured, json, yaml []byte) *K8sObject {
 		json:   json,
 		yaml:   yaml,
 	}
+
 	gvk := u.GetObjectKind().GroupVersionKind()
 	o.Group = gvk.Group
 	o.Kind = gvk.Kind

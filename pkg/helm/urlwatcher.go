@@ -99,7 +99,7 @@ func PollURL(dirURL string, interval time.Duration) error {
 	}
 
 	po := NewPoller(dirURL, destDir, interval)
-	go po.poll()
+	po.poll()
 
 	os.RemoveAll(destDir)
 	return nil

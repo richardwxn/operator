@@ -25,6 +25,7 @@ import (
 	"fmt"
 	"reflect"
 	"regexp"
+	"strings"
 
 	"github.com/kylelemons/godebug/pretty"
 
@@ -82,6 +83,26 @@ func getPathContext(nc *PathContext, fullPath, remainPath util.Path, createMissi
 		v = v.Elem()
 	}
 	ncNode := v.Interface()
+
+	// Hack for translation of gateway node
+	if strings.HasSuffix(pe, "gressGateway") {
+		dbgPrint("handling gateway node")
+		m := ncNode.(map[string]interface{})
+		var nn map[string]interface{}
+		if m[pe] == nil {
+			m[pe] = make([]map[string]interface{}, 1)
+			nn = make(map[string]interface{})
+			m[pe].([]map[string]interface{})[0] = nn
+		} else {
+			nn = m[pe].([]map[string]interface{})[0]
+		}
+		nc.KeyToChild = pe
+		npc := &PathContext{
+			Parent: nc,
+			Node:   nn,
+		}
+		return getPathContext(npc, fullPath, remainPath[1:], createMissing)
+	}
 
 	// For list types, we need a key to identify the selected list item. This can be either a a value key of the
 	// form :matching_value in the case of a leaf list, or a matching key:value in the case of a non-leaf list.

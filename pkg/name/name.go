@@ -68,25 +68,6 @@ const (
 	NodeAgentComponentName       ComponentName = "NodeAgent"
 	IngressComponentName         ComponentName = "IngressGateway"
 	EgressComponentName          ComponentName = "EgressGateway"
-<<<<<<< HEAD
-)
-
-var (
-	ComponentNameToFeatureName = map[ComponentName]FeatureName{
-		IstioBaseComponentName:       IstioBaseFeatureName,
-		PilotComponentName:           TrafficManagementFeatureName,
-		GalleyComponentName:          ConfigManagementFeatureName,
-		SidecarInjectorComponentName: AutoInjectionFeatureName,
-		PolicyComponentName:          PolicyFeatureName,
-		TelemetryComponentName:       TelemetryFeatureName,
-		CitadelComponentName:         SecurityFeatureName,
-		CertManagerComponentName:     SecurityFeatureName,
-		NodeAgentComponentName:       SecurityFeatureName,
-		IngressComponentName:         GatewayFeatureName,
-		EgressComponentName:          GatewayFeatureName,
-	}
-=======
->>>>>>> Rebase with master, refactor
 )
 
 var (
@@ -151,7 +132,6 @@ func IsComponentEnabledInSpec(featureName FeatureName, componentName ComponentNa
 	return componentNode.Value, nil
 }
 
-<<<<<<< HEAD
 // IsComponentEnabledFromValue get whether component is enabled in helm value.yaml tree
 func IsComponentEnabledFromValue(valuePath string, valueSpec map[string]interface{}) (bool, error) {
 	valuePath += ".enabled"
@@ -214,122 +194,6 @@ func GetFromTreePath(inputTree map[string]interface{}, path util.Path) (interfac
 		return nil, false, nil
 	}
 	return GetFromTreePath(val.(map[string]interface{}), path[1:])
-=======
-// IsComponentEnabledFromValue get whether component is enabled from value.yaml tree
-func IsComponentEnabledFromValue(valuePath string, valueSpec map[string]interface{}) bool {
-	enableNodeI, found, err := GetFromValuePath(valueSpec, util.PathFromString(valuePath))
-	if err != nil {
-		log.Error(err.Error())
-		return false
-	}
-	if !found || enableNodeI == nil {
-		return false
-	}
-	enableNode, ok := enableNodeI.(bool)
-	if !ok {
-		log.Errorf("node at valuePath %s has bad type %T, expect bool", valuePath, enableNodeI)
-	}
-	return enableNode
-}
-
-<<<<<<< HEAD
-func NamespaceFromValue(valuePath string, valueSpec map[string]interface{}) string{
-	nsNodeI, found, err := GetFromValuePath(valueSpec, util.PathFromString(valuePath))
-	if err != nil {
-		log.Error(err.Error())
-		return ""
-	}
-	if !found || nsNodeI == nil {
-		return ""
-	}
-	nsNode, ok := nsNodeI.(string)
-	if !ok {
-		log.Errorf("node at valuePath %s has bad type %T, expect string", valuePath, nsNodeI)
-	}
-	return nsNode
-}
-
-// GetFromValuePath returns the value at path from the given tree, or false if the path does not exist.
-func GetFromValuePath(inputTree map[string]interface{}, path util.Path) (interface{}, bool, error) {
-		if len(path) == 0 {
-			return nil, false, fmt.Errorf("cannot find path from inputTree, path is empty")
-		}
-		val := inputTree[path[0]]
-		if val == nil {
-			return nil, false, fmt.Errorf("cannot find path from inputTree")
-		}
-		if len(path) == 1 {
-			return val, true, nil
-		}
-		return GetFromValuePath(val.(map[string]interface{}), path[1:])
->>>>>>> Rebase with master, refactor
-}
-
-// IsComponentEnabledFromValue get whether component is enabled from value.yaml tree
-func IsComponentEnabledFromValue(valuePath string, valueSpec map[string]interface{}) bool {
-	enableNodeI, found, err := GetFromValuePath(valueSpec, util.PathFromString(valuePath))
-	if err != nil {
-		log.Error(err.Error())
-		return false
-	}
-	if !found || enableNodeI == nil {
-		return false
-	}
-	enableNode, ok := enableNodeI.(bool)
-	if !ok {
-		log.Errorf("node at valuePath %s has bad type %T, expect bool", valuePath, enableNodeI)
-	}
-	return enableNode
-}
-
-=======
->>>>>>> refactor
-func NamespaceFromValue(valuePath string, valueSpec map[string]interface{}) string {
-	nsNodeI, found, err := GetFromValuePath(valueSpec, util.PathFromString(valuePath))
-	if err != nil {
-		log.Error(err.Error())
-		return ""
-	}
-	if !found || nsNodeI == nil {
-		return ""
-	}
-	nsNode, ok := nsNodeI.(string)
-	if !ok {
-		log.Errorf("node at valuePath %s has bad type %T, expect string", valuePath, nsNodeI)
-	}
-	return nsNode
-}
-
-// GetFromValuePath returns the value at path from the given tree, or false if the path does not exist.
-func GetFromValuePath(inputTree map[string]interface{}, path util.Path) (interface{}, bool, error) {
-	dbgPrint("getFromValuePath path=%s", path)
-	if len(path) == 0 {
-		return nil, false, fmt.Errorf("cannot find path from inputTree, path is empty")
-	}
-	val := inputTree[path[0]]
-	if val == nil {
-		return nil, false, fmt.Errorf("cannot find path from inputTree")
-	}
-	if len(path) == 1 {
-		return val, true, nil
-	}
-	switch newRoot := val.(type) {
-	case map[string]interface{}:
-		return GetFromValuePath(newRoot, path[1:])
-	case []interface{}:
-		for _, test := range newRoot {
-			nextVal, found, err := GetFromValuePath(test.(map[string]interface{}), path[1:])
-			if err != nil {
-				log.Error("fail to get from one of the value path")
-				continue
-			}
-			if found {
-				return nextVal, true, nil
-			}
-		}
-		return nil, false, fmt.Errorf("cannot find path from inputTree")
-	}
-	return GetFromValuePath(val.(map[string]interface{}), path[1:])
 }
 
 // Namespace returns the namespace for the component. It follows these rules:

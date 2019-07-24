@@ -225,7 +225,7 @@ mixer:
 	}
 	tr, err := NewValueYAMLTranslator(version.NewMinorVersion(1, 2))
 	if err != nil {
-		t.Fatal("fail to get value.yaml translator")
+		t.Fatal("fail to get helm value.yaml translator")
 	}
 
 	for _, tt := range tests {

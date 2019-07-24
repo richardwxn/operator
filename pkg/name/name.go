@@ -132,69 +132,68 @@ func IsComponentEnabledInSpec(featureName FeatureName, componentName ComponentNa
 	return componentNode.Value, nil
 }
 
-// IsComponentEnabledFromValue get whether component is enabled from value.yaml tree
-func IsComponentEnabledFromValue(valuePath string, valueSpec map[string]interface{}) bool {
-	enableNodeI, found, err := GetFromValuePath(valueSpec, util.PathFromString(valuePath))
+// IsComponentEnabledFromValue get whether component is enabled in helm value.yaml tree
+func IsComponentEnabledFromValue(valuePath string, valueSpec map[string]interface{}) (bool, error) {
+	valuePath += ".enabled"
+	enableNodeI, found, err := GetFromTreePath(valueSpec, util.ToYAMLPath(valuePath))
 	if err != nil {
-		log.Error(err.Error())
-		return false
+		return false, fmt.Errorf("component enablement path: %s not found in helm value.yaml tree", valuePath)
 	}
 	if !found || enableNodeI == nil {
-		return false
+		return false, nil
 	}
 	enableNode, ok := enableNodeI.(bool)
 	if !ok {
-		log.Errorf("node at valuePath %s has bad type %T, expect bool", valuePath, enableNodeI)
+		return false, fmt.Errorf("node at valuePath %s has bad type %T, expect bool", valuePath, enableNodeI)
 	}
-	return enableNode
+	return enableNode, nil
 }
 
-func NamespaceFromValue(valuePath string, valueSpec map[string]interface{}) string {
-	nsNodeI, found, err := GetFromValuePath(valueSpec, util.PathFromString(valuePath))
+// NamespaceFromValue gets the namespace value in helm value.yaml tree.
+func NamespaceFromValue(valuePath string, valueSpec map[string]interface{}) (string, error) {
+	nsNodeI, found, err := GetFromTreePath(valueSpec, util.ToYAMLPath(valuePath))
 	if err != nil {
-		log.Error(err.Error())
-		return ""
+		return "", fmt.Errorf("namespace path not found: %s from helm value.yaml tree", valuePath)
 	}
 	if !found || nsNodeI == nil {
-		return ""
+		return "", nil
 	}
 	nsNode, ok := nsNodeI.(string)
 	if !ok {
-		log.Errorf("node at valuePath %s has bad type %T, expect string", valuePath, nsNodeI)
+		return "", fmt.Errorf("node at helm value.yaml tree path %s has bad type %T, expect string", valuePath, nsNodeI)
 	}
-	return nsNode
+	return nsNode, nil
 }
 
-// GetFromValuePath returns the value at path from the given tree, or false if the path does not exist.
-func GetFromValuePath(inputTree map[string]interface{}, path util.Path) (interface{}, bool, error) {
-	dbgPrint("getFromValuePath path=%s", path)
+// GetFromTreePath returns the value at path from the given tree, or false if the path does not exist.
+func GetFromTreePath(inputTree map[string]interface{}, path util.Path) (interface{}, bool, error) {
+	dbgPrint("GetFromTreePath path=%s", path)
 	if len(path) == 0 {
-		return nil, false, fmt.Errorf("cannot find path from inputTree, path is empty")
+		return nil, false, fmt.Errorf("path is empty")
 	}
 	val := inputTree[path[0]]
 	if val == nil {
-		return nil, false, fmt.Errorf("cannot find path from inputTree")
+		return nil, false, nil
 	}
 	if len(path) == 1 {
 		return val, true, nil
 	}
 	switch newRoot := val.(type) {
 	case map[string]interface{}:
-		return GetFromValuePath(newRoot, path[1:])
+		return GetFromTreePath(newRoot, path[1:])
 	case []interface{}:
-		for _, test := range newRoot {
-			nextVal, found, err := GetFromValuePath(test.(map[string]interface{}), path[1:])
+		for _, node := range newRoot {
+			nextVal, found, err := GetFromTreePath(node.(map[string]interface{}), path[1:])
 			if err != nil {
-				log.Error("fail to get from one of the value path")
 				continue
 			}
 			if found {
 				return nextVal, true, nil
 			}
 		}
-		return nil, false, fmt.Errorf("cannot find path from inputTree")
+		return nil, false, nil
 	}
-	return GetFromValuePath(val.(map[string]interface{}), path[1:])
+	return GetFromTreePath(val.(map[string]interface{}), path[1:])
 }
 
 // Namespace returns the namespace for the component. It follows these rules:
@@ -274,7 +273,7 @@ func getFromStructPath(node interface{}, path util.Path) (interface{}, bool, err
 	var structElems reflect.Value
 	switch kind {
 	case reflect.Map, reflect.Slice:
-		if len(path) != 0 {
+		if len(path) == 0 {
 			return nil, false, fmt.Errorf("getFromStructPath path %s, unsupported leaf type %T", path, node)
 		}
 	case reflect.Ptr:

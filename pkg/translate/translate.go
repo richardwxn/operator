@@ -43,7 +43,7 @@ const (
 
 var (
 	// DebugPackage controls detailed debug output for this package.
-	DebugPackage = true
+	DebugPackage = false
 )
 
 // Translator is a set of mappings to translate between API paths, charts, values.yaml and k8s paths.

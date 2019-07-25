@@ -137,8 +137,93 @@ sidecarInjectorWebhook:
   enabled: false
 `,
 		},
+//		{
+//			desc: "Some components Disabled",
+//			want: `
+//hub: docker.io/istio
+//tag: 1.2.3
+//default_namespace_prefix: istio-system
+//telemetry:
+//  components:
+//    namespace: istio-telemetry
+//    telemetry:
+//      common:
+//        enabled: {}
+//  enabled: {}
+//policy:
+//  components:
+//    namespace: istio-policy
+//    policy:
+//      common:
+//        enabled:
+//          value: true
+//  enabled:
+//    value: true
+//config_management:
+//  components:
+//    galley:
+//      common:
+//        enabled: {}
+//  enabled: {}
+//security:
+//  components:
+//    namespace: istio-system
+//    cert_manager:
+//      common:
+//        enabled: {}
+//    node_agent:
+//      common:
+//        enabled: {}
+//    citadel:
+//      common:
+//        enabled: {}
+//  enabled: {}
+//gateways:
+//  components:
+//    ingress_gateway:
+//      - gateway:
+//          common:
+//           enabled: {}
+//    egress_gateway:
+//      - gateway:
+//          common:
+//           enabled: {}
+//  enabled: {}
+//traffic_management:
+//  components:
+//    pilot:
+//      common:
+//        enabled:
+//          value: true
+//  enabled:
+//    value: true
+//auto_injection:
+//  components:
+//    injector:
+//       common:
+//        enabled: {}
+//  enabled: {}
+//`,
+//			valueYAML: `
+//galley:
+//  enabled: false
+//pilot:
+//  enabled: true
+//global:
+//  hub: docker.io/istio
+//  istioNamespace: istio-system
+//  policyNamespace: istio-policy
+//  tag: 1.2.3
+//  telemetryNamespace: istio-telemetry
+//mixer:
+//  policy:
+//    enabled: true
+//  telemetry:
+//    enabled: false
+//`,
+//		},
 		{
-			desc: "Some components Disabled",
+			desc: "K8s resources translation",
 			want: `
 hub: docker.io/istio
 tag: 1.2.3
@@ -195,6 +280,8 @@ traffic_management:
       common:
         enabled:
           value: true
+        k8s:
+          replica_count: 1
   enabled:
     value: true
 auto_injection:
@@ -209,6 +296,13 @@ galley:
   enabled: false
 pilot:
   enabled: true
+  resources:
+    requests:
+      cpu: 1000m
+      memory: 1G
+  replicaCount: 1
+  nodeSelector:
+    beta.kubernetes.io/os: linux
 global:
   hub: docker.io/istio
   istioNamespace: istio-system
@@ -221,8 +315,7 @@ mixer:
   telemetry:
     enabled: false
 `,
-		},
-	}
+		}}
 	tr, err := NewValueYAMLTranslator(version.NewMinorVersion(1, 2))
 	if err != nil {
 		t.Fatal("fail to get helm value.yaml translator")

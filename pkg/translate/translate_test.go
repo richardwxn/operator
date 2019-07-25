@@ -40,10 +40,19 @@ gateways:
     ingressGateway:
     - gateway:
         common:
-          enabled: true
+          enabled: false
+    egressGateway:
     - gateway:
         common:
           enabled: false
+  enabled: true
+configManagement:
+  components:
+    galley:
+      common:
+         enabled: false
+  enabled:
+    true
 `,
 			want: `
 certmanager:

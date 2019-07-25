@@ -49,18 +49,18 @@ var (
 			APIMapping: map[string]*Translation{},
 			KubernetesMapping: map[string]*Translation{
 				// TODO use template for podaffinity
-				"{{.ValueComponentName}}.podAntiAffinityLabelSelector": {"{{.FeatureName}}.Components.{{.ComponentName}}.Common.K8S.Affinity", nil},
-				"{{.ValueComponentName}}.env":                          {"{{.FeatureName}}.Components.{{.ComponentName}}.Common.K8S.Env", nil},
-				"{{.ValueComponentName}}.autoscaleEnabled":             {"{{.FeatureName}}.Components.{{.ComponentName}}.Common.K8S.HpaSpec", nil},
-				"{{.ValueComponentName}}.imagePullPolicy":              {"{{.FeatureName}}.Components.{{.ComponentName}}.Common.K8S.ImagePullPolicy", nil},
-				"{{.ValueComponentName}}.nodeSelector":                 {"{{.FeatureName}}.Components.{{.ComponentName}}.Common.K8S.NodeSelector", nil},
-				"{{.ValueComponentName}}.podDisruptionBudget":          {"{{.FeatureName}}.Components.{{.ComponentName}}.Common.K8S.PodDisruptionBudget", nil},
-				"{{.ValueComponentName}}.podAnnotations":               {"{{.FeatureName}}.Components.{{.ComponentName}}.Common.K8S.PodAnnotations", nil},
-				"{{.ValueComponentName}}.priorityClassName":            {"{{.FeatureName}}.Components.{{.ComponentName}}.Common.K8S.PriorityClassName", nil},
+				"{{.ValueComponentName}}.podAntiAffinityLabelSelector": {"{{.FeatureName}}.Components.{{.ComponentName}}.Common.K8s.Affinity", nil},
+				"{{.ValueComponentName}}.env":                          {"{{.FeatureName}}.Components.{{.ComponentName}}.Common.K8s.Env", nil},
+				"{{.ValueComponentName}}.autoscaleEnabled":             {"{{.FeatureName}}.Components.{{.ComponentName}}.Common.K8s.HpaSpec", nil},
+				"{{.ValueComponentName}}.imagePullPolicy":              {"{{.FeatureName}}.Components.{{.ComponentName}}.Common.K8s.ImagePullPolicy", nil},
+				"{{.ValueComponentName}}.nodeSelector":                 {"{{.FeatureName}}.Components.{{.ComponentName}}.Common.K8s.NodeSelector", nil},
+				"{{.ValueComponentName}}.podDisruptionBudget":          {"{{.FeatureName}}.Components.{{.ComponentName}}.Common.K8s.PodDisruptionBudget", nil},
+				"{{.ValueComponentName}}.podAnnotations":               {"{{.FeatureName}}.Components.{{.ComponentName}}.Common.K8s.PodAnnotations", nil},
+				"{{.ValueComponentName}}.priorityClassName":            {"{{.FeatureName}}.Components.{{.ComponentName}}.Common.K8s.PriorityClassName", nil},
 				// TODO check readinessProbe mapping
-				"{{.ValueComponentName}}.readinessProbe": {"{{.FeatureName}}.Components.{{.ComponentName}}.Common.K8S.ReadinessProbe", nil},
-				"{{.ValueComponentName}}.replicaCount":   {"{{.FeatureName}}.Components.{{.ComponentName}}.Common.K8S.ReplicaCount", nil},
-				"{{.ValueComponentName}}.resources":      {"{{.FeatureName}}.Components.{{.ComponentName}}.Common.K8S.Resources", nil},
+				"{{.ValueComponentName}}.readinessProbe": {"{{.FeatureName}}.Components.{{.ComponentName}}.Common.K8s.ReadinessProbe", nil},
+				"{{.ValueComponentName}}.replicaCount":   {"{{.FeatureName}}.Components.{{.ComponentName}}.Common.K8s.ReplicaCount", nil},
+				"{{.ValueComponentName}}.resources":      {"{{.FeatureName}}.Components.{{.ComponentName}}.Common.K8s.Resources", nil},
 			},
 			ValuesToComponentName: map[string]name.ComponentName{
 				"pilot":                         name.PilotComponentName,
@@ -233,6 +233,15 @@ func (t *ValueYAMLTranslator) setEnablementAndNamespacesFromValue(valueSpec map[
 func translateTree(valueTree map[string]interface{},
 	cpSpecTree map[string]interface{}, mapping map[string]*Translation) error {
 	for inPath, v := range mapping {
+		// Extra logics needed for K8s translation
+		// HPA spec
+
+
+		// Readiness Probe
+
+
+
+		// Env, which is map[string]string originally then to []*
 		log.Infof("Checking for path %s in helm Value.yaml tree", inPath)
 		m, found, err := name.GetFromTreePath(valueTree, util.ToYAMLPath(inPath))
 		if err != nil {
@@ -255,7 +264,6 @@ func translateTree(valueTree map[string]interface{},
 
 		path := util.ToYAMLPath(v.outPath)
 		log.Infof("path has value in helm Value.yaml tree, mapping to output path %s", path)
-		//pe := path[0]
 
 		if err := tpath.WriteNode(cpSpecTree, path, m); err != nil {
 			return err

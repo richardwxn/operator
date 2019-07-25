@@ -241,7 +241,6 @@ pilot:
   autoscaleMin: 1
   env:
     GODEBUG: gctrace=1
-    GODEBUG2: gctrace=1
   podAntiAffinityLabelSelector:
     - labelSelector:
         matchLabels:
@@ -327,8 +326,6 @@ traffic_management:
           replica_count: 1
           env:
           - name: GODEBUG
-            value: gctrace=1 
-          - name: GODEBUG2
             value: gctrace=1
           hpa_spec:
              maxReplicas: 3
@@ -371,7 +368,7 @@ auto_injection:
 			if err != nil {
 				t.Fatalf("unmarshal(%s): got error %s", tt.desc, err)
 			}
-			dbgPrint("value struct: \n%s\n", pretty.Sprint(valueStruct))
+			scope.Debugf("value struct: \n%s\n", pretty.Sprint(valueStruct))
 			got, err := tr.TranslateFromValueToSpec(&valueStruct)
 			if gotErr, wantErr := errToString(err), tt.wantErr; gotErr != wantErr {
 				t.Errorf("ValuesToProto(%s)(%v): gotErr:%s, wantErr:%s", tt.desc, tt.valueYAML, gotErr, wantErr)

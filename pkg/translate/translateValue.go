@@ -48,18 +48,20 @@ var (
 		version.NewMinorVersion(1, 2): {
 			APIMapping: map[string]*Translation{},
 			KubernetesMapping: map[string]*Translation{
-				"{{.ValueComponentName}}.podAntiAffinityLabelSelector":     {"{{.FeatureName}}.Components.{{.ComponentName}}.Common.K8s.Affinity.PodAntiAffinity.RequiredDuringSchedulingIgnoredDuringExecution", nil},
-				"{{.ValueComponentName}}.podAntiAffinityTermLabelSelector": {"{{.FeatureName}}.Components.{{.ComponentName}}.Common.K8s.Affinity.PodAntiAffinity.PreferredDuringSchedulingIgnoredDuringExecution", nil},
-				"{{.ValueComponentName}}.env":                              {"{{.FeatureName}}.Components.{{.ComponentName}}.Common.K8s.Env", nil},
-				"{{.ValueComponentName}}.autoscaleEnabled":                 {"{{.FeatureName}}.Components.{{.ComponentName}}.Common.K8s.HpaSpec", nil},
-				"{{.ValueComponentName}}.imagePullPolicy":                  {"{{.FeatureName}}.Components.{{.ComponentName}}.Common.K8s.ImagePullPolicy", nil},
-				"{{.ValueComponentName}}.nodeSelector":                     {"{{.FeatureName}}.Components.{{.ComponentName}}.Common.K8s.NodeSelector", nil},
-				"{{.ValueComponentName}}.podDisruptionBudget":              {"{{.FeatureName}}.Components.{{.ComponentName}}.Common.K8s.PodDisruptionBudget", nil},
-				"{{.ValueComponentName}}.podAnnotations":                   {"{{.FeatureName}}.Components.{{.ComponentName}}.Common.K8s.PodAnnotations", nil},
-				"{{.ValueComponentName}}.priorityClassName":                {"{{.FeatureName}}.Components.{{.ComponentName}}.Common.K8s.PriorityClassName", nil},
-				"{{.ValueComponentName}}.readinessProbe":                   {"{{.FeatureName}}.Components.{{.ComponentName}}.Common.K8s.ReadinessProbe", nil},
-				"{{.ValueComponentName}}.replicaCount":                     {"{{.FeatureName}}.Components.{{.ComponentName}}.Common.K8s.ReplicaCount", nil},
-				"{{.ValueComponentName}}.resources":                        {"{{.FeatureName}}.Components.{{.ComponentName}}.Common.K8s.Resources", nil},
+				"{{.ValueComponentName}}.podAntiAffinityLabelSelector": {"{{.FeatureName}}.Components.{{.ComponentName}}.Common.K8s." +
+					"Affinity.PodAntiAffinity.RequiredDuringSchedulingIgnoredDuringExecution", nil},
+				"{{.ValueComponentName}}.podAntiAffinityTermLabelSelector": {"{{.FeatureName}}.Components.{{.ComponentName}}.Common.K8s." +
+					"Affinity.PodAntiAffinity.PreferredDuringSchedulingIgnoredDuringExecution", nil},
+				"{{.ValueComponentName}}.env":                 {"{{.FeatureName}}.Components.{{.ComponentName}}.Common.K8s.Env", nil},
+				"{{.ValueComponentName}}.autoscaleEnabled":    {"{{.FeatureName}}.Components.{{.ComponentName}}.Common.K8s.HpaSpec", nil},
+				"{{.ValueComponentName}}.imagePullPolicy":     {"{{.FeatureName}}.Components.{{.ComponentName}}.Common.K8s.ImagePullPolicy", nil},
+				"{{.ValueComponentName}}.nodeSelector":        {"{{.FeatureName}}.Components.{{.ComponentName}}.Common.K8s.NodeSelector", nil},
+				"{{.ValueComponentName}}.podDisruptionBudget": {"{{.FeatureName}}.Components.{{.ComponentName}}.Common.K8s.PodDisruptionBudget", nil},
+				"{{.ValueComponentName}}.podAnnotations":      {"{{.FeatureName}}.Components.{{.ComponentName}}.Common.K8s.PodAnnotations", nil},
+				"{{.ValueComponentName}}.priorityClassName":   {"{{.FeatureName}}.Components.{{.ComponentName}}.Common.K8s.PriorityClassName", nil},
+				"{{.ValueComponentName}}.readinessProbe":      {"{{.FeatureName}}.Components.{{.ComponentName}}.Common.K8s.ReadinessProbe", nil},
+				"{{.ValueComponentName}}.replicaCount":        {"{{.FeatureName}}.Components.{{.ComponentName}}.Common.K8s.ReplicaCount", nil},
+				"{{.ValueComponentName}}.resources":           {"{{.FeatureName}}.Components.{{.ComponentName}}.Common.K8s.Resources", nil},
 			},
 			ValuesToComponentName: map[string]name.ComponentName{
 				"pilot":                         name.PilotComponentName,

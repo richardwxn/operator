@@ -7,21 +7,21 @@ See the
 [design doc](https://docs.google.com/document/d/11j9ZtYWNWnxQYnZy8ayZav1FMwTH6F6z6fkDYZ7V298/edit#heading=h.qex63c29z2to)
 for a more complete design description. The operator code is divided roughly into five areas:
 
-1. [IstioControlPlaneSpec API](https://github.com/istio/operator/blob/master/ARCHITECTURE.md#istiocontrolplanespec-api) and related infrastructure, which is expressed as a
+1. [IstioControlPlaneSpec API](#istiocontrolplanespec-api) and related infrastructure, which is expressed as a
 [proto](https://github.com/istio/operator/blob/master/pkg/apis/istio/v1alpha2/istiocontrolplane_types.proto) and
 compiled to [Go
 structs](https://github.com/istio/operator/blob/master/pkg/apis/istio/v1alpha2/istiocontrolplane_types.pb.go).
 `IstioControlPlaneSpec` has pass-through fields to the Helm values.yaml API, but these are additionally validated through
-a [schema](https://github.com/istio/operator/blob/master/pkg/apis/istio/v1alpha2/values_types.go). 
-1. [Controller](https://github.com/istio/operator/blob/master/ARCHITECTURE.md#istiocontrolplanespec-api) code. The code comprises the K8s listener, webhook and logic for reconciling the cluster
+a [schema](https://github.com/istio/operator/blob/master/pkg/apis/istio/v1alpha2/values/values_types.proto). 
+1. [Controller](#k8s-controller) code. The code comprises the K8s listener, webhook and logic for reconciling the cluster
 to an `IstioControlPlaneSpec` CR. 
-1. [Manifest creation](https://github.com/istio/operator/blob/master/ARCHITECTURE.md#istiocontrolplanespec-api) code. User settings are overlaid on top of the
+1. [Manifest creation](#manifest-creation) code. User settings are overlaid on top of the
 selected profile values and passed to a renderer in the Helm library to create manifests. Further customization on the
 created manifests can be done through overlays. 
-1. [CLI](https://github.com/istio/operator/blob/master/ARCHITECTURE.md#istiocontrolplanespec-api) code. CLI code shares the `IstioControlPlaneSpec` API with
+1. [CLI](#cli) code. CLI code shares the `IstioControlPlaneSpec` API with
 the controller, but allows manifests to be generated and optionally applied from the command line without the need to
 run a privileged controller in the cluster. 
-1. [Migration tools](https://github.com/istio/operator/blob/master/ARCHITECTURE.md#istiocontrolplanespec-api). The migration tools are intended to
+1. [Migration tools](#migration-tools). The migration tools are intended to
 automate configuration migration from Helm to the operator.
 
 The operator code uses the new Helm charts in the [istio/installer](https://github.com/istio/installer) repo. It is not

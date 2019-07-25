@@ -16,9 +16,8 @@ package translate
 
 import (
 	"fmt"
-	"strings"
-
 	"github.com/ghodss/yaml"
+	"strings"
 
 	"istio.io/operator/pkg/apis/istio/v1alpha2"
 	"istio.io/operator/pkg/name"
@@ -87,6 +86,8 @@ var (
 	// Feature enablement mapping. Ex: "{{.ValueComponent}}.enabled": {"{{.FeatureName}}.enabled}", nil},
 	componentEnablementPattern   = "{{.FeatureName}}.Components.{{.ComponentName}}.Common.Enabled"
 	gWComponentEnablementPattern = "{{.FeatureName}}.Components.{{.ComponentName}}.Gateway.Common.Enabled"
+
+
 )
 
 // initAPIMapping generate the reverse mapping from original translator apiMapping
@@ -110,6 +111,15 @@ func (t *ValueYAMLTranslator) initK8SMapping() {
 			outputMapping[newKey] = &Translation{newVal, nil}
 		}
 	}
+
+	// add readiness mapping
+	outputMapping["global.proxy.readinessInitialDelaySeconds"] = &Translation{
+		"TrafficManagement.Components.ProxyComponent.Common.K8s.ReadinessProbe.InitialDelaySeconds", nil}
+	outputMapping["global.proxy.readinessPeriodSeconds"] = &Translation{
+			"TrafficManagement.Components.ProxyComponent.Common.K8s.ReadinessProbe.PeriodSeconds", nil}
+	outputMapping["global.proxy.readinessFailureThreshold"] = &Translation{
+		"TrafficManagement.Components.ProxyComponent.Common.K8s.ReadinessProbe.FailureThreshold", nil}
+
 	t.KubernetesMapping = outputMapping
 }
 
@@ -172,7 +182,7 @@ func (t *ValueYAMLTranslator) TranslateTree(valueTree map[string]interface{}, cp
 		return fmt.Errorf("error when translating value.yaml tree with global mapping %v", err.Error())
 	}
 	// translate with k8s mapping
-	err = translateTree(valueTree, cpSpecTree, t.KubernetesMapping)
+	err = translateK8sTree(valueTree, cpSpecTree, t.KubernetesMapping)
 	if err != nil {
 		return fmt.Errorf("error when translating value.yaml tree with kubernetes mapping %v", err.Error())
 	}
@@ -189,7 +199,7 @@ func (t *ValueYAMLTranslator) setEnablementAndNamespacesFromValue(valueSpec map[
 		}
 		featureName := name.ComponentNameToFeatureName[cni]
 		tmpl := componentEnablementPattern
-		if strings.Contains(cnv, "gateway") {
+		if cni == name.IngressComponentName || cni == name.EgressComponentName {
 			tmpl = gWComponentEnablementPattern
 		}
 		ceVal := renderFeatureComponentPathTemplate(tmpl, featureName, cni)
@@ -229,19 +239,101 @@ func (t *ValueYAMLTranslator) setEnablementAndNamespacesFromValue(valueSpec map[
 	return nil
 }
 
+func translateHPASpec(inPath string, value interface{}, valueTree map[string]interface{}, cpSpecTree map[string]interface{}) error {
+	asEnabled, ok := value.(bool)
+	if !ok {
+		return fmt.Errorf("autoscaleEnabled node value is not bool")
+	}
+	if asEnabled {
+		newP := strings.Split(inPath, ".")[0]
+		minPath :=  newP + ".autoscaleMin"
+		asMin, found, err := name.GetFromTreePath(valueTree, util.ToYAMLPath(minPath))
+		if found && err != nil {
+			if err := tpath.WriteNode(cpSpecTree, outpath, asMin); err != nil {
+				return err
+			}
+		}
+		maxPath := newP + ".autoscaleMax"
+		asMax, found, err := name.GetFromTreePath(valueTree, util.ToYAMLPath(maxPath))
+		if found && err != nil {
+			if err := tpath.WriteNode(cpSpecTree, outpath, asMax); err != nil {
+				return err
+			}
+		}
+		return nil
+	} else {
+		return nil
+	}
+
+}
+
+
+func translateEnv(inPath string, value interface{}, valueTree map[string]interface{}, cpSpecTree map[string]interface{}) error {
+	// translates from map[string]string then to []*Env
+	envMap, ok := value.(map[string]string)
+	if !ok {
+
+	}
+	outEnv := make([]map[string]interface{}, len(envMap))
+	for k,v := range envMap {
+		
+	}
+	tpath.WriteNode(cpSpecTree, path, "gg")
+}
+
+// translateTK8sree is internal method for translating K8s setting from value.yaml tree.
+func translateK8sTree(valueTree map[string]interface{},
+	cpSpecTree map[string]interface{}, mapping map[string]*Translation) error {
+	for inPath, v := range mapping {
+		log.Infof("Checking for k8s path %s in helm Value.yaml tree", inPath)
+		m, found, err := name.GetFromTreePath(valueTree, util.ToYAMLPath(inPath))
+		if err != nil {
+			return err
+		}
+		if !found {
+			log.Infof("path %s not found in helm Value.yaml tree, skip mapping.", inPath)
+			continue
+		}
+		if strings.HasSuffix(inPath, "autoscaleEnabled") {
+			err := translateHPASpec(inPath, m, valueTree, cpSpecTree)
+			if err != nil {
+				return fmt.Errorf("error in translating K8s HPA spec %s", err.Error())
+			}
+			continue
+		}
+		if strings.HasSuffix(inPath, "env") {
+			err := translateEnv(inPath, m, valueTree, cpSpecTree)
+			if err != nil {
+				return fmt.Errorf("error in translating k8s Env %s", err.Error())
+			}
+			continue
+		}
+
+		if mstr, ok := m.(string); ok && mstr == "" {
+			log.Infof("path %s is empty string, skip mapping.", inPath)
+			continue
+		}
+		// Zero int values are due to proto3 compiling to scalars rather than ptrs. Skip these because values of 0 are
+		// the default in destination fields and need not be set explicitly.
+		if mint, ok := util.ToIntValue(m); ok && mint == 0 {
+			log.Infof("path %s is int 0, skip mapping.", inPath)
+			continue
+		}
+
+		path := util.ToYAMLPath(v.outPath)
+		log.Infof("path has value in helm Value.yaml tree, mapping to output path %s", path)
+
+		if err := tpath.WriteNode(cpSpecTree, path, m); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
 // translateTree is internal method for translating value.yaml tree
 func translateTree(valueTree map[string]interface{},
 	cpSpecTree map[string]interface{}, mapping map[string]*Translation) error {
 	for inPath, v := range mapping {
-		// Extra logics needed for K8s translation
-		// HPA spec
-
-
-		// Readiness Probe
-
-
-
-		// Env, which is map[string]string originally then to []*
 		log.Infof("Checking for path %s in helm Value.yaml tree", inPath)
 		m, found, err := name.GetFromTreePath(valueTree, util.ToYAMLPath(inPath))
 		if err != nil {

@@ -25,7 +25,6 @@ import (
 	"fmt"
 	"reflect"
 	"regexp"
-	"strings"
 
 	"github.com/kylelemons/godebug/pretty"
 
@@ -86,7 +85,7 @@ func getPathContext(nc *PathContext, fullPath, remainPath util.Path, createMissi
 	ncNode := v.Interface()
 
 	// Hack for translation of gateway node
-	if strings.HasSuffix(pe, "gressGateway") {
+	if isGatewaysPath(pe) {
 		dbgPrint("handling gateway node")
 		m := ncNode.(map[string]interface{})
 		var nn map[string]interface{}
@@ -278,6 +277,11 @@ func isMapOrInterface(v interface{}) bool {
 		vv = vv.Elem()
 	}
 	return vv.Kind() == reflect.Map
+}
+
+// isGatewaysPath check whether pe is part of gateway path
+func isGatewaysPath(pe string) bool {
+	return pe == "ingressGateway" || pe == "egressGateway"
 }
 
 // dbgPrint prints v if the package global variable DebugPackage is set.

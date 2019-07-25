@@ -35,24 +35,6 @@ func TestProtoToValuesV12(t *testing.T) {
 			desc: "default success",
 			yamlStr: `
 defaultNamespacePrefix: istio-system
-gateways:
-  components:
-    ingressGateway:
-    - gateway:
-        common:
-          enabled: false
-    egressGateway:
-    - gateway:
-        common:
-          enabled: false
-  enabled: true
-configManagement:
-  components:
-    galley:
-      common:
-         enabled: false
-  enabled:
-    true
 `,
 			want: `
 certmanager:

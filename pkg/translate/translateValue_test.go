@@ -35,6 +35,33 @@ func TestValueToProto(t *testing.T) {
 	}{
 		{
 			desc: "All Enabled",
+			valueYAML: `
+certManager:
+  enabled: true
+galley:
+  enabled: true
+global:
+  hub: docker.io/istio
+  istioNamespace: istio-system
+  policyNamespace: istio-policy
+  tag: 1.2.3
+  telemetryNamespace: istio-telemetry
+mixer:
+  policy:
+    enabled: true
+  telemetry:
+    enabled: true
+pilot:
+  enabled: true
+nodeAgent:
+  enabled: true
+gateways:
+  enabled: true
+  istio-ingressgateway:
+    enabled: true
+sidecarInjectorWebhook:
+  enabled: false
+`,
 			want: `
 hub: docker.io/istio
 tag: 1.2.3
@@ -109,36 +136,129 @@ gateways:
   enabled:
     value: true
 `,
+		},
+		{
+			desc: "Some components Disabled",
 			valueYAML: `
-certManager:
-  enabled: true
 galley:
+ enabled: false
+pilot:
+ enabled: true
+global:
+ hub: docker.io/istio
+ istioNamespace: istio-system
+ policyNamespace: istio-policy
+ tag: 1.2.3
+ telemetryNamespace: istio-telemetry
+mixer:
+ policy:
+   enabled: true
+ telemetry:
+   enabled: false
+`,
+			want: `
+hub: docker.io/istio
+tag: 1.2.3
+default_namespace_prefix: istio-system
+telemetry:
+ components:
+   namespace: istio-telemetry
+   telemetry:
+     common:
+       enabled: {}
+ enabled: {}
+policy:
+ components:
+   namespace: istio-policy
+   policy:
+     common:
+       enabled:
+         value: true
+ enabled:
+   value: true
+config_management:
+ components:
+   galley:
+     common:
+       enabled: {}
+ enabled: {}
+security:
+ components:
+   namespace: istio-system
+   cert_manager:
+     common:
+       enabled: {}
+   node_agent:
+     common:
+       enabled: {}
+   citadel:
+     common:
+       enabled: {}
+ enabled: {}
+gateways:
+ components:
+   ingress_gateway:
+     - gateway:
+         common:
+          enabled: {}
+   egress_gateway:
+     - gateway:
+         common:
+          enabled: {}
+ enabled: {}
+traffic_management:
+ components:
+   pilot:
+     common:
+       enabled:
+         value: true
+ enabled:
+   value: true
+auto_injection:
+ components:
+   injector:
+      common:
+       enabled: {}
+ enabled: {}
+`,
+		},
+		{
+			desc: "K8s resources translation",
+			valueYAML: `
+galley:
+  enabled: false
+pilot:
   enabled: true
+  resources:
+    requests:
+      cpu: 1000m
+      memory: 1G
+  replicaCount: 1
+  nodeSelector:
+    beta.kubernetes.io/os: linux
+  autoscaleEnabled: true
+  autoscaleMax: 3
+  autoscaleMin: 1
+  env:
+    GODEBUG: gctrace=1
+  podAntiAffinityLabelSelector:
+    - labelSelector:
+        matchLabels:
+          testK1: testV1
 global:
   hub: docker.io/istio
   istioNamespace: istio-system
   policyNamespace: istio-policy
   tag: 1.2.3
   telemetryNamespace: istio-telemetry
+  proxy: 
+    ReadinessInitialDelaySeconds: 2
 mixer:
   policy:
     enabled: true
   telemetry:
-    enabled: true
-pilot:
-  enabled: true
-nodeAgent:
-  enabled: true
-gateways:
-  enabled: true
-  istio-ingressgateway:
-    enabled: true
-sidecarInjectorWebhook:
-  enabled: false
+    enabled: false
 `,
-		},
-		{
-			desc: "Some components Disabled",
 			want: `
 hub: docker.io/istio
 tag: 1.2.3
@@ -195,6 +315,37 @@ traffic_management:
       common:
         enabled:
           value: true
+        k8s:
+          affinity:
+            podAntiAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+              - labelSelector:
+                    matchLabels:
+                      testK1: testV1
+                topologyKey: ""
+          replica_count: 1
+          env:
+          - name: GODEBUG
+            value: gctrace=1
+          hpa_spec:
+             maxReplicas: 3
+             minReplicas: 1
+             scaleTargetRef:
+               kind: ""
+               name: ""
+          node_selector:
+             beta.kubernetes.io/os: linux
+          resources:
+             requests:
+               cpu: 1000m
+               memory: 1G
+    proxy:
+      common:
+        k8s:
+          readiness_probe:
+            initial_delaySeconds: 2
+        values:
+          readinessInitialDelaySeconds: 2
   enabled:
     value: true
 auto_injection:
@@ -204,28 +355,10 @@ auto_injection:
         enabled: {}
   enabled: {}
 `,
-			valueYAML: `
-galley:
-  enabled: false
-pilot:
-  enabled: true
-global:
-  hub: docker.io/istio
-  istioNamespace: istio-system
-  policyNamespace: istio-policy
-  tag: 1.2.3
-  telemetryNamespace: istio-telemetry
-mixer:
-  policy:
-    enabled: true
-  telemetry:
-    enabled: false
-`,
-		},
-	}
+		}}
 	tr, err := NewValueYAMLTranslator(version.NewMinorVersion(1, 2))
 	if err != nil {
-		t.Fatal("fail to get value.yaml translator")
+		t.Fatal("fail to get helm value.yaml translator")
 	}
 
 	for _, tt := range tests {
@@ -235,7 +368,7 @@ mixer:
 			if err != nil {
 				t.Fatalf("unmarshal(%s): got error %s", tt.desc, err)
 			}
-			dbgPrint("value struct: \n%s\n", pretty.Sprint(valueStruct))
+			scope.Debugf("value struct: \n%s\n", pretty.Sprint(valueStruct))
 			got, err := tr.TranslateFromValueToSpec(&valueStruct)
 			if gotErr, wantErr := errToString(err), tt.wantErr; gotErr != wantErr {
 				t.Errorf("ValuesToProto(%s)(%v): gotErr:%s, wantErr:%s", tt.desc, tt.valueYAML, gotErr, wantErr)

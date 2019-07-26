@@ -22,7 +22,6 @@ import (
 
 	"istio.io/operator/pkg/apis/istio/v1alpha2"
 	"istio.io/operator/pkg/util"
-	"istio.io/pkg/log"
 )
 
 var (
@@ -44,17 +43,16 @@ var (
 // CheckIstioControlPlaneSpec validates the values in the given Installer spec, using the field map defaultValidations to
 // call the appropriate validation function.
 func CheckIstioControlPlaneSpec(is *v1alpha2.IstioControlPlaneSpec, checkRequired bool) util.Errors {
-	log.Infof("Validating IstioControlPlaneSpec")
 	return validate(defaultValidations, is, nil, checkRequired)
 }
 
 func validate(validations map[string]ValidatorFunc, structPtr interface{}, path util.Path, checkRequired bool) (errs util.Errors) {
-	dbgPrint("validate with path %s, %v (%T)", path, structPtr, structPtr)
+	scope.Debugf("validate with path %s, %v (%T)", path, structPtr, structPtr)
 	if structPtr == nil {
 		return nil
 	}
 	if reflect.TypeOf(structPtr).Kind() == reflect.Struct {
-		dbgPrint("validate path %s, skipping struct type %T", path, structPtr)
+		scope.Debugf("validate path %s, skipping struct type %T", path, structPtr)
 		return nil
 	}
 	if reflect.TypeOf(structPtr).Kind() != reflect.Ptr {
@@ -77,7 +75,7 @@ func validate(validations map[string]ValidatorFunc, structPtr interface{}, path 
 			continue
 		}
 
-		dbgPrint("Checking field %s", fieldName)
+		scope.Debugf("Checking field %s", fieldName)
 		switch kind {
 		case reflect.Struct:
 			errs = util.AppendErrs(errs, validate(validations, fieldValue.Addr().Interface(), append(path, fieldName), checkRequired))
@@ -112,21 +110,24 @@ func validate(validations map[string]ValidatorFunc, structPtr interface{}, path 
 
 func validateLeaf(validations map[string]ValidatorFunc, path util.Path, val interface{}, checkRequired bool) util.Errors {
 	pstr := path.String()
-	dbgPrintC("validate %s:%v(%T) ", pstr, val, val)
+	msg := fmt.Sprintf("validate %s:%v(%T) ", pstr, val, val)
 	if util.IsValueNil(val) || util.IsEmptyString(val) {
 		if checkRequired && requiredValues[pstr] {
 			return util.NewErrs(fmt.Errorf("field %s is required but not set", util.ToYAMLPathString(pstr)))
 		}
-		dbgPrint("validate %s: OK (empty value)", pstr)
+		msg += fmt.Sprintf("validate %s: OK (empty value)", pstr)
+		scope.Debug(msg)
 		return nil
 	}
 
 	vf, ok := validations[pstr]
 	if !ok {
-		dbgPrint("validate %s: OK (no validation)", pstr)
+		msg += fmt.Sprintf("validate %s: OK (no validation)", pstr)
+		scope.Debug(msg)
 		// No validation defined.
 		return nil
 	}
+	scope.Debug(msg)
 	return vf(path, val)
 }
 
@@ -154,7 +155,7 @@ func validateInstallPackagePath(path util.Path, val interface{}) util.Errors {
 	}
 
 	if _, err := url.ParseRequestURI(val.(string)); err != nil {
-		return util.NewErrs(fmt.Errorf("invalid value %s:%s", path, valStr))
+		return util.NewErrs(fmt.Errorf("invalid value %s: %s", path, valStr))
 	}
 
 	validPrefixes := []string{util.LocalFilePrefix}

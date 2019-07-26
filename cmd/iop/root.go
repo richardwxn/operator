@@ -71,6 +71,8 @@ func GetRootCmd(args []string) *cobra.Command {
 	mdc := manifestDiffCmd(rootArgs, diffArgs, loggingOptions)
 	dpc := dumpProfileDefaultsCmd(rootArgs, dumpArgs, loggingOptions)
 
+	mmc := manifestMigrateCmd(rootArgs)
+
 	addFlags(ic, rootArgs, loggingOptions)
 	addFlags(mc, rootArgs, loggingOptions)
 	addFlags(dpc, rootArgs, loggingOptions)
@@ -84,6 +86,8 @@ func GetRootCmd(args []string) *cobra.Command {
 	rootCmd.AddCommand(mdc)
 	rootCmd.AddCommand(dpc)
 	rootCmd.AddCommand(version.CobraCommand())
+
+	rootCmd.AddCommand(mmc)
 
 	return rootCmd
 }

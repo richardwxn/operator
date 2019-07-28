@@ -58,6 +58,10 @@ nodeAgent:
 gateways:
   enabled: true
   istio-ingressgateway:
+    resources:
+      requests:
+        cpu: 1000m
+        memory: 1G
     enabled: true
 sidecarInjectorWebhook:
   enabled: false
@@ -129,10 +133,15 @@ gateways:
           common:
            enabled:
              value: true
+           k8s:
+             resources:
+               requests:
+                 cpu: 1000m
+                 memory: 1G 
     egress_gateway:
       - gateway:
           common:
-           enabled: {} 
+            enabled: {}
   enabled:
     value: true
 `,

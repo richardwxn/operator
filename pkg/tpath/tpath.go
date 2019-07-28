@@ -83,26 +83,6 @@ func getPathContext(nc *PathContext, fullPath, remainPath util.Path, createMissi
 	}
 	ncNode := v.Interface()
 
-	// Hack for translation of gateway node
-	if isGatewaysPath(pe) {
-		scope.Debugf("handling gateway node")
-		m := ncNode.(map[string]interface{})
-		var nn map[string]interface{}
-		if m[pe] == nil {
-			m[pe] = make([]map[string]interface{}, 1)
-			nn = make(map[string]interface{})
-			m[pe].([]map[string]interface{})[0] = nn
-		} else {
-			nn = m[pe].([]map[string]interface{})[0]
-		}
-		nc.KeyToChild = pe
-		npc := &PathContext{
-			Parent: nc,
-			Node:   nn,
-		}
-		return getPathContext(npc, fullPath, remainPath[1:], createMissing)
-	}
-
 	// For list types, we need a key to identify the selected list item. This can be either a a value key of the
 	// form :matching_value in the case of a leaf list, or a matching key:value in the case of a non-leaf list.
 	if lst, ok := ncNode.([]interface{}); ok {
@@ -278,7 +258,3 @@ func isMapOrInterface(v interface{}) bool {
 	return vv.Kind() == reflect.Map
 }
 
-// isGatewaysPath check whether pe is part of gateway path
-func isGatewaysPath(pe string) bool {
-	return pe == "ingressGateway" || pe == "egressGateway"
-}

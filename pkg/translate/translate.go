@@ -22,13 +22,12 @@ import (
 	"reflect"
 	"strings"
 
-	"istio.io/operator/pkg/object"
-
-	"istio.io/operator/pkg/tpath"
-
 	"github.com/ghodss/yaml"
+
 	"istio.io/operator/pkg/apis/istio/v1alpha2"
 	"istio.io/operator/pkg/name"
+	"istio.io/operator/pkg/object"
+	"istio.io/operator/pkg/tpath"
 	"istio.io/operator/pkg/util"
 	"istio.io/operator/pkg/version"
 	"istio.io/pkg/log"

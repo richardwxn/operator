@@ -207,7 +207,6 @@ sidecarInjectorWebhook:
 	}
 }
 
-
 // errToString returns the string representation of err and the empty string if
 // err is nil.
 func errToString(err error) string {

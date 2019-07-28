@@ -90,12 +90,12 @@ var (
 	// Translators is a map of minor versions to Translator for that version.
 	// TODO: this should probably be moved out to a config file that's versioned.
 	Translators = map[version.MinorVersion]*Translator{
-		version.NewMinorVersion(1, 2): {
+		version.NewMinorVersion(1, 3): {
 			APIMapping: map[string]*Translation{
-				"Hub":                    {"global.hub", nil},
-				"Tag":                    {"global.tag", nil},
-				"K8SDefaults":            {"global.resources", nil},
-				"DefaultNamespacePrefix": {"global.istioNamespace", nil},
+				"Hub":              {"global.hub", nil},
+				"Tag":              {"global.tag", nil},
+				"K8SDefaults":      {"global.resources", nil},
+				"DefaultNamespace": {"global.istioNamespace", nil},
 
 				"TrafficManagement.Components.Proxy.Common.Values": {"global.proxy", nil},
 

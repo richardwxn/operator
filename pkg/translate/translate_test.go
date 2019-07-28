@@ -24,7 +24,7 @@ import (
 	"istio.io/operator/pkg/version"
 )
 
-func TestProtoToValuesV12(t *testing.T) {
+func TestProtoToValuesV13(t *testing.T) {
 	tests := []struct {
 		desc    string
 		yamlStr string
@@ -34,16 +34,7 @@ func TestProtoToValuesV12(t *testing.T) {
 		{
 			desc: "default success",
 			yamlStr: `
-defaultNamespacePrefix: istio-system
-gateways:
-  components:
-    ingressGateway:
-    - gateway:
-        common:
-          enabled: true
-    - gateway:
-        common:
-          enabled: false
+defaultNamespace: istio-system
 `,
 			want: `
 certmanager:
@@ -90,7 +81,7 @@ sidecarInjectorWebhook:
 			yamlStr: `
 hub: docker.io/istio
 tag: 1.2.3
-defaultNamespacePrefix: istio-system
+defaultNamespace: istio-system
 `,
 			want: `
 certmanager:
@@ -137,7 +128,7 @@ sidecarInjectorWebhook:
 		{
 			desc: "security",
 			yamlStr: `
-defaultNamespacePrefix: istio-system
+defaultNamespace: istio-system
 security:
   enabled: true
   controlPlaneMtls: true
@@ -187,7 +178,10 @@ sidecarInjectorWebhook:
 		},
 	}
 
-	tr := Translators[version.NewMinorVersion(1, 2)]
+	tr, err := NewTranslator(version.NewMinorVersion(1, 3))
+	if err != nil {
+		t.Fatal(err)
+	}
 	for _, tt := range tests {
 		t.Run(tt.desc, func(t *testing.T) {
 			ispec := &v1alpha2.IstioControlPlaneSpec{}
@@ -198,7 +192,7 @@ sidecarInjectorWebhook:
 			scope.Debugf("ispec: \n%s\n", pretty.Sprint(ispec))
 			got, err := tr.ProtoToValues(ispec)
 			if gotErr, wantErr := errToString(err), tt.wantErr; gotErr != wantErr {
-				t.Errorf("ProtoToValues(%s)(%v): gotErr:%s, wantErr:%s", tt.desc, tt.yamlStr, gotErr, wantErr)
+				t.Fatalf("ProtoToValues(%s)(%v): gotErr:%s, wantErr:%s", tt.desc, tt.yamlStr, gotErr, wantErr)
 			}
 			if want := tt.want; !util.IsYAMLEqual(got, want) {
 				t.Errorf("ProtoToValues(%s): got:\n%s\n\nwant:\n%s\nDiff:\n%s\n", tt.desc, got, want, util.YAMLDiff(got, want))

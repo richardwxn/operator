@@ -11,34 +11,18 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
-package util
+//go:generate go run ./vfsgen/vfsgen.go
+package main
 
 import (
-	"strings"
+	"os"
 
-	"github.com/ghodss/yaml"
-
-	"istio.io/pkg/log"
+	"istio.io/operator/cmd/mesh"
 )
 
-var (
-	scope = log.RegisterScope("util", "util", 0)
-)
-
-// Tree is a tree.
-type Tree map[string]interface{}
-
-// String implements the Stringer interface method.
-func (t Tree) String() string {
-	y, err := yaml.Marshal(t)
-	if err != nil {
-		return err.Error()
+func main() {
+	rootCmd := mesh.GetRootCmd(os.Args[1:])
+	if err := rootCmd.Execute(); err != nil {
+		os.Exit(1)
 	}
-	return string(y)
-}
-
-// IsFilePath reports whether the given URL is a local file path.
-func IsFilePath(path string) bool {
-	return strings.Contains(path, "/") || strings.Contains(path, ".")
 }

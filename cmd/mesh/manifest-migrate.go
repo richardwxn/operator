@@ -12,33 +12,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package util
+package mesh
 
 import (
-	"strings"
+	"fmt"
 
-	"github.com/ghodss/yaml"
-
-	"istio.io/pkg/log"
+	"github.com/spf13/cobra"
 )
 
-var (
-	scope = log.RegisterScope("util", "util", 0)
-)
+func manifestMigrateCmd(rootArgs *rootArgs) *cobra.Command {
+	return &cobra.Command{
+		Use:   "migrate",
+		Short: "Migrates a file containing Helm values to IstioControlPlane format.",
+		Long:  "The migrate subcommand is used to migrate a configuration in Helm values format to IstioControlPlane format.",
+		Args:  cobra.ExactArgs(1),
+		Run: func(cmd *cobra.Command, args []string) {
+			manifestMigrate(rootArgs)
+		}}
 
-// Tree is a tree.
-type Tree map[string]interface{}
-
-// String implements the Stringer interface method.
-func (t Tree) String() string {
-	y, err := yaml.Marshal(t)
-	if err != nil {
-		return err.Error()
-	}
-	return string(y)
 }
 
-// IsFilePath reports whether the given URL is a local file path.
-func IsFilePath(path string) bool {
-	return strings.Contains(path, "/") || strings.Contains(path, ".")
+func manifestMigrate(_ *rootArgs) {
+	fmt.Println("Not yet implemented.")
 }

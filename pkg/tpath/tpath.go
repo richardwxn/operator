@@ -257,4 +257,3 @@ func isMapOrInterface(v interface{}) bool {
 	}
 	return vv.Kind() == reflect.Map
 }
-

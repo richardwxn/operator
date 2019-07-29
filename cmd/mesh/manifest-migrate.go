@@ -17,7 +17,10 @@ package mesh
 import (
 	"fmt"
 	"io/ioutil"
+	"istio.io/operator/pkg/kubectlcmd"
+	"istio.io/operator/pkg/util"
 	"os"
+	"path/filepath"
 
 	"github.com/ghodss/yaml"
 	"github.com/spf13/cobra"
@@ -28,15 +31,11 @@ import (
 )
 
 type manifestMigrateArgs struct {
-	// inFilename is the path to the input values.yaml file.
-	inFilename string
-	// outFilename is the path to the translated output filename.
-	outFilename string
+	migrateDir bool
 }
 
 func addManifestMigrateFlags(cmd *cobra.Command, args *manifestMigrateArgs) {
-	cmd.PersistentFlags().StringVarP(&args.inFilename, "filename", "f", "", filenameFlagHelpStr)
-	cmd.PersistentFlags().StringVarP(&args.outFilename, "output", "o", "", "Translation output file path.")
+	cmd.PersistentFlags().BoolVarP(&args.migrateDir, "migrateDir", "r", false, "translate directory")
 }
 
 func manifestMigrateCmd(rootArgs *rootArgs, mmArgs *manifestMigrateArgs) *cobra.Command {
@@ -44,30 +43,50 @@ func manifestMigrateCmd(rootArgs *rootArgs, mmArgs *manifestMigrateArgs) *cobra.
 		Use:   "migrate",
 		Short: "Migrates a file containing Helm values to IstioControlPlane format.",
 		Long:  "The migrate subcommand is used to migrate a configuration in Helm values format to IstioControlPlane format.",
-		Args:  cobra.ExactArgs(0),
 		Run: func(cmd *cobra.Command, args []string) {
-			manifestMigrate(rootArgs, mmArgs)
+			if len(args) == 0 {
+				migrateFromClusterConfig(rootArgs)
+			} else {
+				migrateFromFiles(rootArgs, args, mmArgs)
+			}
 		}}
 }
 
-func manifestMigrate(rootArgs *rootArgs, mmArgs *manifestMigrateArgs) {
+func valueFileFilter(path string) bool {
+	return filepath.Base(path) == "values.yaml"
+}
+
+// migrateFromFiles handles migration for local values.yaml files
+func migrateFromFiles(rootArgs *rootArgs, args [] string, mmArgs *manifestMigrateArgs) {
 	if err := configLogs(rootArgs); err != nil {
 		_, _ = fmt.Fprintf(os.Stderr, "Could not configure logs: %s", err)
 		os.Exit(1)
 	}
-	f, err := ioutil.ReadFile(mmArgs.inFilename)
-	if err != nil {
-		logAndFatalf(rootArgs, "failed to open values.yaml file: %s", err.Error())
+	logAndPrintf(rootArgs, "translating input values.yaml file at: %s to new API", args[0])
+	if mmArgs.migrateDir {
+		value, err := util.ReadFromDir(args[0], valueFileFilter)
+		if err != nil {
+			logAndFatalf(rootArgs, err.Error())
+		}
+		translateFunc(rootArgs, []byte(value))
+	} else {
+		value, err := ioutil.ReadFile(args[0])
+		if err != nil {
+			logAndFatalf(rootArgs, err.Error())
+		}
+		translateFunc(rootArgs, value)
 	}
+}
 
+// translateFunc translates the input values and output the result
+func translateFunc(rootArgs *rootArgs, values []byte) {
 	ts, err := translate.NewValueYAMLTranslator(version.NewMinorVersion(1, 3))
 	if err != nil {
 		logAndFatalf(rootArgs, "failed to create values.yaml translator: %s", err.Error())
 	}
-	logAndPrintf(rootArgs, "translating input values.yaml file at: %s to new API", mmArgs.inFilename)
 
 	valueStruct := v1alpha2.Values{}
-	err = yaml.Unmarshal(f, &valueStruct)
+	err = yaml.Unmarshal(values, &valueStruct)
 	if err != nil {
 		logAndFatalf(rootArgs, "failed to unmarshall values.yaml into value struct : %s", err.Error())
 	}
@@ -81,13 +100,27 @@ func manifestMigrate(rootArgs *rootArgs, mmArgs *manifestMigrateArgs) {
 		logAndFatalf(rootArgs, "failed to marshal translated IstioControlPlaneSpec: %s", err.Error())
 	}
 
-	if mmArgs.outFilename == "" {
-		fmt.Println(string(isCPYaml))
-	} else {
-		if err := ioutil.WriteFile(mmArgs.outFilename, isCPYaml, os.ModePerm); err != nil {
-			logAndFatalf(rootArgs, err.Error())
-		}
-	}
+	fmt.Println(string(isCPYaml))
 }
 
 //TODO use default in cluster if file not specified
+// migrateFromClusterConfig handles migration for incluster config.
+func migrateFromClusterConfig(rootArgs *rootArgs) {
+	if err := configLogs(rootArgs); err != nil {
+		_, _ = fmt.Fprintf(os.Stderr, "Could not configure logs: %s", err)
+		os.Exit(1)
+	}
+	logAndPrintf(rootArgs, "translating input incluster specs")
+
+	c := kubectlcmd.New()
+	output, stderr, err := c.GetConfig("istio-sidecar-injector", "istio-control", "jsonpath='{.data.values}'")
+	if err != nil {
+
+	}
+
+	value, err := yaml.JSONToYAML([]byte(output))
+	if err != nil {
+	}
+
+	translateFunc(rootArgs, value)
+}

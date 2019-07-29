@@ -18,7 +18,11 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"math/rand"
+	"os"
+	"path/filepath"
+	"strings"
 	"time"
 )
 
@@ -28,7 +32,10 @@ func init() {
 
 var (
 	letters = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
+	YAMLSeparator = "\n---\n"
 )
+
+type FilterFile func(fileName string) bool
 
 // RandomString returns a random string of length n.
 func RandomString(n int) string {
@@ -47,4 +54,32 @@ func PrettyJSON(b []byte) []byte {
 		return []byte(fmt.Sprint(err))
 	}
 	return out.Bytes()
+}
+
+func ReadFromDir(dirName string, filter FilterFile) (string, error) {
+	var fileList []string
+	err := filepath.Walk(dirName, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+		if info.IsDir() || !filter(path) {
+			return nil
+		}
+		fileList = append(fileList, path)
+		return nil
+	})
+	if err != nil {
+		return "", err
+	}
+	var sb strings.Builder
+	for _, file := range fileList {
+		a, err := ioutil.ReadFile(file)
+		if err != nil {
+			return "", err
+		}
+		if _, err := sb.WriteString(string(a) + YAMLSeparator + "\n"); err != nil {
+			return "", err
+		}
+	}
+	return sb.String(), nil
 }

@@ -34,7 +34,7 @@ var (
 	letters = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
 )
 
-type FilterFile func(fileName string) bool
+type FileFilter func(fileName string) bool
 
 // RandomString returns a random string of length n.
 func RandomString(n int) string {
@@ -66,7 +66,9 @@ func StringBoolMapToSlice(m map[string]bool) []string {
 	return s
 }
 
-func ReadFromDir(dirName string, filter FilterFile) (string, error) {
+// ReadFiles reads a directory recursively or reads single file and filters the results.
+// It returns a concatenated output of all matching files' content.
+func ReadFiles(dirName string, filter FileFilter) (string, error) {
 	var fileList []string
 	err := filepath.Walk(dirName, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
@@ -87,7 +89,7 @@ func ReadFromDir(dirName string, filter FilterFile) (string, error) {
 		if err != nil {
 			return "", err
 		}
-		if _, err := sb.WriteString(string(a)); err != nil {
+		if _, err := sb.WriteString(string(a) + "\n"); err != nil {
 			return "", err
 		}
 	}

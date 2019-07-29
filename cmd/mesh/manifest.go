@@ -42,20 +42,23 @@ func ManifestCmd(args *rootArgs) *cobra.Command {
 	mgcArgs := &manifestGenerateArgs{}
 	mdcArgs := &manifestDiffArgs{}
 	macArgs := &manifestApplyArgs{}
+	mmcArgs := &manifestMigrateArgs{}
 
 	mgc := manifestGenerateCmd(args, mgcArgs)
 	mdc := manifestDiffCmd(args, mdcArgs)
 	mac := manifestApplyCmd(args, macArgs)
-	mmc := manifestMigrateCmd(args)
+	mmc := manifestMigrateCmd(args, mmcArgs)
 
 	addFlags(mc, args)
 	addFlags(mgc, args)
 	addFlags(mdc, args)
 	addFlags(mac, args)
+	addFlags(mmc, args)
 
 	addManifestGenerateFlags(mgc, mgcArgs)
 	addManifestDiffFlags(mdc, mdcArgs)
 	addManifestApplyFlags(mac, macArgs)
+	addManifestMigrateFlags(mmc, mmcArgs)
 
 	mc.AddCommand(mgc)
 	mc.AddCommand(mdc)

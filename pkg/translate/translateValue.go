@@ -46,7 +46,7 @@ type ValueYAMLTranslator struct {
 var (
 	// ValueYAMLTranslators is Translator for value.yaml
 	ValueYAMLTranslators = map[version.MinorVersion]*ValueYAMLTranslator{
-		version.NewMinorVersion(1, 2): {
+		version.NewMinorVersion(1, 3): {
 			APIMapping: map[string]*Translation{},
 			KubernetesMapping: map[string]*Translation{
 				"{{.ValueComponentName}}.podAntiAffinityLabelSelector": {"{{.FeatureName}}.Components.{{.ComponentName}}.Common.K8s." +
@@ -90,8 +90,12 @@ var (
 )
 
 // initAPIMapping generate the reverse mapping from original translator apiMapping
-func (t *ValueYAMLTranslator) initAPIMapping(vs version.MinorVersion) {
-	for valKey, outVal := range Translators[vs].APIMapping {
+func (t *ValueYAMLTranslator) initAPIMapping(vs version.MinorVersion) error {
+	ts, err := NewTranslator(vs)
+	if err != nil {
+		return err
+	}
+	for valKey, outVal := range ts.APIMapping {
 		t.APIMapping[outVal.outPath] = &Translation{valKey, nil}
 	}
 }
@@ -154,7 +158,10 @@ func NewValueYAMLTranslator(minorVersion version.MinorVersion) (*ValueYAMLTransl
 		return nil, fmt.Errorf("no translator available for version %s", minorVersion)
 	}
 
-	t.initAPIMapping(minorVersion)
+	err := t.initAPIMapping(minorVersion)
+	if err != nil {
+		return nil, fmt.Errorf("error initialize API mapping: %s", err.Error())
+	}
 	t.initGatewayK8sMapping()
 	return t, nil
 }

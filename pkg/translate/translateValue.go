@@ -16,6 +16,7 @@ package translate
 
 import (
 	"fmt"
+
 	"github.com/ghodss/yaml"
 
 	"istio.io/operator/pkg/apis/istio/v1alpha2"
@@ -84,7 +85,7 @@ var (
 	// Component enablement mapping. Ex "{{.ValueComponent}}.enabled": {"{{.FeatureName}}.Components.{{.ComponentName}}.Common.enabled}", nil},
 	// Feature enablement mapping. Ex: "{{.ValueComponent}}.enabled": {"{{.FeatureName}}.enabled}", nil},
 	componentEnablementPattern = "{{.FeatureName}}.Components.{{.ComponentName}}.Common.Enabled"
-	componentValuesPattern = "{{.FeatureName}}.Components.{{.ComponentName}}.Common.Values"
+	componentValuesPattern     = "{{.FeatureName}}.Components.{{.ComponentName}}.Common.Values"
 )
 
 // initAPIMapping generate the reverse mapping from original translator apiMapping
@@ -123,14 +124,6 @@ func (t *ValueYAMLTranslator) initK8SMapping(valueTree map[string]interface{}) {
 		}
 	}
 
-	// add readiness mapping
-	outputMapping["global.proxy.readinessInitialDelaySeconds"] = &Translation{
-		"TrafficManagement.Components.Proxy.Common.K8s.ReadinessProbe.InitialDelaySeconds", nil}
-	outputMapping["global.proxy.readinessPeriodSeconds"] = &Translation{
-		"TrafficManagement.Components.Proxy.Common.K8s.ReadinessProbe.PeriodSeconds", nil}
-	outputMapping["global.proxy.readinessFailureThreshold"] = &Translation{
-		"TrafficManagement.Components.Proxy.Common.K8s.ReadinessProbe.FailureThreshold", nil}
-
 	t.KubernetesMapping = outputMapping
 }
 
@@ -138,7 +131,7 @@ func (t *ValueYAMLTranslator) initK8SMapping(valueTree map[string]interface{}) {
 func NewValueYAMLTranslator(minorVersion version.MinorVersion) (*ValueYAMLTranslator, error) {
 	t := ValueYAMLTranslators[minorVersion]
 	if t == nil {
-		return nil, fmt.Errorf("no translator available for version %s", minorVersion)
+		return nil, fmt.Errorf("no value.yaml translator available for version %s", minorVersion)
 	}
 
 	err := t.initAPIMapping(minorVersion)
@@ -190,7 +183,7 @@ func (t *ValueYAMLTranslator) TranslateTree(valueTree map[string]interface{}, cp
 		return fmt.Errorf("error when translating enablement and namespace from value.yaml tree: %v", err.Error())
 	}
 	// translate with api mapping
-	err = t.translateTree(valueTree, cpSpecTree, path)
+	err = t.translateTree(valueTree, cpSpecTree)
 	if err != nil {
 		return fmt.Errorf("error when translating value.yaml tree with global mapping: %v", err.Error())
 	}
@@ -202,6 +195,11 @@ func (t *ValueYAMLTranslator) TranslateTree(valueTree map[string]interface{}, cp
 		return fmt.Errorf("error when translating value.yaml tree with kubernetes mapping: %v", err.Error())
 	}
 
+	// translate remaining untranslated paths into component values
+	err = t.translateRemainPaths(valueTree, cpSpecTree, nil)
+	if err != nil {
+		return fmt.Errorf("error when translating remaining path: %v", err.Error())
+	}
 	return nil
 }
 
@@ -266,6 +264,9 @@ func translateHPASpec(inPath string, outPath string, value interface{}, valueTre
 				return err
 			}
 		}
+		if _, err := DeleteFromTree(valueTree, util.ToYAMLPath(minPath), util.ToYAMLPath(minPath)); err != nil {
+			return err
+		}
 		maxPath := newP + ".autoscaleMax"
 		asMax, found, err := name.GetFromTreePath(valueTree, util.ToYAMLPath(maxPath))
 		if found && err == nil {
@@ -273,6 +274,9 @@ func translateHPASpec(inPath string, outPath string, value interface{}, valueTre
 			if err := tpath.WriteNode(cpSpecTree, util.ToYAMLPath(outPath+".maxReplicas"), asMax); err != nil {
 				return err
 			}
+		}
+		if _, err := DeleteFromTree(valueTree, util.ToYAMLPath(maxPath), util.ToYAMLPath(maxPath)); err != nil {
+			return err
 		}
 	}
 	return nil
@@ -335,6 +339,9 @@ func (t *ValueYAMLTranslator) translateK8sTree(valueTree map[string]interface{},
 			if err != nil {
 				return fmt.Errorf("error in translating K8s HPA spec: %s", err.Error())
 			}
+			if _, err := DeleteFromTree(valueTree, util.ToYAMLPath(inPath), util.ToYAMLPath(inPath)); err != nil {
+				return err
+			}
 			continue
 		}
 
@@ -343,6 +350,9 @@ func (t *ValueYAMLTranslator) translateK8sTree(valueTree map[string]interface{},
 			if err != nil {
 				return fmt.Errorf("error in translating k8s Env: %s", err.Error())
 			}
+			if _, err := DeleteFromTree(valueTree, util.ToYAMLPath(inPath), util.ToYAMLPath(inPath)); err != nil {
+				return err
+			}
 			continue
 		}
 
@@ -350,6 +360,9 @@ func (t *ValueYAMLTranslator) translateK8sTree(valueTree map[string]interface{},
 			err := translateAffinity(v.outPath, m, cpSpecTree)
 			if err != nil {
 				return fmt.Errorf("error in translating k8s Affinity: %s", err.Error())
+			}
+			if _, err := DeleteFromTree(valueTree, util.ToYAMLPath(inPath), util.ToYAMLPath(inPath)); err != nil {
+				return err
 			}
 			continue
 		}
@@ -366,9 +379,13 @@ func (t *ValueYAMLTranslator) translateK8sTree(valueTree map[string]interface{},
 		}
 
 		output := util.ToYAMLPath(v.outPath)
-		log.Infof("path has value in helm Value.yaml tree, mapping to output path %s", path)
+		log.Infof("path has value in helm Value.yaml tree, mapping to output path %s", output)
 
 		if err := tpath.WriteNode(cpSpecTree, output, m); err != nil {
+			return err
+		}
+
+		if _, err := DeleteFromTree(valueTree, util.ToYAMLPath(inPath), util.ToYAMLPath(inPath)); err != nil {
 			return err
 		}
 	}
@@ -376,39 +393,36 @@ func (t *ValueYAMLTranslator) translateK8sTree(valueTree map[string]interface{},
 	return nil
 }
 
-// translateTree is internal method for translating value.yaml tree
-func (t *ValueYAMLTranslator) translateTree(valueTree map[string]interface{},
-		cpSpecTree map[string]interface{}, path util.Path) error {
-	// translate input valueTree
+// translateRemainPaths translates remaining paths that are not availing in existing mappings.
+func (t *ValueYAMLTranslator) translateRemainPaths(valueTree map[string]interface{},
+	cpSpecTree map[string]interface{}, path util.Path) error {
 	for key, val := range valueTree {
 		newPath := append(path, key)
-		// leaf
+		// value set to nil means no translation needed or being translated already.
 		if val == nil {
-			err := t.insertLeaf(cpSpecTree, newPath, val)
-			if err != nil {
-				return err
-			}
+			continue
 		} else {
 			switch node := val.(type) {
 			case map[string]interface{}:
-				err := t.translateTree(node, cpSpecTree, newPath)
+				err := t.translateRemainPaths(node, cpSpecTree, newPath)
 				if err != nil {
 					return err
 				}
 			case []interface{}:
+				errs := util.Errors{}
 				for _, newNode := range node {
 					newMap, ok := newNode.(map[string]interface{})
 					if !ok {
-						return fmt.Errorf("fail to translate slice")
+						return fmt.Errorf("fail to convert node to map[string] interface")
 					}
-					err := t.translateTree(newMap, cpSpecTree, newPath)
-					if err != nil {
-						return err
-					}
+					errs = util.AppendErr(errs, t.translateRemainPaths(newMap, cpSpecTree, newPath))
 				}
-			// leaf
+				if errs != nil {
+					return errs
+				}
+			// remaining leaf need to be put into common.values
 			default:
-				err := t.insertLeaf(cpSpecTree, newPath, val)
+				err := t.translateToCommonValues(cpSpecTree, newPath, val)
 				if err != nil {
 					return err
 				}
@@ -418,30 +432,48 @@ func (t *ValueYAMLTranslator) translateTree(valueTree map[string]interface{},
 	return nil
 }
 
-// insertLeaf inserts a leaf with value into root at path, which is first mapped using t.APIMapping.
-func (t *ValueYAMLTranslator) insertLeaf(root map[string]interface{}, path util.Path, value interface{}) (errs util.Errors) {
-	// Must be a scalar leaf. See if we have a mapping.
-	valuesPath, m := getValuesPathMapping(t.APIMapping, path)
-	switch {
-	// write it to values if not mapping found
-	case m == nil:
-		//return nil
-		//_, found, err := tpath.GetPathContext(root, path)
-		//if found && err == nil {
-		//	return nil
-		//}
-		errs = util.AppendErr(errs, t.translateToCommonValues(root, path, value))
-	case m.translationFunc == nil:
-		// Use default translation which just maps to a different part of the tree.
-		errs = util.AppendErr(errs, defaultTranslationFunc(m, root, valuesPath, value))
-	default:
-		// Use a custom translation function.
-		errs = util.AppendErr(errs, m.translationFunc(m, root, valuesPath, value))
+// DeleteFromTree sets value at path of input tree to nil
+func DeleteFromTree(valueTree map[string]interface{}, path util.Path, remainPath util.Path) (bool, error) {
+	if len(remainPath) == 0 {
+		return false, nil
 	}
-	return errs
+	for key, val := range valueTree {
+		if key == remainPath[0] {
+			// found the path to delete value
+			if len(remainPath) == 1 {
+				valueTree[key] = nil
+				return true, nil
+			}
+			remainPath = remainPath[1:]
+			switch node := val.(type) {
+			case map[string]interface{}:
+				return DeleteFromTree(node, path, remainPath)
+			case []interface{}:
+				for _, newNode := range node {
+					newMap, ok := newNode.(map[string]interface{})
+					if !ok {
+						return false, fmt.Errorf("fail to translate to map[string]interface{}")
+					}
+					found, err := DeleteFromTree(newMap, path, remainPath)
+					if found && err == nil {
+						return found, nil
+					}
+				}
+			// leaf
+			default:
+				return false, nil
+			}
+		}
+	}
+	return false, nil
 }
 
+// translateToCommonValues translates paths to common.values
 func (t *ValueYAMLTranslator) translateToCommonValues(root map[string]interface{}, path util.Path, value interface{}) error {
+	if len(path) == 0 {
+		log.Warn("path is empty when translating to common.values")
+		return nil
+	}
 	// path starts with ValueComponent name or global
 	cn := path[0]
 	newCN := t.ValuesToComponentName[cn]
@@ -455,18 +487,19 @@ func (t *ValueYAMLTranslator) translateToCommonValues(root map[string]interface{
 			return nil
 		}
 	}
+	// skip enablement node
 	if len(path) > 1 && path[len(path)-1] == "enabled" {
 		return nil
 	}
 	fn := name.ComponentNameToFeatureName[newCN]
 	outPath := renderCommonComponentValues(componentValuesPattern, string(newCN), string(fn))
-	return tpath.WriteNode(root, util.ToYAMLPath(outPath), value)
+	return tpath.WriteNode(root, append(util.ToYAMLPath(outPath), path...), value)
 }
 
 // translateTree is internal method for translating value.yaml tree
-func translateTree2(valueTree map[string]interface{},
-	cpSpecTree map[string]interface{}, mapping map[string]*Translation) error {
-	for inPath, v := range mapping {
+func (t *ValueYAMLTranslator) translateTree(valueTree map[string]interface{},
+	cpSpecTree map[string]interface{}) error {
+	for inPath, v := range t.APIMapping {
 		log.Infof("Checking for path %s in helm Value.yaml tree", inPath)
 		m, found, err := name.GetFromTreePath(valueTree, util.ToYAMLPath(inPath))
 		if err != nil {
@@ -493,6 +526,10 @@ func translateTree2(valueTree map[string]interface{},
 		if err := tpath.WriteNode(cpSpecTree, path, m); err != nil {
 			return err
 		}
+
+		if _, err := DeleteFromTree(valueTree, util.ToYAMLPath(inPath), util.ToYAMLPath(inPath)); err != nil {
+			return err
+		}
 	}
 	return nil
 }
@@ -510,7 +547,7 @@ func renderComponentName(tmpl string, componentName string) string {
 // the supplied parameters.
 func renderCommonComponentValues(tmpl string, componentName string, featureName string) string {
 	type temp struct {
-		FeatureName string
+		FeatureName   string
 		ComponentName string
 	}
 	return renderTemplate(tmpl, temp{FeatureName: featureName, ComponentName: componentName})

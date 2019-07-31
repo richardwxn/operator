@@ -33,236 +33,38 @@ func TestValueToProto(t *testing.T) {
 		want      string
 		wantErr   string
 	}{
-//		{
-//			desc: "All Enabled",
-//			valueYAML: `
-//certManager:
-//  enabled: true
-//galley:
-//  enabled: true
-//global:
-//  hub: docker.io/istio
-//  istioNamespace: istio-system
-//  policyNamespace: istio-policy
-//  tag: 1.2.3
-//  telemetryNamespace: istio-telemetry
-//mixer:
-//  policy:
-//    enabled: true
-//  telemetry:
-//    enabled: true
-//pilot:
-//  enabled: true
-//nodeAgent:
-//  enabled: true
-//gateways:
-//  enabled: true
-//  istio-ingressgateway:
-//    resources:
-//      requests:
-//        cpu: 1000m
-//        memory: 1G
-//    enabled: true
-//sidecarInjectorWebhook:
-//  enabled: false
-//`,
-//			want: `
-//hub: docker.io/istio
-//tag: 1.2.3
-//default_namespace: istio-system
-//telemetry:
-//  components:
-//    namespace: istio-telemetry
-//    telemetry:
-//      common:
-//        enabled:
-//          value: true
-//  enabled:
-//    value: true
-//policy:
-//  components:
-//    namespace: istio-policy
-//    policy:
-//      common:
-//        enabled:
-//          value: true
-//  enabled:
-//    value: true
-//config_management:
-//  components:
-//    galley:
-//      common:
-//        enabled:
-//          value: true
-//  enabled:
-//    value: true
-//security:
-//  components:
-//    namespace: istio-system
-//    cert_manager:
-//      common:
-//        enabled:
-//          value: true
-//    node_agent:
-//      common:
-//        enabled:
-//          value: true
-//    citadel:
-//      common:
-//        enabled: {}
-//  enabled:
-//    value: true
-//traffic_management:
-//   components:
-//     pilot:
-//       common:
-//         enabled:
-//           value: true
-//   enabled:
-//     value: true
-//auto_injection:
-//  components:
-//    injector:
-//      common:
-//        enabled: {}
-//  enabled: {}
-//gateways:
-//  components:
-//    ingress_gateway:
-//      common:
-//        enabled:
-//           value: true
-//        k8s:
-//           resources:
-//             requests:
-//               cpu: 1000m
-//               memory: 1G
-//    egress_gateway:
-//      common:
-//        enabled: {}
-//  enabled:
-//    value: true
-//`,
-//		},
-//		{
-//			desc: "Some components Disabled",
-//			valueYAML: `
-//galley:
-// enabled: false
-//pilot:
-// enabled: true
-//global:
-// hub: docker.io/istio
-// istioNamespace: istio-system
-// policyNamespace: istio-policy
-// tag: 1.2.3
-// telemetryNamespace: istio-telemetry
-//mixer:
-// policy:
-//   enabled: true
-// telemetry:
-//   enabled: false
-//`,
-//			want: `
-//hub: docker.io/istio
-//tag: 1.2.3
-//default_namespace: istio-system
-//telemetry:
-// components:
-//   namespace: istio-telemetry
-//   telemetry:
-//     common:
-//       enabled: {}
-// enabled: {}
-//policy:
-// components:
-//   namespace: istio-policy
-//   policy:
-//     common:
-//       enabled:
-//         value: true
-// enabled:
-//   value: true
-//config_management:
-// components:
-//   galley:
-//     common:
-//       enabled: {}
-// enabled: {}
-//security:
-// components:
-//   namespace: istio-system
-//   cert_manager:
-//     common:
-//       enabled: {}
-//   node_agent:
-//     common:
-//       enabled: {}
-//   citadel:
-//     common:
-//       enabled: {}
-// enabled: {}
-//gateways:
-// components:
-//   ingress_gateway:
-//     common:
-//       enabled: {}
-//   egress_gateway:
-//     common:
-//       enabled: {}
-// enabled: {}
-//traffic_management:
-// components:
-//   pilot:
-//     common:
-//       enabled:
-//         value: true
-// enabled:
-//   value: true
-//auto_injection:
-// components:
-//   injector:
-//      common:
-//       enabled: {}
-// enabled: {}
-//`,
-//		},
 		{
-			desc: "K8s resources translation",
+			desc: "All Enabled",
 			valueYAML: `
-galley:
-  enabled: false
-pilot:
+certManager:
   enabled: true
-  resources:
-    requests:
-      cpu: 1000m
-      memory: 1G
-  replicaCount: 1
-  nodeSelector:
-    beta.kubernetes.io/os: linux
-  autoscaleEnabled: true
-  autoscaleMax: 3
-  autoscaleMin: 1
-  env:
-    GODEBUG: gctrace=1
-  podAntiAffinityLabelSelector:
-    - labelSelector:
-        matchLabels:
-          testK1: testV1
+galley:
+  enabled: true
 global:
   hub: docker.io/istio
   istioNamespace: istio-system
   policyNamespace: istio-policy
   tag: 1.2.3
   telemetryNamespace: istio-telemetry
-  proxy: 
-    ReadinessInitialDelaySeconds: 2
 mixer:
   policy:
     enabled: true
   telemetry:
-    enabled: false
+    enabled: true
+pilot:
+  enabled: true
+nodeAgent:
+  enabled: true
+gateways:
+  enabled: true
+  istio-ingressgateway:
+    resources:
+      requests:
+        cpu: 1000m
+        memory: 1G
+    enabled: true
+sidecarInjectorWebhook:
+  enabled: false
 `,
 			want: `
 hub: docker.io/istio
@@ -273,8 +75,10 @@ telemetry:
     namespace: istio-telemetry
     telemetry:
       common:
-        enabled: {}
-  enabled: {}
+        enabled:
+          value: true
+  enabled:
+    value: true
 policy:
   components:
     namespace: istio-policy
@@ -288,77 +92,277 @@ config_management:
   components:
     galley:
       common:
-        enabled: {}
-  enabled: {}
+        enabled:
+          value: true
+  enabled:
+    value: true 
 security:
   components:
     namespace: istio-system
     cert_manager:
       common:
-        enabled: {}
+        enabled:
+          value: true
     node_agent:
       common:
-        enabled: {}
+        enabled:
+          value: true
     citadel:
+      common:
+        enabled: {}
+  enabled:
+    value: true
+traffic_management:
+   components:
+     pilot:
+       common:
+         enabled: 
+           value: true
+   enabled: 
+     value: true
+auto_injection:
+  components:
+    injector:
       common:
         enabled: {}
   enabled: {}
 gateways:
   components:
     ingress_gateway:
-      common:
-        enabled: {}
+          common:
+           enabled:
+             value: true
+           k8s:
+             resources:
+               requests:
+                 cpu: 1000m
+                 memory: 1G 
     egress_gateway:
-      common:
-        enabled: {}
-  enabled: {}
-traffic_management:
-  components:
-    pilot:
-      common:
-        enabled:
-          value: true
-        k8s:
-          affinity:
-            podAntiAffinity:
-              requiredDuringSchedulingIgnoredDuringExecution:
-              - labelSelector:
-                    matchLabels:
-                      testK1: testV1
-                topologyKey: ""
-          replica_count: 1
-          env:
-          - name: GODEBUG
-            value: gctrace=1
-          hpa_spec:
-             maxReplicas: 3
-             minReplicas: 1
-             scaleTargetRef:
-               kind: ""
-               name: ""
-          node_selector:
-             beta.kubernetes.io/os: linux
-          resources:
-             requests:
-               cpu: 1000m
-               memory: 1G
-    proxy:
-      common:
-        k8s:
-          readiness_probe:
-            initial_delaySeconds: 2
-        values:
-          readinessInitialDelaySeconds: 2
+          common:
+            enabled: {}
   enabled:
     value: true
-auto_injection:
-  components:
-    injector:
-       common:
-        enabled: {}
-  enabled: {}
 `,
-		}}
+		},
+		{
+			desc: "Some components Disabled",
+			valueYAML: `
+galley:
+  enabled: false
+pilot:
+  enabled: true
+global:
+  hub: docker.io/istio
+  istioNamespace: istio-system
+  policyNamespace: istio-policy
+  tag: 1.2.3
+  telemetryNamespace: istio-telemetry
+mixer:
+  policy:
+    enabled: true
+telemetry:
+    enabled: false
+`,
+			want: `
+hub: docker.io/istio
+tag: 1.2.3
+default_namespace: istio-system
+telemetry:
+ components:
+   namespace: istio-telemetry
+   telemetry:
+     common:
+       enabled: {}
+ enabled: {}
+policy:
+ components:
+   namespace: istio-policy
+   policy:
+     common:
+       enabled:
+         value: true
+ enabled:
+   value: true
+config_management:
+ components:
+   galley:
+     common:
+       enabled: {}
+ enabled: {}
+security:
+ components:
+   namespace: istio-system
+   cert_manager:
+     common:
+       enabled: {}
+   node_agent:
+     common:
+       enabled: {}
+   citadel:
+     common:
+       enabled: {}
+ enabled: {}
+gateways:
+ components:
+   ingress_gateway:
+     common:
+       enabled: {}
+   egress_gateway:
+     common:
+       enabled: {}
+ enabled: {}
+traffic_management:
+ components:
+   pilot:
+     common:
+       enabled:
+         value: true
+ enabled:
+   value: true
+auto_injection:
+ components:
+   injector:
+      common:
+       enabled: {}
+ enabled: {}
+`,
+		},
+		{
+			desc: "K8s resources translation",
+			valueYAML: `
+galley:
+ enabled: false
+pilot:
+ enabled: true
+ resources:
+   requests:
+     cpu: 1000m
+     memory: 1G
+ replicaCount: 1
+ nodeSelector:
+   beta.kubernetes.io/os: linux
+ autoscaleEnabled: true
+ autoscaleMax: 3
+ autoscaleMin: 1
+ traceSampling: 1.0
+ image: pilot
+ env:
+   GODEBUG: gctrace=1
+ podAntiAffinityLabelSelector:
+   - labelSelector:
+       matchLabels:
+         testK1: testV1
+global:
+ hub: docker.io/istio
+ istioNamespace: istio-system
+ policyNamespace: istio-policy
+ tag: 1.2.3
+ telemetryNamespace: istio-telemetry
+ proxy:
+   ReadinessInitialDelaySeconds: 2
+mixer:
+ policy:
+   enabled: true
+ telemetry:
+   enabled: false
+`,
+			want: `
+hub: docker.io/istio
+tag: 1.2.3
+default_namespace: istio-system
+telemetry:
+ components:
+   namespace: istio-telemetry
+   telemetry:
+     common:
+       enabled: {}
+ enabled: {}
+policy:
+ components:
+   namespace: istio-policy
+   policy:
+     common:
+       enabled:
+         value: true
+ enabled:
+   value: true
+config_management:
+ components:
+   galley:
+     common:
+       enabled: {}
+ enabled: {}
+security:
+ components:
+   namespace: istio-system
+   cert_manager:
+     common:
+       enabled: {}
+   node_agent:
+     common:
+       enabled: {}
+   citadel:
+     common:
+       enabled: {}
+ enabled: {}
+gateways:
+ components:
+   ingress_gateway:
+     common:
+       enabled: {}
+   egress_gateway:
+     common:
+       enabled: {}
+ enabled: {}
+traffic_management:
+ components:
+   pilot:
+     common:
+       enabled:
+         value: true
+       k8s:
+         affinity:
+           podAntiAffinity:
+             requiredDuringSchedulingIgnoredDuringExecution:
+             - labelSelector:
+                   matchLabels:
+                     testK1: testV1
+               topologyKey: ""
+         replica_count: 1
+         env:
+         - name: GODEBUG
+           value: gctrace=1
+         hpa_spec:
+            maxReplicas: 3
+            minReplicas: 1
+            scaleTargetRef:
+              kind: ""
+              name: ""
+         node_selector:
+            beta.kubernetes.io/os: linux
+         resources:
+            requests:
+              cpu: 1000m
+              memory: 1G
+       values:
+         pilot:
+           image: pilot
+           traceSampling: 1
+   proxy:
+     common:
+       values:
+         readinessInitialDelaySeconds: 2
+ enabled:
+   value: true
+auto_injection:
+ components:
+   injector:
+      common:
+       enabled: {}
+ enabled: {}
+`,
+		},
+	}
 	tr, err := NewValueYAMLTranslator(version.NewMinorVersion(1, 3))
 	if err != nil {
 		t.Fatal("fail to get helm value.yaml translator")

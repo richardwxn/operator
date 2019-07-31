@@ -134,17 +134,22 @@ func IsComponentEnabledInSpec(featureName FeatureName, componentName ComponentNa
 
 // IsComponentEnabledFromValue get whether component is enabled in helm value.yaml tree
 func IsComponentEnabledFromValue(valuePath string, valueSpec map[string]interface{}) (bool, error) {
-	valuePath += ".enabled"
-	enableNodeI, found, err := GetFromTreePath(valueSpec, util.ToYAMLPath(valuePath))
+	enabledPath := valuePath + ".enabled"
+	enableNodeI, found, err := GetFromTreePath(valueSpec, util.ToYAMLPath(enabledPath))
 	if err != nil {
-		return false, fmt.Errorf("component enablement path: %s not found in helm value.yaml tree", valuePath)
+		return false, fmt.Errorf("error finding component enablement path: %s in helm value.yaml tree", enabledPath)
 	}
 	if !found || enableNodeI == nil {
+		// Some components do not specify enablement should be treated as enabled if node exists.
+		_, found, err := GetFromTreePath(valueSpec, util.ToYAMLPath(valuePath))
+		if found && err == nil {
+			return true, nil
+		}
 		return false, nil
 	}
 	enableNode, ok := enableNodeI.(bool)
 	if !ok {
-		return false, fmt.Errorf("node at valuePath %s has bad type %T, expect bool", valuePath, enableNodeI)
+		return false, fmt.Errorf("node at valuePath %s has bad type %T, expect bool", enabledPath, enableNodeI)
 	}
 	return enableNode, nil
 }

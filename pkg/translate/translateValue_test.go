@@ -69,7 +69,7 @@ sidecarInjectorWebhook:
 			want: `
 hub: docker.io/istio
 tag: 1.2.3
-default_namespace_prefix: istio-system
+default_namespace: istio-system
 telemetry:
   components:
     namespace: istio-telemetry
@@ -129,19 +129,17 @@ auto_injection:
 gateways:
   components:
     ingress_gateway:
-      - gateway:
-          common:
-           enabled:
-             value: true
-           k8s:
-             resources:
-               requests:
-                 cpu: 1000m
-                 memory: 1G 
+      common:
+        enabled:
+           value: true
+        k8s:
+           resources:
+             requests:
+               cpu: 1000m
+               memory: 1G 
     egress_gateway:
-      - gateway:
-          common:
-            enabled: {}
+      common:
+        enabled: {}
   enabled:
     value: true
 `,
@@ -168,7 +166,7 @@ mixer:
 			want: `
 hub: docker.io/istio
 tag: 1.2.3
-default_namespace_prefix: istio-system
+default_namespace: istio-system
 telemetry:
  components:
    namespace: istio-telemetry
@@ -207,13 +205,11 @@ security:
 gateways:
  components:
    ingress_gateway:
-     - gateway:
-         common:
-          enabled: {}
+     common:
+       enabled: {}
    egress_gateway:
-     - gateway:
-         common:
-          enabled: {}
+     common:
+       enabled: {}
  enabled: {}
 traffic_management:
  components:
@@ -271,7 +267,7 @@ mixer:
 			want: `
 hub: docker.io/istio
 tag: 1.2.3
-default_namespace_prefix: istio-system
+default_namespace: istio-system
 telemetry:
   components:
     namespace: istio-telemetry
@@ -310,13 +306,11 @@ security:
 gateways:
   components:
     ingress_gateway:
-      - gateway:
-          common:
-           enabled: {}
+      common:
+        enabled: {}
     egress_gateway:
-      - gateway:
-          common:
-           enabled: {}
+      common:
+        enabled: {}
   enabled: {}
 traffic_management:
   components:
@@ -365,7 +359,7 @@ auto_injection:
   enabled: {}
 `,
 		}}
-	tr, err := NewValueYAMLTranslator(version.NewMinorVersion(1, 2))
+	tr, err := NewValueYAMLTranslator(version.NewMinorVersion(1, 3))
 	if err != nil {
 		t.Fatal("fail to get helm value.yaml translator")
 	}

@@ -177,6 +177,10 @@ func WriteNode(root interface{}, path util.Path, value interface{}) error {
 	return WritePathContext(pc, value)
 }
 
+func WritePaths() {
+	
+}
+
 // WritePathContext writes the given value to the Node in the given PathContext.
 func WritePathContext(nc *PathContext, value interface{}) error {
 	scope.Debugf("WritePathContext PathContext=%s, value=%v", nc, value)

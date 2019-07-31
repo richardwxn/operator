@@ -16,7 +16,6 @@ package translate
 
 import (
 	"fmt"
-
 	"github.com/ghodss/yaml"
 
 	"istio.io/operator/pkg/apis/istio/v1alpha2"
@@ -39,8 +38,6 @@ type ValueYAMLTranslator struct {
 	ValuesToComponentName map[string]name.ComponentName
 	// NamespaceMapping maps namespace defined in value.yaml to that in API spec.
 	NamespaceMapping map[string][]string
-	// GatewayK8sMapping defines mapping specific for gateways k8s setting.
-	GatewayK8sMapping map[string]*Translation
 }
 
 var (
@@ -50,9 +47,9 @@ var (
 			APIMapping: map[string]*Translation{},
 			KubernetesMapping: map[string]*Translation{
 				"{{.ValueComponentName}}.podAntiAffinityLabelSelector": {"{{.FeatureName}}.Components.{{.ComponentName}}.Common.K8s." +
-						"Affinity.PodAntiAffinity.RequiredDuringSchedulingIgnoredDuringExecution", nil},
+					"Affinity.PodAntiAffinity.RequiredDuringSchedulingIgnoredDuringExecution", nil},
 				"{{.ValueComponentName}}.podAntiAffinityTermLabelSelector": {"{{.FeatureName}}.Components.{{.ComponentName}}.Common.K8s." +
-						"Affinity.PodAntiAffinity.PreferredDuringSchedulingIgnoredDuringExecution", nil},
+					"Affinity.PodAntiAffinity.PreferredDuringSchedulingIgnoredDuringExecution", nil},
 				"{{.ValueComponentName}}.env":                 {"{{.FeatureName}}.Components.{{.ComponentName}}.Common.K8s.Env", nil},
 				"{{.ValueComponentName}}.autoscaleEnabled":    {"{{.FeatureName}}.Components.{{.ComponentName}}.Common.K8s.HpaSpec", nil},
 				"{{.ValueComponentName}}.imagePullPolicy":     {"{{.FeatureName}}.Components.{{.ComponentName}}.Common.K8s.ImagePullPolicy", nil},
@@ -65,14 +62,16 @@ var (
 				"{{.ValueComponentName}}.resources":           {"{{.FeatureName}}.Components.{{.ComponentName}}.Common.K8s.Resources", nil},
 			},
 			ValuesToComponentName: map[string]name.ComponentName{
-				"pilot":                  name.PilotComponentName,
-				"galley":                 name.GalleyComponentName,
-				"sidecarInjectorWebhook": name.SidecarInjectorComponentName,
-				"mixer.policy":           name.PolicyComponentName,
-				"mixer.telemetry":        name.TelemetryComponentName,
-				"security":               name.CitadelComponentName,
-				"nodeagent":              name.NodeAgentComponentName,
-				"certmanager":            name.CertManagerComponentName,
+				"pilot":                         name.PilotComponentName,
+				"galley":                        name.GalleyComponentName,
+				"sidecarInjectorWebhook":        name.SidecarInjectorComponentName,
+				"mixer.policy":                  name.PolicyComponentName,
+				"mixer.telemetry":               name.TelemetryComponentName,
+				"security":                      name.CitadelComponentName,
+				"nodeagent":                     name.NodeAgentComponentName,
+				"certmanager":                   name.CertManagerComponentName,
+				"gateways.istio-ingressgateway": name.IngressComponentName,
+				"gateways.istio-egressgateway":  name.EgressComponentName,
 			},
 			NamespaceMapping: map[string][]string{
 				"global.istioNamespace":     {"security.components.namespace"},
@@ -80,13 +79,11 @@ var (
 				"global.policyNamespace":    {"policy.components.namespace"},
 				"global.configNamespace":    {"configManagement.components.namespace"},
 			},
-			GatewayK8sMapping: map[string]*Translation{},
 		},
 	}
 	// Component enablement mapping. Ex "{{.ValueComponent}}.enabled": {"{{.FeatureName}}.Components.{{.ComponentName}}.Common.enabled}", nil},
 	// Feature enablement mapping. Ex: "{{.ValueComponent}}.enabled": {"{{.FeatureName}}.enabled}", nil},
 	componentEnablementPattern = "{{.FeatureName}}.Components.{{.ComponentName}}.Common.Enabled"
-	gatewayNames               = []string{"gateways.istio-ingressgateway", "gateways.istio-egressgateway"}
 )
 
 // initAPIMapping generate the reverse mapping from original translator apiMapping
@@ -98,22 +95,7 @@ func (t *ValueYAMLTranslator) initAPIMapping(vs version.MinorVersion) error {
 	for valKey, outVal := range ts.APIMapping {
 		t.APIMapping[outVal.outPath] = &Translation{valKey, nil}
 	}
-}
-
-// initGatewayMapping generates the mapping for gateway k8s settings.
-func (t *ValueYAMLTranslator) initGatewayK8sMapping() {
-	// initialize gateway k8s mapping
-	gwK8sMapping := make(map[string]*Translation)
-	for valKey, outVal := range t.KubernetesMapping {
-		for _, gwName := range gatewayNames {
-			outP := util.PathFromString(outVal.outPath)
-			// extract the part of "Common.K8s.{{.ResourceName}}"
-			gwOut := "Gateway." + outP[len(outP)-3:].String()
-			gw := renderComponentName(valKey, gwName)
-			gwK8sMapping[gw] = &Translation{gwOut, nil}
-		}
-	}
-	t.GatewayK8sMapping = gwK8sMapping
+	return nil
 }
 
 // initK8SMapping generates the k8s settings mapping for components that are enabled based on templates
@@ -162,7 +144,6 @@ func NewValueYAMLTranslator(minorVersion version.MinorVersion) (*ValueYAMLTransl
 	if err != nil {
 		return nil, fmt.Errorf("error initialize API mapping: %s", err.Error())
 	}
-	t.initGatewayK8sMapping()
 	return t, nil
 }
 
@@ -208,66 +189,18 @@ func (t *ValueYAMLTranslator) TranslateTree(valueTree map[string]interface{}, cp
 		return fmt.Errorf("error when translating enablement and namespace from value.yaml tree: %v", err.Error())
 	}
 	// translate with api mapping
-	err = translateTree(valueTree, cpSpecTree, t.APIMapping)
+	err = t.translateTree(valueTree, cpSpecTree, path)
 	if err != nil {
 		return fmt.Errorf("error when translating value.yaml tree with global mapping: %v", err.Error())
 	}
 
 	// translate with k8s mapping
 	t.initK8SMapping(valueTree)
-	err = translateK8sTree(valueTree, cpSpecTree, t.KubernetesMapping)
+	err = t.translateK8sTree(valueTree, cpSpecTree)
 	if err != nil {
 		return fmt.Errorf("error when translating value.yaml tree with kubernetes mapping: %v", err.Error())
 	}
 
-	// translation for gateways
-	err = t.translateGateway(valueTree, cpSpecTree, "gateways.istio-ingressgateway", "Gateways.Components.IngressGateway")
-	if err != nil {
-		return fmt.Errorf("error when translating ingressGateway from value.yaml tree: %v", err.Error())
-	}
-	err = t.translateGateway(valueTree, cpSpecTree, "gateways.istio-egressgateway", "Gateways.Components.EgressGateway")
-	if err != nil {
-		return fmt.Errorf("error when translating egressGateway from value.yaml tree: %v", err.Error())
-	}
-	return nil
-}
-
-// translateGateway handles translation for gateways specific configuration
-func (t *ValueYAMLTranslator) translateGateway(valueSpec map[string]interface{}, root map[string]interface{}, inPath string, outPath string) error {
-	gwSpecs := make([]map[string]interface{}, 1)
-	gwSpec := make(map[string]interface{})
-	gwSpecs[0] = gwSpec
-	// for gateway feature enablement
-	enabled, err := name.IsComponentEnabledFromValue(inPath, valueSpec)
-	if err != nil {
-		return fmt.Errorf("error in finding gateways path: %s from value.yaml tree", inPath)
-	}
-	outFP := util.ToYAMLPath("Gateways.Enabled")
-	curEnabled, found, _ := name.GetFromTreePath(root, outFP)
-	if !found {
-		if err := tpath.WriteNode(root, outFP, enabled); err != nil {
-			return err
-		}
-	} else if curEnabled == false && enabled {
-		if err := tpath.WriteNode(root, outFP, enabled); err != nil {
-			return err
-		}
-	}
-	// for gateway component enablemnt
-	outCP := util.ToYAMLPath("Gateway.Common.Enabled")
-	if err := tpath.WriteNode(gwSpec, outCP, enabled); err != nil {
-		return err
-	}
-	if enabled {
-		err = translateK8sTree(valueSpec, gwSpec, t.GatewayK8sMapping)
-		if err != nil {
-			return err
-		}
-	}
-	err = tpath.WriteNode(root, util.ToYAMLPath(outPath), gwSpecs)
-	if err != nil {
-		return err
-	}
 	return nil
 }
 
@@ -379,9 +312,9 @@ func translateAffinity(outPath string, value interface{}, cpSpecTree map[string]
 }
 
 // translateK8sTree is internal method for translating K8s configurations from value.yaml tree.
-func translateK8sTree(valueTree map[string]interface{},
-		cpSpecTree map[string]interface{}, mapping map[string]*Translation) error {
-	for inPath, v := range mapping {
+func (t *ValueYAMLTranslator) translateK8sTree(valueTree map[string]interface{},
+	cpSpecTree map[string]interface{}) error {
+	for inPath, v := range t.KubernetesMapping {
 		log.Infof("Checking for k8s path %s in helm Value.yaml tree", inPath)
 		m, found, err := name.GetFromTreePath(valueTree, util.ToYAMLPath(inPath))
 		if err != nil {
@@ -443,8 +376,71 @@ func translateK8sTree(valueTree map[string]interface{},
 }
 
 // translateTree is internal method for translating value.yaml tree
-func translateTree(valueTree map[string]interface{},
-		cpSpecTree map[string]interface{}, mapping map[string]*Translation) error {
+func (t *ValueYAMLTranslator) translateTree(valueTree map[string]interface{},
+		cpSpecTree map[string]interface{}, path util.Path) error {
+	// translate input valueTree
+	for key, val := range valueTree {
+		newPath := append(path, key)
+		// leaf
+		if val == nil {
+			err := t.insertLeaf(cpSpecTree, newPath, mapping, val)
+			if err != nil {
+				return err
+			}
+		} else {
+			switch node := val.(type) {
+			case map[string]interface{}:
+				err := t.translateTree(node, cpSpecTree, newPath)
+				if err != nil {
+					return err
+				}
+			case []interface{}:
+				for _, newNode := range node {
+					newMap, ok := newNode.(map[string]interface{})
+					if !ok {
+						return fmt.Errorf("fail to translate slice")
+					}
+					err := t.translateTree(newMap, cpSpecTree, newPath)
+					if err != nil {
+						return err
+					}
+				}
+			// leaf
+			default:
+				err := t.insertLeaf(cpSpecTree, newPath, val)
+				if err != nil {
+					return err
+				}
+			}
+		}
+	}
+	return nil
+}
+
+// insertLeaf inserts a leaf with value into root at path, which is first mapped using t.APIMapping.
+func (t *ValueYAMLTranslator) insertLeaf(root map[string]interface{}, path util.Path, value interface{}) (errs util.Errors) {
+	// Must be a scalar leaf. See if we have a mapping.
+	valuesPath, m := getValuesPathMapping(t.APIMapping, path)
+	switch {
+	case m == nil:
+		cn := path[0]
+		newCN := t.ValuesToComponentName[cn]
+		if newCN != "" {
+			
+		}
+	case m.translationFunc == nil:
+		// Use default translation which just maps to a different part of the tree.
+		errs = util.AppendErr(errs, defaultTranslationFunc(m, root, valuesPath, value))
+	default:
+		// Use a custom translation function.
+		errs = util.AppendErr(errs, m.translationFunc(m, root, valuesPath, value))
+	}
+	return errs
+}
+
+// translateTree is internal method for translating value.yaml tree
+func translateTree2(valueTree map[string]interface{},
+	cpSpecTree map[string]interface{}, mapping map[string]*Translation) error {
 	for inPath, v := range mapping {
 		log.Infof("Checking for path %s in helm Value.yaml tree", inPath)
 		m, found, err := name.GetFromTreePath(valueTree, util.ToYAMLPath(inPath))

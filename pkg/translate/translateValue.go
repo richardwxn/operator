@@ -84,6 +84,7 @@ var (
 	// Component enablement mapping. Ex "{{.ValueComponent}}.enabled": {"{{.FeatureName}}.Components.{{.ComponentName}}.Common.enabled}", nil},
 	// Feature enablement mapping. Ex: "{{.ValueComponent}}.enabled": {"{{.FeatureName}}.enabled}", nil},
 	componentEnablementPattern = "{{.FeatureName}}.Components.{{.ComponentName}}.Common.Enabled"
+	componentValuesPattern = "{{.FeatureName}}.Components.{{.ComponentName}}.Common.Values"
 )
 
 // initAPIMapping generate the reverse mapping from original translator apiMapping
@@ -383,7 +384,7 @@ func (t *ValueYAMLTranslator) translateTree(valueTree map[string]interface{},
 		newPath := append(path, key)
 		// leaf
 		if val == nil {
-			err := t.insertLeaf(cpSpecTree, newPath, mapping, val)
+			err := t.insertLeaf(cpSpecTree, newPath, val)
 			if err != nil {
 				return err
 			}
@@ -422,12 +423,14 @@ func (t *ValueYAMLTranslator) insertLeaf(root map[string]interface{}, path util.
 	// Must be a scalar leaf. See if we have a mapping.
 	valuesPath, m := getValuesPathMapping(t.APIMapping, path)
 	switch {
+	// write it to values if not mapping found
 	case m == nil:
-		cn := path[0]
-		newCN := t.ValuesToComponentName[cn]
-		if newCN != "" {
-			
-		}
+		//return nil
+		//_, found, err := tpath.GetPathContext(root, path)
+		//if found && err == nil {
+		//	return nil
+		//}
+		errs = util.AppendErr(errs, t.translateToCommonValues(root, path, value))
 	case m.translationFunc == nil:
 		// Use default translation which just maps to a different part of the tree.
 		errs = util.AppendErr(errs, defaultTranslationFunc(m, root, valuesPath, value))
@@ -436,6 +439,28 @@ func (t *ValueYAMLTranslator) insertLeaf(root map[string]interface{}, path util.
 		errs = util.AppendErr(errs, m.translationFunc(m, root, valuesPath, value))
 	}
 	return errs
+}
+
+func (t *ValueYAMLTranslator) translateToCommonValues(root map[string]interface{}, path util.Path, value interface{}) error {
+	// path starts with ValueComponent name or global
+	cn := path[0]
+	newCN := t.ValuesToComponentName[cn]
+	if newCN == "" {
+		// some components path len is 2, e.g. mixer.policy
+		if len(path) > 1 {
+			cn += path[1]
+			newCN = t.ValuesToComponentName[cn]
+		}
+		if newCN == "" {
+			return nil
+		}
+	}
+	if len(path) > 1 && path[len(path)-1] == "enabled" {
+		return nil
+	}
+	fn := name.ComponentNameToFeatureName[newCN]
+	outPath := renderCommonComponentValues(componentValuesPattern, string(newCN), string(fn))
+	return tpath.WriteNode(root, util.ToYAMLPath(outPath), value)
 }
 
 // translateTree is internal method for translating value.yaml tree
@@ -479,4 +504,14 @@ func renderComponentName(tmpl string, componentName string) string {
 		ValueComponentName string
 	}
 	return renderTemplate(tmpl, temp{componentName})
+}
+
+// renderCommonComponentValues renders a template of the form "{{.FeatureName}}.Components.{{.ComponentName}}.Common.Values" with
+// the supplied parameters.
+func renderCommonComponentValues(tmpl string, componentName string, featureName string) string {
+	type temp struct {
+		FeatureName string
+		ComponentName string
+	}
+	return renderTemplate(tmpl, temp{FeatureName: featureName, ComponentName: componentName})
 }

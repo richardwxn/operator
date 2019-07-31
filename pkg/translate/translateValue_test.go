@@ -33,200 +33,200 @@ func TestValueToProto(t *testing.T) {
 		want      string
 		wantErr   string
 	}{
-		{
-			desc: "All Enabled",
-			valueYAML: `
-certManager:
-  enabled: true
-galley:
-  enabled: true
-global:
-  hub: docker.io/istio
-  istioNamespace: istio-system
-  policyNamespace: istio-policy
-  tag: 1.2.3
-  telemetryNamespace: istio-telemetry
-mixer:
-  policy:
-    enabled: true
-  telemetry:
-    enabled: true
-pilot:
-  enabled: true
-nodeAgent:
-  enabled: true
-gateways:
-  enabled: true
-  istio-ingressgateway:
-    resources:
-      requests:
-        cpu: 1000m
-        memory: 1G
-    enabled: true
-sidecarInjectorWebhook:
-  enabled: false
-`,
-			want: `
-hub: docker.io/istio
-tag: 1.2.3
-default_namespace: istio-system
-telemetry:
-  components:
-    namespace: istio-telemetry
-    telemetry:
-      common:
-        enabled:
-          value: true
-  enabled:
-    value: true
-policy:
-  components:
-    namespace: istio-policy
-    policy:
-      common:
-        enabled:
-          value: true
-  enabled:
-    value: true
-config_management:
-  components:
-    galley:
-      common:
-        enabled:
-          value: true
-  enabled:
-    value: true 
-security:
-  components:
-    namespace: istio-system
-    cert_manager:
-      common:
-        enabled:
-          value: true
-    node_agent:
-      common:
-        enabled:
-          value: true
-    citadel:
-      common:
-        enabled: {}
-  enabled:
-    value: true
-traffic_management:
-   components:
-     pilot:
-       common:
-         enabled: 
-           value: true
-   enabled: 
-     value: true
-auto_injection:
-  components:
-    injector:
-      common:
-        enabled: {}
-  enabled: {}
-gateways:
-  components:
-    ingress_gateway:
-      common:
-        enabled:
-           value: true
-        k8s:
-           resources:
-             requests:
-               cpu: 1000m
-               memory: 1G 
-    egress_gateway:
-      common:
-        enabled: {}
-  enabled:
-    value: true
-`,
-		},
-		{
-			desc: "Some components Disabled",
-			valueYAML: `
-galley:
- enabled: false
-pilot:
- enabled: true
-global:
- hub: docker.io/istio
- istioNamespace: istio-system
- policyNamespace: istio-policy
- tag: 1.2.3
- telemetryNamespace: istio-telemetry
-mixer:
- policy:
-   enabled: true
- telemetry:
-   enabled: false
-`,
-			want: `
-hub: docker.io/istio
-tag: 1.2.3
-default_namespace: istio-system
-telemetry:
- components:
-   namespace: istio-telemetry
-   telemetry:
-     common:
-       enabled: {}
- enabled: {}
-policy:
- components:
-   namespace: istio-policy
-   policy:
-     common:
-       enabled:
-         value: true
- enabled:
-   value: true
-config_management:
- components:
-   galley:
-     common:
-       enabled: {}
- enabled: {}
-security:
- components:
-   namespace: istio-system
-   cert_manager:
-     common:
-       enabled: {}
-   node_agent:
-     common:
-       enabled: {}
-   citadel:
-     common:
-       enabled: {}
- enabled: {}
-gateways:
- components:
-   ingress_gateway:
-     common:
-       enabled: {}
-   egress_gateway:
-     common:
-       enabled: {}
- enabled: {}
-traffic_management:
- components:
-   pilot:
-     common:
-       enabled:
-         value: true
- enabled:
-   value: true
-auto_injection:
- components:
-   injector:
-      common:
-       enabled: {}
- enabled: {}
-`,
-		},
+//		{
+//			desc: "All Enabled",
+//			valueYAML: `
+//certManager:
+//  enabled: true
+//galley:
+//  enabled: true
+//global:
+//  hub: docker.io/istio
+//  istioNamespace: istio-system
+//  policyNamespace: istio-policy
+//  tag: 1.2.3
+//  telemetryNamespace: istio-telemetry
+//mixer:
+//  policy:
+//    enabled: true
+//  telemetry:
+//    enabled: true
+//pilot:
+//  enabled: true
+//nodeAgent:
+//  enabled: true
+//gateways:
+//  enabled: true
+//  istio-ingressgateway:
+//    resources:
+//      requests:
+//        cpu: 1000m
+//        memory: 1G
+//    enabled: true
+//sidecarInjectorWebhook:
+//  enabled: false
+//`,
+//			want: `
+//hub: docker.io/istio
+//tag: 1.2.3
+//default_namespace: istio-system
+//telemetry:
+//  components:
+//    namespace: istio-telemetry
+//    telemetry:
+//      common:
+//        enabled:
+//          value: true
+//  enabled:
+//    value: true
+//policy:
+//  components:
+//    namespace: istio-policy
+//    policy:
+//      common:
+//        enabled:
+//          value: true
+//  enabled:
+//    value: true
+//config_management:
+//  components:
+//    galley:
+//      common:
+//        enabled:
+//          value: true
+//  enabled:
+//    value: true
+//security:
+//  components:
+//    namespace: istio-system
+//    cert_manager:
+//      common:
+//        enabled:
+//          value: true
+//    node_agent:
+//      common:
+//        enabled:
+//          value: true
+//    citadel:
+//      common:
+//        enabled: {}
+//  enabled:
+//    value: true
+//traffic_management:
+//   components:
+//     pilot:
+//       common:
+//         enabled:
+//           value: true
+//   enabled:
+//     value: true
+//auto_injection:
+//  components:
+//    injector:
+//      common:
+//        enabled: {}
+//  enabled: {}
+//gateways:
+//  components:
+//    ingress_gateway:
+//      common:
+//        enabled:
+//           value: true
+//        k8s:
+//           resources:
+//             requests:
+//               cpu: 1000m
+//               memory: 1G
+//    egress_gateway:
+//      common:
+//        enabled: {}
+//  enabled:
+//    value: true
+//`,
+//		},
+//		{
+//			desc: "Some components Disabled",
+//			valueYAML: `
+//galley:
+// enabled: false
+//pilot:
+// enabled: true
+//global:
+// hub: docker.io/istio
+// istioNamespace: istio-system
+// policyNamespace: istio-policy
+// tag: 1.2.3
+// telemetryNamespace: istio-telemetry
+//mixer:
+// policy:
+//   enabled: true
+// telemetry:
+//   enabled: false
+//`,
+//			want: `
+//hub: docker.io/istio
+//tag: 1.2.3
+//default_namespace: istio-system
+//telemetry:
+// components:
+//   namespace: istio-telemetry
+//   telemetry:
+//     common:
+//       enabled: {}
+// enabled: {}
+//policy:
+// components:
+//   namespace: istio-policy
+//   policy:
+//     common:
+//       enabled:
+//         value: true
+// enabled:
+//   value: true
+//config_management:
+// components:
+//   galley:
+//     common:
+//       enabled: {}
+// enabled: {}
+//security:
+// components:
+//   namespace: istio-system
+//   cert_manager:
+//     common:
+//       enabled: {}
+//   node_agent:
+//     common:
+//       enabled: {}
+//   citadel:
+//     common:
+//       enabled: {}
+// enabled: {}
+//gateways:
+// components:
+//   ingress_gateway:
+//     common:
+//       enabled: {}
+//   egress_gateway:
+//     common:
+//       enabled: {}
+// enabled: {}
+//traffic_management:
+// components:
+//   pilot:
+//     common:
+//       enabled:
+//         value: true
+// enabled:
+//   value: true
+//auto_injection:
+// components:
+//   injector:
+//      common:
+//       enabled: {}
+// enabled: {}
+//`,
+//		},
 		{
 			desc: "K8s resources translation",
 			valueYAML: `

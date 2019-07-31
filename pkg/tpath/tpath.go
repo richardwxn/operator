@@ -61,7 +61,7 @@ func (nc *PathContext) String() string {
 // a malformed path.
 // It also creates a tree of PathContexts during the traversal so that Parent nodes can be updated if required. This is
 // required when (say) appending to a list, where the parent list itself must be updated.
-func GetPathContext(root interface{}, path util.Path) (*PathContext, bool, error) {
+func  GetPathContext(root interface{}, path util.Path) (*PathContext, bool, error) {
 	return getPathContext(&PathContext{Node: root}, path, path, false)
 }
 
@@ -175,10 +175,6 @@ func WriteNode(root interface{}, path util.Path, value interface{}) error {
 		return err
 	}
 	return WritePathContext(pc, value)
-}
-
-func WritePaths() {
-	
 }
 
 // WritePathContext writes the given value to the Node in the given PathContext.

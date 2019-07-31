@@ -516,18 +516,7 @@ func renderFeatureComponentPathTemplate(tmpl string, featureName name.FeatureNam
 		FeatureName:   featureName,
 		ComponentName: componentName,
 	}
-	t, err := template.New("").Parse(tmpl)
-	if err != nil {
-		log.Errorf("Failed to create template object, Error: %v. Template string: \n%s\n", err.Error(), tmpl)
-		return err.Error()
-	}
-	buf := new(bytes.Buffer)
-	err = t.Execute(buf, ts)
-	if err != nil {
-		log.Errorf("Failed to execute template: %v", err.Error())
-		return err.Error()
-	}
-	return buf.String()
+	return renderTemplate(tmpl, ts)
 }
 
 // renderResourceComponentPathTemplate renders a template of the form <path>{{.ResourceName}}<path>{{.ContainerName}}<path> with
@@ -540,16 +529,20 @@ func (t *Translator) renderResourceComponentPathTemplate(tmpl string, componentN
 		ResourceName:  t.ComponentMaps[componentName].ResourceName,
 		ContainerName: t.ComponentMaps[componentName].ContainerName,
 	}
-	// TODO: address comment
-	// Can extract the template execution part to a common method, so for each
-	// rendering method just need to create a template struct and call this common method
-	tm, err := template.New("").Parse(tmpl)
+	return renderTemplate(tmpl, ts)
+}
+
+// helper method to render template
+func renderTemplate(tmpl string, ts interface{}) string {
+	t, err := template.New("").Parse(tmpl)
 	if err != nil {
+		log.Error(err.Error())
 		return err.Error()
 	}
 	buf := new(bytes.Buffer)
-	err = tm.Execute(buf, ts)
+	err = t.Execute(buf, ts)
 	if err != nil {
+		log.Error(err.Error())
 		return err.Error()
 	}
 	return buf.String()

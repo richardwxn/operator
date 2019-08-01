@@ -34,6 +34,141 @@ func TestValueToProto(t *testing.T) {
 		wantErr   string
 	}{
 		{
+			desc: "K8s resources translation",
+			valueYAML: `
+galley:
+  enabled: false
+pilot:
+  enabled: true
+  resources:
+    requests:
+      cpu: 1000m
+      memory: 1G
+  replicaCount: 1
+  nodeSelector:
+    beta.kubernetes.io/os: linux
+  autoscaleEnabled: true
+  autoscaleMax: 3
+  autoscaleMin: 1
+  traceSampling: 1.0
+  image: pilot
+  env:
+    GODEBUG: gctrace=1
+  podAntiAffinityLabelSelector:
+    - labelSelector:
+        matchLabels:
+          testK1: testV1
+global:
+  hub: docker.io/istio
+  istioNamespace: istio-system
+  policyNamespace: istio-policy
+  tag: 1.2.3
+  telemetryNamespace: istio-telemetry
+  proxy:
+    ReadinessInitialDelaySeconds: 2
+mixer:
+  policy:
+    enabled: true
+  telemetry:
+    enabled: false
+`,
+			want: `
+hub: docker.io/istio
+tag: 1.2.3
+default_namespace: istio-system
+telemetry:
+ components:
+   namespace: istio-telemetry
+   telemetry:
+     common:
+       enabled: {}
+ enabled: {}
+policy:
+ components:
+   namespace: istio-policy
+   policy:
+     common:
+       enabled:
+         value: true
+ enabled:
+   value: true
+config_management:
+ components:
+   galley:
+     common:
+       enabled: {}
+ enabled: {}
+security:
+ components:
+   namespace: istio-system
+   cert_manager:
+     common:
+       enabled: {}
+   node_agent:
+     common:
+       enabled: {}
+   citadel:
+     common:
+       enabled: {}
+ enabled: {}
+gateways:
+ components:
+   ingress_gateway:
+     common:
+       enabled: {}
+   egress_gateway:
+     common:
+       enabled: {}
+ enabled: {}
+traffic_management:
+ components:
+   pilot:
+     common:
+       enabled:
+         value: true
+       k8s:
+         affinity:
+           podAntiAffinity:
+             requiredDuringSchedulingIgnoredDuringExecution:
+             - labelSelector:
+                   matchLabels:
+                     testK1: testV1
+               topologyKey: ""
+         replica_count: 1
+         env:
+         - name: GODEBUG
+           value: gctrace=1
+         hpa_spec:
+            maxReplicas: 3
+            minReplicas: 1
+            scaleTargetRef:
+              kind: ""
+              name: ""
+         node_selector:
+            beta.kubernetes.io/os: linux
+         resources:
+            requests:
+              cpu: 1000m
+              memory: 1G
+       values:
+         pilot:
+           image: pilot
+           traceSampling: 1
+   proxy:
+     common:
+       values:
+         readinessInitialDelaySeconds: 2
+ enabled:
+   value: true
+auto_injection:
+ components:
+   injector:
+      common:
+       enabled: {}
+ enabled: {}
+`,
+		},
+		{
 			desc: "All Enabled",
 			valueYAML: `
 certManager:
@@ -227,141 +362,6 @@ auto_injection:
  enabled: {}
 `,
 		},
-		{
-			desc: "K8s resources translation",
-			valueYAML: `
-galley:
- enabled: false
-pilot:
- enabled: true
- resources:
-   requests:
-     cpu: 1000m
-     memory: 1G
- replicaCount: 1
- nodeSelector:
-   beta.kubernetes.io/os: linux
- autoscaleEnabled: true
- autoscaleMax: 3
- autoscaleMin: 1
- traceSampling: 1.0
- image: pilot
- env:
-   GODEBUG: gctrace=1
- podAntiAffinityLabelSelector:
-   - labelSelector:
-       matchLabels:
-         testK1: testV1
-global:
- hub: docker.io/istio
- istioNamespace: istio-system
- policyNamespace: istio-policy
- tag: 1.2.3
- telemetryNamespace: istio-telemetry
- proxy:
-   ReadinessInitialDelaySeconds: 2
-mixer:
- policy:
-   enabled: true
- telemetry:
-   enabled: false
-`,
-			want: `
-hub: docker.io/istio
-tag: 1.2.3
-default_namespace: istio-system
-telemetry:
- components:
-   namespace: istio-telemetry
-   telemetry:
-     common:
-       enabled: {}
- enabled: {}
-policy:
- components:
-   namespace: istio-policy
-   policy:
-     common:
-       enabled:
-         value: true
- enabled:
-   value: true
-config_management:
- components:
-   galley:
-     common:
-       enabled: {}
- enabled: {}
-security:
- components:
-   namespace: istio-system
-   cert_manager:
-     common:
-       enabled: {}
-   node_agent:
-     common:
-       enabled: {}
-   citadel:
-     common:
-       enabled: {}
- enabled: {}
-gateways:
- components:
-   ingress_gateway:
-     common:
-       enabled: {}
-   egress_gateway:
-     common:
-       enabled: {}
- enabled: {}
-traffic_management:
- components:
-   pilot:
-     common:
-       enabled:
-         value: true
-       k8s:
-         affinity:
-           podAntiAffinity:
-             requiredDuringSchedulingIgnoredDuringExecution:
-             - labelSelector:
-                   matchLabels:
-                     testK1: testV1
-               topologyKey: ""
-         replica_count: 1
-         env:
-         - name: GODEBUG
-           value: gctrace=1
-         hpa_spec:
-            maxReplicas: 3
-            minReplicas: 1
-            scaleTargetRef:
-              kind: ""
-              name: ""
-         node_selector:
-            beta.kubernetes.io/os: linux
-         resources:
-            requests:
-              cpu: 1000m
-              memory: 1G
-       values:
-         pilot:
-           image: pilot
-           traceSampling: 1
-   proxy:
-     common:
-       values:
-         readinessInitialDelaySeconds: 2
- enabled:
-   value: true
-auto_injection:
- components:
-   injector:
-      common:
-       enabled: {}
- enabled: {}
-`,
-		},
 	}
 	tr, err := NewValueYAMLTranslator(version.NewMinorVersion(1, 3))
 	if err != nil {
@@ -380,9 +380,11 @@ auto_injection:
 			if gotErr, wantErr := errToString(err), tt.wantErr; gotErr != wantErr {
 				t.Errorf("ValuesToProto(%s)(%v): gotErr:%s, wantErr:%s", tt.desc, tt.valueYAML, gotErr, wantErr)
 			}
-			cpYaml, _ := yaml.Marshal(got)
-			if want := tt.want; !util.IsYAMLEqual(string(cpYaml), want) {
-				t.Errorf("ValuesToProto(%s): got:\n%s\n\nwant:\n%s\nDiff:\n%s\n", tt.desc, string(cpYaml), want, util.YAMLDiff(string(cpYaml), want))
+			if tt.wantErr != "" {
+				cpYaml, _ := yaml.Marshal(got)
+				if want := tt.want; !util.IsYAMLEqual(string(cpYaml), want) {
+					t.Errorf("ValuesToProto(%s): got:\n%s\n\nwant:\n%s\nDiff:\n%s\n", tt.desc, string(cpYaml), want, util.YAMLDiff(string(cpYaml), want))
+				}
 			}
 		})
 	}

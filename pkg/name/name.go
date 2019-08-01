@@ -132,15 +132,16 @@ func IsComponentEnabledInSpec(featureName FeatureName, componentName ComponentNa
 	return componentNode.Value, nil
 }
 
-// IsComponentEnabledFromValue get whether component is enabled in helm value.yaml tree
+// IsComponentEnabledFromValue get whether component is enabled in helm value.yaml tree.
+// valuePath points to component path in the values tree.
 func IsComponentEnabledFromValue(valuePath string, valueSpec map[string]interface{}) (bool, error) {
 	enabledPath := valuePath + ".enabled"
 	enableNodeI, found, err := GetFromTreePath(valueSpec, util.ToYAMLPath(enabledPath))
 	if err != nil {
 		return false, fmt.Errorf("error finding component enablement path: %s in helm value.yaml tree", enabledPath)
 	}
-	if !found || enableNodeI == nil {
-		// Some components do not specify enablement should be treated as enabled if node exists.
+	if !found {
+		// Some components do not specify enablement should be treated as enabled if the root node in the component subtree exists.
 		_, found, err := GetFromTreePath(valueSpec, util.ToYAMLPath(valuePath))
 		if found && err == nil {
 			return true, nil

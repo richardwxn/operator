@@ -93,10 +93,8 @@ func (c *Client) Apply(dryRun, verbose bool, namespace string, manifest string, 
 	return stdout.String(), stderr.String(), nil
 }
 
-
-// Apply runs the kubectl apply with the provided manifest argument
-func (c *Client) GetConfig(name, namespace, output string,  extraArgs ...string) (string, string, error) {
-
+// GetConfig runs the kubectl get cm command with the provided argument
+func (c *Client) GetConfig(name, namespace, output string, extraArgs ...string) (string, string, error) {
 	args := []string{"get", "cm", name}
 	if namespace != "" {
 		args = append(args, "-n", namespace)
@@ -115,11 +113,11 @@ func (c *Client) GetConfig(name, namespace, output string,  extraArgs ...string)
 
 	err := c.cmdSite.Run(cmd)
 	if err != nil {
-		logAndPrint("error running kubectl apply: %s", err)
+		logAndPrint("error running kubectl get cm: %s", err)
 		return stdout.String(), stderr.String(), fmt.Errorf("error from running kubectl get cm: %s", err)
 	}
 
-	logAndPrint("kubectl apply success")
+	logAndPrint("kubectl get cm success")
 
 	return stdout.String(), stderr.String(), nil
 }

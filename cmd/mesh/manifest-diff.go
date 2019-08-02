@@ -16,18 +16,19 @@ package mesh
 
 import (
 	"fmt"
-	"github.com/spf13/cobra"
 	"io/ioutil"
-	"istio.io/operator/pkg/util"
 	"os"
 	"path/filepath"
 
+	"github.com/spf13/cobra"
+
 	"istio.io/operator/pkg/object"
+	"istio.io/operator/pkg/util"
 	"istio.io/pkg/log"
 )
 
 // YAMLSuffix is the suffix of a YAML file.
-const YAMLSuffix = ".yaml"
+const YAMLSuffix = "yaml"
 
 type manifestDiffArgs struct {
 	// compareDir indicates comparison between directory.
@@ -47,7 +48,7 @@ func manifestDiffCmd(rootArgs *rootArgs, diffArgs *manifestDiffArgs) *cobra.Comm
 		Args:  cobra.ExactArgs(2),
 		Run: func(cmd *cobra.Command, args []string) {
 			if diffArgs.compareDir {
-				compareManifestsFromDirs(rootArgs, args[0], args[1])
+				compareManifestsFromDirs(args[0], args[1])
 			} else {
 				compareManifestsFromFiles(rootArgs, args)
 			}
@@ -57,8 +58,10 @@ func manifestDiffCmd(rootArgs *rootArgs, diffArgs *manifestDiffArgs) *cobra.Comm
 
 //compareManifestsFromFiles compares two manifest files
 func compareManifestsFromFiles(rootArgs *rootArgs, args []string) {
-	checkLogsOrExit(rootArgs)
-
+	if err := configLogs(rootArgs); err != nil {
+		_, _ = fmt.Fprintf(os.Stderr, "Could not configure logs: %s", err)
+		os.Exit(1)
+	}
 	a, err := ioutil.ReadFile(args[0])
 	if err != nil {
 		log.Error(err.Error())
@@ -78,7 +81,6 @@ func compareManifestsFromFiles(rootArgs *rootArgs, args []string) {
 		fmt.Println("Manifests are identical")
 	} else {
 		fmt.Printf("Difference of manifests are:\n%s", diff)
-		os.Exit(1)
 	}
 }
 
@@ -87,9 +89,7 @@ func yamlFileFilter(path string) bool {
 }
 
 //compareManifestsFromDirs compares manifests from two directories
-func compareManifestsFromDirs(rootArgs *rootArgs, dirName1 string, dirName2 string) {
-	checkLogsOrExit(rootArgs)
-
+func compareManifestsFromDirs(dirName1 string, dirName2 string) {
 	mf1, err := util.ReadFiles(dirName1, yamlFileFilter)
 	if err != nil {
 		log.Error(err.Error())

@@ -70,6 +70,8 @@ global:
 mixer:
   policy:
     enabled: true
+    image: mixer
+    replicaCount: 1
   telemetry:
     enabled: false
 `,
@@ -90,6 +92,10 @@ policy:
    policy:
      common:
        enabled: true
+       k8s:
+         replicaCount: 1
+       values:
+         image: mixer
  enabled: true
 configManagement:
  components:
@@ -146,9 +152,8 @@ trafficManagement:
               cpu: 1000m
               memory: 1G
        values:
-         pilot:
-           image: pilot
-           traceSampling: 1
+          image: pilot
+          traceSampling: 1
    proxy:
      common:
        values:

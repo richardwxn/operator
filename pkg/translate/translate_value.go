@@ -429,25 +429,28 @@ func (t *ReverseTranslator) translateRemainingPaths(valueTree map[string]interfa
 
 // translateToCommonValues translates paths to common.values
 func (t *ReverseTranslator) translateToCommonValues(root map[string]interface{}, path util.Path, value interface{}) error {
-	if len(path) == 0 {
-		log.Warn("path is empty when translating to common.values")
+	if len(path) < 2 {
+		log.Warn("path is empty or only contains root component node when translating to common.values")
 		return nil
 	}
 	// path starts with ValueComponent name or global
 	cn := path[0]
+	// get rid of component name at the root
+	vp := path[1:]
 	newCN := t.ValuesToComponentName[cn]
 	if newCN == "" {
 		// some components path len is 2, e.g. mixer.policy
 		if len(path) > 1 {
-			cn = path[:1].String()
+			cn = path[:2].String()
 			newCN = t.ValuesToComponentName[cn]
+			vp = path[2:]
 		}
 		if newCN == "" {
 			return nil
 		}
 	}
 	// enabled node value should not be added to common.values path
-	if len(path) > 1 && path[len(path)-1] == "enabled" {
+	if path[len(path)-1] == "enabled" {
 		return nil
 	}
 	fn := name.ComponentNameToFeatureName[newCN]
@@ -455,7 +458,7 @@ func (t *ReverseTranslator) translateToCommonValues(root map[string]interface{},
 	if err != nil {
 		return err
 	}
-	return tpath.WriteNode(root, append(util.ToYAMLPath(outPath), path...), value)
+	return tpath.WriteNode(root, append(util.ToYAMLPath(outPath), vp...), value)
 }
 
 // translateTree is internal method for translating value.yaml tree

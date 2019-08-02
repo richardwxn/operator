@@ -18,6 +18,7 @@ import (
 	"testing"
 
 	"github.com/ghodss/yaml"
+	"github.com/gogo/protobuf/jsonpb"
 	"github.com/kr/pretty"
 
 	"istio.io/operator/pkg/apis/istio/v1alpha2"
@@ -75,57 +76,54 @@ mixer:
 			want: `
 hub: docker.io/istio
 tag: 1.2.3
-default_namespace: istio-system
+defaultNamespace: istio-system
 telemetry:
  components:
    namespace: istio-telemetry
    telemetry:
      common:
-       enabled: {}
- enabled: {}
+       enabled: false
+ enabled: false
 policy:
  components:
    namespace: istio-policy
    policy:
      common:
-       enabled:
-         value: true
- enabled:
-   value: true
-config_management:
+       enabled: true
+ enabled: true
+configManagement:
  components:
    galley:
      common:
-       enabled: {}
- enabled: {}
+       enabled: false
+ enabled: false
 security:
  components:
    namespace: istio-system
-   cert_manager:
+   certManager:
      common:
-       enabled: {}
-   node_agent:
+       enabled: false
+   nodeAgent:
      common:
-       enabled: {}
+       enabled: false
    citadel:
      common:
-       enabled: {}
- enabled: {}
+       enabled: false
+ enabled: false
 gateways:
  components:
-   ingress_gateway:
+   ingressGateway:
      common:
-       enabled: {}
-   egress_gateway:
+       enabled: false
+   egressGateway:
      common:
-       enabled: {}
- enabled: {}
-traffic_management:
+       enabled: false
+ enabled: false
+trafficManagement:
  components:
    pilot:
      common:
-       enabled:
-         value: true
+       enabled: true
        k8s:
          affinity:
            podAntiAffinity:
@@ -133,18 +131,15 @@ traffic_management:
              - labelSelector:
                    matchLabels:
                      testK1: testV1
-               topologyKey: ""
-         replica_count: 1
+         replicaCount: 1
          env:
          - name: GODEBUG
            value: gctrace=1
-         hpa_spec:
+         hpaSpec:
             maxReplicas: 3
             minReplicas: 1
-            scaleTargetRef:
-              kind: ""
-              name: ""
-         node_selector:
+            scaleTargetRef: {}
+         nodeSelector:
             beta.kubernetes.io/os: linux
          resources:
             requests:
@@ -158,14 +153,13 @@ traffic_management:
      common:
        values:
          readinessInitialDelaySeconds: 2
- enabled:
-   value: true
-auto_injection:
+ enabled: true
+autoInjection:
  components:
    injector:
       common:
-       enabled: {}
- enabled: {}
+       enabled: false
+ enabled: false
 `,
 		},
 		{
@@ -204,79 +198,66 @@ sidecarInjectorWebhook:
 			want: `
 hub: docker.io/istio
 tag: 1.2.3
-default_namespace: istio-system
+defaultNamespace: istio-system
 telemetry:
   components:
     namespace: istio-telemetry
     telemetry:
       common:
-        enabled:
-          value: true
-  enabled:
-    value: true
+        enabled: true
+  enabled: true
 policy:
   components:
     namespace: istio-policy
     policy:
       common:
-        enabled:
-          value: true
-  enabled:
-    value: true
-config_management:
+        enabled: true
+  enabled: true
+configManagement:
   components:
     galley:
       common:
-        enabled:
-          value: true
-  enabled:
-    value: true 
+        enabled: true
+  enabled: true 
 security:
   components:
     namespace: istio-system
-    cert_manager:
+    certManager:
       common:
-        enabled:
-          value: true
-    node_agent:
+        enabled: true
+    nodeAgent:
       common:
-        enabled:
-          value: true
+        enabled: true
     citadel:
       common:
-        enabled: {}
-  enabled:
-    value: true
-traffic_management:
+        enabled: false
+  enabled: true
+trafficManagement:
    components:
      pilot:
        common:
-         enabled: 
-           value: true
-   enabled: 
-     value: true
-auto_injection:
+         enabled: true
+   enabled: true
+autoInjection:
   components:
     injector:
       common:
-        enabled: {}
-  enabled: {}
+        enabled: false
+  enabled: false
 gateways:
   components:
-    ingress_gateway:
+    ingressGateway:
+      common:
+        enabled: true
+        k8s:
+          resources:
+            requests:
+              cpu: 1000m
+              memory: 1G 
+    egressGateway:
           common:
-           enabled:
-             value: true
-           k8s:
-             resources:
-               requests:
-                 cpu: 1000m
-                 memory: 1G 
-    egress_gateway:
-          common:
-            enabled: {}
-  enabled:
-    value: true
+            enabled: false
+  enabled: true
 `,
 		},
 		{
@@ -301,69 +282,65 @@ telemetry:
 			want: `
 hub: docker.io/istio
 tag: 1.2.3
-default_namespace: istio-system
+defaultNamespace: istio-system
 telemetry:
  components:
    namespace: istio-telemetry
    telemetry:
      common:
-       enabled: {}
- enabled: {}
+       enabled: false
+ enabled: false
 policy:
  components:
    namespace: istio-policy
    policy:
      common:
-       enabled:
-         value: true
- enabled:
-   value: true
-config_management:
+       enabled: true
+ enabled: true
+configManagement:
  components:
    galley:
      common:
-       enabled: {}
- enabled: {}
+       enabled: false
+ enabled: false
 security:
  components:
    namespace: istio-system
-   cert_manager:
+   certManager:
      common:
-       enabled: {}
-   node_agent:
+       enabled: false
+   nodeAgent:
      common:
-       enabled: {}
+       enabled: false
    citadel:
      common:
-       enabled: {}
- enabled: {}
+       enabled: false
+ enabled: false
 gateways:
  components:
-   ingress_gateway:
+   ingressGateway:
      common:
-       enabled: {}
-   egress_gateway:
+       enabled: false
+   egressGateway:
      common:
-       enabled: {}
- enabled: {}
-traffic_management:
+       enabled: false
+ enabled: false
+trafficManagement:
  components:
    pilot:
      common:
-       enabled:
-         value: true
- enabled:
-   value: true
-auto_injection:
+       enabled: true
+ enabled: true
+autoInjection:
  components:
    injector:
       common:
-       enabled: {}
- enabled: {}
+       enabled: false
+ enabled: false
 `,
 		},
 	}
-	tr, err := NewValueYAMLTranslator(version.NewMinorVersion(1, 3))
+	tr, err := NewReverseTranslator(version.NewMinorVersion(1, 3))
 	if err != nil {
 		t.Fatal("fail to get helm value.yaml translator")
 	}
@@ -380,10 +357,15 @@ auto_injection:
 			if gotErr, wantErr := errToString(err), tt.wantErr; gotErr != wantErr {
 				t.Errorf("ValuesToProto(%s)(%v): gotErr:%s, wantErr:%s", tt.desc, tt.valueYAML, gotErr, wantErr)
 			}
-			if tt.wantErr != "" {
-				cpYaml, _ := yaml.Marshal(got)
-				if want := tt.want; !util.IsYAMLEqual(string(cpYaml), want) {
-					t.Errorf("ValuesToProto(%s): got:\n%s\n\nwant:\n%s\nDiff:\n%s\n", tt.desc, string(cpYaml), want, util.YAMLDiff(string(cpYaml), want))
+			if tt.wantErr == "" {
+				ms := jsonpb.Marshaler{}
+				gotString, err := ms.MarshalToString(got)
+				if err != nil {
+					t.Errorf("error when marshal translated IstioControlPlaneSpec: %s", err)
+				}
+				cpYaml, _ := yaml.JSONToYAML([]byte(gotString))
+				if want := tt.want; !util.IsYAMLEqual(gotString, want) {
+					t.Errorf("ValuesToProto(%s): got:\n%s\n\nwant:\n%s\nDiff:\n%s\n", tt.desc, string(cpYaml), want, util.YAMLDiff(gotString, want))
 				}
 			}
 		})

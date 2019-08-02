@@ -27,13 +27,15 @@ import (
 	"istio.io/pkg/log"
 )
 
-// ValueYAMLTranslator is a set of mappings to translate between values.yaml and API paths, charts, k8s paths.
-type ValueYAMLTranslator struct {
+// ReverseTranslator is a set of mappings to translate between values.yaml and API paths, charts, k8s paths.
+type ReverseTranslator struct {
 	Version version.MinorVersion
 	// APIMapping is Values.yaml path to API path mapping using longest prefix match. If the path is a non-leaf node,
 	// the output path is the matching portion of the path, plus any remaining output path.
 	APIMapping map[string]*Translation
-	// KubernetesMapping defines mappings from k8s resource paths to IstioControlPlane API paths.
+	// KubernetesPatternMapping defines mapping patterns from k8s resource paths to IstioControlPlane API paths.
+	KubernetesPatternMapping map[string]string
+	// KubernetesMapping defines actual k8s mappings generated from KubernetesPatternMapping before each translation.
 	KubernetesMapping map[string]*Translation
 	// ValuesToFeatureComponentName defines mapping from value path to feature and component name in API paths.
 	ValuesToComponentName map[string]name.ComponentName
@@ -42,26 +44,27 @@ type ValueYAMLTranslator struct {
 }
 
 var (
-	// ValueYAMLTranslators maps a minor version to a corresponding ValueYAMLTranslator.
-	ValueYAMLTranslators = map[version.MinorVersion]*ValueYAMLTranslator{
+	// ReverseTranslators maps a minor version to a corresponding ReverseTranslator.
+	ReverseTranslators = map[version.MinorVersion]*ReverseTranslator{
 		version.NewMinorVersion(1, 3): {
 			APIMapping: map[string]*Translation{},
-			KubernetesMapping: map[string]*Translation{
-				"{{.ValueComponentName}}.podAntiAffinityLabelSelector": {"{{.FeatureName}}.Components.{{.ComponentName}}.Common.K8s." +
-					"Affinity.PodAntiAffinity.RequiredDuringSchedulingIgnoredDuringExecution", nil},
-				"{{.ValueComponentName}}.podAntiAffinityTermLabelSelector": {"{{.FeatureName}}.Components.{{.ComponentName}}.Common.K8s." +
-					"Affinity.PodAntiAffinity.PreferredDuringSchedulingIgnoredDuringExecution", nil},
-				"{{.ValueComponentName}}.env":                 {"{{.FeatureName}}.Components.{{.ComponentName}}.Common.K8s.Env", nil},
-				"{{.ValueComponentName}}.autoscaleEnabled":    {"{{.FeatureName}}.Components.{{.ComponentName}}.Common.K8s.HpaSpec", nil},
-				"{{.ValueComponentName}}.imagePullPolicy":     {"{{.FeatureName}}.Components.{{.ComponentName}}.Common.K8s.ImagePullPolicy", nil},
-				"{{.ValueComponentName}}.nodeSelector":        {"{{.FeatureName}}.Components.{{.ComponentName}}.Common.K8s.NodeSelector", nil},
-				"{{.ValueComponentName}}.podDisruptionBudget": {"{{.FeatureName}}.Components.{{.ComponentName}}.Common.K8s.PodDisruptionBudget", nil},
-				"{{.ValueComponentName}}.podAnnotations":      {"{{.FeatureName}}.Components.{{.ComponentName}}.Common.K8s.PodAnnotations", nil},
-				"{{.ValueComponentName}}.priorityClassName":   {"{{.FeatureName}}.Components.{{.ComponentName}}.Common.K8s.PriorityClassName", nil},
-				"{{.ValueComponentName}}.readinessProbe":      {"{{.FeatureName}}.Components.{{.ComponentName}}.Common.K8s.ReadinessProbe", nil},
-				"{{.ValueComponentName}}.replicaCount":        {"{{.FeatureName}}.Components.{{.ComponentName}}.Common.K8s.ReplicaCount", nil},
-				"{{.ValueComponentName}}.resources":           {"{{.FeatureName}}.Components.{{.ComponentName}}.Common.K8s.Resources", nil},
+			KubernetesPatternMapping: map[string]string{
+				"{{.ValueComponentName}}.podAntiAffinityLabelSelector": "{{.FeatureName}}.Components.{{.ComponentName}}.Common.K8s." +
+					"Affinity.PodAntiAffinity.RequiredDuringSchedulingIgnoredDuringExecution",
+				"{{.ValueComponentName}}.podAntiAffinityTermLabelSelector": "{{.FeatureName}}.Components.{{.ComponentName}}.Common.K8s." +
+					"Affinity.PodAntiAffinity.PreferredDuringSchedulingIgnoredDuringExecution",
+				"{{.ValueComponentName}}.env":                 "{{.FeatureName}}.Components.{{.ComponentName}}.Common.K8s.Env",
+				"{{.ValueComponentName}}.autoscaleEnabled":    "{{.FeatureName}}.Components.{{.ComponentName}}.Common.K8s.HpaSpec",
+				"{{.ValueComponentName}}.imagePullPolicy":     "{{.FeatureName}}.Components.{{.ComponentName}}.Common.K8s.ImagePullPolicy",
+				"{{.ValueComponentName}}.nodeSelector":        "{{.FeatureName}}.Components.{{.ComponentName}}.Common.K8s.NodeSelector",
+				"{{.ValueComponentName}}.podDisruptionBudget": "{{.FeatureName}}.Components.{{.ComponentName}}.Common.K8s.PodDisruptionBudget",
+				"{{.ValueComponentName}}.podAnnotations":      "{{.FeatureName}}.Components.{{.ComponentName}}.Common.K8s.PodAnnotations",
+				"{{.ValueComponentName}}.priorityClassName":   "{{.FeatureName}}.Components.{{.ComponentName}}.Common.K8s.PriorityClassName",
+				"{{.ValueComponentName}}.readinessProbe":      "{{.FeatureName}}.Components.{{.ComponentName}}.Common.K8s.ReadinessProbe",
+				"{{.ValueComponentName}}.replicaCount":        "{{.FeatureName}}.Components.{{.ComponentName}}.Common.K8s.ReplicaCount",
+				"{{.ValueComponentName}}.resources":           "{{.FeatureName}}.Components.{{.ComponentName}}.Common.K8s.Resources",
 			},
+			KubernetesMapping:     map[string]*Translation{},
 			ValuesToComponentName: map[string]name.ComponentName{},
 			NamespaceMapping: map[string][]string{
 				"global.istioNamespace":     {"security.components.namespace"},
@@ -78,7 +81,7 @@ var (
 )
 
 // initAPIMapping generate the reverse mapping from original translator apiMapping.
-func (t *ValueYAMLTranslator) initAPIAndComponentMapping(vs version.MinorVersion) error {
+func (t *ReverseTranslator) initAPIAndComponentMapping(vs version.MinorVersion) error {
 	ts, err := NewTranslator(vs)
 	if err != nil {
 		return err
@@ -96,7 +99,7 @@ func (t *ValueYAMLTranslator) initAPIAndComponentMapping(vs version.MinorVersion
 }
 
 // initK8SMapping generates the k8s settings mapping for components that are enabled based on templates.
-func (t *ValueYAMLTranslator) initK8SMapping(valueTree map[string]interface{}) error {
+func (t *ReverseTranslator) initK8SMapping(valueTree map[string]interface{}) error {
 	outputMapping := make(map[string]*Translation)
 	for valKey, componentName := range t.ValuesToComponentName {
 		featureName := name.ComponentNameToFeatureName[componentName]
@@ -108,12 +111,12 @@ func (t *ValueYAMLTranslator) initK8SMapping(valueTree map[string]interface{}) e
 			log.Infof("Component:%s disabled, skip k8s mapping", componentName)
 			continue
 		}
-		for K8SValKey, outPathTmpl := range t.KubernetesMapping {
+		for K8SValKey, outPathTmpl := range t.KubernetesPatternMapping {
 			newKey, err := renderComponentName(K8SValKey, valKey)
 			if err != nil {
 				return err
 			}
-			newVal, err := renderFeatureComponentPathTemplate(outPathTmpl.outPath, featureName, componentName)
+			newVal, err := renderFeatureComponentPathTemplate(outPathTmpl, featureName, componentName)
 			if err != nil {
 				return err
 			}
@@ -125,9 +128,9 @@ func (t *ValueYAMLTranslator) initK8SMapping(valueTree map[string]interface{}) e
 	return nil
 }
 
-// NewValueYAMLTranslator creates a new ValueYAMLTranslator for minorVersion and returns a ptr to it.
-func NewValueYAMLTranslator(minorVersion version.MinorVersion) (*ValueYAMLTranslator, error) {
-	t := ValueYAMLTranslators[minorVersion]
+// NewReverseTranslator creates a new ReverseTranslator for minorVersion and returns a ptr to it.
+func NewReverseTranslator(minorVersion version.MinorVersion) (*ReverseTranslator, error) {
+	t := ReverseTranslators[minorVersion]
 	if t == nil {
 		return nil, fmt.Errorf("no value.yaml translator available for version %s", minorVersion)
 	}
@@ -140,7 +143,7 @@ func NewValueYAMLTranslator(minorVersion version.MinorVersion) (*ValueYAMLTransl
 }
 
 // TranslateFromValueToSpec translates from values struct to IstioControlPlaneSpec.
-func (t *ValueYAMLTranslator) TranslateFromValueToSpec(values *v1alpha2.Values) (controlPlaneSpec *v1alpha2.IstioControlPlaneSpec, err error) {
+func (t *ReverseTranslator) TranslateFromValueToSpec(values *v1alpha2.Values) (controlPlaneSpec *v1alpha2.IstioControlPlaneSpec, err error) {
 	valueYaml, err := yaml.Marshal(values)
 	if err != nil {
 		return nil, fmt.Errorf("error when marshalling value struct %v", err)
@@ -173,7 +176,7 @@ func (t *ValueYAMLTranslator) TranslateFromValueToSpec(values *v1alpha2.Values) 
 }
 
 // TranslateTree translates input value.yaml Tree to ControlPlaneSpec Tree.
-func (t *ValueYAMLTranslator) TranslateTree(valueTree map[string]interface{}, cpSpecTree map[string]interface{}, path util.Path) error {
+func (t *ReverseTranslator) TranslateTree(valueTree map[string]interface{}, cpSpecTree map[string]interface{}, path util.Path) error {
 	// translate enablement and namespace
 	err := t.setEnablementAndNamespacesFromValue(valueTree, cpSpecTree)
 	if err != nil {
@@ -205,7 +208,7 @@ func (t *ValueYAMLTranslator) TranslateTree(valueTree map[string]interface{}, cp
 
 // setEnablementAndNamespaces translates the enablement and namespace value of each component in the baseYAML values
 // tree, based on feature/component inheritance relationship.
-func (t *ValueYAMLTranslator) setEnablementAndNamespacesFromValue(valueSpec map[string]interface{}, root map[string]interface{}) error {
+func (t *ReverseTranslator) setEnablementAndNamespacesFromValue(valueSpec map[string]interface{}, root map[string]interface{}) error {
 	for cnv, cni := range t.ValuesToComponentName {
 		enabled, err := name.IsComponentEnabledFromValue(cnv, valueSpec)
 		if err != nil {
@@ -269,7 +272,7 @@ func translateHPASpec(inPath string, outPath string, value interface{}, valueTre
 			return err
 		}
 	}
-	if err := tpath.WriteNode(valueTree, util.ToYAMLPath(minPath), nil); err != nil {
+	if _, err := tpath.DeleteFromTree(valueTree, util.ToYAMLPath(minPath), util.ToYAMLPath(minPath)); err != nil {
 		return err
 	}
 	maxPath := newP + ".autoscaleMax"
@@ -280,7 +283,7 @@ func translateHPASpec(inPath string, outPath string, value interface{}, valueTre
 			return err
 		}
 	}
-	if err := tpath.WriteNode(valueTree, util.ToYAMLPath(maxPath), nil); err != nil {
+	if _, err := tpath.DeleteFromTree(valueTree, util.ToYAMLPath(maxPath), util.ToYAMLPath(maxPath)); err != nil {
 		return err
 	}
 	return nil
@@ -321,7 +324,7 @@ func translateAffinity(outPath string, value interface{}, cpSpecTree map[string]
 }
 
 // translateK8sTree is internal method for translating K8s configurations from value.yaml tree.
-func (t *ValueYAMLTranslator) translateK8sTree(valueTree map[string]interface{},
+func (t *ReverseTranslator) translateK8sTree(valueTree map[string]interface{},
 	cpSpecTree map[string]interface{}) error {
 	for inPath, v := range t.KubernetesMapping {
 		log.Infof("Checking for k8s path %s in helm Value.yaml tree", inPath)
@@ -378,7 +381,8 @@ func (t *ValueYAMLTranslator) translateK8sTree(valueTree map[string]interface{},
 				return err
 			}
 		}
-		if err := tpath.WriteNode(valueTree, util.ToYAMLPath(inPath), nil); err != nil {
+
+		if _, err := tpath.DeleteFromTree(valueTree, util.ToYAMLPath(inPath), util.ToYAMLPath(inPath)); err != nil {
 			return err
 		}
 	}
@@ -386,7 +390,7 @@ func (t *ValueYAMLTranslator) translateK8sTree(valueTree map[string]interface{},
 }
 
 // translateRemainingPaths translates remaining paths that are not availing in existing mappings.
-func (t *ValueYAMLTranslator) translateRemainingPaths(valueTree map[string]interface{},
+func (t *ReverseTranslator) translateRemainingPaths(valueTree map[string]interface{},
 	cpSpecTree map[string]interface{}, path util.Path) error {
 	for key, val := range valueTree {
 		newPath := append(path, key)
@@ -423,8 +427,8 @@ func (t *ValueYAMLTranslator) translateRemainingPaths(valueTree map[string]inter
 	return nil
 }
 
-// translateToCommonValues translates paths to common.values.
-func (t *ValueYAMLTranslator) translateToCommonValues(root map[string]interface{}, path util.Path, value interface{}) error {
+// translateToCommonValues translates paths to common.values
+func (t *ReverseTranslator) translateToCommonValues(root map[string]interface{}, path util.Path, value interface{}) error {
 	if len(path) == 0 {
 		log.Warn("path is empty when translating to common.values")
 		return nil
@@ -455,7 +459,7 @@ func (t *ValueYAMLTranslator) translateToCommonValues(root map[string]interface{
 }
 
 // translateTree is internal method for translating value.yaml tree
-func (t *ValueYAMLTranslator) translateTree(valueTree map[string]interface{},
+func (t *ReverseTranslator) translateTree(valueTree map[string]interface{},
 	cpSpecTree map[string]interface{}) error {
 	for inPath, v := range t.APIMapping {
 		log.Infof("Checking for path %s in helm Value.yaml tree", inPath)
@@ -485,7 +489,7 @@ func (t *ValueYAMLTranslator) translateTree(valueTree map[string]interface{},
 			return err
 		}
 
-		if err := tpath.WriteNode(valueTree, util.ToYAMLPath(inPath), nil); err != nil {
+		if _, err := tpath.DeleteFromTree(valueTree, util.ToYAMLPath(inPath), util.ToYAMLPath(inPath)); err != nil {
 			return err
 		}
 	}

@@ -81,6 +81,7 @@ func compareManifestsFromFiles(rootArgs *rootArgs, args []string) {
 		fmt.Println("Manifests are identical")
 	} else {
 		fmt.Printf("Difference of manifests are:\n%s", diff)
+		os.Exit(1)
 	}
 }
 
@@ -109,5 +110,6 @@ func compareManifestsFromDirs(dirName1 string, dirName2 string) {
 		fmt.Println("Manifests are identical")
 	} else {
 		fmt.Printf("Difference of manifests are:\n%s", diff)
+		os.Exit(1)
 	}
 }

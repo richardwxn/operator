@@ -53,7 +53,7 @@ func manifestMigrateCmd(rootArgs *rootArgs, mmArgs *manifestMigrateArgs) *cobra.
 			if len(args) == 0 {
 				migrateFromClusterConfig(rootArgs, mmArgs)
 			} else {
-				migrateFromFiles(rootArgs, args, mmArgs)
+				migrateFromFiles(rootArgs, args)
 			}
 		}}
 }
@@ -63,7 +63,7 @@ func valueFileFilter(path string) bool {
 }
 
 // migrateFromFiles handles migration for local values.yaml files
-func migrateFromFiles(rootArgs *rootArgs, args []string, mmArgs *manifestMigrateArgs) {
+func migrateFromFiles(rootArgs *rootArgs, args []string) {
 	checkLogsOrExit(rootArgs)
 
 	logAndPrintf(rootArgs, "translating input values.yaml file at: %s to new API", args[0])

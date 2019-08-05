@@ -18,6 +18,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"strings"
+	"time"
 
 	jsonpatch "github.com/evanphx/json-patch"
 	"github.com/ghodss/yaml"
@@ -36,6 +37,9 @@ const (
 
 	// DefaultGlobalValuesFilename is the default name for a global values file if none is specified.
 	DefaultGlobalValuesFilename = "global.yaml"
+
+	// TemplatePollingIntervalInMinute is the default minute intervals for HTTPTemplateRenderer to poll HTTP URL.
+	TemplatePollingIntervalInMinute = 30
 )
 
 // TemplateRenderer defines a helm template renderer interface.
@@ -61,6 +65,9 @@ func NewHelmRenderer(chartsRootDir, helmBaseDir, profile, componentName, namespa
 	switch {
 	case chartsRootDir == "":
 		return NewVFSRenderer(helmBaseDir, globalValues, componentName, namespace), nil
+	case util.IsHTTPURL(dir):
+		return NewHTTPTemplateRenderer(dir, globalValues, componentName, namespace,
+			TemplatePollingIntervalInMinute*time.Minute), nil
 	case util.IsFilePath(dir):
 		return NewFileTemplateRenderer(dir, globalValues, componentName, namespace), nil
 	default:

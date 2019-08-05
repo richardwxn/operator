@@ -49,32 +49,36 @@ const (
 
 // checkUpdate checks a SHA URL to determine if the installation package has been updated
 // and fetches the new version if necessary.
-func (p *Poller) checkUpdate() error {
+func (p *Poller) checkUpdate() (bool, error) {
 	uf := p.urlFetcher
 	shaF, err := uf.fetchSha()
 	if err != nil {
-		return err
+		return false, err
 	}
 	hashAll, err := ioutil.ReadFile(shaF)
 	if err != nil {
-		return fmt.Errorf("failed to read sha file: %s", err)
+		return false, fmt.Errorf("failed to read sha file: %s", err)
 	}
 	// Original sha file name is formatted with "HashValue filename"
 	newHash := strings.Fields(string(hashAll))[0]
 
 	if !strings.EqualFold(newHash, p.existingHash) {
 		p.existingHash = newHash
-		return uf.fetchChart(shaF)
+		return true, uf.fetchChart(shaF)
 	}
-	return nil
+	return false, nil
 }
 
-func (p *Poller) poll() {
+func (p *Poller) poll(notify chan struct{}) {
 	for t := range p.ticker.C {
 		// When the ticker fires
 		log.Debugf("Tick at: %s", t)
-		if err := p.checkUpdate(); err != nil {
+		updated, err := p.checkUpdate()
+		if err != nil {
 			log.Errorf("Error polling charts: %v", err)
+		}
+		if updated {
+			notify <- struct{}{}
 		}
 	}
 }
@@ -91,16 +95,17 @@ func NewPoller(dirURL string, destDir string, interval time.Duration) *Poller {
 
 //PollURL continuously polls the given url, which points to a directory containing an
 //installation package at the given interval and fetches a new copy if it is updated.
-func PollURL(dirURL string, interval time.Duration) error {
+func PollURL(dirURL string, interval time.Duration) (chan struct{}, error) {
 	destDir, err := ioutil.TempDir("", ChartsTempFilePrefix)
 	if err != nil {
 		log.Error("failed to create temp directory for charts")
-		return err
+		return nil, err
 	}
 
 	po := NewPoller(dirURL, destDir, interval)
-	po.poll()
+	updated := make(chan struct{}, 1)
+	go po.poll(updated)
 
 	os.RemoveAll(destDir)
-	return nil
+	return updated, nil
 }

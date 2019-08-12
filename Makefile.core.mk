@@ -70,7 +70,6 @@ api_path := pkg/apis/istio/v1alpha2
 api_protos := $(shell find $(api_path) -type f -name '*.proto' | sort)
 api_pb_gos := $(api_protos:.proto=.pb.go)
 
-
 default: mesh
 
 generate-api-go: $(api_pb_gos)
@@ -85,35 +84,17 @@ clean-proto:
 # is all of this needed or is this cruft?
 
 get_dep_proto:
-	GO111MODULE=off GOPATH=/tmp go get k8s.io/api/core/v1 k8s.io/api/autoscaling/v2beta1 k8s.io/apimachinery/pkg/apis/meta/v1/ github.com/gogo/protobuf/...
+	GO111MODULE=off GOPATH=/tmp go get k8s.io/api/core/v1 k8s.io/api/autoscaling/v2beta1 k8s.io/apimachinery/pkg/apis/meta/v1/
 
 proto_iscp: get_dep_proto
 	protoc -I=/tmp/src -I=${GOPATH}/src/ -I=/usr/include/protobuf --gogofast_out=${GOPATH}/src ${GOPATH}/src/istio.io/operator/pkg/apis/istio/v1alpha2/istiocontrolplane_types.proto
 	sed -i -e 's|github.com/gogo/protobuf/protobuf/google/protobuf|github.com/gogo/protobuf/types|g' pkg/apis/istio/v1alpha2/istiocontrolplane_types.pb.go
 	patch pkg/apis/istio/v1alpha2/istiocontrolplane_types.pb.go < pkg/apis/istio/v1alpha2/fixup_go_structs.patch
 
-proto_iscp_orig: get_dep_proto
-	protoc -I=/tmp/src -I=${GOPATH}/src -I=/usr/include/protobuf --gogofast_out=${GOPATH}/src ${GOPATH}/src/istio.io/operator/pkg/apis/istio/v1alpha2/istiocontrolplane_types.proto
-	sed -i -e 's|github.com/gogo/protobuf/protobuf/google/protobuf|github.com/gogo/protobuf/types|g' pkg/apis/istio/v1alpha2/istiocontrolplane_types.pb.go
-	cp pkg/apis/istio/v1alpha2/istiocontrolplane_types.pb.go pkg/apis/istio/v1alpha2/istiocontrolplane_types.pb.go.orig
-
 proto_values: get_dep_proto
 	protoc -I=/tmp/src -I=${GOPATH}/src -I=/usr/include/protobuf --go_out=${GOPATH}/src ${GOPATH}/src/istio.io/operator/pkg/apis/istio/v1alpha2/values/values_types.proto
 	sed -i -e 's|github.com/gogo/protobuf/protobuf/google/protobuf|github.com/gogo/protobuf/types|g' pkg/apis/istio/v1alpha2/values/values_types.pb.go
 	patch pkg/apis/istio/v1alpha2/values/values_types.pb.go < pkg/apis/istio/v1alpha2/values/fix_values_structs.patch
-
-proto_values_orig: get_dep_proto
-	protoc -I=/tmp/src -I=${GOPATH}/src -I=/usr/include/protobuf --go_out=${GOPATH}/src ${GOPATH}/src/istio.io/operator/pkg/apis/istio/v1alpha2/values/values_types.proto
-	sed -i -e 's|github.com/gogo/protobuf/protobuf/google/protobuf|github.com/gogo/protobuf/types|g' pkg/apis/istio/v1alpha2/values/values_types.pb.go
-	cp pkg/apis/istio/v1alpha2/values/values_types.pb.go pkg/apis/istio/v1alpha2/values/values_types.pb.go.orig
-
-
-gen_patch_iscp:
-	diff -u pkg/apis/istio/v1alpha2/istiocontrolplane_types.pb.go.orig pkg/apis/istio/v1alpha2/istiocontrolplane_types.pb.go > pkg/apis/istio/v1alpha2/fixup_go_structs.patch || true
-
-gen_patch_values:
-	diff -u pkg/apis/istio/v1alpha2/values/values_types.pb.go.orig pkg/apis/istio/v1alpha2/values/values_types.pb.go > pkg/apis/istio/v1alpha2/values/fix_values_structs.patch || true
-
 
 mesh: vfsgen
 	go build -o ${GOBIN}/mesh ./cmd/mesh.go

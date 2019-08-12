@@ -3,6 +3,8 @@ ifeq ($(BUILD_WITH_CONTAINER),0)
 override GOBIN := $(GOPATH)/bin
 endif
 
+pwd := $(shell pwd)
+
 # make targets
 .PHONY: lint test_with_coverage mandiff build fmt vfsgen update-charts
 
@@ -70,6 +72,16 @@ api_path := pkg/apis/istio/v1alpha2
 api_protos := $(shell find $(api_path) -type f -name '*.proto' | sort)
 api_pb_gos := $(api_protos:.proto=.pb.go)
 
+########################
+# protoc_gen_docs
+########################
+
+gen_doc_iscp: get_dep_proto
+	protoc -I/tmp/src -I$(pwd) -I/usr/include/protobuf --docs_out=warnings=true,emit_yaml=true,mode=html_page:$(pwd) pkg/apis/istio/v1alpha2/istiocontrolplane_types.proto
+
+gen_doc_values: get_dep_proto
+	protoc -I/tmp/src -I$(pwd) -I/usr/include/protobuf --docs_out=warnings=true,emit_yaml=true,mode=html_page:$(pwd) pkg/apis/istio/v1alpha2/values/values_types.proto
+
 default: mesh
 
 generate-api-go: $(api_pb_gos)
@@ -87,12 +99,12 @@ get_dep_proto:
 	GO111MODULE=off GOPATH=/tmp go get k8s.io/api/core/v1 k8s.io/api/autoscaling/v2beta1 k8s.io/apimachinery/pkg/apis/meta/v1/
 
 proto_iscp: get_dep_proto
-	protoc -I=/tmp/src -I=${GOPATH}/src/ -I=/usr/include/protobuf --gogofast_out=${GOPATH}/src ${GOPATH}/src/istio.io/operator/pkg/apis/istio/v1alpha2/istiocontrolplane_types.proto
+	protoc -I=/tmp/src -I$(pwd) -I=/usr/include/protobuf --gogofast_out=$(pwd) pkg/apis/istio/v1alpha2/istiocontrolplane_types.proto
 	sed -i -e 's|github.com/gogo/protobuf/protobuf/google/protobuf|github.com/gogo/protobuf/types|g' pkg/apis/istio/v1alpha2/istiocontrolplane_types.pb.go
 	patch pkg/apis/istio/v1alpha2/istiocontrolplane_types.pb.go < pkg/apis/istio/v1alpha2/fixup_go_structs.patch
 
 proto_values: get_dep_proto
-	protoc -I=/tmp/src -I=${GOPATH}/src -I=/usr/include/protobuf --go_out=${GOPATH}/src ${GOPATH}/src/istio.io/operator/pkg/apis/istio/v1alpha2/values/values_types.proto
+	protoc -I=/tmp/src -I$(pwd) -I=/usr/include/protobuf --go_out=$(pwd) pkg/apis/istio/v1alpha2/values/values_types.proto
 	sed -i -e 's|github.com/gogo/protobuf/protobuf/google/protobuf|github.com/gogo/protobuf/types|g' pkg/apis/istio/v1alpha2/values/values_types.pb.go
 	patch pkg/apis/istio/v1alpha2/values/values_types.pb.go < pkg/apis/istio/v1alpha2/values/fix_values_structs.patch
 

@@ -33,6 +33,15 @@ import (
 	"istio.io/pkg/log"
 )
 
+const (
+	// InstallationChartsFileName is the name of the installation package to fetch.
+	InstallationChartsFileName = "istio-installer-1.3.0.tar.gz"
+	// InstallationShaFileName is Sha filename to verify
+	InstallationShaFileName = "istio-installer-1.3.0.tar.gz.sha256"
+	// ChartsTempFilePrefix is temporary Files prefix
+	ChartsTempFilePrefix = "istio-install-package"
+)
+
 // FileDownloader is wrapper of HTTP client to download files
 type FileDownloader struct {
 	// client is a HTTP/HTTPS client.
@@ -45,8 +54,6 @@ type URLFetcher struct {
 	url string
 	// verifyURL is url to download the verification file
 	verifyURL string
-	// versionsURL is url to download version file
-	versionsURL string
 	// verify indicates whether the downloaded tar should be verified
 	verify bool
 	// destDir is path of charts downloaded to, empty as default to temp dir
@@ -56,35 +63,38 @@ type URLFetcher struct {
 }
 
 // NewURLFetcher creates an URLFetcher pointing to urls and destination
-func NewURLFetcher(repoURL string, destDir string, chartName string, shaName string) *URLFetcher {
+func NewURLFetcher(repoURL string, destDir string, cFileName string, shaFileName string) (*URLFetcher, error) {
 	if destDir == "" {
 		destDir = filepath.Join(os.TempDir(), ChartsTempFilePrefix)
 	}
-	uf := &URLFetcher{
-		url:         repoURL + "/" + chartName,
-		verifyURL:   repoURL + "/" + shaName,
-		versionsURL: repoURL + "/" + VersionsFileName,
-		verify:      true,
-		destDir:     destDir,
-		downloader:  NewFileDownloader(),
+	if _, err := os.Stat(destDir); os.IsNotExist(err) {
+		err := os.Mkdir(destDir, os.ModeDir|os.ModePerm)
+		if err != nil {
+			return nil, err
+		}
 	}
-	return uf
+	uf := &URLFetcher{
+		url:        repoURL + "/" + cFileName,
+		verifyURL:  repoURL + "/" + shaFileName,
+		verify:     true,
+		destDir:    destDir,
+		downloader: NewFileDownloader(),
+	}
+	return uf, nil
+}
+
+func (f *URLFetcher) GetDestDir() string {
+	return f.destDir
 }
 
 // FetchBundles fetches the charts, sha and version file
-func (f *URLFetcher) FetchBundles() error {
+func (f *URLFetcher) FetchBundles() util.Errors {
 	errs := util.Errors{}
 
 	shaF, err := f.fetchSha()
 	errs = util.AppendErr(errs, err)
 
-	err = f.fetchChart(shaF)
-	errs = util.AppendErr(errs, err)
-
-	_, err = f.fetchVersion()
-	errs = util.AppendErr(errs, err)
-
-	return errs
+	return util.AppendErr(errs, f.fetchChart(shaF))
 }
 
 // fetchChart fetches the charts and verifies charts against SHA file if required
@@ -113,7 +123,8 @@ func (f *URLFetcher) fetchChart(shaF string) error {
 		if err != nil {
 			return fmt.Errorf("failed to read sha file: %s", err)
 		}
-		hash := string(hashAll)
+		// SHA file has structure of "sha_value filename"
+		hash := strings.Split(string(hashAll), " ")[0]
 		h := sha256.New()
 		if _, err := io.Copy(h, file); err != nil {
 			log.Error(err.Error())
@@ -124,8 +135,8 @@ func (f *URLFetcher) fetchChart(shaF string) error {
 			return fmt.Errorf("checksum of charts file located at: %s does not match expected SHA file: %s", saved, shaF)
 		}
 	}
-
-	return archiver.Unarchive(saved, f.destDir)
+	targz := archiver.TarGz{Tar: &archiver.Tar{OverwriteExisting: true}}
+	return targz.Unarchive(saved, f.destDir)
 }
 
 // fetchsha downloads the SHA file from url
@@ -138,17 +149,6 @@ func (f *URLFetcher) fetchSha() (string, error) {
 		return "", err
 	}
 	return shaF, nil
-}
-
-func (f *URLFetcher) fetchVersion() (string, error) {
-	if f.versionsURL == "" {
-		return "", fmt.Errorf("SHA file url is empty")
-	}
-	vF, err := f.downloader.DownloadTo(f.versionsURL, f.destDir)
-	if err != nil {
-		return "", err
-	}
-	return vF, nil
 }
 
 // NewFileDownloader creates a wrapper for download files.
@@ -196,7 +196,7 @@ func (c *FileDownloader) DownloadTo(ref, dest string) (string, error) {
 
 	name := filepath.Base(u.Path)
 	destFile := filepath.Join(dest, name)
-	if err := ioutil.WriteFile(destFile, data.Bytes(), 0644); err != nil {
+	if err := ioutil.WriteFile(destFile, data.Bytes(), 0666); err != nil {
 		return destFile, err
 	}
 

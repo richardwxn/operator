@@ -36,17 +36,6 @@ type Poller struct {
 	urlFetcher *URLFetcher
 }
 
-const (
-	// InstallationChartsFileName is the name of the installation package to fetch.
-	InstallationChartsFileName = "istio-installer.tar.gz"
-	// InstallationShaFileName is Sha filename to verify
-	InstallationShaFileName = "istio-installer.tar.gz.sha256"
-	// VersionsFileName is version file's name
-	VersionsFileName = "VERSIONS.yaml"
-	// ChartsTempFilePrefix is temporary Files prefix
-	ChartsTempFilePrefix = "istio-install-package-"
-)
-
 // checkUpdate checks a SHA URL to determine if the installation package has been updated
 // and fetches the new version if necessary.
 func (p *Poller) checkUpdate() (bool, error) {
@@ -84,13 +73,16 @@ func (p *Poller) poll(notify chan struct{}) {
 }
 
 // NewPoller returns a poller pointing to given url with specified interval
-func NewPoller(dirURL string, destDir string, interval time.Duration) *Poller {
-	uf := NewURLFetcher(dirURL, destDir, InstallationChartsFileName, InstallationShaFileName)
+func NewPoller(dirURL string, destDir string, interval time.Duration) (*Poller, error) {
+	uf, err := NewURLFetcher(dirURL, destDir, InstallationChartsFileName, InstallationShaFileName)
+	if err != nil {
+		return nil, err
+	}
 	return &Poller{
 		url:        dirURL,
 		ticker:     time.NewTicker(time.Minute * interval),
 		urlFetcher: uf,
-	}
+	}, nil
 }
 
 //PollURL continuously polls the given url, which points to a directory containing an
@@ -102,7 +94,10 @@ func PollURL(dirURL string, interval time.Duration) (chan struct{}, error) {
 		return nil, err
 	}
 
-	po := NewPoller(dirURL, destDir, interval)
+	po, err := NewPoller(dirURL, destDir, interval)
+	if err != nil {
+		log.Fatalf("failed to create new poller for: %s", err)
+	}
 	updated := make(chan struct{}, 1)
 	go po.poll(updated)
 

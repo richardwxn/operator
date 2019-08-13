@@ -1,0 +1,6 @@
+# default-install.yaml
+apiVersion: install.istio.io/v1alpha2
+kind: IstioControlPlane
+spec:
+  profile: default
+  installPackagePath: https://github.com/istio/istio/releases/download/1.2.3

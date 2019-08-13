@@ -15,7 +15,6 @@
 package helm
 
 import (
-	"bytes"
 	"crypto/sha256"
 	"encoding/hex"
 	"fmt"
@@ -29,6 +28,7 @@ import (
 
 	"github.com/mholt/archiver"
 
+	"istio.io/operator/pkg/httprequest"
 	"istio.io/operator/pkg/util"
 	"istio.io/pkg/log"
 )
@@ -58,8 +58,6 @@ type URLFetcher struct {
 	verify bool
 	// destDir is path of charts downloaded to, empty as default to temp dir
 	destDir string
-	// downloader downloads files from remote url
-	downloader *FileDownloader
 }
 
 // NewURLFetcher creates an URLFetcher pointing to urls and destination
@@ -74,15 +72,15 @@ func NewURLFetcher(repoURL string, destDir string, cFileName string, shaFileName
 		}
 	}
 	uf := &URLFetcher{
-		url:        repoURL + "/" + cFileName,
-		verifyURL:  repoURL + "/" + shaFileName,
+		url:        filepath.Join(repoURL, cFileName),
+		verifyURL:  filepath.Join(repoURL, shaFileName),
 		verify:     true,
 		destDir:    destDir,
-		downloader: NewFileDownloader(),
 	}
 	return uf, nil
 }
 
+// GetDestDir returns path of destination dir.
 func (f *URLFetcher) GetDestDir() string {
 	return f.destDir
 }
@@ -99,9 +97,7 @@ func (f *URLFetcher) FetchBundles() util.Errors {
 
 // fetchChart fetches the charts and verifies charts against SHA file if required
 func (f *URLFetcher) fetchChart(shaF string) error {
-	c := f.downloader
-
-	saved, err := c.DownloadTo(f.url, f.destDir)
+	saved, err := DownloadTo(f.url, f.destDir)
 	if err != nil {
 		return err
 	}
@@ -144,59 +140,27 @@ func (f *URLFetcher) fetchSha() (string, error) {
 	if f.verifyURL == "" {
 		return "", fmt.Errorf("SHA file url is empty")
 	}
-	shaF, err := f.downloader.DownloadTo(f.verifyURL, f.destDir)
+	shaF, err := DownloadTo(f.verifyURL, f.destDir)
 	if err != nil {
 		return "", err
 	}
 	return shaF, nil
 }
 
-// NewFileDownloader creates a wrapper for download files.
-func NewFileDownloader() *FileDownloader {
-	return &FileDownloader{
-		client: &http.Client{
-			Transport: &http.Transport{
-				DisableCompression: true,
-				Proxy:              http.ProxyFromEnvironment,
-			}},
-	}
-}
-
-// SendGet sends an HTTP GET request to href.
-func (c *FileDownloader) SendGet(url string) (*bytes.Buffer, error) {
-	buf := bytes.NewBuffer(nil)
-
-	req, err := http.NewRequest("GET", url, nil)
-	if err != nil {
-		return nil, err
-	}
-	resp, err := c.client.Do(req)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-	if resp.StatusCode != 200 {
-		return nil, fmt.Errorf("failed to fetch URL %s : %s", url, resp.Status)
-	}
-
-	_, err = io.Copy(buf, resp.Body)
-	return buf, err
-}
-
 // DownloadTo downloads from remote url to dest local file path
-func (c *FileDownloader) DownloadTo(ref, dest string) (string, error) {
+func DownloadTo(ref, dest string) (string, error) {
 	u, err := url.Parse(ref)
 	if err != nil {
 		return "", fmt.Errorf("invalid chart URL: %s", ref)
 	}
-	data, err := c.SendGet(u.String())
+	data, err := httprequest.Get(u.String())
 	if err != nil {
 		return "", err
 	}
 
 	name := filepath.Base(u.Path)
 	destFile := filepath.Join(dest, name)
-	if err := ioutil.WriteFile(destFile, data.Bytes(), 0666); err != nil {
+	if err := ioutil.WriteFile(destFile, data, 0666); err != nil {
 		return destFile, err
 	}
 

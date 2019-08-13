@@ -24,8 +24,8 @@ import (
 	"istio.io/pkg/log"
 )
 
-// Poller is used to poll files from remote url at specific internal
-type Poller struct {
+// URLPoller is used to poll files from remote url at specific internal
+type URLPoller struct {
 	// url is remote target url to poll from
 	url string
 	// existingHash records last sha value of polled files
@@ -38,7 +38,7 @@ type Poller struct {
 
 // checkUpdate checks a SHA URL to determine if the installation package has been updated
 // and fetches the new version if necessary.
-func (p *Poller) checkUpdate() (bool, error) {
+func (p *URLPoller) checkUpdate() (bool, error) {
 	uf := p.urlFetcher
 	shaF, err := uf.fetchSha()
 	if err != nil {
@@ -58,7 +58,7 @@ func (p *Poller) checkUpdate() (bool, error) {
 	return false, nil
 }
 
-func (p *Poller) poll(notify chan struct{}) {
+func (p *URLPoller) poll(notify chan<- struct{}) {
 	for t := range p.ticker.C {
 		// When the ticker fires
 		log.Debugf("Tick at: %s", t)
@@ -73,12 +73,12 @@ func (p *Poller) poll(notify chan struct{}) {
 }
 
 // NewPoller returns a poller pointing to given url with specified interval
-func NewPoller(dirURL string, destDir string, interval time.Duration) (*Poller, error) {
+func NewPoller(dirURL string, destDir string, interval time.Duration) (*URLPoller, error) {
 	uf, err := NewURLFetcher(dirURL, destDir, InstallationChartsFileName, InstallationShaFileName)
 	if err != nil {
 		return nil, err
 	}
-	return &Poller{
+	return &URLPoller{
 		url:        dirURL,
 		ticker:     time.NewTicker(time.Minute * interval),
 		urlFetcher: uf,
@@ -87,7 +87,7 @@ func NewPoller(dirURL string, destDir string, interval time.Duration) (*Poller, 
 
 //PollURL continuously polls the given url, which points to a directory containing an
 //installation package at the given interval and fetches a new copy if it is updated.
-func PollURL(dirURL string, interval time.Duration) (chan struct{}, error) {
+func PollURL(dirURL string, interval time.Duration) (chan<- struct{}, error) {
 	destDir, err := ioutil.TempDir("", ChartsTempFilePrefix)
 	if err != nil {
 		log.Error("failed to create temp directory for charts")

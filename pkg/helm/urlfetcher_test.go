@@ -80,21 +80,21 @@ func TestFetch(t *testing.T) {
 		{
 			name:           "Charts download only",
 			chartsFileName: InstallationChartsFileName,
-			expectFile:     "./istio-installer.tar.gz",
+			expectFile:     "./istio-installer-1.3.0.tar.gz",
 			verify:         false,
 		},
 		{
 			name:           "Charts download and verify",
 			chartsFileName: InstallationChartsFileName,
 			shaFileName:    InstallationShaFileName,
-			expectFile:     "./istio-installer.tar.gz",
+			expectFile:     "./istio-installer-1.3.0.tar.gz",
 			verify:         true,
 		},
 		{
 			name:           "Charts download but verification fail",
 			chartsFileName: InstallationChartsFileName,
 			shaFileName:    InstallationShaFileName,
-			expectFile:     "./istio-installer.tar.gz",
+			expectFile:     "./istio-installer-1.3.0.tar.gz",
 			verify:         true,
 			verifyFail:     true,
 		},
@@ -114,7 +114,6 @@ func TestFetch(t *testing.T) {
 
 	fq := &URLFetcher{
 		destDir:    tmp + "/testout",
-		downloader: NewFileDownloader(),
 	}
 
 	for _, test := range tests {

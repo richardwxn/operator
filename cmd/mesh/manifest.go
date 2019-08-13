@@ -101,7 +101,6 @@ func genManifests(inFilename string, setOverlayYAML string) (name.ManifestMap, e
 		if len(errs) != 0 {
 			return nil, errs.ToError()
 		}
-		//
 		mergedICPS.InstallPackagePath = filepath.Join(uf.GetDestDir(), "install", "kubernetes", "operator", "charts")
 	}
 

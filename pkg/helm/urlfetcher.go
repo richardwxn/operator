@@ -20,9 +20,9 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
-	"net/http"
 	"net/url"
 	"os"
+	"path"
 	"path/filepath"
 	"strings"
 
@@ -34,19 +34,15 @@ import (
 )
 
 const (
-	// InstallationChartsFileName is the name of the installation package to fetch.
-	InstallationChartsFileName = "istio-installer-1.3.0.tar.gz"
-	// InstallationShaFileName is Sha filename to verify
-	InstallationShaFileName = "istio-installer-1.3.0.tar.gz.sha256"
+	// InstallationPathTemplate is used to construct installation url based on version
+	InstallationPathTemplate = "https://github.com/istio/istio/releases/download/%s/istio-%s-linux.tar.gz"
 	// ChartsTempFilePrefix is temporary Files prefix
 	ChartsTempFilePrefix = "istio-install-package"
+	// ChartsFilePath is file path of installation packages to helm charts.
+	ChartsFilePath = "install/kubernetes/operator/charts"
+	// SHAFileSuffix is the default SHA file suffix
+	SHAFileSuffix = ".sha256"
 )
-
-// FileDownloader is wrapper of HTTP client to download files
-type FileDownloader struct {
-	// client is a HTTP/HTTPS client.
-	client *http.Client
-}
 
 // URLFetcher is used to fetch and manipulate charts from remote url
 type URLFetcher struct {
@@ -60,8 +56,8 @@ type URLFetcher struct {
 	destDir string
 }
 
-// NewURLFetcher creates an URLFetcher pointing to urls and destination
-func NewURLFetcher(repoURL string, destDir string, cFileName string, shaFileName string) (*URLFetcher, error) {
+// NewURLFetcher creates an URLFetcher pointing to installation package url and destination
+func NewURLFetcher(insPackageURL string, destDir string) (*URLFetcher, error) {
 	if destDir == "" {
 		destDir = filepath.Join(os.TempDir(), ChartsTempFilePrefix)
 	}
@@ -72,10 +68,10 @@ func NewURLFetcher(repoURL string, destDir string, cFileName string, shaFileName
 		}
 	}
 	uf := &URLFetcher{
-		url:        filepath.Join(repoURL, cFileName),
-		verifyURL:  filepath.Join(repoURL, shaFileName),
-		verify:     true,
-		destDir:    destDir,
+		url:       insPackageURL,
+		verifyURL: insPackageURL + SHAFileSuffix,
+		verify:    true,
+		destDir:   destDir,
 	}
 	return uf, nil
 }
@@ -88,10 +84,14 @@ func (f *URLFetcher) GetDestDir() string {
 // FetchBundles fetches the charts, sha and version file
 func (f *URLFetcher) FetchBundles() util.Errors {
 	errs := util.Errors{}
-
+	// check whether install package already cached locally at destDir, skip downloading if yes.
+	fn := path.Base(f.url)
+	_, err := os.Stat(filepath.Join(f.destDir, fn))
+	if err == nil {
+		return errs
+	}
 	shaF, err := f.fetchSha()
 	errs = util.AppendErr(errs, err)
-
 	return util.AppendErr(errs, f.fetchChart(shaF))
 }
 

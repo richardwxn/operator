@@ -19,7 +19,7 @@ import (
 	"strings"
 
 	"github.com/ghodss/yaml"
-
+	
 	"istio.io/pkg/log"
 )
 
@@ -47,5 +47,5 @@ func IsFilePath(path string) bool {
 // IsHTTPURL checks whether the given URL is a HTTP URL, empty path or relative URLs would be rejected.
 func IsHTTPURL(path string) bool {
 	u, err := url.Parse(path)
-	return err == nil && u.Scheme != "" && u.Host != ""
+	return err == nil && u.Host != "" && (u.Scheme == "http" || u.Scheme == "https")
 }

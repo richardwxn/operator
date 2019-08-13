@@ -73,13 +73,13 @@ func (p *URLPoller) poll(notify chan<- struct{}) {
 }
 
 // NewPoller returns a poller pointing to given url with specified interval
-func NewPoller(dirURL string, destDir string, interval time.Duration) (*URLPoller, error) {
-	uf, err := NewURLFetcher(dirURL, destDir, InstallationChartsFileName, InstallationShaFileName)
+func NewPoller(installationURL string, destDir string, interval time.Duration) (*URLPoller, error) {
+	uf, err := NewURLFetcher(installationURL, destDir)
 	if err != nil {
 		return nil, err
 	}
 	return &URLPoller{
-		url:        dirURL,
+		url:        installationURL,
 		ticker:     time.NewTicker(time.Minute * interval),
 		urlFetcher: uf,
 	}, nil
@@ -87,14 +87,14 @@ func NewPoller(dirURL string, destDir string, interval time.Duration) (*URLPolle
 
 //PollURL continuously polls the given url, which points to a directory containing an
 //installation package at the given interval and fetches a new copy if it is updated.
-func PollURL(dirURL string, interval time.Duration) (chan<- struct{}, error) {
+func PollURL(installationURL string, interval time.Duration) (chan<- struct{}, error) {
 	destDir, err := ioutil.TempDir("", ChartsTempFilePrefix)
 	if err != nil {
 		log.Error("failed to create temp directory for charts")
 		return nil, err
 	}
 
-	po, err := NewPoller(dirURL, destDir, interval)
+	po, err := NewPoller(installationURL, destDir, interval)
 	if err != nil {
 		log.Fatalf("failed to create new poller for: %s", err)
 	}

@@ -16,6 +16,7 @@ package mesh
 
 import (
 	"fmt"
+	"path"
 	"path/filepath"
 	"strings"
 
@@ -30,6 +31,7 @@ import (
 	"istio.io/operator/pkg/translate"
 	"istio.io/operator/pkg/util"
 	"istio.io/operator/pkg/validate"
+	"istio.io/operator/pkg/version"
 	binversion "istio.io/operator/version"
 )
 
@@ -91,9 +93,13 @@ func genManifests(inFilename string, setOverlayYAML string) (name.ManifestMap, e
 	if err != nil {
 		return nil, err
 	}
+	// for installation path contains version number only
+	isp := mergedICPS.InstallPackagePath
+	if version.IsVersionString(isp) {
+		mergedICPS.InstallPackagePath = fmt.Sprintf(helm.InstallationPathTemplate, isp, isp)
+	}
 	if util.IsHTTPURL(mergedICPS.InstallPackagePath) {
-		// TODO: Make the filename logic more robust
-		uf, err := helm.NewURLFetcher(mergedICPS.InstallPackagePath, "", helm.InstallationChartsFileName, helm.InstallationShaFileName)
+		uf, err := helm.NewURLFetcher(mergedICPS.InstallPackagePath, "")
 		if err != nil {
 			return nil, err
 		}
@@ -101,7 +107,11 @@ func genManifests(inFilename string, setOverlayYAML string) (name.ManifestMap, e
 		if len(errs) != 0 {
 			return nil, errs.ToError()
 		}
-		mergedICPS.InstallPackagePath = filepath.Join(uf.GetDestDir(), "install", "kubernetes", "operator", "charts")
+		isp := path.Base(mergedICPS.InstallPackagePath)
+		// get rid of the suffix, installation package is untared to folder name istio-{version}, e.g. istio-1.3.0
+		idx := strings.LastIndex(isp, "-")
+
+		mergedICPS.InstallPackagePath = filepath.Join(uf.GetDestDir(), isp[:idx], helm.ChartsFilePath)
 	}
 
 	cp := controlplane.NewIstioControlPlane(mergedICPS, t)

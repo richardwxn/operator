@@ -19,7 +19,7 @@ import (
 	"strings"
 
 	"github.com/ghodss/yaml"
-	
+
 	"istio.io/pkg/log"
 )
 

@@ -31,7 +31,6 @@ import (
 	"istio.io/operator/pkg/translate"
 	"istio.io/operator/pkg/util"
 	"istio.io/operator/pkg/validate"
-	"istio.io/operator/pkg/version"
 	binversion "istio.io/operator/version"
 )
 
@@ -93,25 +92,9 @@ func genManifests(inFilename string, setOverlayYAML string) (name.ManifestMap, e
 	if err != nil {
 		return nil, err
 	}
-	// for installation path contains version number only
-	isp := mergedICPS.InstallPackagePath
-	if version.IsVersionString(isp) {
-		mergedICPS.InstallPackagePath = fmt.Sprintf(helm.InstallationPathTemplate, isp, isp)
-	}
-	if util.IsHTTPURL(mergedICPS.InstallPackagePath) {
-		uf, err := helm.NewURLFetcher(mergedICPS.InstallPackagePath, "")
-		if err != nil {
-			return nil, err
-		}
-		errs := uf.FetchBundles()
-		if len(errs) != 0 {
-			return nil, errs.ToError()
-		}
-		isp := path.Base(mergedICPS.InstallPackagePath)
-		// get rid of the suffix, installation package is untared to folder name istio-{version}, e.g. istio-1.3.0
-		idx := strings.LastIndex(isp, "-")
 
-		mergedICPS.InstallPackagePath = filepath.Join(uf.GetDestDir(), isp[:idx], helm.ChartsFilePath)
+	if err := fetchInstallPackageFromURL(mergedICPS); err != nil {
+		return nil, err
 	}
 
 	cp := controlplane.NewIstioControlPlane(mergedICPS, t)
@@ -124,6 +107,32 @@ func genManifests(inFilename string, setOverlayYAML string) (name.ManifestMap, e
 		return manifests, errs.ToError()
 	}
 	return manifests, nil
+}
+
+// fetchInstallPackageFromURL downloads installation packages from specified URL.
+func fetchInstallPackageFromURL(mergedICPS *v1alpha2.IstioControlPlaneSpec) error {
+	// for installation path contains version number only
+	if mergedICPS.Version != "" {
+		if mergedICPS.InstallPackagePath != "" {
+			return fmt.Errorf("cannot set both of InstallPackagePath and Version")
+		}
+		mergedICPS.InstallPackagePath = helm.InstallURLFromVersion(mergedICPS.Version)
+	}
+	if util.IsHTTPURL(mergedICPS.InstallPackagePath) {
+		uf, err := helm.NewURLFetcher(mergedICPS.InstallPackagePath, "")
+		if err != nil {
+			return err
+		}
+		if err := uf.FetchBundles().ToError(); err != nil {
+			return err
+		}
+		isp := path.Base(mergedICPS.InstallPackagePath)
+		// get rid of the suffix, installation package is untared to folder name istio-{version}, e.g. istio-1.3.0
+		idx := strings.LastIndex(isp, "-")
+		// TODO: replace with more robust logic to set local file path
+		mergedICPS.InstallPackagePath = filepath.Join(uf.DestDir(), isp[:idx], helm.ChartsFilePath)
+	}
+	return nil
 }
 
 // makeTreeFromSetList creates a YAML tree from a string slice containing key-value pairs in the format key=value.

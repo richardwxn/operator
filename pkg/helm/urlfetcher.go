@@ -34,10 +34,10 @@ import (
 )
 
 const (
-	// InstallationPathTemplate is used to construct installation url based on version
-	InstallationPathTemplate = "https://github.com/istio/istio/releases/download/%s/istio-%s-linux.tar.gz"
-	// ChartsTempFilePrefix is temporary Files prefix
-	ChartsTempFilePrefix = "istio-install-package"
+	// installationPathTemplate is used to construct installation url based on version
+	installationPathTemplate = "https://github.com/istio/istio/releases/download/%s/istio-%s-linux.tar.gz"
+	// InstallationDirectory is temporary folder name for caching downloaded installation packages.
+	InstallationDirectory = "istio-install-packages"
 	// ChartsFilePath is file path of installation packages to helm charts.
 	ChartsFilePath = "install/kubernetes/operator/charts"
 	// SHAFileSuffix is the default SHA file suffix
@@ -56,10 +56,11 @@ type URLFetcher struct {
 	destDir string
 }
 
-// NewURLFetcher creates an URLFetcher pointing to installation package url and destination
+// NewURLFetcher creates an URLFetcher pointing to installation package URL and destination,
+// and returns a pointer to it.
 func NewURLFetcher(insPackageURL string, destDir string) (*URLFetcher, error) {
 	if destDir == "" {
-		destDir = filepath.Join(os.TempDir(), ChartsTempFilePrefix)
+		destDir = filepath.Join(os.TempDir(), InstallationDirectory)
 	}
 	if _, err := os.Stat(destDir); os.IsNotExist(err) {
 		err := os.Mkdir(destDir, os.ModeDir|os.ModePerm)
@@ -76,8 +77,8 @@ func NewURLFetcher(insPackageURL string, destDir string) (*URLFetcher, error) {
 	return uf, nil
 }
 
-// GetDestDir returns path of destination dir.
-func (f *URLFetcher) GetDestDir() string {
+// DestDir returns path of destination dir.
+func (f *URLFetcher) DestDir() string {
 	return f.destDir
 }
 
@@ -165,4 +166,9 @@ func DownloadTo(ref, dest string) (string, error) {
 	}
 
 	return destFile, nil
+}
+
+// InstallURLFromVersion generates default installation url from version number.
+func InstallURLFromVersion(version string) string {
+	return fmt.Sprintf(installationPathTemplate, version, version)
 }

@@ -92,7 +92,7 @@ func TestFetch(t *testing.T) {
 			verifyFail:              true,
 		},
 	}
-	tmp, err := ioutil.TempDir("", ChartsTempFilePrefix)
+	tmp, err := ioutil.TempDir("", InstallationDirectory)
 	if err != nil {
 		t.Fatal(err)
 	}

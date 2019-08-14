@@ -88,7 +88,7 @@ func NewPoller(installationURL string, destDir string, interval time.Duration) (
 //PollURL continuously polls the given url, which points to a directory containing an
 //installation package at the given interval and fetches a new copy if it is updated.
 func PollURL(installationURL string, interval time.Duration) (chan<- struct{}, error) {
-	destDir, err := ioutil.TempDir("", ChartsTempFilePrefix)
+	destDir, err := ioutil.TempDir("", InstallationDirectory)
 	if err != nil {
 		log.Error("failed to create temp directory for charts")
 		return nil, err

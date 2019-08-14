@@ -169,7 +169,7 @@ func (t *ReverseTranslator) TranslateFromValueToSpec(values *v1alpha2.Values) (c
 	err = util.UnmarshalWithJSONPB(string(outputVal), cpSpec)
 
 	if err != nil {
-		return nil, fmt.Errorf("error when unmarshalling into control plane spec %v, \nyaml: %s", err, outputVal)
+		return nil, fmt.Errorf("error when unmarshalling into control plane spec %v, \nyaml:\n %s", err, outputVal)
 	}
 
 	return cpSpec, nil

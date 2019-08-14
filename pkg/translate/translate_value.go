@@ -89,6 +89,9 @@ func (t *ReverseTranslator) initAPIAndComponentMapping(vs version.MinorVersion) 
 	for valKey, outVal := range ts.APIMapping {
 		t.APIMapping[outVal.outPath] = &Translation{valKey, nil}
 	}
+	// Override for special mapping
+	t.APIMapping["global.controlPlaneSecurityEnabled"] = &Translation{"Security.ControlPlaneMtls", nil}
+	t.APIMapping["global.mtls.enabled"] = &Translation{"Security.DataPlaneMtlsStrict", nil}
 
 	for cn, cm := range ts.ComponentMaps {
 		if cn != name.IstioBaseComponentName {

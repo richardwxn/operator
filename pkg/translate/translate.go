@@ -119,9 +119,9 @@ var (
 
 				"Telemetry.Components.Namespace": {"global.telemetryNamespace", nil},
 
-				"Security.ControlPlaneMtls":     {"global.controlPlaneSecurityEnabled", nil},
-				"Security.DataPlaneMtlsStrict":  {"global.mtls.enabled", nil},
-				"Security.Components.Namespace": {"global.securityNamespace", nil},
+				"Security.ControlPlaneMtls.Value":    {"global.controlPlaneSecurityEnabled", nil},
+				"Security.DataPlaneMtlsStrict.Value": {"global.mtls.enabled", nil},
+				"Security.Components.Namespace":      {"global.securityNamespace", nil},
 			},
 			KubernetesMapping: map[string]*Translation{
 				"{{.FeatureName}}.Components.{{.ComponentName}}.Common.K8S.Affinity": {

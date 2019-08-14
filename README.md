@@ -32,7 +32,7 @@ for deprecation.
 This repo currently provides pre-configured Helm values sets for different scenarios as configuration
 [profiles](https://istio.io/docs/setup/kubernetes/additional-setup/config-profiles/), which act as a starting point for
 an Istio install and can be customized by creating customization overlay files or passing parameters when
-calling Helm. Similarly, the operator API uses the same profiles (expressed internally through the new API, e.g. compiled in [base profiles files](https://github.com/istio/operator/tree/master/data/profiles)), which can be selected
+calling Helm. Similarly, the operator API uses the same profiles (expressed internally through the new API), which can be selected
 as a starting point for the installation. For comparison, the following example shows the command needed to install
 Istio using the SDS configuration profile using Helm:
 
@@ -52,7 +52,7 @@ spec:
   profile: sds
 ```
 
-See [Select a base profile](#select-a-specific-base-profile) for more information.
+See [Select a specific configuration_profile](#select-a-specific-configuration-profile) for more information.
 
 If you don't specify a configuration profile, Istio is installed using the `default` configuration profile. All
 profiles listed in istio.io are available by default, or `profile:` can point to a local file path to reference a custom
@@ -162,7 +162,7 @@ mesh profile dump --set profile=minimal
 ```
 
 
-#### Select a specific base profile
+#### Select a specific configuration profile
 
 The simplest customization is to select a profile different to `default` e.g. `sds`. See [samples/sds.yaml](samples/sds.yaml):
 
@@ -191,7 +191,7 @@ apiVersion: install.istio.io/v1alpha2
 kind: IstioControlPlane
 spec:
   profile: /usr/home/bob/go/src/github.com/ostromart/istio-installer/data/profiles/default.yaml
-  customPackagePath: /usr/home/bob/go/src/github.com/ostromart/istio-installer/data/charts/
+  installPackagePath: /usr/home/bob/go/src/github.com/ostromart/istio-installer/data/charts/
 ```
 
 You can mix and match these approaches. For example, you can use a compiled-in configuration profile with charts in your

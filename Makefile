@@ -62,7 +62,6 @@ RUN = docker run -t --sig-proxy=true -u $(UID) --rm \
 	-e GOBIN="$(GOBIN)" \
 	-v /etc/passwd:/etc/passwd:ro \
 	-v $(readlink /etc/localtime):/etc/localtime:ro \
-	-v $(GOPATH)/src/istio.io/operator:/go/src/istio.io/operator \
 	--mount type=bind,source="$(PWD)",destination="/work" \
 	--mount type=volume,source=istio-go-mod,destination="/go/pkg/mod" \
 	--mount type=volume,source=istio-go-cache,destination="/gocache" \
@@ -72,7 +71,7 @@ else
 export GOBIN ?= ./out/bin
 endif
 
-MAKE = $(RUN) make -e -f Makefile.core.mk
+MAKE = $(RUN) make --no-print-directory -e -f Makefile.core.mk
 
 %:
 	@$(MAKE) $@

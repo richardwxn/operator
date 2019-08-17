@@ -52,7 +52,7 @@ spec:
   profile: sds
 ```
 
-See [Select a specific configuration_profile](#select-a-specific-configuration-profile) for more information.
+See [Select a specific configuration_profile](./cmd/README.md#select-a-specific-configuration-profile) for more information.
 
 If you don't specify a configuration profile, Istio is installed using the `default` configuration profile. All
 profiles listed in istio.io are available by default, or `profile:` can point to a local file path to reference a custom
@@ -91,7 +91,6 @@ The `mesh` command supports the following flags:
 - `verbose`: display entire manifest contents and other debug info (default is false).
 
 ### Quick tour of CLI commands
-
 #### Basic default manifest
 
 The following command generates a manifest with the compiled in default profile and charts:

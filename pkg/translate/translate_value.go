@@ -77,7 +77,6 @@ var (
 	// Component enablement mapping. Ex "{{.ValueComponent}}.enabled": {"{{.FeatureName}}.Components.{{.ComponentName}}.enabled}", nil},
 	// Feature enablement mapping. Ex: "{{.ValueComponent}}.enabled": {"{{.FeatureName}}.enabled}", nil},
 	componentEnablementPattern = "{{.FeatureName}}.Components.{{.ComponentName}}.Enabled"
-	componentValuesPattern     = "{{.FeatureName}}.Components.{{.ComponentName}}.Values"
 )
 
 // initAPIMapping generate the reverse mapping from original translator apiMapping.
@@ -464,7 +463,7 @@ func (t *ReverseTranslator) translateRemainingPaths(valueTree map[string]interfa
 			if newPath[len(newPath)-1] == "enabled" {
 				continue
 			}
-			if err := tpath.WriteNode(cpSpecTree, util.ToYAMLPath("Values." + newPath.String()), val); err != nil {
+			if err := tpath.WriteNode(cpSpecTree, util.ToYAMLPath("Values."+newPath.String()), val); err != nil {
 				return err
 			}
 		}
@@ -517,14 +516,4 @@ func renderComponentName(tmpl string, componentName string) (string, error) {
 		ValueComponentName string
 	}
 	return renderTemplate(tmpl, temp{componentName})
-}
-
-// renderCommonComponentValues renders a template of the form "{{.FeatureName}}.Components.{{.ComponentName}}.Values" with
-// the supplied parameters.
-func renderCommonComponentValues(tmpl string, componentName string, featureName string) (string, error) {
-	type temp struct {
-		FeatureName   string
-		ComponentName string
-	}
-	return renderTemplate(tmpl, temp{FeatureName: featureName, ComponentName: componentName})
 }

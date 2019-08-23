@@ -1,0 +1,322 @@
+autoInjection:
+  components:
+    injector:
+      enabled: true
+      k8s:
+        affinity:
+          podAntiAffinity:
+            preferredDuringSchedulingIgnoredDuringExecution: []
+            requiredDuringSchedulingIgnoredDuringExecution: []
+        nodeSelector: {}
+        replicaCount: 1
+  enabled: true
+configManagement:
+  components:
+    galley:
+      enabled: true
+      k8s:
+        affinity:
+          podAntiAffinity:
+            preferredDuringSchedulingIgnoredDuringExecution: []
+            requiredDuringSchedulingIgnoredDuringExecution: []
+        nodeSelector: {}
+        replicaCount: 1
+        resources:
+          requests:
+            cpu: 100m
+  enabled: true
+gateways:
+  components:
+    egressGateway:
+      enabled: false
+    ingressGateway:
+      enabled: false
+  enabled: false
+hub: gcr.io/istio-release
+policy:
+  components:
+    policy:
+      enabled: true
+      k8s:
+        affinity:
+          podAntiAffinity:
+            preferredDuringSchedulingIgnoredDuringExecution: []
+            requiredDuringSchedulingIgnoredDuringExecution: []
+        env:
+        - name: GODEBUG
+          value: gctrace=1
+        hpaSpec:
+          maxReplicas: 5
+          metrics:
+          - resource:
+              name: cpu
+              targetAverageUtilization: 80
+            type: Resource
+          minReplicas: 1
+          scaleTargetRef:
+            apiVersion: apps/v1
+            kind: Deployment
+            name: istio-mixer.policy
+        nodeSelector: {}
+        podAnnotations: {}
+        replicaCount: 1
+  enabled: true
+security:
+  components:
+    certManager:
+      enabled: false
+    citadel:
+      enabled: true
+      k8s:
+        affinity:
+          podAntiAffinity:
+            preferredDuringSchedulingIgnoredDuringExecution: []
+            requiredDuringSchedulingIgnoredDuringExecution: []
+        nodeSelector: {}
+        replicaCount: 1
+    nodeAgent:
+      enabled: false
+  enabled: true
+tag: master-latest-daily
+telemetry:
+  components:
+    telemetry:
+      enabled: true
+      k8s:
+        affinity:
+          podAntiAffinity:
+            preferredDuringSchedulingIgnoredDuringExecution: []
+            requiredDuringSchedulingIgnoredDuringExecution: []
+        hpaSpec:
+          maxReplicas: 5
+          metrics:
+          - resource:
+              name: cpu
+              targetAverageUtilization: 80
+            type: Resource
+          minReplicas: 1
+          scaleTargetRef:
+            apiVersion: apps/v1
+            kind: Deployment
+            name: istio-mixer.telemetry
+        nodeSelector: {}
+        replicaCount: 1
+        resources:
+          limits:
+            cpu: 4800m
+            memory: 4G
+          requests:
+            cpu: 1000m
+            memory: 1G
+  enabled: true
+trafficManagement:
+  components:
+    pilot:
+      enabled: true
+      k8s:
+        affinity:
+          podAntiAffinity:
+            preferredDuringSchedulingIgnoredDuringExecution: []
+            requiredDuringSchedulingIgnoredDuringExecution: []
+        env:
+        - name: GODEBUG
+          value: gctrace=1
+        hpaSpec:
+          maxReplicas: 5
+          metrics:
+          - resource:
+              name: cpu
+              targetAverageUtilization: 80
+            type: Resource
+          minReplicas: 1
+          scaleTargetRef:
+            apiVersion: apps/v1
+            kind: Deployment
+            name: istio-pilot
+        nodeSelector: {}
+        replicaCount: 1
+        resources:
+          requests:
+            cpu: 500m
+            memory: 2048Mi
+  enabled: true
+values:
+  galley:
+    image: galley
+    rollingMaxSurge: 100%
+    rollingMaxUnavailable: 25%
+  global:
+    arch:
+      amd64: 2
+      ppc64le: 2
+      s390x: 2
+    configValidation: true
+    defaultResources:
+      requests:
+        cpu: 10m
+    disablePolicyChecks: true
+    enableHelmTest: false
+    enableTracing: true
+    imagePullPolicy: IfNotPresent
+    k8sIngress:
+      enableHttps: false
+      gatewayName: ingressgateway
+    logging:
+      level: default:info
+    meshExpansion:
+      useILB: false
+    meshID: ""
+    monitoringPort: 15014
+    oneNamespace: false
+    policyCheckFailOpen: false
+    priorityClassName: ""
+    proxy_init:
+      image: proxy_init
+    sds:
+      udsPath: ""
+    tracer:
+      datadog:
+        address: $(HOST_IP):8126
+      lightstep:
+        accessToken: ""
+        address: ""
+        cacertPath: ""
+        secure: true
+      zipkin:
+        address: ""
+    trustDomain: ""
+    useMCP: true
+  mixer:
+    policy:
+      image: mixer
+      rollingMaxSurge: 100%
+      rollingMaxUnavailable: 25%
+    telemetry:
+      image: mixer
+      loadshedding:
+        latencyThreshold: 100ms
+        mode: enforce
+      reportBatchMaxEntries: 100
+      reportBatchMaxTime: 1s
+      rollingMaxSurge: 100%
+      rollingMaxUnavailable: 25%
+      sessionAffinityEnabled: false
+      useMCP: true
+  nodeagent:
+    env:
+      cA_ADDR: ""
+      cA_PROVIDER: ""
+      plugins: ""
+    image: node-agent-k8s
+  pilot:
+    configMap: true
+    configNamespace: istio-config
+    image: pilot
+    ingress:
+      ingressClass: istio
+      ingressControllerMode: "OFF"
+      ingressService: istio-ingressgateway
+    keepaliveMaxServerConnectionAge: 30m
+    rollingMaxSurge: 100%
+    rollingMaxUnavailable: 25%
+    traceSampling: 1
+    useMCP: true
+  proxy:
+    accessLogEncoding: TEXT
+    accessLogFile: ""
+    accessLogFormat: ""
+    autoInject: enabled
+    clusterDomain: cluster.local
+    componentLogLevel: ""
+    concurrency: 2
+    dnsRefreshRate: 300s
+    enableCoreDump: false
+    enableCoreDumpImage: ubuntu:xenial
+    envoyAccessLogService:
+      enabled: false
+      host: null
+      port: null
+      tcpKeepalive:
+        interval: 10s
+        probes: 3
+        time: 10s
+      tlsSettings:
+        caCertificates: null
+        clientCertificate: null
+        mode: DISABLE
+        privateKey: null
+        sni: null
+        subjectAltNames: []
+    envoyMetricsService:
+      enabled: false
+      host: null
+      port: null
+    envoyStatsd:
+      enabled: false
+      host: null
+      port: null
+    excludeIPRanges: ""
+    excludeInboundPorts: ""
+    excludeOutboundPorts: ""
+    image: proxyv2
+    includeIPRanges: '*'
+    includeInboundPorts: '*'
+    init:
+      resources:
+        limits:
+          cpu: 100m
+          memory: 50Mi
+        requests:
+          cpu: 10m
+          memory: 10Mi
+    kubevirtInterfaces: ""
+    logLevel: ""
+    privileged: false
+    protocolDetectionTimeout: 10ms
+    readinessFailureThreshold: 30
+    readinessInitialDelaySeconds: 1
+    readinessPeriodSeconds: 2
+    resources:
+      limits:
+        cpu: 2000m
+        memory: 1024Mi
+      requests:
+        cpu: 100m
+        memory: 128Mi
+    statusPort: 15020
+    tracer: zipkin
+  security:
+    controlPlaneMtls: false
+    dataPlaneMtlsStrict: false
+    dnsCerts:
+      istio-galley-service-account:
+        istio-config: istio-galley.istio-config.svc
+        istio-control: istio-galley.istio-control.svc
+        istio-control-master: istio-galley.istio-control-master.svc
+        istio-master: istio-galley.istio-master.svc
+        istio-pilot11: istio-galley.istio-pilot11.svc
+      istio-pilot-service-account:
+        istio-control: istio-pilot-service-account.istio-control
+        istio-pilot11: istio-pilot-service-account.istio-system
+      istio-sidecar-injector-service-account:
+        istio-control: istio-sidecar-injector.istio-control.svc
+        istio-control-master: istio-sidecar-injector.istio-control-master.svc
+        istio-master: istio-sidecar-injector.istio-master.svc
+        istio-pilot11: istio-sidecar-injector.istio-pilot11.svc
+        istio-remote: istio-sidecar-injector.istio-remote.svc
+    enableNamespacesByDefault: true
+    image: citadel
+    rollingMaxSurge: 100%
+    rollingMaxUnavailable: 25%
+    selfSigned: true
+    trustDomain: cluster.local
+    workloadCertTtl: 2160h
+  sidecarInjectorWebhook:
+    enableNamespacesByDefault: false
+    image: sidecar_injector
+    injectLabel: istio-injection
+    rewriteAppHTTPProbe: false
+    rollingMaxSurge: 100%
+    rollingMaxUnavailable: 25%
+    selfSigned: false
+

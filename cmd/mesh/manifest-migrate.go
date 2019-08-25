@@ -64,7 +64,7 @@ func valueFileFilter(path string) bool {
 // migrateFromFiles handles migration for local values.yaml files
 func migrateFromFiles(rootArgs *rootArgs, args []string, l *logger) {
 	initLogsOrExit(rootArgs)
-	value, err := util.ReadFiles(args[0], valueFileFilter)
+	value, err := util.ReadFilesWithFilter(args[0], valueFileFilter)
 	if err != nil {
 		l.logAndFatal(err.Error())
 	}

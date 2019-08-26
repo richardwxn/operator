@@ -69,7 +69,10 @@ global:
   telemetryNamespace: istio-telemetry
   proxy:
     readinessInitialDelaySeconds: 2
-  controlPlaneSecurityEnabled: true
+  controlPlaneSecurityEnabled: false
+  mtls:
+    enabled:
+      false
 mixer:
   policy:
     enabled: true
@@ -159,7 +162,9 @@ autoInjection:
  enabled: false
 values:
   global:
-    controlPlaneSecurityEnabled: true
+    controlPlaneSecurityEnabled: false
+    mtls:
+      enabled: false
   pilot:
     image: pilot
     traceSampling: 1
@@ -274,7 +279,7 @@ global:
 mixer:
   policy:
     enabled: true
-telemetry:
+  telemetry:
     enabled: false
 `,
 			want: `

@@ -233,6 +233,10 @@ func (t *ReverseTranslator) setEnablementAndNamespacesFromValue(valueSpec map[st
 				return err
 			}
 		}
+		vep := util.ToYAMLPath(cnv + ".enabled")
+		if _, err := tpath.DeleteFromTree(valueSpec, vep, vep); err != nil {
+			return err
+		}
 	}
 
 	// set namespace
@@ -457,7 +461,7 @@ func (t *ReverseTranslator) translateRemainingPaths(valueTree map[string]interfa
 			}
 		// remaining leaf need to be put into root.values
 		default:
-			if newPath[len(newPath)-1] == "enabled" {
+			if newPath.String() == "gateways.enabled" || newPath.String() == "mixer.enabled" {
 				continue
 			}
 			if err := tpath.WriteNode(cpSpecTree, util.ToYAMLPath("Values."+newPath.String()), val); err != nil {

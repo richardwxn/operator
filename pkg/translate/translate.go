@@ -118,9 +118,9 @@ var (
 				"Values.Proxy": {"global.proxy", nil},
 
 				"ConfigManagement.Components.Namespace": {"global.configNamespace", nil},
-				"Policy.Components.Namespace":      {"global.policyNamespace", nil},
-				"Telemetry.Components.Namespace": {"global.telemetryNamespace", nil},
-				"Security.Components.Namespace":      {"global.securityNamespace", nil},
+				"Policy.Components.Namespace":           {"global.policyNamespace", nil},
+				"Telemetry.Components.Namespace":        {"global.telemetryNamespace", nil},
+				"Security.Components.Namespace":         {"global.securityNamespace", nil},
 			},
 			KubernetesMapping: map[string]*Translation{
 				"{{.FeatureName}}.Components.{{.ComponentName}}.K8S.Affinity": {

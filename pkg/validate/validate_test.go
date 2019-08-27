@@ -247,7 +247,7 @@ installPackagePath: /local/file/path
 `,
 		},
 		{
-			desc: "BadTag",
+			desc: "BadValuesIP",
 			yamlStr: `
 values:
   global:
@@ -256,9 +256,22 @@ values:
 `,
 			wantErrs: makeErrors([]string{`global.proxy.includeIpRanges invalid CIDR address: 1.1.0.300/16`}),
 		},
+		{
+			desc: "EmptyValuesIP",
+			yamlStr: `
+values:
+  global:
+    proxy:
+      includeIpRanges: ""
+      includeInboundPorts: "*"
+`,
+		},
 	}
 
 	for _, tt := range tests {
+		if tt.desc != "EmptyValuesIP" {
+			continue
+		}
 		t.Run(tt.desc, func(t *testing.T) {
 			ispec := &v1alpha2.IstioControlPlaneSpec{}
 			err := util.UnmarshalWithJSONPB(tt.yamlStr, ispec)

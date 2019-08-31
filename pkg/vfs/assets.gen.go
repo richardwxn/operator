@@ -31617,6 +31617,10 @@ spec:
             requests:
               cpu: 500m
               memory: 2048Mi
+          strategy:
+            rollingUpdate:
+              maxSurge: "100%"
+              maxUnavailable: "25%"
 
   # Policy feature
   policy:
@@ -31641,6 +31645,10 @@ spec:
           env:
             - name: GODEBUG
               value: "gctrace=1"
+          strategy:
+            rollingUpdate:
+              maxSurge: "100%"
+              maxUnavailable: "25%"
 
   # Telemetry feature
   telemetry:
@@ -31674,11 +31682,22 @@ spec:
             limits:
               cpu: 4800m
               memory: 4G
+          strategy:
+            rollingUpdate:
+              maxSurge: "100%"
+              maxUnavailable: "25%"
 
   # Security feature
   security:
     enabled: true
     components:
+      citadel:
+        enabled: true
+        k8s:
+          strategy:
+            rollingUpdate:
+              maxSurge: "100%"
+              maxUnavailable: "25%"
       certManager:
         enabled: false
       nodeAgent:
@@ -31695,6 +31714,10 @@ spec:
           resources:
             requests:
               cpu: 100m
+          strategy:
+            rollingUpdate:
+              maxSurge: "100%"
+              maxUnavailable: "25%"
 
   # Auto injection feature
   autoInjection:
@@ -31704,6 +31727,10 @@ spec:
         enabled: true
         k8s:
           replicaCount: 1
+          strategy:
+            rollingUpdate:
+              maxSurge: "100%"
+              maxUnavailable: "25%"
 
   # Istio Gateway feature
   gateways:
@@ -31731,6 +31758,10 @@ spec:
             limits:
               cpu: 2000m
               memory: 1024Mi
+          strategy:
+            rollingUpdate:
+              maxSurge: "100%"
+              maxUnavailable: "25%"
 
       egressGateway:
         enabled: false
@@ -31754,6 +31785,10 @@ spec:
             limits:
               cpu: 2000m
               memory: 256Mi
+          strategy:
+            rollingUpdate:
+              maxSurge: "100%"
+              maxUnavailable: "25%"
 
   # Global values passed through to helm global.yaml.
   values:
@@ -31870,8 +31905,6 @@ spec:
       autoscaleMin: 1
       autoscaleMax: 5
       replicaCount: 1
-      rollingMaxSurge: 100%
-      rollingMaxUnavailable: 25%
       image: pilot
       traceSampling: 1.0
       configNamespace: istio-config
@@ -31923,8 +31956,6 @@ spec:
       telemetry:
         image: mixer
         replicaCount: 1
-        rollingMaxSurge: 100%
-        rollingMaxUnavailable: 25%
         autoscaleEnabled: true
         sessionAffinityEnabled: false
         loadshedding:
@@ -31940,20 +31971,14 @@ spec:
 
       policy:
         image: mixer
-        rollingMaxSurge: 100%
-        rollingMaxUnavailable: 25%
         adapters:
           kubernetesenv:
             enabled: true
 
     galley:
-      rollingMaxSurge: 100%
-      rollingMaxUnavailable: 25%
 
     citadel:
       image: citadel
-      rollingMaxSurge: 100%
-      rollingMaxUnavailable: 25%
       selfSigned: true # indicate if self-signed CA is used.
       trustDomain: cluster.local # indicate the domain used in SPIFFE identity URL
       enableNamespacesByDefault: true
@@ -31971,8 +31996,6 @@ spec:
     gateways:
       istio-egressgateway:
         autoscaleEnabled: true
-        rollingMaxSurge: 100%
-        rollingMaxUnavailable: 25%
         zvpn:
           suffix: global
           enabled: true
@@ -31998,8 +32021,6 @@ spec:
 
       istio-ingressgateway:
         autoscaleEnabled: true
-        rollingMaxSurge: 100%
-        rollingMaxUnavailable: 25%
         applicationPorts: ""
         debug: info
         domain: ""
@@ -32077,8 +32098,6 @@ spec:
             tls: false
 
     sidecarInjectorWebhook:
-      rollingMaxSurge: 100%
-      rollingMaxUnavailable: 25%
       image: sidecar_injector
       enableNamespacesByDefault: false
       rewriteAppHTTPProbe: false

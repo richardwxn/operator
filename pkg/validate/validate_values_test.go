@@ -18,6 +18,9 @@ import (
 	"fmt"
 	"testing"
 
+	"istio.io/operator/pkg/helm"
+	"istio.io/operator/pkg/manifest"
+
 	"github.com/ghodss/yaml"
 
 	"istio.io/operator/pkg/util"
@@ -127,6 +130,52 @@ global:
 			}
 		})
 	}
+}
+
+func TestValidateValuesFromProfile(t *testing.T) {
+	tests := []struct {
+		desc     string
+		profile  string
+		wantErrs util.Errors
+	}{
+		{
+			desc:    "default profile",
+			profile: "default",
+		},
+		{
+			desc:    "demo profile",
+			profile: "demo",
+		},
+		{
+			desc:    "demo-auth profile",
+			profile: "demo-auth",
+		},
+		{
+			desc:    "minimal profile",
+			profile: "minimal",
+		},
+		{
+			desc:    "sds profile",
+			profile: "sds",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.desc, func(t *testing.T) {
+			pf, err := helm.ReadProfileYAML(tt.profile)
+			if err != nil {
+				t.Fatalf("fail to read profile: %s", tt.profile)
+			}
+			val, _, err := manifest.ParseK8SYAMLToIstioControlPlaneSpec(pf)
+			if err != nil {
+				t.Fatalf(" fail to parse profile to ISCP: (%s), got error %s", tt.profile, err)
+			}
+			errs := CheckValues(val.Values)
+			if gotErr, wantErr := errs, tt.wantErrs; !util.EqualErrors(gotErr, wantErr) {
+				t.Errorf("CheckValues of (%v): gotErr:%s, wantErr:%s", tt.profile, gotErr, wantErr)
+			}
+		})
+	}
+
 }
 
 func makeErrors(estr []string) util.Errors {

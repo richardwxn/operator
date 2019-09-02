@@ -18,11 +18,10 @@ import (
 	"fmt"
 	"testing"
 
-	"istio.io/operator/pkg/helm"
-	"istio.io/operator/pkg/manifest"
-
 	"github.com/ghodss/yaml"
 
+	"istio.io/operator/pkg/helm"
+	"istio.io/operator/pkg/manifest"
 	"istio.io/operator/pkg/util"
 )
 
@@ -139,23 +138,18 @@ func TestValidateValuesFromProfile(t *testing.T) {
 		wantErrs util.Errors
 	}{
 		{
-			desc:    "default profile",
 			profile: "default",
 		},
 		{
-			desc:    "demo profile",
 			profile: "demo",
 		},
 		{
-			desc:    "demo-auth profile",
 			profile: "demo-auth",
 		},
 		{
-			desc:    "minimal profile",
 			profile: "minimal",
 		},
 		{
-			desc:    "sds profile",
 			profile: "sds",
 		},
 	}
@@ -175,7 +169,6 @@ func TestValidateValuesFromProfile(t *testing.T) {
 			}
 		})
 	}
-
 }
 
 func makeErrors(estr []string) util.Errors {

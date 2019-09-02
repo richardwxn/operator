@@ -64,7 +64,7 @@ func NewHelmRenderer(chartsRootDir, helmBaseDir, componentName, namespace string
 	}
 }
 
-// ReadProfileYAML reads the YAML value associated with the given profile. It uses an appropriate reader for the
+// ReadProfileYAML reads the YAML values associated with the given profile. It uses an appropriate reader for the
 // profile format (compiled-in, file, HTTP, etc.).
 func ReadProfileYAML(profile string) (string, error) {
 	var err error

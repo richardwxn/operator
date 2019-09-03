@@ -22,20 +22,26 @@ WD=$(cd "$WD"; pwd)
 ROOT=$(dirname "$WD")
 cd "${ROOT}"
 
-export GO111MODULE=on
-ISTIO_DIR=$(mktemp -d)/src/istio.io/istio
+ISTIO_DIR="${GOPATH}/src/istio.io/istio"
+if [[ ! -d "${ISTIO_DIR}" ]]
+then
+    ISTIO_DIR=$(mktemp -d)/src/istio.io/istio
+    git clone https://github.com/istio/istio.git "${ISTIO_DIR}"
+fi
 ISTIO_CONTROL_NS=istio-system
 MODE=permissive
 SIMPLE_AUTH=false
 E2E_ARGS="--skip_setup=true --use_local_cluster=true --istio_namespace=${ISTIO_CONTROL_NS}"
 TMPDIR=/tmp
-KIND_IMAGE="kindest/node:v1.14.0"
-export ISTIOCTL_BIN=${ISTIOCTL_BIN:-/usr/local/bin/istioctl}
+
+export GO111MODULE=on
 export IstioTop=${ISTIO_DIR}/../../..
 
-git clone https://github.com/istio/istio.git "${ISTIO_DIR}"
-
+#kind and istioctl setup
+KIND_IMAGE="kindest/node:v1.14.0"
 pushd ${ISTIO_DIR}
+go install ./istioctl/cmd/istioctl
+export ISTIOCTL_BIN=${GOPATH}/bin/istioctl
 source "./prow/lib.sh"
 setup_kind_cluster ${KIND_IMAGE}
 popd
@@ -52,11 +58,11 @@ function run-simple-base() {
     E2E_ARGS="${E2E_ARGS} --auth_enable=${SIMPLE_AUTH} --namespace=${NS}")
 }
 function run-simple() {
-    ISTIO_CONTROL_NS=istio-system MODE=permissive NS=simple run-simple-base 
+    ISTIO_CONTROL_NS=istio-system MODE=permissive NS=simple run-simple-base
 }
 # Simple test, strict mode
 function run-simple-strict() {
-    MODE=strict ISTIO_CONTROL_NS=istio-system NS=simple-strict SIMPLE_AUTH=true run-simple-base 
+    MODE=strict ISTIO_CONTROL_NS=istio-system NS=simple-strict SIMPLE_AUTH=true run-simple-base
 }
 
 function run-bookinfo-demo() {
@@ -71,4 +77,5 @@ echo "start e2e testing"
 run-simple
 run-simple-strict
 run-bookinfo-demo
+
 

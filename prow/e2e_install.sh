@@ -38,12 +38,11 @@ export GO111MODULE=on
 export IstioTop=${ISTIO_DIR}/../../..
 
 #kind and istioctl setup
-KIND_IMAGE="kindest/node:v1.14.0"
 pushd ${ISTIO_DIR}
 go install ./istioctl/cmd/istioctl
 export ISTIOCTL_BIN=${GOPATH}/bin/istioctl
 source "./prow/lib.sh"
-setup_kind_cluster ${KIND_IMAGE}
+setup_kind_cluster ${NODE_IMAGE}
 popd
 
 echo "installing istio with operator CLI"

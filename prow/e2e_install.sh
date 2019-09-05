@@ -20,19 +20,19 @@ set -x
 WD=$(dirname "$0")
 WD=$(cd "$WD"; pwd)
 ROOT=$(dirname "$WD")
+export GOPATH=$(cd ../../../; pwd)
 cd "${ROOT}"
 
 ISTIO_DIR="${GOPATH}/src/istio.io/istio"
 if [[ ! -d "${ISTIO_DIR}" ]]
 then
-    ISTIO_DIR=$(mktemp -d)/src/istio.io/istio
     git clone https://github.com/istio/istio.git "${ISTIO_DIR}"
 fi
 
 ISTIO_NS=istio-system
 MODE=permissive
 SIMPLE_AUTH=false
-E2E_ARGS="--skip_setup=true --use_local_cluster=true --istio_namespace=${ISTIO_CONTROL_NS}"
+E2E_ARGS="--skip_setup=true --use_local_cluster=true --istio_namespace=${ISTIO_NS}"
 TMPDIR=/tmp
 export GO111MODULE=on
 export IstioTop=${ISTIO_DIR}/../../..

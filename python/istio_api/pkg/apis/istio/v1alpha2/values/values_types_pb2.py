@@ -15,22 +15,23 @@ _sym_db = _symbol_database.Default()
 
 from google.protobuf import duration_pb2 as google_dot_protobuf_dot_duration__pb2
 from k8s.io.api.core.v1 import generated_pb2 as k8s_dot_io_dot_api_dot_core_dot_v1_dot_generated__pb2
+from github.com.gogo.protobuf.protobuf.google.protobuf import wrappers_pb2 as github_dot_com_dot_gogo_dot_protobuf_dot_protobuf_dot_google_dot_protobuf_dot_wrappers__pb2
 
 
 DESCRIPTOR = _descriptor.FileDescriptor(
   name='pkg/apis/istio/v1alpha2/values/values_types.proto',
-  package='values',
+  package='v1alpha2',
   syntax='proto3',
   serialized_options=_b('Z\010v1alpha2'),
-  serialized_pb=_b('\n1pkg/apis/istio/v1alpha2/values/values_types.proto\x12\x06values\x1a\x1egoogle/protobuf/duration.proto\x1a\"k8s.io/api/core/v1/generated.proto\"4\n\x12\x41\x64\x64onIngressConfig\x12\x0f\n\x07\x65nabled\x18\x01 \x01(\x08\x12\r\n\x05hosts\x18\x02 \x03(\t\";\n\nArchConfig\x12\r\n\x05\x61md64\x18\x01 \x01(\r\x12\x0f\n\x07ppc64le\x18\x02 \x01(\r\x12\r\n\x05s390x\x18\x03 \x01(\r\"\x1c\n\tCNIConfig\x12\x0f\n\x07\x65nabled\x18\x01 \x01(\x08\">\n\x1a\x43PUTargetUtilizationConfig\x12 \n\x18targetAverageUtilization\x18\x01 \x01(\x05\"\xb1\x01\n\x11\x43\x65rtManagerConfig\x12\x0f\n\x07\x65nabled\x18\x01 \x01(\x08\x12\x0b\n\x03hub\x18\x02 \x01(\t\x12\x0b\n\x03tag\x18\x03 \x01(\t\x12\x34\n\x0cnodeSelector\x18\x04 \x01(\x0b\x32\x1e.values.TypeMapStringInterface\x12;\n\tresources\x18\x05 \x01(\x0b\x32(.k8s.io.api.core.v1.ResourceRequirements\"\x9e\x01\n\rCoreDNSConfig\x12\x0f\n\x07\x65nabled\x18\x01 \x01(\x08\x12\x14\n\x0c\x63oreDNSImage\x18\x02 \x01(\t\x12\x1a\n\x12\x63oreDNSPluginImage\x18\x03 \x01(\t\x12\x34\n\x0cnodeSelector\x18\x04 \x01(\x0b\x32\x1e.values.TypeMapStringInterface\x12\x14\n\x0creplicaCount\x18\x05 \x01(\r\"3\n DefaultPodDisruptionBudgetConfig\x12\x0f\n\x07\x65nabled\x18\x01 \x01(\x08\"K\n\x16\x44\x65\x66\x61ultResourcesConfig\x12\x31\n\x08requests\x18\x01 \x01(\x0b\x32\x1f.values.ResourcesRequestsConfig\"\xb2\x06\n\x13\x45gressGatewayConfig\x12\x18\n\x10\x61utoscaleEnabled\x18\x01 \x01(\x08\x12\x14\n\x0c\x61utoscaleMax\x18\x02 \x01(\r\x12\x14\n\x0c\x61utoscaleMin\x18\x03 \x01(\r\x12/\n\x03\x63pu\x18\x05 \x01(\x0b\x32\".values.CPUTargetUtilizationConfig\x12\x0f\n\x07\x65nabled\x18\x07 \x01(\x08\x12\x31\n\x03\x65nv\x18\x08 \x03(\x0b\x32$.values.EgressGatewayConfig.EnvEntry\x12+\n\x06labels\x18\t \x01(\x0b\x32\x1b.values.GatewayLabelsConfig\x12\x34\n\x0cnodeSelector\x18\n \x01(\x0b\x32\x1e.values.TypeMapStringInterface\x12\x36\n\x0epodAnnotations\x18\x0b \x01(\x0b\x32\x1e.values.TypeMapStringInterface\x12K\n\x1cpodAntiAffinityLabelSelector\x18\x0c \x01(\x0b\x32%.values.TypeSliceOfMapStringInterface\x12O\n podAntiAffinityTermLabelSelector\x18\r \x01(\x0b\x32%.values.TypeSliceOfMapStringInterface\x12\"\n\x05ports\x18\x0e \x03(\x0b\x32\x13.values.PortsConfig\x12;\n\tresources\x18\x0f \x01(\x0b\x32(.k8s.io.api.core.v1.ResourceRequirements\x12+\n\rsecretVolumes\x18\x10 \x03(\x0b\x32\x14.values.SecretVolume\x12:\n\x12serviceAnnotations\x18\x11 \x01(\x0b\x32\x1e.values.TypeMapStringInterface\x12\x0c\n\x04type\x18\x12 \x01(\t\x12#\n\x04zvpn\x18\x13 \x01(\x0b\x32\x15.values.ZeroVPNConfig\x1a*\n\x08\x45nvEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"A\n\x12\x45nvoyMetricsConfig\x12\x0f\n\x07\x65nabled\x18\x01 \x01(\x08\x12\x0c\n\x04host\x18\x02 \x01(\t\x12\x0c\n\x04port\x18\x03 \x01(\x05\"\xfa\x02\n\x0cGalleyConfig\x12\x0f\n\x07\x65nabled\x18\x01 \x01(\x08\x12\r\n\x05image\x18\x02 \x01(\t\x12,\n\x04mesh\x18\x03 \x03(\x0b\x32\x1e.values.GalleyConfig.MeshEntry\x12K\n\x1cpodAntiAffinityLabelSelector\x18\x04 \x01(\x0b\x32%.values.TypeSliceOfMapStringInterface\x12O\n podAntiAffinityTermLabelSelector\x18\x05 \x01(\x0b\x32%.values.TypeSliceOfMapStringInterface\x12\x14\n\x0creplicaCount\x18\x06 \x01(\r\x12;\n\tresources\x18\x07 \x01(\x0b\x32(.k8s.io.api.core.v1.ResourceRequirements\x1a+\n\tMeshEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"1\n\x13GatewayLabelsConfig\x12\x0b\n\x03\x61pp\x18\x01 \x01(\t\x12\r\n\x05istio\x18\x02 \x01(\t\"\x95\x01\n\x0eGatewaysConfig\x12\x37\n\x12istioEgressgateway\x18\x01 \x01(\x0b\x32\x1b.values.EgressGatewayConfig\x12\x0f\n\x07\x65nabled\x18\x02 \x01(\x08\x12\x39\n\x13istioIngressgateway\x18\x04 \x01(\x0b\x32\x1c.values.IngressGatewayConfig\"\xa1\n\n\x0cGlobalConfig\x12 \n\x04\x61rch\x18\x01 \x01(\x0b\x32\x12.values.ArchConfig\x12\x17\n\x0f\x63onfigNamespace\x18\x02 \x01(\t\x12\x18\n\x10\x63onfigValidation\x18\x03 \x01(\x08\x12#\n\x1b\x63ontrolPlaneSecurityEnabled\x18\x04 \x01(\x08\x12;\n\x13\x64\x65\x66\x61ultNodeSelector\x18\x06 \x01(\x0b\x32\x1e.values.TypeMapStringInterface\x12L\n\x1a\x64\x65\x66\x61ultPodDisruptionBudget\x18\x07 \x01(\x0b\x32(.values.DefaultPodDisruptionBudgetConfig\x12\x1b\n\x13\x64isablePolicyChecks\x18\x08 \x01(\x08\x12\x38\n\x10\x64\x65\x66\x61ultResources\x18\t \x01(\x0b\x32\x1e.values.DefaultResourcesConfig\x12\x16\n\x0e\x65nableHelmTest\x18\n \x01(\x08\x12\x15\n\renableTracing\x18\x0b \x01(\x08\x12\x0b\n\x03hub\x18\x0c \x01(\t\x12\x17\n\x0fimagePullPolicy\x18\r \x01(\t\x12\x16\n\x0eistioNamespace\x18\x0e \x01(\t\x12\x46\n\x11localityLbSetting\x18\x0f \x03(\x0b\x32+.values.GlobalConfig.LocalityLbSettingEntry\x12\x33\n\nk8sIngress\x18\x10 \x01(\x0b\x32\x1f.values.KubernetesIngressConfig\x12,\n\x07logging\x18\x11 \x01(\x0b\x32\x1b.values.GlobalLoggingConfig\x12\x32\n\rmeshExpansion\x18\x12 \x01(\x0b\x32\x1b.values.MeshExpansionConfig\x12\x34\n\x0cmeshNetworks\x18\x13 \x01(\x0b\x32\x1e.values.TypeMapStringInterface\x12\x16\n\x0emonitoringPort\x18\x14 \x01(\r\x12 \n\x04mtls\x18\x15 \x01(\x0b\x32\x12.values.MTLSConfig\x12\x30\n\x0cmultiCluster\x18\x16 \x01(\x0b\x32\x1a.values.MultiClusterConfig\x12\x14\n\x0coneNamespace\x18\x17 \x01(\x08\x12\x42\n\x15outboundTrafficPolicy\x18\x18 \x01(\x0b\x32#.values.OutboundTrafficPolicyConfig\x12\x1b\n\x13policyCheckFailOpen\x18\x19 \x01(\x08\x12\x17\n\x0fpolicyNamespace\x18\x1a \x01(\t\x12\x19\n\x11priorityClassName\x18\x1b \x01(\t\x12\"\n\x05proxy\x18\x1c \x01(\x0b\x32\x13.values.ProxyConfig\x12*\n\tproxyInit\x18\x1d \x01(\x0b\x32\x17.values.ProxyInitConfig\x12\x1e\n\x03sds\x18\x1e \x01(\x0b\x32\x11.values.SDSConfig\x12\x0b\n\x03tag\x18\x1f \x01(\t\x12\x1a\n\x12telemetryNamespace\x18  \x01(\t\x12$\n\x06tracer\x18! \x01(\x0b\x32\x14.values.TracerConfig\x12\x13\n\x0btrustDomain\x18\" \x01(\t\x12\x0e\n\x06useMCP\x18# \x01(\x08\x1a\x38\n\x16LocalityLbSettingEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"$\n\x13GlobalLoggingConfig\x12\r\n\x05level\x18\x01 \x01(\t\"\xdc\x08\n\x14IngressGatewayConfig\x12\x18\n\x10\x61utoscaleEnabled\x18\x01 \x01(\x08\x12\x14\n\x0c\x61utoscaleMax\x18\x02 \x01(\r\x12\x14\n\x0c\x61utoscaleMin\x18\x03 \x01(\r\x12/\n\x03\x63pu\x18\x05 \x01(\x0b\x32\".values.CPUTargetUtilizationConfig\x12\x15\n\rcustomService\x18\x06 \x01(\x08\x12\r\n\x05\x64\x65\x62ug\x18\x07 \x01(\t\x12\x0e\n\x06\x64omain\x18\x08 \x01(\t\x12\x0f\n\x07\x65nabled\x18\n \x01(\x08\x12\x32\n\x03\x65nv\x18\x0b \x03(\x0b\x32%.values.IngressGatewayConfig.EnvEntry\x12\x13\n\x0b\x65xternalIPs\x18\x0c \x03(\t\x12\x12\n\nk8sIngress\x18\r \x01(\x08\x12\x17\n\x0fk8sIngressHttps\x18\x0e \x01(\x08\x12+\n\x06labels\x18\x0f \x01(\x0b\x32\x1b.values.GatewayLabelsConfig\x12\x16\n\x0eloadBalancerIP\x18\x10 \x01(\t\x12 \n\x18loadBalancerSourceRanges\x18\x11 \x03(\t\x12/\n\x12meshExpansionPorts\x18\x12 \x03(\x0b\x32\x13.values.PortsConfig\x12\x34\n\x0cnodeSelector\x18\x13 \x01(\x0b\x32\x1e.values.TypeMapStringInterface\x12\x36\n\x0epodAnnotations\x18\x14 \x01(\x0b\x32\x1e.values.TypeMapStringInterface\x12K\n\x1cpodAntiAffinityLabelSelector\x18\x15 \x01(\x0b\x32%.values.TypeSliceOfMapStringInterface\x12O\n podAntiAffinityTermLabelSelector\x18\x16 \x01(\x0b\x32%.values.TypeSliceOfMapStringInterface\x12\"\n\x05ports\x18\x17 \x03(\x0b\x32\x13.values.PortsConfig\x12\x14\n\x0creplicaCount\x18\x18 \x01(\r\x12\x31\n\tresources\x18\x19 \x01(\x0b\x32\x1e.values.TypeMapStringInterface\x12,\n\x03sds\x18\x1a \x01(\x0b\x32\x1f.values.IngressGatewaySdsConfig\x12+\n\rsecretVolumes\x18\x1b \x03(\x0b\x32\x14.values.SecretVolume\x12:\n\x12serviceAnnotations\x18\x1c \x01(\x0b\x32\x1e.values.TypeMapStringInterface\x12\x0c\n\x04type\x18\x1d \x01(\t\x12.\n\x04zvpn\x18\x1e \x01(\x0b\x32 .values.IngressGatewayZvpnConfig\x1a*\n\x08\x45nvEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"9\n\x17IngressGatewaySdsConfig\x12\x0f\n\x07\x65nabled\x18\x01 \x01(\x08\x12\r\n\x05image\x18\x02 \x01(\t\";\n\x18IngressGatewayZvpnConfig\x12\x0f\n\x07\x65nabled\x18\x01 \x01(\x08\x12\x0e\n\x06suffix\x18\x02 \x01(\t\"2\n\x1fKubernetesEnvMixerAdapterConfig\x12\x0f\n\x07\x65nabled\x18\x01 \x01(\x08\"T\n\x17KubernetesIngressConfig\x12\x0f\n\x07\x65nabled\x18\x01 \x01(\x08\x12\x13\n\x0b\x65nableHttps\x18\x02 \x01(\x08\x12\x13\n\x0bgatewayName\x18\x03 \x01(\t\"_\n\x12LoadSheddingConfig\x12\x18\n\x10latencyThreshold\x18\x01 \x01(\t\"/\n\x04mode\x12\x0c\n\x08\x44ISABLED\x10\x00\x12\x0c\n\x08LOG_ONLY\x10\x01\x12\x0b\n\x07\x45NFORCE\x10\x02\"\x1d\n\nMTLSConfig\x12\x0f\n\x07\x65nabled\x18\x01 \x01(\x08\"6\n\x13MeshExpansionConfig\x12\x0f\n\x07\x65nabled\x18\x01 \x01(\x08\x12\x0e\n\x06useILB\x18\x02 \x01(\x08\"\xd7\x01\n\x13MixerAdaptersConfig\x12>\n\rkubernetesenv\x18\x01 \x01(\x0b\x32\'.values.KubernetesEnvMixerAdapterConfig\x12\x38\n\nprometheus\x18\x02 \x01(\x0b\x32$.values.PrometheusMixerAdapterConfig\x12.\n\x05stdio\x18\x03 \x01(\x0b\x32\x1f.values.StdioMixerAdapterConfig\x12\x16\n\x0euseAdapterCRDs\x18\x04 \x01(\x08\"i\n\x0bMixerConfig\x12)\n\x06policy\x18\x01 \x01(\x0b\x32\x19.values.MixerPolicyConfig\x12/\n\ttelemetry\x18\x02 \x01(\x0b\x32\x1c.values.MixerTelemetryConfig\"\xf8\x01\n\x11MixerPolicyConfig\x12\x18\n\x10\x61utoscaleEnabled\x18\x01 \x01(\x08\x12\x14\n\x0c\x61utoscaleMax\x18\x02 \x01(\r\x12\x14\n\x0c\x61utoscaleMin\x18\x03 \x01(\r\x12/\n\x03\x63pu\x18\x04 \x01(\x0b\x32\".values.CPUTargetUtilizationConfig\x12\x0f\n\x07\x65nabled\x18\x05 \x01(\x08\x12\r\n\x05image\x18\x06 \x01(\t\x12\x36\n\x0epodAnnotations\x18\x07 \x01(\x0b\x32\x1e.values.TypeMapStringInterface\x12\x14\n\x0creplicaCount\x18\x08 \x01(\r\"\xcf\x04\n\x14MixerTelemetryConfig\x12-\n\x08\x61\x64\x61pters\x18\x01 \x01(\x0b\x32\x1b.values.MixerAdaptersConfig\x12\x18\n\x10\x61utoscaleEnabled\x18\x02 \x01(\x08\x12\x14\n\x0c\x61utoscaleMax\x18\x03 \x01(\r\x12\x14\n\x0c\x61utoscaleMin\x18\x04 \x01(\r\x12/\n\x03\x63pu\x18\x05 \x01(\x0b\x32\".values.CPUTargetUtilizationConfig\x12\x0f\n\x07\x65nabled\x18\x06 \x01(\x08\x12\x32\n\x03\x65nv\x18\x07 \x03(\x0b\x32%.values.MixerTelemetryConfig.EnvEntry\x12\r\n\x05image\x18\x08 \x01(\t\x12\x30\n\x0cloadshedding\x18\t \x01(\x0b\x32\x1a.values.LoadSheddingConfig\x12\x34\n\x0cnodeSelector\x18\n \x01(\x0b\x32\x1e.values.TypeMapStringInterface\x12\x36\n\x0epodAnnotations\x18\x0b \x01(\x0b\x32\x1e.values.TypeMapStringInterface\x12\x14\n\x0creplicaCount\x18\x0c \x01(\r\x12;\n\tresources\x18\r \x01(\x0b\x32(.k8s.io.api.core.v1.ResourceRequirements\x12\x1e\n\x16sessionAffinityEnabled\x18\x0e \x01(\x08\x1a*\n\x08\x45nvEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"%\n\x12MultiClusterConfig\x12\x0f\n\x07\x65nabled\x18\x01 \x01(\x08\"\x94\x01\n\x0fNodeAgentConfig\x12\x0f\n\x07\x65nabled\x18\x01 \x01(\x08\x12+\n\x03\x65nv\x18\x02 \x01(\x0b\x32\x1e.values.TypeMapStringInterface\x12\r\n\x05image\x18\x03 \x01(\t\x12\x34\n\x0cnodeSelector\x18\x04 \x01(\x0b\x32\x1e.values.TypeMapStringInterface\"G\n\x1bOutboundTrafficPolicyConfig\"(\n\x04mode\x12\r\n\tALLOW_ANY\x10\x00\x12\x11\n\rREGISTRY_ONLY\x10\x01\"\xc3\x07\n\x0bPilotConfig\x12\x0f\n\x07\x65nabled\x18\x01 \x01(\x08\x12\x18\n\x10\x61utoscaleEnabled\x18\x02 \x01(\x08\x12\x14\n\x0c\x61utoscaleMin\x18\x03 \x01(\r\x12\x14\n\x0c\x61utoscaleMax\x18\x04 \x01(\r\x12\x14\n\x0creplicaCount\x18\x05 \x01(\r\x12\r\n\x05image\x18\x06 \x01(\t\x12\x0f\n\x07sidecar\x18\x07 \x01(\x08\x12\x15\n\rtraceSampling\x18\x08 \x01(\x01\x12;\n\tresources\x18\t \x01(\x0b\x32(.k8s.io.api.core.v1.ResourceRequirements\x12\x17\n\x0f\x63onfigNamespace\x18\n \x01(\t\x12/\n\x03\x63pu\x18\x0b \x01(\x0b\x32\".values.CPUTargetUtilizationConfig\x12\x34\n\x0cnodeSelector\x18\x0c \x01(\x0b\x32\x1e.values.TypeMapStringInterface\x12\x42\n\x1fkeepaliveMaxServerConnectionAge\x18\r \x01(\x0b\x32\x19.google.protobuf.Duration\x12\x38\n\x10\x64\x65ploymentLabels\x18\x0e \x01(\x0b\x32\x1e.values.TypeMapStringInterface\x12\x34\n\x0cmeshNetworks\x18\x0f \x01(\x0b\x32\x1e.values.TypeMapStringInterface\x12K\n\x1cpodAntiAffinityLabelSelector\x18\x10 \x01(\x0b\x32%.values.TypeSliceOfMapStringInterface\x12O\n podAntiAffinityTermLabelSelector\x18\x11 \x01(\x0b\x32%.values.TypeSliceOfMapStringInterface\x12\x11\n\tconfigMap\x18\x12 \x01(\x08\x12+\n\x07ingress\x18\x13 \x01(\x0b\x32\x1a.values.PilotIngressConfig\x12\x0e\n\x06useMCP\x18\x14 \x01(\x08\x12)\n\x03\x65nv\x18\x15 \x03(\x0b\x32\x1c.values.PilotConfig.EnvEntry\x12)\n\x06policy\x18\x16 \x01(\x0b\x32\x19.values.PilotPolicyConfig\x12/\n\ttelemetry\x18\x17 \x01(\x0b\x32\x1c.values.PilotTelemetryConfig\x1a*\n\x08\x45nvEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"}\n\x12PilotIngressConfig\x12\x16\n\x0eingressService\x18\x01 \x01(\t\x12\x14\n\x0cingressClass\x18\x03 \x01(\t\"9\n\x15ingressControllerMode\x12\x0b\n\x07\x44\x45\x46\x41ULT\x10\x00\x12\n\n\x06STRICT\x10\x01\x12\x07\n\x03OFF\x10\x02\"$\n\x11PilotPolicyConfig\x12\x0f\n\x07\x65nabled\x18\x01 \x01(\x08\"\'\n\x14PilotTelemetryConfig\x12\x0f\n\x07\x65nabled\x18\x01 \x01(\x08\"O\n\x0bPortsConfig\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x0c\n\x04port\x18\x02 \x01(\x05\x12\x10\n\x08nodePort\x18\x03 \x01(\x05\x12\x12\n\ntargetPort\x18\x04 \x01(\x05\"\x99\x03\n\x10PrometheusConfig\x12 \n\x18\x63reatePrometheusResource\x18\x01 \x01(\x08\x12\x0f\n\x07\x65nabled\x18\x02 \x01(\x08\x12\x14\n\x0creplicaCount\x18\x03 \x01(\r\x12\x0b\n\x03hub\x18\x04 \x01(\t\x12\x0b\n\x03tag\x18\x05 \x01(\t\x12\x11\n\tretention\x18\x06 \x01(\t\x12\x34\n\x0cnodeSelector\x18\x07 \x01(\x0b\x32\x1e.values.TypeMapStringInterface\x12\x31\n\x0escrapeInterval\x18\x08 \x01(\x0b\x32\x19.google.protobuf.Duration\x12\x13\n\x0b\x63ontextPath\x18\t \x01(\t\x12+\n\x07ingress\x18\n \x01(\x0b\x32\x1a.values.AddonIngressConfig\x12\x30\n\x07service\x18\x0b \x01(\x0b\x32\x1f.values.PrometheusServiceConfig\x12\x32\n\x08security\x18\x0c \x01(\x0b\x32 .values.PrometheusSecurityConfig\"i\n\x1cPrometheusMixerAdapterConfig\x12\x0f\n\x07\x65nabled\x18\x01 \x01(\x08\x12\x38\n\x15metricsExpiryDuration\x18\x02 \x01(\x0b\x32\x19.google.protobuf.Duration\"+\n\x18PrometheusSecurityConfig\x12\x0f\n\x07\x65nabled\x18\x01 \x01(\x08\"\x89\x01\n\x17PrometheusServiceConfig\x12\x33\n\x0b\x61nnotations\x18\x01 \x01(\x0b\x32\x1e.values.TypeMapStringInterface\x12\x39\n\x08nodePort\x18\x02 \x01(\x0b\x32\'.values.PrometheusServiceNodePortConfig\"@\n\x1fPrometheusServiceNodePortConfig\x12\x0f\n\x07\x65nabled\x18\x01 \x01(\x08\x12\x0c\n\x04port\x18\x02 \x01(\r\"\xb4\x06\n\x0bProxyConfig\x12\x15\n\raccessLogFile\x18\x01 \x01(\t\x12\x17\n\x0f\x61\x63\x63\x65ssLogFormat\x18\x02 \x01(\t\x12\x15\n\rclusterDomain\x18\x05 \x01(\t\x12\x19\n\x11\x63omponentLogLevel\x18\x06 \x01(\t\x12\x13\n\x0b\x63oncurrency\x18\x07 \x01(\r\x12\x31\n\x0e\x64nsRefreshRate\x18\x08 \x01(\x0b\x32\x19.google.protobuf.Duration\x12\x16\n\x0e\x65nableCoreDump\x18\t \x01(\x08\x12\x37\n\x13\x65nvoyMetricsService\x18\n \x01(\x0b\x32\x1a.values.EnvoyMetricsConfig\x12/\n\x0b\x65nvoyStatsd\x18\x0b \x01(\x0b\x32\x1a.values.EnvoyMetricsConfig\x12\x1b\n\x13\x65xcludeInboundPorts\x18\x0c \x01(\t\x12\x17\n\x0f\x65xcludeIPRanges\x18\r \x01(\t\x12\r\n\x05image\x18\x0e \x01(\t\x12\x1b\n\x13includeInboundPorts\x18\x0f \x01(\t\x12\x17\n\x0fincludeIPRanges\x18\x10 \x01(\t\x12\x1a\n\x12kubevirtInterfaces\x18\x11 \x01(\t\x12\x10\n\x08logLevel\x18\x12 \x01(\t\x12\x12\n\nprivileged\x18\x13 \x01(\x08\x12$\n\x1creadinessInitialDelaySeconds\x18\x14 \x01(\r\x12\x1e\n\x16readinessPeriodSeconds\x18\x15 \x01(\r\x12!\n\x19readinessFailureThreshold\x18\x16 \x01(\r\x12\x12\n\nstatusPort\x18\x17 \x01(\r\x12;\n\tresources\x18\x18 \x01(\x0b\x32(.k8s.io.api.core.v1.ResourceRequirements\"\'\n\x11\x61\x63\x63\x65ssLogEncoding\x12\x08\n\x04JSON\x10\x00\x12\x08\n\x04TEXT\x10\x01\"\'\n\nautoInject\x12\x0b\n\x07\x45NABLED\x10\x00\x12\x0c\n\x08\x44ISABLED\x10\x01\"0\n\x06tracer\x12\n\n\x06ZIPKIN\x10\x00\x12\r\n\tLIGHTSTEP\x10\x01\x12\x0b\n\x07\x44\x41TADOG\x10\x02\" \n\x0fProxyInitConfig\x12\r\n\x05image\x18\x01 \x01(\t\"6\n\x17ResourcesRequestsConfig\x12\x0b\n\x03\x63pu\x18\x01 \x01(\t\x12\x0e\n\x06memory\x18\x02 \x01(\t\"^\n\tSDSConfig\x12\x0f\n\x07\x65nabled\x18\x01 \x01(\x08\x12\x0f\n\x07udsPath\x18\x02 \x01(\t\x12\x14\n\x0cuseNormalJwt\x18\x03 \x01(\x08\x12\x19\n\x11useTrustworthyJwt\x18\x04 \x01(\x08\"C\n\x0cSecretVolume\x12\x11\n\tmountPath\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x12\n\nsecretName\x18\x03 \x01(\t\"\xa8\x02\n\x0eSecurityConfig\x12\x0f\n\x07\x65nabled\x18\x01 \x01(\x08\x12\x14\n\x0creplicaCount\x18\x02 \x01(\r\x12\r\n\x05image\x18\x03 \x01(\t\x12\x12\n\nselfSigned\x18\x04 \x01(\x08\x12\x13\n\x0btrustDomain\x18\x05 \x01(\t\x12\x36\n\x08\x64nsCerts\x18\x06 \x03(\x0b\x32$.values.SecurityConfig.DnsCertsEntry\x12\x18\n\x10\x63reateMeshPolicy\x18\x07 \x01(\x08\x12\x34\n\x0cnodeSelector\x18\x08 \x01(\x0b\x32\x1e.values.TypeMapStringInterface\x1a/\n\rDnsCertsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"v\n\rServiceConfig\x12\x33\n\x0b\x61nnotations\x18\x01 \x01(\x0b\x32\x1e.values.TypeMapStringInterface\x12\x14\n\x0c\x65xternalPort\x18\x02 \x01(\r\x12\x0c\n\x04name\x18\x03 \x01(\t\x12\x0c\n\x04type\x18\x12 \x01(\t\"\xfe\x03\n\x15SidecarInjectorConfig\x12\x0f\n\x07\x65nabled\x18\x01 \x01(\x08\x12!\n\x19\x65nableNamespacesByDefault\x18\x02 \x01(\x08\x12\r\n\x05image\x18\x03 \x01(\t\x12\x34\n\x0cnodeSelector\x18\n \x01(\x0b\x32\x1e.values.TypeMapStringInterface\x12\x42\n\x13neverInjectSelector\x18\x0b \x01(\x0b\x32%.values.TypeSliceOfMapStringInterface\x12\x43\n\x14\x61lwaysInjectSelector\x18\x0c \x01(\x0b\x32%.values.TypeSliceOfMapStringInterface\x12K\n\x1cpodAntiAffinityLabelSelector\x18\r \x01(\x0b\x32%.values.TypeSliceOfMapStringInterface\x12O\n podAntiAffinityTermLabelSelector\x18\x0e \x01(\x0b\x32%.values.TypeSliceOfMapStringInterface\x12\x14\n\x0creplicaCount\x18\x0f \x01(\r\x12\x1b\n\x13rewriteAppHTTPProbe\x18\x10 \x01(\x08\x12\x12\n\nselfSigned\x18\x11 \x01(\x08\"@\n\x17StdioMixerAdapterConfig\x12\x0f\n\x07\x65nabled\x18\x01 \x01(\x08\x12\x14\n\x0coutputAsJson\x18\x02 \x01(\x08\"\x9a\x01\n\x0cTracerConfig\x12,\n\x07\x64\x61tadog\x18\x01 \x01(\x0b\x32\x1b.values.TracerDatadogConfig\x12\x30\n\tlightstep\x18\x02 \x01(\x0b\x32\x1d.values.TracerLightStepConfig\x12*\n\x06zipkin\x18\x03 \x01(\x0b\x32\x1a.values.TracerZipkinConfig\"&\n\x13TracerDatadogConfig\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\"a\n\x15TracerLightStepConfig\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12\x13\n\x0b\x61\x63\x63\x65ssToken\x18\x02 \x01(\t\x12\x12\n\ncacertPath\x18\x03 \x01(\t\x12\x0e\n\x06secure\x18\x04 \x01(\x08\"%\n\x12TracerZipkinConfig\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\"\x99\x02\n\rTracingConfig\x12\x0f\n\x07\x65nabled\x18\x01 \x01(\x08\x12-\n\x07ingress\x18\x02 \x01(\x0b\x32\x1c.values.TracingIngressConfig\x12+\n\x06jaeger\x18\x03 \x01(\x0b\x32\x1b.values.TracingJaegerConfig\x12\x34\n\x0cnodeSelector\x18\x04 \x01(\x0b\x32\x1e.values.TypeMapStringInterface\x12\x10\n\x08provider\x18\x05 \x01(\t\x12&\n\x07service\x18\x06 \x01(\x0b\x32\x15.values.ServiceConfig\x12+\n\x06zipkin\x18\x07 \x01(\x0b\x32\x1b.values.TracingZipkinConfig\"\'\n\x14TracingIngressConfig\x12\x0f\n\x07\x65nabled\x18\x01 \x01(\x08\"b\n\x13TracingJaegerConfig\x12\x0b\n\x03hub\x18\x01 \x01(\t\x12\x0b\n\x03tag\x18\x02 \x01(\t\x12\x31\n\x06memory\x18\x03 \x01(\x0b\x32!.values.TracingJaegerMemoryConfig\"/\n\x19TracingJaegerMemoryConfig\x12\x12\n\nmax_traces\x18\x01 \x01(\r\"\xf1\x01\n\x13TracingZipkinConfig\x12\x0b\n\x03hub\x18\x01 \x01(\t\x12\x0b\n\x03tag\x18\x02 \x01(\t\x12\x19\n\x11probeStartupDelay\x18\x03 \x01(\r\x12\x11\n\tqueryPort\x18\x04 \x01(\r\x12;\n\tresources\x18\x05 \x01(\x0b\x32(.k8s.io.api.core.v1.ResourceRequirements\x12\x14\n\x0cjavaOptsHeap\x18\x06 \x01(\t\x12\x10\n\x08maxSpans\x18\x07 \x01(\r\x12-\n\x04node\x18\x08 \x01(\x0b\x32\x1f.values.TracingZipkinNodeConfig\"\'\n\x17TracingZipkinNodeConfig\x12\x0c\n\x04\x63pus\x18\x01 \x01(\r\"\xe5\x04\n\x06Values\x12.\n\x0b\x63\x65rtmanager\x18\x01 \x01(\x0b\x32\x19.values.CertManagerConfig\x12$\n\tistio_cni\x18\x02 \x01(\x0b\x32\x11.values.CNIConfig\x12+\n\x0cistiocoredns\x18\x03 \x01(\x0b\x32\x15.values.CoreDNSConfig\x12$\n\x06galley\x18\x04 \x01(\x0b\x32\x14.values.GalleyConfig\x12(\n\x08gateways\x18\x05 \x01(\x0b\x32\x16.values.GatewaysConfig\x12$\n\x06global\x18\x06 \x01(\x0b\x32\x14.values.GlobalConfig\x12/\n\x07grafana\x18\x07 \x01(\x0b\x32\x1e.values.TypeMapStringInterface\x12\"\n\x05mixer\x18\x08 \x01(\x0b\x32\x13.values.MixerConfig\x12*\n\tnodeagent\x18\t \x01(\x0b\x32\x17.values.NodeAgentConfig\x12\"\n\x05pilot\x18\n \x01(\x0b\x32\x13.values.PilotConfig\x12,\n\nprometheus\x18\x0b \x01(\x0b\x32\x18.values.PrometheusConfig\x12(\n\x08security\x18\x0c \x01(\x0b\x32\x16.values.SecurityConfig\x12=\n\x16sidecarInjectorWebhook\x18\r \x01(\x0b\x32\x1d.values.SidecarInjectorConfig\x12&\n\x07tracing\x18\x0e \x01(\x0b\x32\x15.values.TracingConfig\"\x18\n\x16TypeMapStringInterface\"\x1f\n\x1dTypeSliceOfMapStringInterface\"0\n\rZeroVPNConfig\x12\x0f\n\x07\x65nabled\x18\x01 \x01(\x08\x12\x0e\n\x06suffix\x18\x02 \x01(\tB\nZ\x08v1alpha2b\x06proto3')
+  serialized_pb=_b('\n1pkg/apis/istio/v1alpha2/values/values_types.proto\x12\x08v1alpha2\x1a\x1egoogle/protobuf/duration.proto\x1a\"k8s.io/api/core/v1/generated.proto\x1a@github.com/gogo/protobuf/protobuf/google/protobuf/wrappers.proto\"P\n\x12\x41\x64\x64onIngressConfig\x12+\n\x07\x65nabled\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\r\n\x05hosts\x18\x02 \x03(\t\";\n\nArchConfig\x12\r\n\x05\x61md64\x18\x01 \x01(\r\x12\x0f\n\x07ppc64le\x18\x02 \x01(\r\x12\r\n\x05s390x\x18\x03 \x01(\r\"8\n\tCNIConfig\x12+\n\x07\x65nabled\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\">\n\x1a\x43PUTargetUtilizationConfig\x12 \n\x18targetAverageUtilization\x18\x01 \x01(\x05\"\xba\x01\n\x11\x43\x65rtManagerConfig\x12+\n\x07\x65nabled\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x0b\n\x03hub\x18\x02 \x01(\t\x12\x0b\n\x03tag\x18\x03 \x01(\t\x12\x36\n\x0cnodeSelector\x18\x04 \x01(\x0b\x32 .v1alpha2.TypeMapStringInterface\x12&\n\tresources\x18\x05 \x01(\x0b\x32\x13.v1alpha2.Resources\"\xd1\x01\n\tResources\x12/\n\x06limits\x18\x01 \x03(\x0b\x32\x1f.v1alpha2.Resources.LimitsEntry\x12\x33\n\x08requests\x18\x02 \x03(\x0b\x32!.v1alpha2.Resources.RequestsEntry\x1a-\n\x0bLimitsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x1a/\n\rRequestsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\xbc\x01\n\rCoreDNSConfig\x12+\n\x07\x65nabled\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x14\n\x0c\x63oreDNSImage\x18\x02 \x01(\t\x12\x1a\n\x12\x63oreDNSPluginImage\x18\x03 \x01(\t\x12\x36\n\x0cnodeSelector\x18\x04 \x01(\x0b\x32 .v1alpha2.TypeMapStringInterface\x12\x14\n\x0creplicaCount\x18\x05 \x01(\r\"O\n DefaultPodDisruptionBudgetConfig\x12+\n\x07\x65nabled\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\"M\n\x16\x44\x65\x66\x61ultResourcesConfig\x12\x33\n\x08requests\x18\x01 \x01(\x0b\x32!.v1alpha2.ResourcesRequestsConfig\"\xeb\x06\n\x13\x45gressGatewayConfig\x12\x34\n\x10\x61utoscaleEnabled\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x14\n\x0c\x61utoscaleMax\x18\x02 \x01(\r\x12\x14\n\x0c\x61utoscaleMin\x18\x03 \x01(\r\x12\x31\n\x03\x63pu\x18\x05 \x01(\x0b\x32$.v1alpha2.CPUTargetUtilizationConfig\x12+\n\x07\x65nabled\x18\x07 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x33\n\x03\x65nv\x18\x08 \x03(\x0b\x32&.v1alpha2.EgressGatewayConfig.EnvEntry\x12-\n\x06labels\x18\t \x01(\x0b\x32\x1d.v1alpha2.GatewayLabelsConfig\x12\x36\n\x0cnodeSelector\x18\n \x01(\x0b\x32 .v1alpha2.TypeMapStringInterface\x12\x38\n\x0epodAnnotations\x18\x0b \x01(\x0b\x32 .v1alpha2.TypeMapStringInterface\x12M\n\x1cpodAntiAffinityLabelSelector\x18\x0c \x01(\x0b\x32\'.v1alpha2.TypeSliceOfMapStringInterface\x12Q\n podAntiAffinityTermLabelSelector\x18\r \x01(\x0b\x32\'.v1alpha2.TypeSliceOfMapStringInterface\x12$\n\x05ports\x18\x0e \x03(\x0b\x32\x15.v1alpha2.PortsConfig\x12&\n\tresources\x18\x0f \x01(\x0b\x32\x13.v1alpha2.Resources\x12-\n\rsecretVolumes\x18\x10 \x03(\x0b\x32\x16.v1alpha2.SecretVolume\x12<\n\x12serviceAnnotations\x18\x11 \x01(\x0b\x32 .v1alpha2.TypeMapStringInterface\x12\x0c\n\x04type\x18\x12 \x01(\t\x12%\n\x04zvpn\x18\x13 \x01(\x0b\x32\x17.v1alpha2.ZeroVPNConfig\x1a*\n\x08\x45nvEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"]\n\x12\x45nvoyMetricsConfig\x12+\n\x07\x65nabled\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x0c\n\x04host\x18\x02 \x01(\t\x12\x0c\n\x04port\x18\x03 \x01(\x05\"\x87\x03\n\x0cGalleyConfig\x12+\n\x07\x65nabled\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\r\n\x05image\x18\x02 \x01(\t\x12.\n\x04mesh\x18\x03 \x03(\x0b\x32 .v1alpha2.GalleyConfig.MeshEntry\x12M\n\x1cpodAntiAffinityLabelSelector\x18\x04 \x01(\x0b\x32\'.v1alpha2.TypeSliceOfMapStringInterface\x12Q\n podAntiAffinityTermLabelSelector\x18\x05 \x01(\x0b\x32\'.v1alpha2.TypeSliceOfMapStringInterface\x12\x14\n\x0creplicaCount\x18\x06 \x01(\r\x12&\n\tresources\x18\x07 \x01(\x0b\x32\x13.v1alpha2.Resources\x1a+\n\tMeshEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"1\n\x13GatewayLabelsConfig\x12\x0b\n\x03\x61pp\x18\x01 \x01(\t\x12\r\n\x05istio\x18\x02 \x01(\t\"\xb5\x01\n\x0eGatewaysConfig\x12\x39\n\x12istioEgressgateway\x18\x01 \x01(\x0b\x32\x1d.v1alpha2.EgressGatewayConfig\x12+\n\x07\x65nabled\x18\x02 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12;\n\x13istioIngressgateway\x18\x04 \x01(\x0b\x32\x1e.v1alpha2.IngressGatewayConfig\"\xa1\x0c\n\x0cGlobalConfig\x12\"\n\x04\x61rch\x18\x01 \x01(\x0b\x32\x14.v1alpha2.ArchConfig\x12\x17\n\x0f\x63onfigNamespace\x18\x02 \x01(\t\x12\x34\n\x10\x63onfigValidation\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12?\n\x1b\x63ontrolPlaneSecurityEnabled\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12=\n\x13\x64\x65\x66\x61ultNodeSelector\x18\x06 \x01(\x0b\x32 .v1alpha2.TypeMapStringInterface\x12N\n\x1a\x64\x65\x66\x61ultPodDisruptionBudget\x18\x07 \x01(\x0b\x32*.v1alpha2.DefaultPodDisruptionBudgetConfig\x12\x37\n\x13\x64isablePolicyChecks\x18\x08 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12:\n\x10\x64\x65\x66\x61ultResources\x18\t \x01(\x0b\x32 .v1alpha2.DefaultResourcesConfig\x12\x32\n\x0e\x65nableHelmTest\x18\n \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x31\n\renableTracing\x18\x0b \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x0b\n\x03hub\x18\x0c \x01(\t\x12\x17\n\x0fimagePullPolicy\x18\r \x01(\t\x12\x16\n\x0eistioNamespace\x18\x0e \x01(\t\x12H\n\x11localityLbSetting\x18\x0f \x03(\x0b\x32-.v1alpha2.GlobalConfig.LocalityLbSettingEntry\x12\x35\n\nk8sIngress\x18\x10 \x01(\x0b\x32!.v1alpha2.KubernetesIngressConfig\x12.\n\x07logging\x18\x11 \x01(\x0b\x32\x1d.v1alpha2.GlobalLoggingConfig\x12\x34\n\rmeshExpansion\x18\x12 \x01(\x0b\x32\x1d.v1alpha2.MeshExpansionConfig\x12\x36\n\x0cmeshNetworks\x18\x13 \x01(\x0b\x32 .v1alpha2.TypeMapStringInterface\x12\x16\n\x0emonitoringPort\x18\x14 \x01(\r\x12\"\n\x04mtls\x18\x15 \x01(\x0b\x32\x14.v1alpha2.MTLSConfig\x12\x32\n\x0cmultiCluster\x18\x16 \x01(\x0b\x32\x1c.v1alpha2.MultiClusterConfig\x12\x30\n\x0coneNamespace\x18\x17 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x44\n\x15outboundTrafficPolicy\x18\x18 \x01(\x0b\x32%.v1alpha2.OutboundTrafficPolicyConfig\x12\x37\n\x13policyCheckFailOpen\x18\x19 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x17\n\x0fpolicyNamespace\x18\x1a \x01(\t\x12\x19\n\x11priorityClassName\x18\x1b \x01(\t\x12$\n\x05proxy\x18\x1c \x01(\x0b\x32\x15.v1alpha2.ProxyConfig\x12,\n\tproxyInit\x18\x1d \x01(\x0b\x32\x19.v1alpha2.ProxyInitConfig\x12 \n\x03sds\x18\x1e \x01(\x0b\x32\x13.v1alpha2.SDSConfig\x12\x0b\n\x03tag\x18\x1f \x01(\t\x12\x1a\n\x12telemetryNamespace\x18  \x01(\t\x12&\n\x06tracer\x18! \x01(\x0b\x32\x16.v1alpha2.TracerConfig\x12\x13\n\x0btrustDomain\x18\" \x01(\t\x12*\n\x06useMCP\x18# \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x1a\x38\n\x16LocalityLbSettingEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"$\n\x13GlobalLoggingConfig\x12\r\n\x05level\x18\x01 \x01(\t\"\x84\n\n\x14IngressGatewayConfig\x12\x34\n\x10\x61utoscaleEnabled\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x14\n\x0c\x61utoscaleMax\x18\x02 \x01(\r\x12\x14\n\x0c\x61utoscaleMin\x18\x03 \x01(\r\x12\x31\n\x03\x63pu\x18\x05 \x01(\x0b\x32$.v1alpha2.CPUTargetUtilizationConfig\x12\x31\n\rcustomService\x18\x06 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\r\n\x05\x64\x65\x62ug\x18\x07 \x01(\t\x12\x0e\n\x06\x64omain\x18\x08 \x01(\t\x12+\n\x07\x65nabled\x18\n \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x34\n\x03\x65nv\x18\x0b \x03(\x0b\x32\'.v1alpha2.IngressGatewayConfig.EnvEntry\x12\x13\n\x0b\x65xternalIPs\x18\x0c \x03(\t\x12.\n\nk8sIngress\x18\r \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x33\n\x0fk8sIngressHttps\x18\x0e \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12-\n\x06labels\x18\x0f \x01(\x0b\x32\x1d.v1alpha2.GatewayLabelsConfig\x12\x16\n\x0eloadBalancerIP\x18\x10 \x01(\t\x12 \n\x18loadBalancerSourceRanges\x18\x11 \x03(\t\x12\x31\n\x12meshExpansionPorts\x18\x12 \x03(\x0b\x32\x15.v1alpha2.PortsConfig\x12\x36\n\x0cnodeSelector\x18\x13 \x01(\x0b\x32 .v1alpha2.TypeMapStringInterface\x12\x38\n\x0epodAnnotations\x18\x14 \x01(\x0b\x32 .v1alpha2.TypeMapStringInterface\x12M\n\x1cpodAntiAffinityLabelSelector\x18\x15 \x01(\x0b\x32\'.v1alpha2.TypeSliceOfMapStringInterface\x12Q\n podAntiAffinityTermLabelSelector\x18\x16 \x01(\x0b\x32\'.v1alpha2.TypeSliceOfMapStringInterface\x12$\n\x05ports\x18\x17 \x03(\x0b\x32\x15.v1alpha2.PortsConfig\x12\x14\n\x0creplicaCount\x18\x18 \x01(\r\x12\x33\n\tresources\x18\x19 \x01(\x0b\x32 .v1alpha2.TypeMapStringInterface\x12.\n\x03sds\x18\x1a \x01(\x0b\x32!.v1alpha2.IngressGatewaySdsConfig\x12-\n\rsecretVolumes\x18\x1b \x03(\x0b\x32\x16.v1alpha2.SecretVolume\x12<\n\x12serviceAnnotations\x18\x1c \x01(\x0b\x32 .v1alpha2.TypeMapStringInterface\x12\x0c\n\x04type\x18\x1d \x01(\t\x12\x30\n\x04zvpn\x18\x1e \x01(\x0b\x32\".v1alpha2.IngressGatewayZvpnConfig\x1a*\n\x08\x45nvEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"U\n\x17IngressGatewaySdsConfig\x12+\n\x07\x65nabled\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\r\n\x05image\x18\x02 \x01(\t\"W\n\x18IngressGatewayZvpnConfig\x12+\n\x07\x65nabled\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x0e\n\x06suffix\x18\x02 \x01(\t\"N\n\x1fKubernetesEnvMixerAdapterConfig\x12+\n\x07\x65nabled\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\"\x8c\x01\n\x17KubernetesIngressConfig\x12+\n\x07\x65nabled\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12/\n\x0b\x65nableHttps\x18\x02 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x13\n\x0bgatewayName\x18\x03 \x01(\t\"_\n\x12LoadSheddingConfig\x12\x18\n\x10latencyThreshold\x18\x01 \x01(\t\"/\n\x04mode\x12\x0c\n\x08\x44ISABLED\x10\x00\x12\x0c\n\x08LOG_ONLY\x10\x01\x12\x0b\n\x07\x45NFORCE\x10\x02\"9\n\nMTLSConfig\x12+\n\x07\x65nabled\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\"n\n\x13MeshExpansionConfig\x12+\n\x07\x65nabled\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12*\n\x06useILB\x18\x02 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\"\xf9\x01\n\x13MixerAdaptersConfig\x12@\n\rkubernetesenv\x18\x01 \x01(\x0b\x32).v1alpha2.KubernetesEnvMixerAdapterConfig\x12:\n\nprometheus\x18\x02 \x01(\x0b\x32&.v1alpha2.PrometheusMixerAdapterConfig\x12\x30\n\x05stdio\x18\x03 \x01(\x0b\x32!.v1alpha2.StdioMixerAdapterConfig\x12\x32\n\x0euseAdapterCRDs\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\"m\n\x0bMixerConfig\x12+\n\x06policy\x18\x01 \x01(\x0b\x32\x1b.v1alpha2.MixerPolicyConfig\x12\x31\n\ttelemetry\x18\x02 \x01(\x0b\x32\x1e.v1alpha2.MixerTelemetryConfig\"\xb4\x02\n\x11MixerPolicyConfig\x12\x34\n\x10\x61utoscaleEnabled\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x14\n\x0c\x61utoscaleMax\x18\x02 \x01(\r\x12\x14\n\x0c\x61utoscaleMin\x18\x03 \x01(\r\x12\x31\n\x03\x63pu\x18\x04 \x01(\x0b\x32$.v1alpha2.CPUTargetUtilizationConfig\x12+\n\x07\x65nabled\x18\x05 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\r\n\x05image\x18\x06 \x01(\t\x12\x38\n\x0epodAnnotations\x18\x07 \x01(\x0b\x32 .v1alpha2.TypeMapStringInterface\x12\x14\n\x0creplicaCount\x18\x08 \x01(\r\"\x9a\x05\n\x14MixerTelemetryConfig\x12/\n\x08\x61\x64\x61pters\x18\x01 \x01(\x0b\x32\x1d.v1alpha2.MixerAdaptersConfig\x12\x34\n\x10\x61utoscaleEnabled\x18\x02 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x14\n\x0c\x61utoscaleMax\x18\x03 \x01(\r\x12\x14\n\x0c\x61utoscaleMin\x18\x04 \x01(\r\x12\x31\n\x03\x63pu\x18\x05 \x01(\x0b\x32$.v1alpha2.CPUTargetUtilizationConfig\x12+\n\x07\x65nabled\x18\x06 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x34\n\x03\x65nv\x18\x07 \x03(\x0b\x32\'.v1alpha2.MixerTelemetryConfig.EnvEntry\x12\r\n\x05image\x18\x08 \x01(\t\x12\x32\n\x0cloadshedding\x18\t \x01(\x0b\x32\x1c.v1alpha2.LoadSheddingConfig\x12\x36\n\x0cnodeSelector\x18\n \x01(\x0b\x32 .v1alpha2.TypeMapStringInterface\x12\x38\n\x0epodAnnotations\x18\x0b \x01(\x0b\x32 .v1alpha2.TypeMapStringInterface\x12\x14\n\x0creplicaCount\x18\x0c \x01(\r\x12&\n\tresources\x18\r \x01(\x0b\x32\x13.v1alpha2.Resources\x12:\n\x16sessionAffinityEnabled\x18\x0e \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x1a*\n\x08\x45nvEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"A\n\x12MultiClusterConfig\x12+\n\x07\x65nabled\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\"\xb4\x01\n\x0fNodeAgentConfig\x12+\n\x07\x65nabled\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12-\n\x03\x65nv\x18\x02 \x01(\x0b\x32 .v1alpha2.TypeMapStringInterface\x12\r\n\x05image\x18\x03 \x01(\t\x12\x36\n\x0cnodeSelector\x18\x04 \x01(\x0b\x32 .v1alpha2.TypeMapStringInterface\"G\n\x1bOutboundTrafficPolicyConfig\"(\n\x04mode\x12\r\n\tALLOW_ANY\x10\x00\x12\x11\n\rREGISTRY_ONLY\x10\x01\"\xce\x08\n\x0bPilotConfig\x12+\n\x07\x65nabled\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x34\n\x10\x61utoscaleEnabled\x18\x02 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x14\n\x0c\x61utoscaleMin\x18\x03 \x01(\r\x12\x14\n\x0c\x61utoscaleMax\x18\x04 \x01(\r\x12\x14\n\x0creplicaCount\x18\x05 \x01(\r\x12\r\n\x05image\x18\x06 \x01(\t\x12+\n\x07sidecar\x18\x07 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x15\n\rtraceSampling\x18\x08 \x01(\x01\x12&\n\tresources\x18\t \x01(\x0b\x32\x13.v1alpha2.Resources\x12\x17\n\x0f\x63onfigNamespace\x18\n \x01(\t\x12\x31\n\x03\x63pu\x18\x0b \x01(\x0b\x32$.v1alpha2.CPUTargetUtilizationConfig\x12\x36\n\x0cnodeSelector\x18\x0c \x01(\x0b\x32 .v1alpha2.TypeMapStringInterface\x12\x42\n\x1fkeepaliveMaxServerConnectionAge\x18\r \x01(\x0b\x32\x19.google.protobuf.Duration\x12:\n\x10\x64\x65ploymentLabels\x18\x0e \x01(\x0b\x32 .v1alpha2.TypeMapStringInterface\x12\x36\n\x0cmeshNetworks\x18\x0f \x01(\x0b\x32 .v1alpha2.TypeMapStringInterface\x12M\n\x1cpodAntiAffinityLabelSelector\x18\x10 \x01(\x0b\x32\'.v1alpha2.TypeSliceOfMapStringInterface\x12Q\n podAntiAffinityTermLabelSelector\x18\x11 \x01(\x0b\x32\'.v1alpha2.TypeSliceOfMapStringInterface\x12-\n\tconfigMap\x18\x12 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12-\n\x07ingress\x18\x13 \x01(\x0b\x32\x1c.v1alpha2.PilotIngressConfig\x12*\n\x06useMCP\x18\x14 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12+\n\x03\x65nv\x18\x15 \x03(\x0b\x32\x1e.v1alpha2.PilotConfig.EnvEntry\x12+\n\x06policy\x18\x16 \x01(\x0b\x32\x1b.v1alpha2.PilotPolicyConfig\x12\x31\n\ttelemetry\x18\x17 \x01(\x0b\x32\x1e.v1alpha2.PilotTelemetryConfig\x1a*\n\x08\x45nvEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"}\n\x12PilotIngressConfig\x12\x16\n\x0eingressService\x18\x01 \x01(\t\x12\x14\n\x0cingressClass\x18\x03 \x01(\t\"9\n\x15ingressControllerMode\x12\x0b\n\x07\x44\x45\x46\x41ULT\x10\x00\x12\n\n\x06STRICT\x10\x01\x12\x07\n\x03OFF\x10\x02\"@\n\x11PilotPolicyConfig\x12+\n\x07\x65nabled\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\"C\n\x14PilotTelemetryConfig\x12+\n\x07\x65nabled\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\"O\n\x0bPortsConfig\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x0c\n\x04port\x18\x02 \x01(\x05\x12\x10\n\x08nodePort\x18\x03 \x01(\x05\x12\x12\n\ntargetPort\x18\x04 \x01(\x05\"\xd9\x03\n\x10PrometheusConfig\x12<\n\x18\x63reatePrometheusResource\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12+\n\x07\x65nabled\x18\x02 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x14\n\x0creplicaCount\x18\x03 \x01(\r\x12\x0b\n\x03hub\x18\x04 \x01(\t\x12\x0b\n\x03tag\x18\x05 \x01(\t\x12\x11\n\tretention\x18\x06 \x01(\t\x12\x36\n\x0cnodeSelector\x18\x07 \x01(\x0b\x32 .v1alpha2.TypeMapStringInterface\x12\x31\n\x0escrapeInterval\x18\x08 \x01(\x0b\x32\x19.google.protobuf.Duration\x12\x13\n\x0b\x63ontextPath\x18\t \x01(\t\x12-\n\x07ingress\x18\n \x01(\x0b\x32\x1c.v1alpha2.AddonIngressConfig\x12\x32\n\x07service\x18\x0b \x01(\x0b\x32!.v1alpha2.PrometheusServiceConfig\x12\x34\n\x08security\x18\x0c \x01(\x0b\x32\".v1alpha2.PrometheusSecurityConfig\"\x85\x01\n\x1cPrometheusMixerAdapterConfig\x12+\n\x07\x65nabled\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x38\n\x15metricsExpiryDuration\x18\x02 \x01(\x0b\x32\x19.google.protobuf.Duration\"G\n\x18PrometheusSecurityConfig\x12+\n\x07\x65nabled\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\"\x8d\x01\n\x17PrometheusServiceConfig\x12\x35\n\x0b\x61nnotations\x18\x01 \x01(\x0b\x32 .v1alpha2.TypeMapStringInterface\x12;\n\x08nodePort\x18\x02 \x01(\x0b\x32).v1alpha2.PrometheusServiceNodePortConfig\"\\\n\x1fPrometheusServiceNodePortConfig\x12+\n\x07\x65nabled\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x0c\n\x04port\x18\x02 \x01(\r\"\xdb\x06\n\x0bProxyConfig\x12\x15\n\raccessLogFile\x18\x01 \x01(\t\x12\x17\n\x0f\x61\x63\x63\x65ssLogFormat\x18\x02 \x01(\t\x12\x15\n\rclusterDomain\x18\x05 \x01(\t\x12\x19\n\x11\x63omponentLogLevel\x18\x06 \x01(\t\x12\x13\n\x0b\x63oncurrency\x18\x07 \x01(\r\x12\x31\n\x0e\x64nsRefreshRate\x18\x08 \x01(\x0b\x32\x19.google.protobuf.Duration\x12\x32\n\x0e\x65nableCoreDump\x18\t \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x39\n\x13\x65nvoyMetricsService\x18\n \x01(\x0b\x32\x1c.v1alpha2.EnvoyMetricsConfig\x12\x31\n\x0b\x65nvoyStatsd\x18\x0b \x01(\x0b\x32\x1c.v1alpha2.EnvoyMetricsConfig\x12\x1b\n\x13\x65xcludeInboundPorts\x18\x0c \x01(\t\x12\x17\n\x0f\x65xcludeIPRanges\x18\r \x01(\t\x12\r\n\x05image\x18\x0e \x01(\t\x12\x1b\n\x13includeInboundPorts\x18\x0f \x01(\t\x12\x17\n\x0fincludeIPRanges\x18\x10 \x01(\t\x12\x1a\n\x12kubevirtInterfaces\x18\x11 \x01(\t\x12\x10\n\x08logLevel\x18\x12 \x01(\t\x12.\n\nprivileged\x18\x13 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12$\n\x1creadinessInitialDelaySeconds\x18\x14 \x01(\r\x12\x1e\n\x16readinessPeriodSeconds\x18\x15 \x01(\r\x12!\n\x19readinessFailureThreshold\x18\x16 \x01(\r\x12\x12\n\nstatusPort\x18\x17 \x01(\r\x12&\n\tresources\x18\x18 \x01(\x0b\x32\x13.v1alpha2.Resources\"\'\n\x11\x61\x63\x63\x65ssLogEncoding\x12\x08\n\x04JSON\x10\x00\x12\x08\n\x04TEXT\x10\x01\"\'\n\nautoInject\x12\x0b\n\x07\x45NABLED\x10\x00\x12\x0c\n\x08\x44ISABLED\x10\x01\"0\n\x06tracer\x12\n\n\x06ZIPKIN\x10\x00\x12\r\n\tLIGHTSTEP\x10\x01\x12\x0b\n\x07\x44\x41TADOG\x10\x02\" \n\x0fProxyInitConfig\x12\r\n\x05image\x18\x01 \x01(\t\"6\n\x17ResourcesRequestsConfig\x12\x0b\n\x03\x63pu\x18\x01 \x01(\t\x12\x0e\n\x06memory\x18\x02 \x01(\t\"\xb2\x01\n\tSDSConfig\x12+\n\x07\x65nabled\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x0f\n\x07udsPath\x18\x02 \x01(\t\x12\x30\n\x0cuseNormalJwt\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x35\n\x11useTrustworthyJwt\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\"C\n\x0cSecretVolume\x12\x11\n\tmountPath\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x12\n\nsecretName\x18\x03 \x01(\t\"\x80\x03\n\x0eSecurityConfig\x12+\n\x07\x65nabled\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x14\n\x0creplicaCount\x18\x02 \x01(\r\x12\r\n\x05image\x18\x03 \x01(\t\x12.\n\nselfSigned\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x13\n\x0btrustDomain\x18\x05 \x01(\t\x12\x38\n\x08\x64nsCerts\x18\x06 \x03(\x0b\x32&.v1alpha2.SecurityConfig.DnsCertsEntry\x12\x34\n\x10\x63reateMeshPolicy\x18\x07 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x36\n\x0cnodeSelector\x18\x08 \x01(\x0b\x32 .v1alpha2.TypeMapStringInterface\x1a/\n\rDnsCertsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"x\n\rServiceConfig\x12\x35\n\x0b\x61nnotations\x18\x01 \x01(\x0b\x32 .v1alpha2.TypeMapStringInterface\x12\x14\n\x0c\x65xternalPort\x18\x02 \x01(\r\x12\x0c\n\x04name\x18\x03 \x01(\t\x12\x0c\n\x04type\x18\x12 \x01(\t\"\xf8\x04\n\x15SidecarInjectorConfig\x12+\n\x07\x65nabled\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12=\n\x19\x65nableNamespacesByDefault\x18\x02 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\r\n\x05image\x18\x03 \x01(\t\x12\x36\n\x0cnodeSelector\x18\n \x01(\x0b\x32 .v1alpha2.TypeMapStringInterface\x12\x44\n\x13neverInjectSelector\x18\x0b \x01(\x0b\x32\'.v1alpha2.TypeSliceOfMapStringInterface\x12\x45\n\x14\x61lwaysInjectSelector\x18\x0c \x01(\x0b\x32\'.v1alpha2.TypeSliceOfMapStringInterface\x12M\n\x1cpodAntiAffinityLabelSelector\x18\r \x01(\x0b\x32\'.v1alpha2.TypeSliceOfMapStringInterface\x12Q\n podAntiAffinityTermLabelSelector\x18\x0e \x01(\x0b\x32\'.v1alpha2.TypeSliceOfMapStringInterface\x12\x14\n\x0creplicaCount\x18\x0f \x01(\r\x12\x37\n\x13rewriteAppHTTPProbe\x18\x10 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12.\n\nselfSigned\x18\x11 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\"x\n\x17StdioMixerAdapterConfig\x12+\n\x07\x65nabled\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x30\n\x0coutputAsJson\x18\x02 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\"\xa0\x01\n\x0cTracerConfig\x12.\n\x07\x64\x61tadog\x18\x01 \x01(\x0b\x32\x1d.v1alpha2.TracerDatadogConfig\x12\x32\n\tlightstep\x18\x02 \x01(\x0b\x32\x1f.v1alpha2.TracerLightStepConfig\x12,\n\x06zipkin\x18\x03 \x01(\x0b\x32\x1c.v1alpha2.TracerZipkinConfig\"&\n\x13TracerDatadogConfig\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\"}\n\x15TracerLightStepConfig\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12\x13\n\x0b\x61\x63\x63\x65ssToken\x18\x02 \x01(\t\x12\x12\n\ncacertPath\x18\x03 \x01(\t\x12*\n\x06secure\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\"%\n\x12TracerZipkinConfig\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\"\xbf\x02\n\rTracingConfig\x12+\n\x07\x65nabled\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12/\n\x07ingress\x18\x02 \x01(\x0b\x32\x1e.v1alpha2.TracingIngressConfig\x12-\n\x06jaeger\x18\x03 \x01(\x0b\x32\x1d.v1alpha2.TracingJaegerConfig\x12\x36\n\x0cnodeSelector\x18\x04 \x01(\x0b\x32 .v1alpha2.TypeMapStringInterface\x12\x10\n\x08provider\x18\x05 \x01(\t\x12(\n\x07service\x18\x06 \x01(\x0b\x32\x17.v1alpha2.ServiceConfig\x12-\n\x06zipkin\x18\x07 \x01(\x0b\x32\x1d.v1alpha2.TracingZipkinConfig\"C\n\x14TracingIngressConfig\x12+\n\x07\x65nabled\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\"d\n\x13TracingJaegerConfig\x12\x0b\n\x03hub\x18\x01 \x01(\t\x12\x0b\n\x03tag\x18\x02 \x01(\t\x12\x33\n\x06memory\x18\x03 \x01(\x0b\x32#.v1alpha2.TracingJaegerMemoryConfig\"/\n\x19TracingJaegerMemoryConfig\x12\x12\n\nmax_traces\x18\x01 \x01(\r\"\xde\x01\n\x13TracingZipkinConfig\x12\x0b\n\x03hub\x18\x01 \x01(\t\x12\x0b\n\x03tag\x18\x02 \x01(\t\x12\x19\n\x11probeStartupDelay\x18\x03 \x01(\r\x12\x11\n\tqueryPort\x18\x04 \x01(\r\x12&\n\tresources\x18\x05 \x01(\x0b\x32\x13.v1alpha2.Resources\x12\x14\n\x0cjavaOptsHeap\x18\x06 \x01(\t\x12\x10\n\x08maxSpans\x18\x07 \x01(\r\x12/\n\x04node\x18\x08 \x01(\x0b\x32!.v1alpha2.TracingZipkinNodeConfig\"\'\n\x17TracingZipkinNodeConfig\x12\x0c\n\x04\x63pus\x18\x01 \x01(\r\"\x81\x05\n\x06Values\x12\x30\n\x0b\x63\x65rtmanager\x18\x01 \x01(\x0b\x32\x1b.v1alpha2.CertManagerConfig\x12&\n\tistio_cni\x18\x02 \x01(\x0b\x32\x13.v1alpha2.CNIConfig\x12-\n\x0cistiocoredns\x18\x03 \x01(\x0b\x32\x17.v1alpha2.CoreDNSConfig\x12&\n\x06galley\x18\x04 \x01(\x0b\x32\x16.v1alpha2.GalleyConfig\x12*\n\x08gateways\x18\x05 \x01(\x0b\x32\x18.v1alpha2.GatewaysConfig\x12&\n\x06global\x18\x06 \x01(\x0b\x32\x16.v1alpha2.GlobalConfig\x12\x31\n\x07grafana\x18\x07 \x01(\x0b\x32 .v1alpha2.TypeMapStringInterface\x12$\n\x05mixer\x18\x08 \x01(\x0b\x32\x15.v1alpha2.MixerConfig\x12,\n\tnodeagent\x18\t \x01(\x0b\x32\x19.v1alpha2.NodeAgentConfig\x12$\n\x05pilot\x18\n \x01(\x0b\x32\x15.v1alpha2.PilotConfig\x12.\n\nprometheus\x18\x0b \x01(\x0b\x32\x1a.v1alpha2.PrometheusConfig\x12*\n\x08security\x18\x0c \x01(\x0b\x32\x18.v1alpha2.SecurityConfig\x12?\n\x16sidecarInjectorWebhook\x18\r \x01(\x0b\x32\x1f.v1alpha2.SidecarInjectorConfig\x12(\n\x07tracing\x18\x0e \x01(\x0b\x32\x17.v1alpha2.TracingConfig\"\x18\n\x16TypeMapStringInterface\"\x1f\n\x1dTypeSliceOfMapStringInterface\"L\n\rZeroVPNConfig\x12+\n\x07\x65nabled\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x0e\n\x06suffix\x18\x02 \x01(\tB\nZ\x08v1alpha2b\x06proto3')
   ,
-  dependencies=[google_dot_protobuf_dot_duration__pb2.DESCRIPTOR,k8s_dot_io_dot_api_dot_core_dot_v1_dot_generated__pb2.DESCRIPTOR,])
+  dependencies=[google_dot_protobuf_dot_duration__pb2.DESCRIPTOR,k8s_dot_io_dot_api_dot_core_dot_v1_dot_generated__pb2.DESCRIPTOR,github_dot_com_dot_gogo_dot_protobuf_dot_protobuf_dot_google_dot_protobuf_dot_wrappers__pb2.DESCRIPTOR,])
 
 
 
 _LOADSHEDDINGCONFIG_MODE = _descriptor.EnumDescriptor(
   name='mode',
-  full_name='values.LoadSheddingConfig.mode',
+  full_name='v1alpha2.LoadSheddingConfig.mode',
   filename=None,
   file=DESCRIPTOR,
   values=[
@@ -49,14 +50,14 @@ _LOADSHEDDINGCONFIG_MODE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=5060,
-  serialized_end=5107,
+  serialized_start=6160,
+  serialized_end=6207,
 )
 _sym_db.RegisterEnumDescriptor(_LOADSHEDDINGCONFIG_MODE)
 
 _OUTBOUNDTRAFFICPOLICYCONFIG_MODE = _descriptor.EnumDescriptor(
   name='mode',
-  full_name='values.OutboundTrafficPolicyConfig.mode',
+  full_name='v1alpha2.OutboundTrafficPolicyConfig.mode',
   filename=None,
   file=DESCRIPTOR,
   values=[
@@ -71,14 +72,14 @@ _OUTBOUNDTRAFFICPOLICYCONFIG_MODE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=6587,
-  serialized_end=6627,
+  serialized_start=8004,
+  serialized_end=8044,
 )
 _sym_db.RegisterEnumDescriptor(_OUTBOUNDTRAFFICPOLICYCONFIG_MODE)
 
 _PILOTINGRESSCONFIG_INGRESSCONTROLLERMODE = _descriptor.EnumDescriptor(
   name='ingressControllerMode',
-  full_name='values.PilotIngressConfig.ingressControllerMode',
+  full_name='v1alpha2.PilotIngressConfig.ingressControllerMode',
   filename=None,
   file=DESCRIPTOR,
   values=[
@@ -97,14 +98,14 @@ _PILOTINGRESSCONFIG_INGRESSCONTROLLERMODE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=7663,
-  serialized_end=7720,
+  serialized_start=9219,
+  serialized_end=9276,
 )
 _sym_db.RegisterEnumDescriptor(_PILOTINGRESSCONFIG_INGRESSCONTROLLERMODE)
 
 _PROXYCONFIG_ACCESSLOGENCODING = _descriptor.EnumDescriptor(
   name='accessLogEncoding',
-  full_name='values.ProxyConfig.accessLogEncoding',
+  full_name='v1alpha2.ProxyConfig.accessLogEncoding',
   filename=None,
   file=DESCRIPTOR,
   values=[
@@ -119,14 +120,14 @@ _PROXYCONFIG_ACCESSLOGENCODING = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=9343,
-  serialized_end=9382,
+  serialized_start=11147,
+  serialized_end=11186,
 )
 _sym_db.RegisterEnumDescriptor(_PROXYCONFIG_ACCESSLOGENCODING)
 
 _PROXYCONFIG_AUTOINJECT = _descriptor.EnumDescriptor(
   name='autoInject',
-  full_name='values.ProxyConfig.autoInject',
+  full_name='v1alpha2.ProxyConfig.autoInject',
   filename=None,
   file=DESCRIPTOR,
   values=[
@@ -141,14 +142,14 @@ _PROXYCONFIG_AUTOINJECT = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=9384,
-  serialized_end=9423,
+  serialized_start=11188,
+  serialized_end=11227,
 )
 _sym_db.RegisterEnumDescriptor(_PROXYCONFIG_AUTOINJECT)
 
 _PROXYCONFIG_TRACER = _descriptor.EnumDescriptor(
   name='tracer',
-  full_name='values.ProxyConfig.tracer',
+  full_name='v1alpha2.ProxyConfig.tracer',
   filename=None,
   file=DESCRIPTOR,
   values=[
@@ -167,28 +168,28 @@ _PROXYCONFIG_TRACER = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=9425,
-  serialized_end=9473,
+  serialized_start=11229,
+  serialized_end=11277,
 )
 _sym_db.RegisterEnumDescriptor(_PROXYCONFIG_TRACER)
 
 
 _ADDONINGRESSCONFIG = _descriptor.Descriptor(
   name='AddonIngressConfig',
-  full_name='values.AddonIngressConfig',
+  full_name='v1alpha2.AddonIngressConfig',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='enabled', full_name='values.AddonIngressConfig.enabled', index=0,
-      number=1, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
+      name='enabled', full_name='v1alpha2.AddonIngressConfig.enabled', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='hosts', full_name='values.AddonIngressConfig.hosts', index=1,
+      name='hosts', full_name='v1alpha2.AddonIngressConfig.hosts', index=1,
       number=2, type=9, cpp_type=9, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -206,34 +207,34 @@ _ADDONINGRESSCONFIG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=129,
-  serialized_end=181,
+  serialized_start=197,
+  serialized_end=277,
 )
 
 
 _ARCHCONFIG = _descriptor.Descriptor(
   name='ArchConfig',
-  full_name='values.ArchConfig',
+  full_name='v1alpha2.ArchConfig',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='amd64', full_name='values.ArchConfig.amd64', index=0,
+      name='amd64', full_name='v1alpha2.ArchConfig.amd64', index=0,
       number=1, type=13, cpp_type=3, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='ppc64le', full_name='values.ArchConfig.ppc64le', index=1,
+      name='ppc64le', full_name='v1alpha2.ArchConfig.ppc64le', index=1,
       number=2, type=13, cpp_type=3, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='s390x', full_name='values.ArchConfig.s390x', index=2,
+      name='s390x', full_name='v1alpha2.ArchConfig.s390x', index=2,
       number=3, type=13, cpp_type=3, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
@@ -251,22 +252,22 @@ _ARCHCONFIG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=183,
-  serialized_end=242,
+  serialized_start=279,
+  serialized_end=338,
 )
 
 
 _CNICONFIG = _descriptor.Descriptor(
   name='CNIConfig',
-  full_name='values.CNIConfig',
+  full_name='v1alpha2.CNIConfig',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='enabled', full_name='values.CNIConfig.enabled', index=0,
-      number=1, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
+      name='enabled', full_name='v1alpha2.CNIConfig.enabled', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
@@ -282,20 +283,20 @@ _CNICONFIG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=244,
-  serialized_end=272,
+  serialized_start=340,
+  serialized_end=396,
 )
 
 
 _CPUTARGETUTILIZATIONCONFIG = _descriptor.Descriptor(
   name='CPUTargetUtilizationConfig',
-  full_name='values.CPUTargetUtilizationConfig',
+  full_name='v1alpha2.CPUTargetUtilizationConfig',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='targetAverageUtilization', full_name='values.CPUTargetUtilizationConfig.targetAverageUtilization', index=0,
+      name='targetAverageUtilization', full_name='v1alpha2.CPUTargetUtilizationConfig.targetAverageUtilization', index=0,
       number=1, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
@@ -313,48 +314,48 @@ _CPUTARGETUTILIZATIONCONFIG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=274,
-  serialized_end=336,
+  serialized_start=398,
+  serialized_end=460,
 )
 
 
 _CERTMANAGERCONFIG = _descriptor.Descriptor(
   name='CertManagerConfig',
-  full_name='values.CertManagerConfig',
+  full_name='v1alpha2.CertManagerConfig',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='enabled', full_name='values.CertManagerConfig.enabled', index=0,
-      number=1, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
+      name='enabled', full_name='v1alpha2.CertManagerConfig.enabled', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='hub', full_name='values.CertManagerConfig.hub', index=1,
+      name='hub', full_name='v1alpha2.CertManagerConfig.hub', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='tag', full_name='values.CertManagerConfig.tag', index=2,
+      name='tag', full_name='v1alpha2.CertManagerConfig.tag', index=2,
       number=3, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='nodeSelector', full_name='values.CertManagerConfig.nodeSelector', index=3,
+      name='nodeSelector', full_name='v1alpha2.CertManagerConfig.nodeSelector', index=3,
       number=4, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='resources', full_name='values.CertManagerConfig.resources', index=4,
+      name='resources', full_name='v1alpha2.CertManagerConfig.resources', index=4,
       number=5, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
@@ -372,48 +373,160 @@ _CERTMANAGERCONFIG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=339,
-  serialized_end=516,
+  serialized_start=463,
+  serialized_end=649,
 )
 
 
-_COREDNSCONFIG = _descriptor.Descriptor(
-  name='CoreDNSConfig',
-  full_name='values.CoreDNSConfig',
+_RESOURCES_LIMITSENTRY = _descriptor.Descriptor(
+  name='LimitsEntry',
+  full_name='v1alpha2.Resources.LimitsEntry',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='enabled', full_name='values.CoreDNSConfig.enabled', index=0,
-      number=1, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
+      name='key', full_name='v1alpha2.Resources.LimitsEntry.key', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='coreDNSImage', full_name='values.CoreDNSConfig.coreDNSImage', index=1,
+      name='value', full_name='v1alpha2.Resources.LimitsEntry.value', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=_b('8\001'),
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=767,
+  serialized_end=812,
+)
+
+_RESOURCES_REQUESTSENTRY = _descriptor.Descriptor(
+  name='RequestsEntry',
+  full_name='v1alpha2.Resources.RequestsEntry',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='key', full_name='v1alpha2.Resources.RequestsEntry.key', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='value', full_name='v1alpha2.Resources.RequestsEntry.value', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=_b('8\001'),
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=814,
+  serialized_end=861,
+)
+
+_RESOURCES = _descriptor.Descriptor(
+  name='Resources',
+  full_name='v1alpha2.Resources',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='limits', full_name='v1alpha2.Resources.limits', index=0,
+      number=1, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='requests', full_name='v1alpha2.Resources.requests', index=1,
+      number=2, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[_RESOURCES_LIMITSENTRY, _RESOURCES_REQUESTSENTRY, ],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=652,
+  serialized_end=861,
+)
+
+
+_COREDNSCONFIG = _descriptor.Descriptor(
+  name='CoreDNSConfig',
+  full_name='v1alpha2.CoreDNSConfig',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='enabled', full_name='v1alpha2.CoreDNSConfig.enabled', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='coreDNSImage', full_name='v1alpha2.CoreDNSConfig.coreDNSImage', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='coreDNSPluginImage', full_name='values.CoreDNSConfig.coreDNSPluginImage', index=2,
+      name='coreDNSPluginImage', full_name='v1alpha2.CoreDNSConfig.coreDNSPluginImage', index=2,
       number=3, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='nodeSelector', full_name='values.CoreDNSConfig.nodeSelector', index=3,
+      name='nodeSelector', full_name='v1alpha2.CoreDNSConfig.nodeSelector', index=3,
       number=4, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='replicaCount', full_name='values.CoreDNSConfig.replicaCount', index=4,
+      name='replicaCount', full_name='v1alpha2.CoreDNSConfig.replicaCount', index=4,
       number=5, type=13, cpp_type=3, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
@@ -431,51 +544,20 @@ _COREDNSCONFIG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=519,
-  serialized_end=677,
+  serialized_start=864,
+  serialized_end=1052,
 )
 
 
 _DEFAULTPODDISRUPTIONBUDGETCONFIG = _descriptor.Descriptor(
   name='DefaultPodDisruptionBudgetConfig',
-  full_name='values.DefaultPodDisruptionBudgetConfig',
+  full_name='v1alpha2.DefaultPodDisruptionBudgetConfig',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='enabled', full_name='values.DefaultPodDisruptionBudgetConfig.enabled', index=0,
-      number=1, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=679,
-  serialized_end=730,
-)
-
-
-_DEFAULTRESOURCESCONFIG = _descriptor.Descriptor(
-  name='DefaultResourcesConfig',
-  full_name='values.DefaultResourcesConfig',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='requests', full_name='values.DefaultResourcesConfig.requests', index=0,
+      name='enabled', full_name='v1alpha2.DefaultPodDisruptionBudgetConfig.enabled', index=0,
       number=1, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
@@ -493,27 +575,58 @@ _DEFAULTRESOURCESCONFIG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=732,
-  serialized_end=807,
+  serialized_start=1054,
+  serialized_end=1133,
 )
 
 
-_EGRESSGATEWAYCONFIG_ENVENTRY = _descriptor.Descriptor(
-  name='EnvEntry',
-  full_name='values.EgressGatewayConfig.EnvEntry',
+_DEFAULTRESOURCESCONFIG = _descriptor.Descriptor(
+  name='DefaultResourcesConfig',
+  full_name='v1alpha2.DefaultResourcesConfig',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='key', full_name='values.EgressGatewayConfig.EnvEntry.key', index=0,
+      name='requests', full_name='v1alpha2.DefaultResourcesConfig.requests', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1135,
+  serialized_end=1212,
+)
+
+
+_EGRESSGATEWAYCONFIG_ENVENTRY = _descriptor.Descriptor(
+  name='EnvEntry',
+  full_name='v1alpha2.EgressGatewayConfig.EnvEntry',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='key', full_name='v1alpha2.EgressGatewayConfig.EnvEntry.key', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='value', full_name='values.EgressGatewayConfig.EnvEntry.value', index=1,
+      name='value', full_name='v1alpha2.EgressGatewayConfig.EnvEntry.value', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -531,131 +644,131 @@ _EGRESSGATEWAYCONFIG_ENVENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1586,
-  serialized_end=1628,
+  serialized_start=2048,
+  serialized_end=2090,
 )
 
 _EGRESSGATEWAYCONFIG = _descriptor.Descriptor(
   name='EgressGatewayConfig',
-  full_name='values.EgressGatewayConfig',
+  full_name='v1alpha2.EgressGatewayConfig',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='autoscaleEnabled', full_name='values.EgressGatewayConfig.autoscaleEnabled', index=0,
-      number=1, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
+      name='autoscaleEnabled', full_name='v1alpha2.EgressGatewayConfig.autoscaleEnabled', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='autoscaleMax', full_name='values.EgressGatewayConfig.autoscaleMax', index=1,
+      name='autoscaleMax', full_name='v1alpha2.EgressGatewayConfig.autoscaleMax', index=1,
       number=2, type=13, cpp_type=3, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='autoscaleMin', full_name='values.EgressGatewayConfig.autoscaleMin', index=2,
+      name='autoscaleMin', full_name='v1alpha2.EgressGatewayConfig.autoscaleMin', index=2,
       number=3, type=13, cpp_type=3, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='cpu', full_name='values.EgressGatewayConfig.cpu', index=3,
+      name='cpu', full_name='v1alpha2.EgressGatewayConfig.cpu', index=3,
       number=5, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='enabled', full_name='values.EgressGatewayConfig.enabled', index=4,
-      number=7, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
+      name='enabled', full_name='v1alpha2.EgressGatewayConfig.enabled', index=4,
+      number=7, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='env', full_name='values.EgressGatewayConfig.env', index=5,
+      name='env', full_name='v1alpha2.EgressGatewayConfig.env', index=5,
       number=8, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='labels', full_name='values.EgressGatewayConfig.labels', index=6,
+      name='labels', full_name='v1alpha2.EgressGatewayConfig.labels', index=6,
       number=9, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='nodeSelector', full_name='values.EgressGatewayConfig.nodeSelector', index=7,
+      name='nodeSelector', full_name='v1alpha2.EgressGatewayConfig.nodeSelector', index=7,
       number=10, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='podAnnotations', full_name='values.EgressGatewayConfig.podAnnotations', index=8,
+      name='podAnnotations', full_name='v1alpha2.EgressGatewayConfig.podAnnotations', index=8,
       number=11, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='podAntiAffinityLabelSelector', full_name='values.EgressGatewayConfig.podAntiAffinityLabelSelector', index=9,
+      name='podAntiAffinityLabelSelector', full_name='v1alpha2.EgressGatewayConfig.podAntiAffinityLabelSelector', index=9,
       number=12, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='podAntiAffinityTermLabelSelector', full_name='values.EgressGatewayConfig.podAntiAffinityTermLabelSelector', index=10,
+      name='podAntiAffinityTermLabelSelector', full_name='v1alpha2.EgressGatewayConfig.podAntiAffinityTermLabelSelector', index=10,
       number=13, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='ports', full_name='values.EgressGatewayConfig.ports', index=11,
+      name='ports', full_name='v1alpha2.EgressGatewayConfig.ports', index=11,
       number=14, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='resources', full_name='values.EgressGatewayConfig.resources', index=12,
+      name='resources', full_name='v1alpha2.EgressGatewayConfig.resources', index=12,
       number=15, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='secretVolumes', full_name='values.EgressGatewayConfig.secretVolumes', index=13,
+      name='secretVolumes', full_name='v1alpha2.EgressGatewayConfig.secretVolumes', index=13,
       number=16, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='serviceAnnotations', full_name='values.EgressGatewayConfig.serviceAnnotations', index=14,
+      name='serviceAnnotations', full_name='v1alpha2.EgressGatewayConfig.serviceAnnotations', index=14,
       number=17, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='type', full_name='values.EgressGatewayConfig.type', index=15,
+      name='type', full_name='v1alpha2.EgressGatewayConfig.type', index=15,
       number=18, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='zvpn', full_name='values.EgressGatewayConfig.zvpn', index=16,
+      name='zvpn', full_name='v1alpha2.EgressGatewayConfig.zvpn', index=16,
       number=19, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
@@ -673,34 +786,34 @@ _EGRESSGATEWAYCONFIG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=810,
-  serialized_end=1628,
+  serialized_start=1215,
+  serialized_end=2090,
 )
 
 
 _ENVOYMETRICSCONFIG = _descriptor.Descriptor(
   name='EnvoyMetricsConfig',
-  full_name='values.EnvoyMetricsConfig',
+  full_name='v1alpha2.EnvoyMetricsConfig',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='enabled', full_name='values.EnvoyMetricsConfig.enabled', index=0,
-      number=1, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
+      name='enabled', full_name='v1alpha2.EnvoyMetricsConfig.enabled', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='host', full_name='values.EnvoyMetricsConfig.host', index=1,
+      name='host', full_name='v1alpha2.EnvoyMetricsConfig.host', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='port', full_name='values.EnvoyMetricsConfig.port', index=2,
+      name='port', full_name='v1alpha2.EnvoyMetricsConfig.port', index=2,
       number=3, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
@@ -718,27 +831,27 @@ _ENVOYMETRICSCONFIG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1630,
-  serialized_end=1695,
+  serialized_start=2092,
+  serialized_end=2185,
 )
 
 
 _GALLEYCONFIG_MESHENTRY = _descriptor.Descriptor(
   name='MeshEntry',
-  full_name='values.GalleyConfig.MeshEntry',
+  full_name='v1alpha2.GalleyConfig.MeshEntry',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='key', full_name='values.GalleyConfig.MeshEntry.key', index=0,
+      name='key', full_name='v1alpha2.GalleyConfig.MeshEntry.key', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='value', full_name='values.GalleyConfig.MeshEntry.value', index=1,
+      name='value', full_name='v1alpha2.GalleyConfig.MeshEntry.value', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -756,61 +869,61 @@ _GALLEYCONFIG_MESHENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2033,
-  serialized_end=2076,
+  serialized_start=2536,
+  serialized_end=2579,
 )
 
 _GALLEYCONFIG = _descriptor.Descriptor(
   name='GalleyConfig',
-  full_name='values.GalleyConfig',
+  full_name='v1alpha2.GalleyConfig',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='enabled', full_name='values.GalleyConfig.enabled', index=0,
-      number=1, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
+      name='enabled', full_name='v1alpha2.GalleyConfig.enabled', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='image', full_name='values.GalleyConfig.image', index=1,
+      name='image', full_name='v1alpha2.GalleyConfig.image', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='mesh', full_name='values.GalleyConfig.mesh', index=2,
+      name='mesh', full_name='v1alpha2.GalleyConfig.mesh', index=2,
       number=3, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='podAntiAffinityLabelSelector', full_name='values.GalleyConfig.podAntiAffinityLabelSelector', index=3,
+      name='podAntiAffinityLabelSelector', full_name='v1alpha2.GalleyConfig.podAntiAffinityLabelSelector', index=3,
       number=4, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='podAntiAffinityTermLabelSelector', full_name='values.GalleyConfig.podAntiAffinityTermLabelSelector', index=4,
+      name='podAntiAffinityTermLabelSelector', full_name='v1alpha2.GalleyConfig.podAntiAffinityTermLabelSelector', index=4,
       number=5, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='replicaCount', full_name='values.GalleyConfig.replicaCount', index=5,
+      name='replicaCount', full_name='v1alpha2.GalleyConfig.replicaCount', index=5,
       number=6, type=13, cpp_type=3, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='resources', full_name='values.GalleyConfig.resources', index=6,
+      name='resources', full_name='v1alpha2.GalleyConfig.resources', index=6,
       number=7, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
@@ -828,27 +941,27 @@ _GALLEYCONFIG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1698,
-  serialized_end=2076,
+  serialized_start=2188,
+  serialized_end=2579,
 )
 
 
 _GATEWAYLABELSCONFIG = _descriptor.Descriptor(
   name='GatewayLabelsConfig',
-  full_name='values.GatewayLabelsConfig',
+  full_name='v1alpha2.GatewayLabelsConfig',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='app', full_name='values.GatewayLabelsConfig.app', index=0,
+      name='app', full_name='v1alpha2.GatewayLabelsConfig.app', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='istio', full_name='values.GatewayLabelsConfig.istio', index=1,
+      name='istio', full_name='v1alpha2.GatewayLabelsConfig.istio', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -866,34 +979,34 @@ _GATEWAYLABELSCONFIG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2078,
-  serialized_end=2127,
+  serialized_start=2581,
+  serialized_end=2630,
 )
 
 
 _GATEWAYSCONFIG = _descriptor.Descriptor(
   name='GatewaysConfig',
-  full_name='values.GatewaysConfig',
+  full_name='v1alpha2.GatewaysConfig',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='istioEgressgateway', full_name='values.GatewaysConfig.istioEgressgateway', index=0,
+      name='istioEgressgateway', full_name='v1alpha2.GatewaysConfig.istioEgressgateway', index=0,
       number=1, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='enabled', full_name='values.GatewaysConfig.enabled', index=1,
-      number=2, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
+      name='enabled', full_name='v1alpha2.GatewaysConfig.enabled', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='istioIngressgateway', full_name='values.GatewaysConfig.istioIngressgateway', index=2,
+      name='istioIngressgateway', full_name='v1alpha2.GatewaysConfig.istioIngressgateway', index=2,
       number=4, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
@@ -911,27 +1024,27 @@ _GATEWAYSCONFIG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2130,
-  serialized_end=2279,
+  serialized_start=2633,
+  serialized_end=2814,
 )
 
 
 _GLOBALCONFIG_LOCALITYLBSETTINGENTRY = _descriptor.Descriptor(
   name='LocalityLbSettingEntry',
-  full_name='values.GlobalConfig.LocalityLbSettingEntry',
+  full_name='v1alpha2.GlobalConfig.LocalityLbSettingEntry',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='key', full_name='values.GlobalConfig.LocalityLbSettingEntry.key', index=0,
+      name='key', full_name='v1alpha2.GlobalConfig.LocalityLbSettingEntry.key', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='value', full_name='values.GlobalConfig.LocalityLbSettingEntry.value', index=1,
+      name='value', full_name='v1alpha2.GlobalConfig.LocalityLbSettingEntry.value', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -949,252 +1062,252 @@ _GLOBALCONFIG_LOCALITYLBSETTINGENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3539,
-  serialized_end=3595,
+  serialized_start=4330,
+  serialized_end=4386,
 )
 
 _GLOBALCONFIG = _descriptor.Descriptor(
   name='GlobalConfig',
-  full_name='values.GlobalConfig',
+  full_name='v1alpha2.GlobalConfig',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='arch', full_name='values.GlobalConfig.arch', index=0,
+      name='arch', full_name='v1alpha2.GlobalConfig.arch', index=0,
       number=1, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='configNamespace', full_name='values.GlobalConfig.configNamespace', index=1,
+      name='configNamespace', full_name='v1alpha2.GlobalConfig.configNamespace', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='configValidation', full_name='values.GlobalConfig.configValidation', index=2,
-      number=3, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
+      name='configValidation', full_name='v1alpha2.GlobalConfig.configValidation', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='controlPlaneSecurityEnabled', full_name='values.GlobalConfig.controlPlaneSecurityEnabled', index=3,
-      number=4, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
+      name='controlPlaneSecurityEnabled', full_name='v1alpha2.GlobalConfig.controlPlaneSecurityEnabled', index=3,
+      number=4, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='defaultNodeSelector', full_name='values.GlobalConfig.defaultNodeSelector', index=4,
+      name='defaultNodeSelector', full_name='v1alpha2.GlobalConfig.defaultNodeSelector', index=4,
       number=6, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='defaultPodDisruptionBudget', full_name='values.GlobalConfig.defaultPodDisruptionBudget', index=5,
+      name='defaultPodDisruptionBudget', full_name='v1alpha2.GlobalConfig.defaultPodDisruptionBudget', index=5,
       number=7, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='disablePolicyChecks', full_name='values.GlobalConfig.disablePolicyChecks', index=6,
-      number=8, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
+      name='disablePolicyChecks', full_name='v1alpha2.GlobalConfig.disablePolicyChecks', index=6,
+      number=8, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='defaultResources', full_name='values.GlobalConfig.defaultResources', index=7,
+      name='defaultResources', full_name='v1alpha2.GlobalConfig.defaultResources', index=7,
       number=9, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='enableHelmTest', full_name='values.GlobalConfig.enableHelmTest', index=8,
-      number=10, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
+      name='enableHelmTest', full_name='v1alpha2.GlobalConfig.enableHelmTest', index=8,
+      number=10, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='enableTracing', full_name='values.GlobalConfig.enableTracing', index=9,
-      number=11, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
+      name='enableTracing', full_name='v1alpha2.GlobalConfig.enableTracing', index=9,
+      number=11, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='hub', full_name='values.GlobalConfig.hub', index=10,
+      name='hub', full_name='v1alpha2.GlobalConfig.hub', index=10,
       number=12, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='imagePullPolicy', full_name='values.GlobalConfig.imagePullPolicy', index=11,
+      name='imagePullPolicy', full_name='v1alpha2.GlobalConfig.imagePullPolicy', index=11,
       number=13, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='istioNamespace', full_name='values.GlobalConfig.istioNamespace', index=12,
+      name='istioNamespace', full_name='v1alpha2.GlobalConfig.istioNamespace', index=12,
       number=14, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='localityLbSetting', full_name='values.GlobalConfig.localityLbSetting', index=13,
+      name='localityLbSetting', full_name='v1alpha2.GlobalConfig.localityLbSetting', index=13,
       number=15, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='k8sIngress', full_name='values.GlobalConfig.k8sIngress', index=14,
+      name='k8sIngress', full_name='v1alpha2.GlobalConfig.k8sIngress', index=14,
       number=16, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='logging', full_name='values.GlobalConfig.logging', index=15,
+      name='logging', full_name='v1alpha2.GlobalConfig.logging', index=15,
       number=17, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='meshExpansion', full_name='values.GlobalConfig.meshExpansion', index=16,
+      name='meshExpansion', full_name='v1alpha2.GlobalConfig.meshExpansion', index=16,
       number=18, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='meshNetworks', full_name='values.GlobalConfig.meshNetworks', index=17,
+      name='meshNetworks', full_name='v1alpha2.GlobalConfig.meshNetworks', index=17,
       number=19, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='monitoringPort', full_name='values.GlobalConfig.monitoringPort', index=18,
+      name='monitoringPort', full_name='v1alpha2.GlobalConfig.monitoringPort', index=18,
       number=20, type=13, cpp_type=3, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='mtls', full_name='values.GlobalConfig.mtls', index=19,
+      name='mtls', full_name='v1alpha2.GlobalConfig.mtls', index=19,
       number=21, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='multiCluster', full_name='values.GlobalConfig.multiCluster', index=20,
+      name='multiCluster', full_name='v1alpha2.GlobalConfig.multiCluster', index=20,
       number=22, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='oneNamespace', full_name='values.GlobalConfig.oneNamespace', index=21,
-      number=23, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
+      name='oneNamespace', full_name='v1alpha2.GlobalConfig.oneNamespace', index=21,
+      number=23, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='outboundTrafficPolicy', full_name='values.GlobalConfig.outboundTrafficPolicy', index=22,
+      name='outboundTrafficPolicy', full_name='v1alpha2.GlobalConfig.outboundTrafficPolicy', index=22,
       number=24, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='policyCheckFailOpen', full_name='values.GlobalConfig.policyCheckFailOpen', index=23,
-      number=25, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
+      name='policyCheckFailOpen', full_name='v1alpha2.GlobalConfig.policyCheckFailOpen', index=23,
+      number=25, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='policyNamespace', full_name='values.GlobalConfig.policyNamespace', index=24,
+      name='policyNamespace', full_name='v1alpha2.GlobalConfig.policyNamespace', index=24,
       number=26, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='priorityClassName', full_name='values.GlobalConfig.priorityClassName', index=25,
+      name='priorityClassName', full_name='v1alpha2.GlobalConfig.priorityClassName', index=25,
       number=27, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='proxy', full_name='values.GlobalConfig.proxy', index=26,
+      name='proxy', full_name='v1alpha2.GlobalConfig.proxy', index=26,
       number=28, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='proxyInit', full_name='values.GlobalConfig.proxyInit', index=27,
+      name='proxyInit', full_name='v1alpha2.GlobalConfig.proxyInit', index=27,
       number=29, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='sds', full_name='values.GlobalConfig.sds', index=28,
+      name='sds', full_name='v1alpha2.GlobalConfig.sds', index=28,
       number=30, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='tag', full_name='values.GlobalConfig.tag', index=29,
+      name='tag', full_name='v1alpha2.GlobalConfig.tag', index=29,
       number=31, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='telemetryNamespace', full_name='values.GlobalConfig.telemetryNamespace', index=30,
+      name='telemetryNamespace', full_name='v1alpha2.GlobalConfig.telemetryNamespace', index=30,
       number=32, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='tracer', full_name='values.GlobalConfig.tracer', index=31,
+      name='tracer', full_name='v1alpha2.GlobalConfig.tracer', index=31,
       number=33, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='trustDomain', full_name='values.GlobalConfig.trustDomain', index=32,
+      name='trustDomain', full_name='v1alpha2.GlobalConfig.trustDomain', index=32,
       number=34, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='useMCP', full_name='values.GlobalConfig.useMCP', index=33,
-      number=35, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
+      name='useMCP', full_name='v1alpha2.GlobalConfig.useMCP', index=33,
+      number=35, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
@@ -1210,20 +1323,20 @@ _GLOBALCONFIG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2282,
-  serialized_end=3595,
+  serialized_start=2817,
+  serialized_end=4386,
 )
 
 
 _GLOBALLOGGINGCONFIG = _descriptor.Descriptor(
   name='GlobalLoggingConfig',
-  full_name='values.GlobalLoggingConfig',
+  full_name='v1alpha2.GlobalLoggingConfig',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='level', full_name='values.GlobalLoggingConfig.level', index=0,
+      name='level', full_name='v1alpha2.GlobalLoggingConfig.level', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -1241,27 +1354,27 @@ _GLOBALLOGGINGCONFIG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3597,
-  serialized_end=3633,
+  serialized_start=4388,
+  serialized_end=4424,
 )
 
 
 _INGRESSGATEWAYCONFIG_ENVENTRY = _descriptor.Descriptor(
   name='EnvEntry',
-  full_name='values.IngressGatewayConfig.EnvEntry',
+  full_name='v1alpha2.IngressGatewayConfig.EnvEntry',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='key', full_name='values.IngressGatewayConfig.EnvEntry.key', index=0,
+      name='key', full_name='v1alpha2.IngressGatewayConfig.EnvEntry.key', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='value', full_name='values.IngressGatewayConfig.EnvEntry.value', index=1,
+      name='value', full_name='v1alpha2.IngressGatewayConfig.EnvEntry.value', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -1279,208 +1392,208 @@ _INGRESSGATEWAYCONFIG_ENVENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1586,
-  serialized_end=1628,
+  serialized_start=2048,
+  serialized_end=2090,
 )
 
 _INGRESSGATEWAYCONFIG = _descriptor.Descriptor(
   name='IngressGatewayConfig',
-  full_name='values.IngressGatewayConfig',
+  full_name='v1alpha2.IngressGatewayConfig',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='autoscaleEnabled', full_name='values.IngressGatewayConfig.autoscaleEnabled', index=0,
-      number=1, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
+      name='autoscaleEnabled', full_name='v1alpha2.IngressGatewayConfig.autoscaleEnabled', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='autoscaleMax', full_name='values.IngressGatewayConfig.autoscaleMax', index=1,
+      name='autoscaleMax', full_name='v1alpha2.IngressGatewayConfig.autoscaleMax', index=1,
       number=2, type=13, cpp_type=3, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='autoscaleMin', full_name='values.IngressGatewayConfig.autoscaleMin', index=2,
+      name='autoscaleMin', full_name='v1alpha2.IngressGatewayConfig.autoscaleMin', index=2,
       number=3, type=13, cpp_type=3, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='cpu', full_name='values.IngressGatewayConfig.cpu', index=3,
+      name='cpu', full_name='v1alpha2.IngressGatewayConfig.cpu', index=3,
       number=5, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='customService', full_name='values.IngressGatewayConfig.customService', index=4,
-      number=6, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
+      name='customService', full_name='v1alpha2.IngressGatewayConfig.customService', index=4,
+      number=6, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='debug', full_name='values.IngressGatewayConfig.debug', index=5,
+      name='debug', full_name='v1alpha2.IngressGatewayConfig.debug', index=5,
       number=7, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='domain', full_name='values.IngressGatewayConfig.domain', index=6,
+      name='domain', full_name='v1alpha2.IngressGatewayConfig.domain', index=6,
       number=8, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='enabled', full_name='values.IngressGatewayConfig.enabled', index=7,
-      number=10, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
+      name='enabled', full_name='v1alpha2.IngressGatewayConfig.enabled', index=7,
+      number=10, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='env', full_name='values.IngressGatewayConfig.env', index=8,
+      name='env', full_name='v1alpha2.IngressGatewayConfig.env', index=8,
       number=11, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='externalIPs', full_name='values.IngressGatewayConfig.externalIPs', index=9,
+      name='externalIPs', full_name='v1alpha2.IngressGatewayConfig.externalIPs', index=9,
       number=12, type=9, cpp_type=9, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='k8sIngress', full_name='values.IngressGatewayConfig.k8sIngress', index=10,
-      number=13, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
+      name='k8sIngress', full_name='v1alpha2.IngressGatewayConfig.k8sIngress', index=10,
+      number=13, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='k8sIngressHttps', full_name='values.IngressGatewayConfig.k8sIngressHttps', index=11,
-      number=14, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
+      name='k8sIngressHttps', full_name='v1alpha2.IngressGatewayConfig.k8sIngressHttps', index=11,
+      number=14, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='labels', full_name='values.IngressGatewayConfig.labels', index=12,
+      name='labels', full_name='v1alpha2.IngressGatewayConfig.labels', index=12,
       number=15, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='loadBalancerIP', full_name='values.IngressGatewayConfig.loadBalancerIP', index=13,
+      name='loadBalancerIP', full_name='v1alpha2.IngressGatewayConfig.loadBalancerIP', index=13,
       number=16, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='loadBalancerSourceRanges', full_name='values.IngressGatewayConfig.loadBalancerSourceRanges', index=14,
+      name='loadBalancerSourceRanges', full_name='v1alpha2.IngressGatewayConfig.loadBalancerSourceRanges', index=14,
       number=17, type=9, cpp_type=9, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='meshExpansionPorts', full_name='values.IngressGatewayConfig.meshExpansionPorts', index=15,
+      name='meshExpansionPorts', full_name='v1alpha2.IngressGatewayConfig.meshExpansionPorts', index=15,
       number=18, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='nodeSelector', full_name='values.IngressGatewayConfig.nodeSelector', index=16,
+      name='nodeSelector', full_name='v1alpha2.IngressGatewayConfig.nodeSelector', index=16,
       number=19, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='podAnnotations', full_name='values.IngressGatewayConfig.podAnnotations', index=17,
+      name='podAnnotations', full_name='v1alpha2.IngressGatewayConfig.podAnnotations', index=17,
       number=20, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='podAntiAffinityLabelSelector', full_name='values.IngressGatewayConfig.podAntiAffinityLabelSelector', index=18,
+      name='podAntiAffinityLabelSelector', full_name='v1alpha2.IngressGatewayConfig.podAntiAffinityLabelSelector', index=18,
       number=21, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='podAntiAffinityTermLabelSelector', full_name='values.IngressGatewayConfig.podAntiAffinityTermLabelSelector', index=19,
+      name='podAntiAffinityTermLabelSelector', full_name='v1alpha2.IngressGatewayConfig.podAntiAffinityTermLabelSelector', index=19,
       number=22, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='ports', full_name='values.IngressGatewayConfig.ports', index=20,
+      name='ports', full_name='v1alpha2.IngressGatewayConfig.ports', index=20,
       number=23, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='replicaCount', full_name='values.IngressGatewayConfig.replicaCount', index=21,
+      name='replicaCount', full_name='v1alpha2.IngressGatewayConfig.replicaCount', index=21,
       number=24, type=13, cpp_type=3, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='resources', full_name='values.IngressGatewayConfig.resources', index=22,
+      name='resources', full_name='v1alpha2.IngressGatewayConfig.resources', index=22,
       number=25, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='sds', full_name='values.IngressGatewayConfig.sds', index=23,
+      name='sds', full_name='v1alpha2.IngressGatewayConfig.sds', index=23,
       number=26, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='secretVolumes', full_name='values.IngressGatewayConfig.secretVolumes', index=24,
+      name='secretVolumes', full_name='v1alpha2.IngressGatewayConfig.secretVolumes', index=24,
       number=27, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='serviceAnnotations', full_name='values.IngressGatewayConfig.serviceAnnotations', index=25,
+      name='serviceAnnotations', full_name='v1alpha2.IngressGatewayConfig.serviceAnnotations', index=25,
       number=28, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='type', full_name='values.IngressGatewayConfig.type', index=26,
+      name='type', full_name='v1alpha2.IngressGatewayConfig.type', index=26,
       number=29, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='zvpn', full_name='values.IngressGatewayConfig.zvpn', index=27,
+      name='zvpn', full_name='v1alpha2.IngressGatewayConfig.zvpn', index=27,
       number=30, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
@@ -1498,27 +1611,27 @@ _INGRESSGATEWAYCONFIG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3636,
-  serialized_end=4752,
+  serialized_start=4427,
+  serialized_end=5711,
 )
 
 
 _INGRESSGATEWAYSDSCONFIG = _descriptor.Descriptor(
   name='IngressGatewaySdsConfig',
-  full_name='values.IngressGatewaySdsConfig',
+  full_name='v1alpha2.IngressGatewaySdsConfig',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='enabled', full_name='values.IngressGatewaySdsConfig.enabled', index=0,
-      number=1, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
+      name='enabled', full_name='v1alpha2.IngressGatewaySdsConfig.enabled', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='image', full_name='values.IngressGatewaySdsConfig.image', index=1,
+      name='image', full_name='v1alpha2.IngressGatewaySdsConfig.image', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -1536,27 +1649,27 @@ _INGRESSGATEWAYSDSCONFIG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4754,
-  serialized_end=4811,
+  serialized_start=5713,
+  serialized_end=5798,
 )
 
 
 _INGRESSGATEWAYZVPNCONFIG = _descriptor.Descriptor(
   name='IngressGatewayZvpnConfig',
-  full_name='values.IngressGatewayZvpnConfig',
+  full_name='v1alpha2.IngressGatewayZvpnConfig',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='enabled', full_name='values.IngressGatewayZvpnConfig.enabled', index=0,
-      number=1, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
+      name='enabled', full_name='v1alpha2.IngressGatewayZvpnConfig.enabled', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='suffix', full_name='values.IngressGatewayZvpnConfig.suffix', index=1,
+      name='suffix', full_name='v1alpha2.IngressGatewayZvpnConfig.suffix', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -1574,22 +1687,22 @@ _INGRESSGATEWAYZVPNCONFIG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4813,
-  serialized_end=4872,
+  serialized_start=5800,
+  serialized_end=5887,
 )
 
 
 _KUBERNETESENVMIXERADAPTERCONFIG = _descriptor.Descriptor(
   name='KubernetesEnvMixerAdapterConfig',
-  full_name='values.KubernetesEnvMixerAdapterConfig',
+  full_name='v1alpha2.KubernetesEnvMixerAdapterConfig',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='enabled', full_name='values.KubernetesEnvMixerAdapterConfig.enabled', index=0,
-      number=1, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
+      name='enabled', full_name='v1alpha2.KubernetesEnvMixerAdapterConfig.enabled', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
@@ -1605,34 +1718,34 @@ _KUBERNETESENVMIXERADAPTERCONFIG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4874,
-  serialized_end=4924,
+  serialized_start=5889,
+  serialized_end=5967,
 )
 
 
 _KUBERNETESINGRESSCONFIG = _descriptor.Descriptor(
   name='KubernetesIngressConfig',
-  full_name='values.KubernetesIngressConfig',
+  full_name='v1alpha2.KubernetesIngressConfig',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='enabled', full_name='values.KubernetesIngressConfig.enabled', index=0,
-      number=1, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
+      name='enabled', full_name='v1alpha2.KubernetesIngressConfig.enabled', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='enableHttps', full_name='values.KubernetesIngressConfig.enableHttps', index=1,
-      number=2, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
+      name='enableHttps', full_name='v1alpha2.KubernetesIngressConfig.enableHttps', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='gatewayName', full_name='values.KubernetesIngressConfig.gatewayName', index=2,
+      name='gatewayName', full_name='v1alpha2.KubernetesIngressConfig.gatewayName', index=2,
       number=3, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -1650,20 +1763,20 @@ _KUBERNETESINGRESSCONFIG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4926,
-  serialized_end=5010,
+  serialized_start=5970,
+  serialized_end=6110,
 )
 
 
 _LOADSHEDDINGCONFIG = _descriptor.Descriptor(
   name='LoadSheddingConfig',
-  full_name='values.LoadSheddingConfig',
+  full_name='v1alpha2.LoadSheddingConfig',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='latencyThreshold', full_name='values.LoadSheddingConfig.latencyThreshold', index=0,
+      name='latencyThreshold', full_name='v1alpha2.LoadSheddingConfig.latencyThreshold', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -1682,22 +1795,22 @@ _LOADSHEDDINGCONFIG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5012,
-  serialized_end=5107,
+  serialized_start=6112,
+  serialized_end=6207,
 )
 
 
 _MTLSCONFIG = _descriptor.Descriptor(
   name='MTLSConfig',
-  full_name='values.MTLSConfig',
+  full_name='v1alpha2.MTLSConfig',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='enabled', full_name='values.MTLSConfig.enabled', index=0,
-      number=1, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
+      name='enabled', full_name='v1alpha2.MTLSConfig.enabled', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
@@ -1713,81 +1826,81 @@ _MTLSCONFIG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5109,
-  serialized_end=5138,
+  serialized_start=6209,
+  serialized_end=6266,
 )
 
 
 _MESHEXPANSIONCONFIG = _descriptor.Descriptor(
   name='MeshExpansionConfig',
-  full_name='values.MeshExpansionConfig',
+  full_name='v1alpha2.MeshExpansionConfig',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='enabled', full_name='values.MeshExpansionConfig.enabled', index=0,
-      number=1, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='useILB', full_name='values.MeshExpansionConfig.useILB', index=1,
-      number=2, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=5140,
-  serialized_end=5194,
-)
-
-
-_MIXERADAPTERSCONFIG = _descriptor.Descriptor(
-  name='MixerAdaptersConfig',
-  full_name='values.MixerAdaptersConfig',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='kubernetesenv', full_name='values.MixerAdaptersConfig.kubernetesenv', index=0,
+      name='enabled', full_name='v1alpha2.MeshExpansionConfig.enabled', index=0,
       number=1, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='prometheus', full_name='values.MixerAdaptersConfig.prometheus', index=1,
+      name='useILB', full_name='v1alpha2.MeshExpansionConfig.useILB', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=6268,
+  serialized_end=6378,
+)
+
+
+_MIXERADAPTERSCONFIG = _descriptor.Descriptor(
+  name='MixerAdaptersConfig',
+  full_name='v1alpha2.MixerAdaptersConfig',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='kubernetesenv', full_name='v1alpha2.MixerAdaptersConfig.kubernetesenv', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='prometheus', full_name='v1alpha2.MixerAdaptersConfig.prometheus', index=1,
       number=2, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='stdio', full_name='values.MixerAdaptersConfig.stdio', index=2,
+      name='stdio', full_name='v1alpha2.MixerAdaptersConfig.stdio', index=2,
       number=3, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='useAdapterCRDs', full_name='values.MixerAdaptersConfig.useAdapterCRDs', index=3,
-      number=4, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
+      name='useAdapterCRDs', full_name='v1alpha2.MixerAdaptersConfig.useAdapterCRDs', index=3,
+      number=4, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
@@ -1803,27 +1916,27 @@ _MIXERADAPTERSCONFIG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5197,
-  serialized_end=5412,
+  serialized_start=6381,
+  serialized_end=6630,
 )
 
 
 _MIXERCONFIG = _descriptor.Descriptor(
   name='MixerConfig',
-  full_name='values.MixerConfig',
+  full_name='v1alpha2.MixerConfig',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='policy', full_name='values.MixerConfig.policy', index=0,
+      name='policy', full_name='v1alpha2.MixerConfig.policy', index=0,
       number=1, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='telemetry', full_name='values.MixerConfig.telemetry', index=1,
+      name='telemetry', full_name='v1alpha2.MixerConfig.telemetry', index=1,
       number=2, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
@@ -1841,69 +1954,69 @@ _MIXERCONFIG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5414,
-  serialized_end=5519,
+  serialized_start=6632,
+  serialized_end=6741,
 )
 
 
 _MIXERPOLICYCONFIG = _descriptor.Descriptor(
   name='MixerPolicyConfig',
-  full_name='values.MixerPolicyConfig',
+  full_name='v1alpha2.MixerPolicyConfig',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='autoscaleEnabled', full_name='values.MixerPolicyConfig.autoscaleEnabled', index=0,
-      number=1, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
+      name='autoscaleEnabled', full_name='v1alpha2.MixerPolicyConfig.autoscaleEnabled', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='autoscaleMax', full_name='values.MixerPolicyConfig.autoscaleMax', index=1,
+      name='autoscaleMax', full_name='v1alpha2.MixerPolicyConfig.autoscaleMax', index=1,
       number=2, type=13, cpp_type=3, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='autoscaleMin', full_name='values.MixerPolicyConfig.autoscaleMin', index=2,
+      name='autoscaleMin', full_name='v1alpha2.MixerPolicyConfig.autoscaleMin', index=2,
       number=3, type=13, cpp_type=3, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='cpu', full_name='values.MixerPolicyConfig.cpu', index=3,
+      name='cpu', full_name='v1alpha2.MixerPolicyConfig.cpu', index=3,
       number=4, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='enabled', full_name='values.MixerPolicyConfig.enabled', index=4,
-      number=5, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
+      name='enabled', full_name='v1alpha2.MixerPolicyConfig.enabled', index=4,
+      number=5, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='image', full_name='values.MixerPolicyConfig.image', index=5,
+      name='image', full_name='v1alpha2.MixerPolicyConfig.image', index=5,
       number=6, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='podAnnotations', full_name='values.MixerPolicyConfig.podAnnotations', index=6,
+      name='podAnnotations', full_name='v1alpha2.MixerPolicyConfig.podAnnotations', index=6,
       number=7, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='replicaCount', full_name='values.MixerPolicyConfig.replicaCount', index=7,
+      name='replicaCount', full_name='v1alpha2.MixerPolicyConfig.replicaCount', index=7,
       number=8, type=13, cpp_type=3, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
@@ -1921,27 +2034,27 @@ _MIXERPOLICYCONFIG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5522,
-  serialized_end=5770,
+  serialized_start=6744,
+  serialized_end=7052,
 )
 
 
 _MIXERTELEMETRYCONFIG_ENVENTRY = _descriptor.Descriptor(
   name='EnvEntry',
-  full_name='values.MixerTelemetryConfig.EnvEntry',
+  full_name='v1alpha2.MixerTelemetryConfig.EnvEntry',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='key', full_name='values.MixerTelemetryConfig.EnvEntry.key', index=0,
+      name='key', full_name='v1alpha2.MixerTelemetryConfig.EnvEntry.key', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='value', full_name='values.MixerTelemetryConfig.EnvEntry.value', index=1,
+      name='value', full_name='v1alpha2.MixerTelemetryConfig.EnvEntry.value', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -1959,112 +2072,112 @@ _MIXERTELEMETRYCONFIG_ENVENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1586,
-  serialized_end=1628,
+  serialized_start=2048,
+  serialized_end=2090,
 )
 
 _MIXERTELEMETRYCONFIG = _descriptor.Descriptor(
   name='MixerTelemetryConfig',
-  full_name='values.MixerTelemetryConfig',
+  full_name='v1alpha2.MixerTelemetryConfig',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='adapters', full_name='values.MixerTelemetryConfig.adapters', index=0,
+      name='adapters', full_name='v1alpha2.MixerTelemetryConfig.adapters', index=0,
       number=1, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='autoscaleEnabled', full_name='values.MixerTelemetryConfig.autoscaleEnabled', index=1,
-      number=2, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
+      name='autoscaleEnabled', full_name='v1alpha2.MixerTelemetryConfig.autoscaleEnabled', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='autoscaleMax', full_name='values.MixerTelemetryConfig.autoscaleMax', index=2,
+      name='autoscaleMax', full_name='v1alpha2.MixerTelemetryConfig.autoscaleMax', index=2,
       number=3, type=13, cpp_type=3, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='autoscaleMin', full_name='values.MixerTelemetryConfig.autoscaleMin', index=3,
+      name='autoscaleMin', full_name='v1alpha2.MixerTelemetryConfig.autoscaleMin', index=3,
       number=4, type=13, cpp_type=3, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='cpu', full_name='values.MixerTelemetryConfig.cpu', index=4,
+      name='cpu', full_name='v1alpha2.MixerTelemetryConfig.cpu', index=4,
       number=5, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='enabled', full_name='values.MixerTelemetryConfig.enabled', index=5,
-      number=6, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
+      name='enabled', full_name='v1alpha2.MixerTelemetryConfig.enabled', index=5,
+      number=6, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='env', full_name='values.MixerTelemetryConfig.env', index=6,
+      name='env', full_name='v1alpha2.MixerTelemetryConfig.env', index=6,
       number=7, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='image', full_name='values.MixerTelemetryConfig.image', index=7,
+      name='image', full_name='v1alpha2.MixerTelemetryConfig.image', index=7,
       number=8, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='loadshedding', full_name='values.MixerTelemetryConfig.loadshedding', index=8,
+      name='loadshedding', full_name='v1alpha2.MixerTelemetryConfig.loadshedding', index=8,
       number=9, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='nodeSelector', full_name='values.MixerTelemetryConfig.nodeSelector', index=9,
+      name='nodeSelector', full_name='v1alpha2.MixerTelemetryConfig.nodeSelector', index=9,
       number=10, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='podAnnotations', full_name='values.MixerTelemetryConfig.podAnnotations', index=10,
+      name='podAnnotations', full_name='v1alpha2.MixerTelemetryConfig.podAnnotations', index=10,
       number=11, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='replicaCount', full_name='values.MixerTelemetryConfig.replicaCount', index=11,
+      name='replicaCount', full_name='v1alpha2.MixerTelemetryConfig.replicaCount', index=11,
       number=12, type=13, cpp_type=3, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='resources', full_name='values.MixerTelemetryConfig.resources', index=12,
+      name='resources', full_name='v1alpha2.MixerTelemetryConfig.resources', index=12,
       number=13, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='sessionAffinityEnabled', full_name='values.MixerTelemetryConfig.sessionAffinityEnabled', index=13,
-      number=14, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
+      name='sessionAffinityEnabled', full_name='v1alpha2.MixerTelemetryConfig.sessionAffinityEnabled', index=13,
+      number=14, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
@@ -2080,22 +2193,22 @@ _MIXERTELEMETRYCONFIG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5773,
-  serialized_end=6364,
+  serialized_start=7055,
+  serialized_end=7721,
 )
 
 
 _MULTICLUSTERCONFIG = _descriptor.Descriptor(
   name='MultiClusterConfig',
-  full_name='values.MultiClusterConfig',
+  full_name='v1alpha2.MultiClusterConfig',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='enabled', full_name='values.MultiClusterConfig.enabled', index=0,
-      number=1, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
+      name='enabled', full_name='v1alpha2.MultiClusterConfig.enabled', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
@@ -2111,41 +2224,41 @@ _MULTICLUSTERCONFIG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6366,
-  serialized_end=6403,
+  serialized_start=7723,
+  serialized_end=7788,
 )
 
 
 _NODEAGENTCONFIG = _descriptor.Descriptor(
   name='NodeAgentConfig',
-  full_name='values.NodeAgentConfig',
+  full_name='v1alpha2.NodeAgentConfig',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='enabled', full_name='values.NodeAgentConfig.enabled', index=0,
-      number=1, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
+      name='enabled', full_name='v1alpha2.NodeAgentConfig.enabled', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='env', full_name='values.NodeAgentConfig.env', index=1,
+      name='env', full_name='v1alpha2.NodeAgentConfig.env', index=1,
       number=2, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='image', full_name='values.NodeAgentConfig.image', index=2,
+      name='image', full_name='v1alpha2.NodeAgentConfig.image', index=2,
       number=3, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='nodeSelector', full_name='values.NodeAgentConfig.nodeSelector', index=3,
+      name='nodeSelector', full_name='v1alpha2.NodeAgentConfig.nodeSelector', index=3,
       number=4, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
@@ -2163,14 +2276,14 @@ _NODEAGENTCONFIG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6406,
-  serialized_end=6554,
+  serialized_start=7791,
+  serialized_end=7971,
 )
 
 
 _OUTBOUNDTRAFFICPOLICYCONFIG = _descriptor.Descriptor(
   name='OutboundTrafficPolicyConfig',
-  full_name='values.OutboundTrafficPolicyConfig',
+  full_name='v1alpha2.OutboundTrafficPolicyConfig',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
@@ -2188,27 +2301,27 @@ _OUTBOUNDTRAFFICPOLICYCONFIG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6556,
-  serialized_end=6627,
+  serialized_start=7973,
+  serialized_end=8044,
 )
 
 
 _PILOTCONFIG_ENVENTRY = _descriptor.Descriptor(
   name='EnvEntry',
-  full_name='values.PilotConfig.EnvEntry',
+  full_name='v1alpha2.PilotConfig.EnvEntry',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='key', full_name='values.PilotConfig.EnvEntry.key', index=0,
+      name='key', full_name='v1alpha2.PilotConfig.EnvEntry.key', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='value', full_name='values.PilotConfig.EnvEntry.value', index=1,
+      name='value', full_name='v1alpha2.PilotConfig.EnvEntry.value', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -2226,173 +2339,173 @@ _PILOTCONFIG_ENVENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1586,
-  serialized_end=1628,
+  serialized_start=2048,
+  serialized_end=2090,
 )
 
 _PILOTCONFIG = _descriptor.Descriptor(
   name='PilotConfig',
-  full_name='values.PilotConfig',
+  full_name='v1alpha2.PilotConfig',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='enabled', full_name='values.PilotConfig.enabled', index=0,
-      number=1, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
+      name='enabled', full_name='v1alpha2.PilotConfig.enabled', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='autoscaleEnabled', full_name='values.PilotConfig.autoscaleEnabled', index=1,
-      number=2, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
+      name='autoscaleEnabled', full_name='v1alpha2.PilotConfig.autoscaleEnabled', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='autoscaleMin', full_name='values.PilotConfig.autoscaleMin', index=2,
+      name='autoscaleMin', full_name='v1alpha2.PilotConfig.autoscaleMin', index=2,
       number=3, type=13, cpp_type=3, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='autoscaleMax', full_name='values.PilotConfig.autoscaleMax', index=3,
+      name='autoscaleMax', full_name='v1alpha2.PilotConfig.autoscaleMax', index=3,
       number=4, type=13, cpp_type=3, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='replicaCount', full_name='values.PilotConfig.replicaCount', index=4,
+      name='replicaCount', full_name='v1alpha2.PilotConfig.replicaCount', index=4,
       number=5, type=13, cpp_type=3, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='image', full_name='values.PilotConfig.image', index=5,
+      name='image', full_name='v1alpha2.PilotConfig.image', index=5,
       number=6, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='sidecar', full_name='values.PilotConfig.sidecar', index=6,
-      number=7, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
+      name='sidecar', full_name='v1alpha2.PilotConfig.sidecar', index=6,
+      number=7, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='traceSampling', full_name='values.PilotConfig.traceSampling', index=7,
+      name='traceSampling', full_name='v1alpha2.PilotConfig.traceSampling', index=7,
       number=8, type=1, cpp_type=5, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='resources', full_name='values.PilotConfig.resources', index=8,
+      name='resources', full_name='v1alpha2.PilotConfig.resources', index=8,
       number=9, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='configNamespace', full_name='values.PilotConfig.configNamespace', index=9,
+      name='configNamespace', full_name='v1alpha2.PilotConfig.configNamespace', index=9,
       number=10, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='cpu', full_name='values.PilotConfig.cpu', index=10,
+      name='cpu', full_name='v1alpha2.PilotConfig.cpu', index=10,
       number=11, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='nodeSelector', full_name='values.PilotConfig.nodeSelector', index=11,
+      name='nodeSelector', full_name='v1alpha2.PilotConfig.nodeSelector', index=11,
       number=12, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='keepaliveMaxServerConnectionAge', full_name='values.PilotConfig.keepaliveMaxServerConnectionAge', index=12,
+      name='keepaliveMaxServerConnectionAge', full_name='v1alpha2.PilotConfig.keepaliveMaxServerConnectionAge', index=12,
       number=13, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='deploymentLabels', full_name='values.PilotConfig.deploymentLabels', index=13,
+      name='deploymentLabels', full_name='v1alpha2.PilotConfig.deploymentLabels', index=13,
       number=14, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='meshNetworks', full_name='values.PilotConfig.meshNetworks', index=14,
+      name='meshNetworks', full_name='v1alpha2.PilotConfig.meshNetworks', index=14,
       number=15, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='podAntiAffinityLabelSelector', full_name='values.PilotConfig.podAntiAffinityLabelSelector', index=15,
+      name='podAntiAffinityLabelSelector', full_name='v1alpha2.PilotConfig.podAntiAffinityLabelSelector', index=15,
       number=16, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='podAntiAffinityTermLabelSelector', full_name='values.PilotConfig.podAntiAffinityTermLabelSelector', index=16,
+      name='podAntiAffinityTermLabelSelector', full_name='v1alpha2.PilotConfig.podAntiAffinityTermLabelSelector', index=16,
       number=17, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='configMap', full_name='values.PilotConfig.configMap', index=17,
-      number=18, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
+      name='configMap', full_name='v1alpha2.PilotConfig.configMap', index=17,
+      number=18, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='ingress', full_name='values.PilotConfig.ingress', index=18,
+      name='ingress', full_name='v1alpha2.PilotConfig.ingress', index=18,
       number=19, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='useMCP', full_name='values.PilotConfig.useMCP', index=19,
-      number=20, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
+      name='useMCP', full_name='v1alpha2.PilotConfig.useMCP', index=19,
+      number=20, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='env', full_name='values.PilotConfig.env', index=20,
+      name='env', full_name='v1alpha2.PilotConfig.env', index=20,
       number=21, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='policy', full_name='values.PilotConfig.policy', index=21,
+      name='policy', full_name='v1alpha2.PilotConfig.policy', index=21,
       number=22, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='telemetry', full_name='values.PilotConfig.telemetry', index=22,
+      name='telemetry', full_name='v1alpha2.PilotConfig.telemetry', index=22,
       number=23, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
@@ -2410,27 +2523,27 @@ _PILOTCONFIG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6630,
-  serialized_end=7593,
+  serialized_start=8047,
+  serialized_end=9149,
 )
 
 
 _PILOTINGRESSCONFIG = _descriptor.Descriptor(
   name='PilotIngressConfig',
-  full_name='values.PilotIngressConfig',
+  full_name='v1alpha2.PilotIngressConfig',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='ingressService', full_name='values.PilotIngressConfig.ingressService', index=0,
+      name='ingressService', full_name='v1alpha2.PilotIngressConfig.ingressService', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='ingressClass', full_name='values.PilotIngressConfig.ingressClass', index=1,
+      name='ingressClass', full_name='v1alpha2.PilotIngressConfig.ingressClass', index=1,
       number=3, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -2449,22 +2562,22 @@ _PILOTINGRESSCONFIG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=7595,
-  serialized_end=7720,
+  serialized_start=9151,
+  serialized_end=9276,
 )
 
 
 _PILOTPOLICYCONFIG = _descriptor.Descriptor(
   name='PilotPolicyConfig',
-  full_name='values.PilotPolicyConfig',
+  full_name='v1alpha2.PilotPolicyConfig',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='enabled', full_name='values.PilotPolicyConfig.enabled', index=0,
-      number=1, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
+      name='enabled', full_name='v1alpha2.PilotPolicyConfig.enabled', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
@@ -2480,22 +2593,22 @@ _PILOTPOLICYCONFIG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=7722,
-  serialized_end=7758,
+  serialized_start=9278,
+  serialized_end=9342,
 )
 
 
 _PILOTTELEMETRYCONFIG = _descriptor.Descriptor(
   name='PilotTelemetryConfig',
-  full_name='values.PilotTelemetryConfig',
+  full_name='v1alpha2.PilotTelemetryConfig',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='enabled', full_name='values.PilotTelemetryConfig.enabled', index=0,
-      number=1, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
+      name='enabled', full_name='v1alpha2.PilotTelemetryConfig.enabled', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
@@ -2511,41 +2624,41 @@ _PILOTTELEMETRYCONFIG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=7760,
-  serialized_end=7799,
+  serialized_start=9344,
+  serialized_end=9411,
 )
 
 
 _PORTSCONFIG = _descriptor.Descriptor(
   name='PortsConfig',
-  full_name='values.PortsConfig',
+  full_name='v1alpha2.PortsConfig',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='name', full_name='values.PortsConfig.name', index=0,
+      name='name', full_name='v1alpha2.PortsConfig.name', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='port', full_name='values.PortsConfig.port', index=1,
+      name='port', full_name='v1alpha2.PortsConfig.port', index=1,
       number=2, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='nodePort', full_name='values.PortsConfig.nodePort', index=2,
+      name='nodePort', full_name='v1alpha2.PortsConfig.nodePort', index=2,
       number=3, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='targetPort', full_name='values.PortsConfig.targetPort', index=3,
+      name='targetPort', full_name='v1alpha2.PortsConfig.targetPort', index=3,
       number=4, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
@@ -2563,97 +2676,97 @@ _PORTSCONFIG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=7801,
-  serialized_end=7880,
+  serialized_start=9413,
+  serialized_end=9492,
 )
 
 
 _PROMETHEUSCONFIG = _descriptor.Descriptor(
   name='PrometheusConfig',
-  full_name='values.PrometheusConfig',
+  full_name='v1alpha2.PrometheusConfig',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='createPrometheusResource', full_name='values.PrometheusConfig.createPrometheusResource', index=0,
-      number=1, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
+      name='createPrometheusResource', full_name='v1alpha2.PrometheusConfig.createPrometheusResource', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='enabled', full_name='values.PrometheusConfig.enabled', index=1,
-      number=2, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
+      name='enabled', full_name='v1alpha2.PrometheusConfig.enabled', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='replicaCount', full_name='values.PrometheusConfig.replicaCount', index=2,
+      name='replicaCount', full_name='v1alpha2.PrometheusConfig.replicaCount', index=2,
       number=3, type=13, cpp_type=3, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='hub', full_name='values.PrometheusConfig.hub', index=3,
+      name='hub', full_name='v1alpha2.PrometheusConfig.hub', index=3,
       number=4, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='tag', full_name='values.PrometheusConfig.tag', index=4,
+      name='tag', full_name='v1alpha2.PrometheusConfig.tag', index=4,
       number=5, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='retention', full_name='values.PrometheusConfig.retention', index=5,
+      name='retention', full_name='v1alpha2.PrometheusConfig.retention', index=5,
       number=6, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='nodeSelector', full_name='values.PrometheusConfig.nodeSelector', index=6,
+      name='nodeSelector', full_name='v1alpha2.PrometheusConfig.nodeSelector', index=6,
       number=7, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='scrapeInterval', full_name='values.PrometheusConfig.scrapeInterval', index=7,
+      name='scrapeInterval', full_name='v1alpha2.PrometheusConfig.scrapeInterval', index=7,
       number=8, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='contextPath', full_name='values.PrometheusConfig.contextPath', index=8,
+      name='contextPath', full_name='v1alpha2.PrometheusConfig.contextPath', index=8,
       number=9, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='ingress', full_name='values.PrometheusConfig.ingress', index=9,
+      name='ingress', full_name='v1alpha2.PrometheusConfig.ingress', index=9,
       number=10, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='service', full_name='values.PrometheusConfig.service', index=10,
+      name='service', full_name='v1alpha2.PrometheusConfig.service', index=10,
       number=11, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='security', full_name='values.PrometheusConfig.security', index=11,
+      name='security', full_name='v1alpha2.PrometheusConfig.security', index=11,
       number=12, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
@@ -2671,96 +2784,27 @@ _PROMETHEUSCONFIG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=7883,
-  serialized_end=8292,
+  serialized_start=9495,
+  serialized_end=9968,
 )
 
 
 _PROMETHEUSMIXERADAPTERCONFIG = _descriptor.Descriptor(
   name='PrometheusMixerAdapterConfig',
-  full_name='values.PrometheusMixerAdapterConfig',
+  full_name='v1alpha2.PrometheusMixerAdapterConfig',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='enabled', full_name='values.PrometheusMixerAdapterConfig.enabled', index=0,
-      number=1, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='metricsExpiryDuration', full_name='values.PrometheusMixerAdapterConfig.metricsExpiryDuration', index=1,
-      number=2, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=8294,
-  serialized_end=8399,
-)
-
-
-_PROMETHEUSSECURITYCONFIG = _descriptor.Descriptor(
-  name='PrometheusSecurityConfig',
-  full_name='values.PrometheusSecurityConfig',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='enabled', full_name='values.PrometheusSecurityConfig.enabled', index=0,
-      number=1, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=8401,
-  serialized_end=8444,
-)
-
-
-_PROMETHEUSSERVICECONFIG = _descriptor.Descriptor(
-  name='PrometheusServiceConfig',
-  full_name='values.PrometheusServiceConfig',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='annotations', full_name='values.PrometheusServiceConfig.annotations', index=0,
+      name='enabled', full_name='v1alpha2.PrometheusMixerAdapterConfig.enabled', index=0,
       number=1, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='nodePort', full_name='values.PrometheusServiceConfig.nodePort', index=1,
+      name='metricsExpiryDuration', full_name='v1alpha2.PrometheusMixerAdapterConfig.metricsExpiryDuration', index=1,
       number=2, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
@@ -2778,27 +2822,96 @@ _PROMETHEUSSERVICECONFIG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=8447,
-  serialized_end=8584,
+  serialized_start=9971,
+  serialized_end=10104,
 )
 
 
-_PROMETHEUSSERVICENODEPORTCONFIG = _descriptor.Descriptor(
-  name='PrometheusServiceNodePortConfig',
-  full_name='values.PrometheusServiceNodePortConfig',
+_PROMETHEUSSECURITYCONFIG = _descriptor.Descriptor(
+  name='PrometheusSecurityConfig',
+  full_name='v1alpha2.PrometheusSecurityConfig',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='enabled', full_name='values.PrometheusServiceNodePortConfig.enabled', index=0,
-      number=1, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
+      name='enabled', full_name='v1alpha2.PrometheusSecurityConfig.enabled', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=10106,
+  serialized_end=10177,
+)
+
+
+_PROMETHEUSSERVICECONFIG = _descriptor.Descriptor(
+  name='PrometheusServiceConfig',
+  full_name='v1alpha2.PrometheusServiceConfig',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='annotations', full_name='v1alpha2.PrometheusServiceConfig.annotations', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='port', full_name='values.PrometheusServiceNodePortConfig.port', index=1,
+      name='nodePort', full_name='v1alpha2.PrometheusServiceConfig.nodePort', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=10180,
+  serialized_end=10321,
+)
+
+
+_PROMETHEUSSERVICENODEPORTCONFIG = _descriptor.Descriptor(
+  name='PrometheusServiceNodePortConfig',
+  full_name='v1alpha2.PrometheusServiceNodePortConfig',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='enabled', full_name='v1alpha2.PrometheusServiceNodePortConfig.enabled', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='port', full_name='v1alpha2.PrometheusServiceNodePortConfig.port', index=1,
       number=2, type=13, cpp_type=3, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
@@ -2816,167 +2929,167 @@ _PROMETHEUSSERVICENODEPORTCONFIG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=8586,
-  serialized_end=8650,
+  serialized_start=10323,
+  serialized_end=10415,
 )
 
 
 _PROXYCONFIG = _descriptor.Descriptor(
   name='ProxyConfig',
-  full_name='values.ProxyConfig',
+  full_name='v1alpha2.ProxyConfig',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='accessLogFile', full_name='values.ProxyConfig.accessLogFile', index=0,
+      name='accessLogFile', full_name='v1alpha2.ProxyConfig.accessLogFile', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='accessLogFormat', full_name='values.ProxyConfig.accessLogFormat', index=1,
+      name='accessLogFormat', full_name='v1alpha2.ProxyConfig.accessLogFormat', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='clusterDomain', full_name='values.ProxyConfig.clusterDomain', index=2,
+      name='clusterDomain', full_name='v1alpha2.ProxyConfig.clusterDomain', index=2,
       number=5, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='componentLogLevel', full_name='values.ProxyConfig.componentLogLevel', index=3,
+      name='componentLogLevel', full_name='v1alpha2.ProxyConfig.componentLogLevel', index=3,
       number=6, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='concurrency', full_name='values.ProxyConfig.concurrency', index=4,
+      name='concurrency', full_name='v1alpha2.ProxyConfig.concurrency', index=4,
       number=7, type=13, cpp_type=3, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='dnsRefreshRate', full_name='values.ProxyConfig.dnsRefreshRate', index=5,
+      name='dnsRefreshRate', full_name='v1alpha2.ProxyConfig.dnsRefreshRate', index=5,
       number=8, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='enableCoreDump', full_name='values.ProxyConfig.enableCoreDump', index=6,
-      number=9, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
+      name='enableCoreDump', full_name='v1alpha2.ProxyConfig.enableCoreDump', index=6,
+      number=9, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='envoyMetricsService', full_name='values.ProxyConfig.envoyMetricsService', index=7,
+      name='envoyMetricsService', full_name='v1alpha2.ProxyConfig.envoyMetricsService', index=7,
       number=10, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='envoyStatsd', full_name='values.ProxyConfig.envoyStatsd', index=8,
+      name='envoyStatsd', full_name='v1alpha2.ProxyConfig.envoyStatsd', index=8,
       number=11, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='excludeInboundPorts', full_name='values.ProxyConfig.excludeInboundPorts', index=9,
+      name='excludeInboundPorts', full_name='v1alpha2.ProxyConfig.excludeInboundPorts', index=9,
       number=12, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='excludeIPRanges', full_name='values.ProxyConfig.excludeIPRanges', index=10,
+      name='excludeIPRanges', full_name='v1alpha2.ProxyConfig.excludeIPRanges', index=10,
       number=13, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='image', full_name='values.ProxyConfig.image', index=11,
+      name='image', full_name='v1alpha2.ProxyConfig.image', index=11,
       number=14, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='includeInboundPorts', full_name='values.ProxyConfig.includeInboundPorts', index=12,
+      name='includeInboundPorts', full_name='v1alpha2.ProxyConfig.includeInboundPorts', index=12,
       number=15, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='includeIPRanges', full_name='values.ProxyConfig.includeIPRanges', index=13,
+      name='includeIPRanges', full_name='v1alpha2.ProxyConfig.includeIPRanges', index=13,
       number=16, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='kubevirtInterfaces', full_name='values.ProxyConfig.kubevirtInterfaces', index=14,
+      name='kubevirtInterfaces', full_name='v1alpha2.ProxyConfig.kubevirtInterfaces', index=14,
       number=17, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='logLevel', full_name='values.ProxyConfig.logLevel', index=15,
+      name='logLevel', full_name='v1alpha2.ProxyConfig.logLevel', index=15,
       number=18, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='privileged', full_name='values.ProxyConfig.privileged', index=16,
-      number=19, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
+      name='privileged', full_name='v1alpha2.ProxyConfig.privileged', index=16,
+      number=19, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='readinessInitialDelaySeconds', full_name='values.ProxyConfig.readinessInitialDelaySeconds', index=17,
+      name='readinessInitialDelaySeconds', full_name='v1alpha2.ProxyConfig.readinessInitialDelaySeconds', index=17,
       number=20, type=13, cpp_type=3, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='readinessPeriodSeconds', full_name='values.ProxyConfig.readinessPeriodSeconds', index=18,
+      name='readinessPeriodSeconds', full_name='v1alpha2.ProxyConfig.readinessPeriodSeconds', index=18,
       number=21, type=13, cpp_type=3, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='readinessFailureThreshold', full_name='values.ProxyConfig.readinessFailureThreshold', index=19,
+      name='readinessFailureThreshold', full_name='v1alpha2.ProxyConfig.readinessFailureThreshold', index=19,
       number=22, type=13, cpp_type=3, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='statusPort', full_name='values.ProxyConfig.statusPort', index=20,
+      name='statusPort', full_name='v1alpha2.ProxyConfig.statusPort', index=20,
       number=23, type=13, cpp_type=3, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='resources', full_name='values.ProxyConfig.resources', index=21,
+      name='resources', full_name='v1alpha2.ProxyConfig.resources', index=21,
       number=24, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
@@ -2997,20 +3110,20 @@ _PROXYCONFIG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=8653,
-  serialized_end=9473,
+  serialized_start=10418,
+  serialized_end=11277,
 )
 
 
 _PROXYINITCONFIG = _descriptor.Descriptor(
   name='ProxyInitConfig',
-  full_name='values.ProxyInitConfig',
+  full_name='v1alpha2.ProxyInitConfig',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='image', full_name='values.ProxyInitConfig.image', index=0,
+      name='image', full_name='v1alpha2.ProxyInitConfig.image', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -3028,27 +3141,27 @@ _PROXYINITCONFIG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=9475,
-  serialized_end=9507,
+  serialized_start=11279,
+  serialized_end=11311,
 )
 
 
 _RESOURCESREQUESTSCONFIG = _descriptor.Descriptor(
   name='ResourcesRequestsConfig',
-  full_name='values.ResourcesRequestsConfig',
+  full_name='v1alpha2.ResourcesRequestsConfig',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='cpu', full_name='values.ResourcesRequestsConfig.cpu', index=0,
+      name='cpu', full_name='v1alpha2.ResourcesRequestsConfig.cpu', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='memory', full_name='values.ResourcesRequestsConfig.memory', index=1,
+      name='memory', full_name='v1alpha2.ResourcesRequestsConfig.memory', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -3066,43 +3179,43 @@ _RESOURCESREQUESTSCONFIG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=9509,
-  serialized_end=9563,
+  serialized_start=11313,
+  serialized_end=11367,
 )
 
 
 _SDSCONFIG = _descriptor.Descriptor(
   name='SDSConfig',
-  full_name='values.SDSConfig',
+  full_name='v1alpha2.SDSConfig',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='enabled', full_name='values.SDSConfig.enabled', index=0,
-      number=1, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
+      name='enabled', full_name='v1alpha2.SDSConfig.enabled', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='udsPath', full_name='values.SDSConfig.udsPath', index=1,
+      name='udsPath', full_name='v1alpha2.SDSConfig.udsPath', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='useNormalJwt', full_name='values.SDSConfig.useNormalJwt', index=2,
-      number=3, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
+      name='useNormalJwt', full_name='v1alpha2.SDSConfig.useNormalJwt', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='useTrustworthyJwt', full_name='values.SDSConfig.useTrustworthyJwt', index=3,
-      number=4, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
+      name='useTrustworthyJwt', full_name='v1alpha2.SDSConfig.useTrustworthyJwt', index=3,
+      number=4, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
@@ -3118,34 +3231,34 @@ _SDSCONFIG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=9565,
-  serialized_end=9659,
+  serialized_start=11370,
+  serialized_end=11548,
 )
 
 
 _SECRETVOLUME = _descriptor.Descriptor(
   name='SecretVolume',
-  full_name='values.SecretVolume',
+  full_name='v1alpha2.SecretVolume',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='mountPath', full_name='values.SecretVolume.mountPath', index=0,
+      name='mountPath', full_name='v1alpha2.SecretVolume.mountPath', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='name', full_name='values.SecretVolume.name', index=1,
+      name='name', full_name='v1alpha2.SecretVolume.name', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='secretName', full_name='values.SecretVolume.secretName', index=2,
+      name='secretName', full_name='v1alpha2.SecretVolume.secretName', index=2,
       number=3, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -3163,27 +3276,27 @@ _SECRETVOLUME = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=9661,
-  serialized_end=9728,
+  serialized_start=11550,
+  serialized_end=11617,
 )
 
 
 _SECURITYCONFIG_DNSCERTSENTRY = _descriptor.Descriptor(
   name='DnsCertsEntry',
-  full_name='values.SecurityConfig.DnsCertsEntry',
+  full_name='v1alpha2.SecurityConfig.DnsCertsEntry',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='key', full_name='values.SecurityConfig.DnsCertsEntry.key', index=0,
+      name='key', full_name='v1alpha2.SecurityConfig.DnsCertsEntry.key', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='value', full_name='values.SecurityConfig.DnsCertsEntry.value', index=1,
+      name='value', full_name='v1alpha2.SecurityConfig.DnsCertsEntry.value', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -3201,68 +3314,68 @@ _SECURITYCONFIG_DNSCERTSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=9980,
-  serialized_end=10027,
+  serialized_start=11957,
+  serialized_end=12004,
 )
 
 _SECURITYCONFIG = _descriptor.Descriptor(
   name='SecurityConfig',
-  full_name='values.SecurityConfig',
+  full_name='v1alpha2.SecurityConfig',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='enabled', full_name='values.SecurityConfig.enabled', index=0,
-      number=1, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
+      name='enabled', full_name='v1alpha2.SecurityConfig.enabled', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='replicaCount', full_name='values.SecurityConfig.replicaCount', index=1,
+      name='replicaCount', full_name='v1alpha2.SecurityConfig.replicaCount', index=1,
       number=2, type=13, cpp_type=3, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='image', full_name='values.SecurityConfig.image', index=2,
+      name='image', full_name='v1alpha2.SecurityConfig.image', index=2,
       number=3, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='selfSigned', full_name='values.SecurityConfig.selfSigned', index=3,
-      number=4, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
+      name='selfSigned', full_name='v1alpha2.SecurityConfig.selfSigned', index=3,
+      number=4, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='trustDomain', full_name='values.SecurityConfig.trustDomain', index=4,
+      name='trustDomain', full_name='v1alpha2.SecurityConfig.trustDomain', index=4,
       number=5, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='dnsCerts', full_name='values.SecurityConfig.dnsCerts', index=5,
+      name='dnsCerts', full_name='v1alpha2.SecurityConfig.dnsCerts', index=5,
       number=6, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='createMeshPolicy', full_name='values.SecurityConfig.createMeshPolicy', index=6,
-      number=7, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
+      name='createMeshPolicy', full_name='v1alpha2.SecurityConfig.createMeshPolicy', index=6,
+      number=7, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='nodeSelector', full_name='values.SecurityConfig.nodeSelector', index=7,
+      name='nodeSelector', full_name='v1alpha2.SecurityConfig.nodeSelector', index=7,
       number=8, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
@@ -3280,41 +3393,41 @@ _SECURITYCONFIG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=9731,
-  serialized_end=10027,
+  serialized_start=11620,
+  serialized_end=12004,
 )
 
 
 _SERVICECONFIG = _descriptor.Descriptor(
   name='ServiceConfig',
-  full_name='values.ServiceConfig',
+  full_name='v1alpha2.ServiceConfig',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='annotations', full_name='values.ServiceConfig.annotations', index=0,
+      name='annotations', full_name='v1alpha2.ServiceConfig.annotations', index=0,
       number=1, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='externalPort', full_name='values.ServiceConfig.externalPort', index=1,
+      name='externalPort', full_name='v1alpha2.ServiceConfig.externalPort', index=1,
       number=2, type=13, cpp_type=3, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='name', full_name='values.ServiceConfig.name', index=2,
+      name='name', full_name='v1alpha2.ServiceConfig.name', index=2,
       number=3, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='type', full_name='values.ServiceConfig.type', index=3,
+      name='type', full_name='v1alpha2.ServiceConfig.type', index=3,
       number=18, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -3332,92 +3445,92 @@ _SERVICECONFIG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=10029,
-  serialized_end=10147,
+  serialized_start=12006,
+  serialized_end=12126,
 )
 
 
 _SIDECARINJECTORCONFIG = _descriptor.Descriptor(
   name='SidecarInjectorConfig',
-  full_name='values.SidecarInjectorConfig',
+  full_name='v1alpha2.SidecarInjectorConfig',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='enabled', full_name='values.SidecarInjectorConfig.enabled', index=0,
-      number=1, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
+      name='enabled', full_name='v1alpha2.SidecarInjectorConfig.enabled', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='enableNamespacesByDefault', full_name='values.SidecarInjectorConfig.enableNamespacesByDefault', index=1,
-      number=2, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
+      name='enableNamespacesByDefault', full_name='v1alpha2.SidecarInjectorConfig.enableNamespacesByDefault', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='image', full_name='values.SidecarInjectorConfig.image', index=2,
+      name='image', full_name='v1alpha2.SidecarInjectorConfig.image', index=2,
       number=3, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='nodeSelector', full_name='values.SidecarInjectorConfig.nodeSelector', index=3,
+      name='nodeSelector', full_name='v1alpha2.SidecarInjectorConfig.nodeSelector', index=3,
       number=10, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='neverInjectSelector', full_name='values.SidecarInjectorConfig.neverInjectSelector', index=4,
+      name='neverInjectSelector', full_name='v1alpha2.SidecarInjectorConfig.neverInjectSelector', index=4,
       number=11, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='alwaysInjectSelector', full_name='values.SidecarInjectorConfig.alwaysInjectSelector', index=5,
+      name='alwaysInjectSelector', full_name='v1alpha2.SidecarInjectorConfig.alwaysInjectSelector', index=5,
       number=12, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='podAntiAffinityLabelSelector', full_name='values.SidecarInjectorConfig.podAntiAffinityLabelSelector', index=6,
+      name='podAntiAffinityLabelSelector', full_name='v1alpha2.SidecarInjectorConfig.podAntiAffinityLabelSelector', index=6,
       number=13, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='podAntiAffinityTermLabelSelector', full_name='values.SidecarInjectorConfig.podAntiAffinityTermLabelSelector', index=7,
+      name='podAntiAffinityTermLabelSelector', full_name='v1alpha2.SidecarInjectorConfig.podAntiAffinityTermLabelSelector', index=7,
       number=14, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='replicaCount', full_name='values.SidecarInjectorConfig.replicaCount', index=8,
+      name='replicaCount', full_name='v1alpha2.SidecarInjectorConfig.replicaCount', index=8,
       number=15, type=13, cpp_type=3, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='rewriteAppHTTPProbe', full_name='values.SidecarInjectorConfig.rewriteAppHTTPProbe', index=9,
-      number=16, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
+      name='rewriteAppHTTPProbe', full_name='v1alpha2.SidecarInjectorConfig.rewriteAppHTTPProbe', index=9,
+      number=16, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='selfSigned', full_name='values.SidecarInjectorConfig.selfSigned', index=10,
-      number=17, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
+      name='selfSigned', full_name='v1alpha2.SidecarInjectorConfig.selfSigned', index=10,
+      number=17, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
@@ -3433,72 +3546,72 @@ _SIDECARINJECTORCONFIG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=10150,
-  serialized_end=10660,
+  serialized_start=12129,
+  serialized_end=12761,
 )
 
 
 _STDIOMIXERADAPTERCONFIG = _descriptor.Descriptor(
   name='StdioMixerAdapterConfig',
-  full_name='values.StdioMixerAdapterConfig',
+  full_name='v1alpha2.StdioMixerAdapterConfig',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='enabled', full_name='values.StdioMixerAdapterConfig.enabled', index=0,
-      number=1, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='outputAsJson', full_name='values.StdioMixerAdapterConfig.outputAsJson', index=1,
-      number=2, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=10662,
-  serialized_end=10726,
-)
-
-
-_TRACERCONFIG = _descriptor.Descriptor(
-  name='TracerConfig',
-  full_name='values.TracerConfig',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='datadog', full_name='values.TracerConfig.datadog', index=0,
+      name='enabled', full_name='v1alpha2.StdioMixerAdapterConfig.enabled', index=0,
       number=1, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='lightstep', full_name='values.TracerConfig.lightstep', index=1,
+      name='outputAsJson', full_name='v1alpha2.StdioMixerAdapterConfig.outputAsJson', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=12763,
+  serialized_end=12883,
+)
+
+
+_TRACERCONFIG = _descriptor.Descriptor(
+  name='TracerConfig',
+  full_name='v1alpha2.TracerConfig',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='datadog', full_name='v1alpha2.TracerConfig.datadog', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='lightstep', full_name='v1alpha2.TracerConfig.lightstep', index=1,
       number=2, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='zipkin', full_name='values.TracerConfig.zipkin', index=2,
+      name='zipkin', full_name='v1alpha2.TracerConfig.zipkin', index=2,
       number=3, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
@@ -3516,20 +3629,20 @@ _TRACERCONFIG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=10729,
-  serialized_end=10883,
+  serialized_start=12886,
+  serialized_end=13046,
 )
 
 
 _TRACERDATADOGCONFIG = _descriptor.Descriptor(
   name='TracerDatadogConfig',
-  full_name='values.TracerDatadogConfig',
+  full_name='v1alpha2.TracerDatadogConfig',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='address', full_name='values.TracerDatadogConfig.address', index=0,
+      name='address', full_name='v1alpha2.TracerDatadogConfig.address', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -3547,150 +3660,46 @@ _TRACERDATADOGCONFIG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=10885,
-  serialized_end=10923,
+  serialized_start=13048,
+  serialized_end=13086,
 )
 
 
 _TRACERLIGHTSTEPCONFIG = _descriptor.Descriptor(
   name='TracerLightStepConfig',
-  full_name='values.TracerLightStepConfig',
+  full_name='v1alpha2.TracerLightStepConfig',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='address', full_name='values.TracerLightStepConfig.address', index=0,
+      name='address', full_name='v1alpha2.TracerLightStepConfig.address', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='accessToken', full_name='values.TracerLightStepConfig.accessToken', index=1,
+      name='accessToken', full_name='v1alpha2.TracerLightStepConfig.accessToken', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='cacertPath', full_name='values.TracerLightStepConfig.cacertPath', index=2,
+      name='cacertPath', full_name='v1alpha2.TracerLightStepConfig.cacertPath', index=2,
       number=3, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='secure', full_name='values.TracerLightStepConfig.secure', index=3,
-      number=4, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=10925,
-  serialized_end=11022,
-)
-
-
-_TRACERZIPKINCONFIG = _descriptor.Descriptor(
-  name='TracerZipkinConfig',
-  full_name='values.TracerZipkinConfig',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='address', full_name='values.TracerZipkinConfig.address', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=11024,
-  serialized_end=11061,
-)
-
-
-_TRACINGCONFIG = _descriptor.Descriptor(
-  name='TracingConfig',
-  full_name='values.TracingConfig',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='enabled', full_name='values.TracingConfig.enabled', index=0,
-      number=1, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='ingress', full_name='values.TracingConfig.ingress', index=1,
-      number=2, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='jaeger', full_name='values.TracingConfig.jaeger', index=2,
-      number=3, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='nodeSelector', full_name='values.TracingConfig.nodeSelector', index=3,
+      name='secure', full_name='v1alpha2.TracerLightStepConfig.secure', index=3,
       number=4, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='provider', full_name='values.TracingConfig.provider', index=4,
-      number=5, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='service', full_name='values.TracingConfig.service', index=5,
-      number=6, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='zipkin', full_name='values.TracingConfig.zipkin', index=6,
-      number=7, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -3703,70 +3712,25 @@ _TRACINGCONFIG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=11064,
-  serialized_end=11345,
+  serialized_start=13088,
+  serialized_end=13213,
 )
 
 
-_TRACINGINGRESSCONFIG = _descriptor.Descriptor(
-  name='TracingIngressConfig',
-  full_name='values.TracingIngressConfig',
+_TRACERZIPKINCONFIG = _descriptor.Descriptor(
+  name='TracerZipkinConfig',
+  full_name='v1alpha2.TracerZipkinConfig',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='enabled', full_name='values.TracingIngressConfig.enabled', index=0,
-      number=1, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=11347,
-  serialized_end=11386,
-)
-
-
-_TRACINGJAEGERCONFIG = _descriptor.Descriptor(
-  name='TracingJaegerConfig',
-  full_name='values.TracingJaegerConfig',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='hub', full_name='values.TracingJaegerConfig.hub', index=0,
+      name='address', full_name='v1alpha2.TracerZipkinConfig.address', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='tag', full_name='values.TracingJaegerConfig.tag', index=1,
-      number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='memory', full_name='values.TracingJaegerConfig.memory', index=2,
-      number=3, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -3779,253 +3743,402 @@ _TRACINGJAEGERCONFIG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=11388,
-  serialized_end=11486,
+  serialized_start=13215,
+  serialized_end=13252,
 )
 
 
-_TRACINGJAEGERMEMORYCONFIG = _descriptor.Descriptor(
-  name='TracingJaegerMemoryConfig',
-  full_name='values.TracingJaegerMemoryConfig',
+_TRACINGCONFIG = _descriptor.Descriptor(
+  name='TracingConfig',
+  full_name='v1alpha2.TracingConfig',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='max_traces', full_name='values.TracingJaegerMemoryConfig.max_traces', index=0,
-      number=1, type=13, cpp_type=3, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=11488,
-  serialized_end=11535,
-)
-
-
-_TRACINGZIPKINCONFIG = _descriptor.Descriptor(
-  name='TracingZipkinConfig',
-  full_name='values.TracingZipkinConfig',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='hub', full_name='values.TracingZipkinConfig.hub', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='tag', full_name='values.TracingZipkinConfig.tag', index=1,
-      number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='probeStartupDelay', full_name='values.TracingZipkinConfig.probeStartupDelay', index=2,
-      number=3, type=13, cpp_type=3, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='queryPort', full_name='values.TracingZipkinConfig.queryPort', index=3,
-      number=4, type=13, cpp_type=3, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='resources', full_name='values.TracingZipkinConfig.resources', index=4,
-      number=5, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='javaOptsHeap', full_name='values.TracingZipkinConfig.javaOptsHeap', index=5,
-      number=6, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='maxSpans', full_name='values.TracingZipkinConfig.maxSpans', index=6,
-      number=7, type=13, cpp_type=3, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='node', full_name='values.TracingZipkinConfig.node', index=7,
-      number=8, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=11538,
-  serialized_end=11779,
-)
-
-
-_TRACINGZIPKINNODECONFIG = _descriptor.Descriptor(
-  name='TracingZipkinNodeConfig',
-  full_name='values.TracingZipkinNodeConfig',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='cpus', full_name='values.TracingZipkinNodeConfig.cpus', index=0,
-      number=1, type=13, cpp_type=3, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=11781,
-  serialized_end=11820,
-)
-
-
-_VALUES = _descriptor.Descriptor(
-  name='Values',
-  full_name='values.Values',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='certmanager', full_name='values.Values.certmanager', index=0,
+      name='enabled', full_name='v1alpha2.TracingConfig.enabled', index=0,
       number=1, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='istio_cni', full_name='values.Values.istio_cni', index=1,
+      name='ingress', full_name='v1alpha2.TracingConfig.ingress', index=1,
       number=2, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='istiocoredns', full_name='values.Values.istiocoredns', index=2,
+      name='jaeger', full_name='v1alpha2.TracingConfig.jaeger', index=2,
       number=3, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='galley', full_name='values.Values.galley', index=3,
+      name='nodeSelector', full_name='v1alpha2.TracingConfig.nodeSelector', index=3,
       number=4, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='gateways', full_name='values.Values.gateways', index=4,
-      number=5, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
+      name='provider', full_name='v1alpha2.TracingConfig.provider', index=4,
+      number=5, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='global', full_name='values.Values.global', index=5,
+      name='service', full_name='v1alpha2.TracingConfig.service', index=5,
       number=6, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='grafana', full_name='values.Values.grafana', index=6,
+      name='zipkin', full_name='v1alpha2.TracingConfig.zipkin', index=6,
+      number=7, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=13255,
+  serialized_end=13574,
+)
+
+
+_TRACINGINGRESSCONFIG = _descriptor.Descriptor(
+  name='TracingIngressConfig',
+  full_name='v1alpha2.TracingIngressConfig',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='enabled', full_name='v1alpha2.TracingIngressConfig.enabled', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=13576,
+  serialized_end=13643,
+)
+
+
+_TRACINGJAEGERCONFIG = _descriptor.Descriptor(
+  name='TracingJaegerConfig',
+  full_name='v1alpha2.TracingJaegerConfig',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='hub', full_name='v1alpha2.TracingJaegerConfig.hub', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='tag', full_name='v1alpha2.TracingJaegerConfig.tag', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='memory', full_name='v1alpha2.TracingJaegerConfig.memory', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=13645,
+  serialized_end=13745,
+)
+
+
+_TRACINGJAEGERMEMORYCONFIG = _descriptor.Descriptor(
+  name='TracingJaegerMemoryConfig',
+  full_name='v1alpha2.TracingJaegerMemoryConfig',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='max_traces', full_name='v1alpha2.TracingJaegerMemoryConfig.max_traces', index=0,
+      number=1, type=13, cpp_type=3, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=13747,
+  serialized_end=13794,
+)
+
+
+_TRACINGZIPKINCONFIG = _descriptor.Descriptor(
+  name='TracingZipkinConfig',
+  full_name='v1alpha2.TracingZipkinConfig',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='hub', full_name='v1alpha2.TracingZipkinConfig.hub', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='tag', full_name='v1alpha2.TracingZipkinConfig.tag', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='probeStartupDelay', full_name='v1alpha2.TracingZipkinConfig.probeStartupDelay', index=2,
+      number=3, type=13, cpp_type=3, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='queryPort', full_name='v1alpha2.TracingZipkinConfig.queryPort', index=3,
+      number=4, type=13, cpp_type=3, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='resources', full_name='v1alpha2.TracingZipkinConfig.resources', index=4,
+      number=5, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='javaOptsHeap', full_name='v1alpha2.TracingZipkinConfig.javaOptsHeap', index=5,
+      number=6, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='maxSpans', full_name='v1alpha2.TracingZipkinConfig.maxSpans', index=6,
+      number=7, type=13, cpp_type=3, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='node', full_name='v1alpha2.TracingZipkinConfig.node', index=7,
+      number=8, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=13797,
+  serialized_end=14019,
+)
+
+
+_TRACINGZIPKINNODECONFIG = _descriptor.Descriptor(
+  name='TracingZipkinNodeConfig',
+  full_name='v1alpha2.TracingZipkinNodeConfig',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='cpus', full_name='v1alpha2.TracingZipkinNodeConfig.cpus', index=0,
+      number=1, type=13, cpp_type=3, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=14021,
+  serialized_end=14060,
+)
+
+
+_VALUES = _descriptor.Descriptor(
+  name='Values',
+  full_name='v1alpha2.Values',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='certmanager', full_name='v1alpha2.Values.certmanager', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='istio_cni', full_name='v1alpha2.Values.istio_cni', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='istiocoredns', full_name='v1alpha2.Values.istiocoredns', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='galley', full_name='v1alpha2.Values.galley', index=3,
+      number=4, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='gateways', full_name='v1alpha2.Values.gateways', index=4,
+      number=5, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='global', full_name='v1alpha2.Values.global', index=5,
+      number=6, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='grafana', full_name='v1alpha2.Values.grafana', index=6,
       number=7, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='mixer', full_name='values.Values.mixer', index=7,
+      name='mixer', full_name='v1alpha2.Values.mixer', index=7,
       number=8, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='nodeagent', full_name='values.Values.nodeagent', index=8,
+      name='nodeagent', full_name='v1alpha2.Values.nodeagent', index=8,
       number=9, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='pilot', full_name='values.Values.pilot', index=9,
+      name='pilot', full_name='v1alpha2.Values.pilot', index=9,
       number=10, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='prometheus', full_name='values.Values.prometheus', index=10,
+      name='prometheus', full_name='v1alpha2.Values.prometheus', index=10,
       number=11, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='security', full_name='values.Values.security', index=11,
+      name='security', full_name='v1alpha2.Values.security', index=11,
       number=12, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='sidecarInjectorWebhook', full_name='values.Values.sidecarInjectorWebhook', index=12,
+      name='sidecarInjectorWebhook', full_name='v1alpha2.Values.sidecarInjectorWebhook', index=12,
       number=13, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='tracing', full_name='values.Values.tracing', index=13,
+      name='tracing', full_name='v1alpha2.Values.tracing', index=13,
       number=14, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
@@ -4043,14 +4156,14 @@ _VALUES = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=11823,
-  serialized_end=12436,
+  serialized_start=14063,
+  serialized_end=14704,
 )
 
 
 _TYPEMAPSTRINGINTERFACE = _descriptor.Descriptor(
   name='TypeMapStringInterface',
-  full_name='values.TypeMapStringInterface',
+  full_name='v1alpha2.TypeMapStringInterface',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
@@ -4067,14 +4180,14 @@ _TYPEMAPSTRINGINTERFACE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=12438,
-  serialized_end=12462,
+  serialized_start=14706,
+  serialized_end=14730,
 )
 
 
 _TYPESLICEOFMAPSTRINGINTERFACE = _descriptor.Descriptor(
   name='TypeSliceOfMapStringInterface',
-  full_name='values.TypeSliceOfMapStringInterface',
+  full_name='v1alpha2.TypeSliceOfMapStringInterface',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
@@ -4091,27 +4204,27 @@ _TYPESLICEOFMAPSTRINGINTERFACE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=12464,
-  serialized_end=12495,
+  serialized_start=14732,
+  serialized_end=14763,
 )
 
 
 _ZEROVPNCONFIG = _descriptor.Descriptor(
   name='ZeroVPNConfig',
-  full_name='values.ZeroVPNConfig',
+  full_name='v1alpha2.ZeroVPNConfig',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='enabled', full_name='values.ZeroVPNConfig.enabled', index=0,
-      number=1, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
+      name='enabled', full_name='v1alpha2.ZeroVPNConfig.enabled', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='suffix', full_name='values.ZeroVPNConfig.suffix', index=1,
+      name='suffix', full_name='v1alpha2.ZeroVPNConfig.suffix', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -4129,16 +4242,27 @@ _ZEROVPNCONFIG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=12497,
-  serialized_end=12545,
+  serialized_start=14765,
+  serialized_end=14841,
 )
 
+_ADDONINGRESSCONFIG.fields_by_name['enabled'].message_type = github_dot_com_dot_gogo_dot_protobuf_dot_protobuf_dot_google_dot_protobuf_dot_wrappers__pb2._BOOLVALUE
+_CNICONFIG.fields_by_name['enabled'].message_type = github_dot_com_dot_gogo_dot_protobuf_dot_protobuf_dot_google_dot_protobuf_dot_wrappers__pb2._BOOLVALUE
+_CERTMANAGERCONFIG.fields_by_name['enabled'].message_type = github_dot_com_dot_gogo_dot_protobuf_dot_protobuf_dot_google_dot_protobuf_dot_wrappers__pb2._BOOLVALUE
 _CERTMANAGERCONFIG.fields_by_name['nodeSelector'].message_type = _TYPEMAPSTRINGINTERFACE
-_CERTMANAGERCONFIG.fields_by_name['resources'].message_type = k8s_dot_io_dot_api_dot_core_dot_v1_dot_generated__pb2._RESOURCEREQUIREMENTS
+_CERTMANAGERCONFIG.fields_by_name['resources'].message_type = _RESOURCES
+_RESOURCES_LIMITSENTRY.containing_type = _RESOURCES
+_RESOURCES_REQUESTSENTRY.containing_type = _RESOURCES
+_RESOURCES.fields_by_name['limits'].message_type = _RESOURCES_LIMITSENTRY
+_RESOURCES.fields_by_name['requests'].message_type = _RESOURCES_REQUESTSENTRY
+_COREDNSCONFIG.fields_by_name['enabled'].message_type = github_dot_com_dot_gogo_dot_protobuf_dot_protobuf_dot_google_dot_protobuf_dot_wrappers__pb2._BOOLVALUE
 _COREDNSCONFIG.fields_by_name['nodeSelector'].message_type = _TYPEMAPSTRINGINTERFACE
+_DEFAULTPODDISRUPTIONBUDGETCONFIG.fields_by_name['enabled'].message_type = github_dot_com_dot_gogo_dot_protobuf_dot_protobuf_dot_google_dot_protobuf_dot_wrappers__pb2._BOOLVALUE
 _DEFAULTRESOURCESCONFIG.fields_by_name['requests'].message_type = _RESOURCESREQUESTSCONFIG
 _EGRESSGATEWAYCONFIG_ENVENTRY.containing_type = _EGRESSGATEWAYCONFIG
+_EGRESSGATEWAYCONFIG.fields_by_name['autoscaleEnabled'].message_type = github_dot_com_dot_gogo_dot_protobuf_dot_protobuf_dot_google_dot_protobuf_dot_wrappers__pb2._BOOLVALUE
 _EGRESSGATEWAYCONFIG.fields_by_name['cpu'].message_type = _CPUTARGETUTILIZATIONCONFIG
+_EGRESSGATEWAYCONFIG.fields_by_name['enabled'].message_type = github_dot_com_dot_gogo_dot_protobuf_dot_protobuf_dot_google_dot_protobuf_dot_wrappers__pb2._BOOLVALUE
 _EGRESSGATEWAYCONFIG.fields_by_name['env'].message_type = _EGRESSGATEWAYCONFIG_ENVENTRY
 _EGRESSGATEWAYCONFIG.fields_by_name['labels'].message_type = _GATEWAYLABELSCONFIG
 _EGRESSGATEWAYCONFIG.fields_by_name['nodeSelector'].message_type = _TYPEMAPSTRINGINTERFACE
@@ -4146,22 +4270,30 @@ _EGRESSGATEWAYCONFIG.fields_by_name['podAnnotations'].message_type = _TYPEMAPSTR
 _EGRESSGATEWAYCONFIG.fields_by_name['podAntiAffinityLabelSelector'].message_type = _TYPESLICEOFMAPSTRINGINTERFACE
 _EGRESSGATEWAYCONFIG.fields_by_name['podAntiAffinityTermLabelSelector'].message_type = _TYPESLICEOFMAPSTRINGINTERFACE
 _EGRESSGATEWAYCONFIG.fields_by_name['ports'].message_type = _PORTSCONFIG
-_EGRESSGATEWAYCONFIG.fields_by_name['resources'].message_type = k8s_dot_io_dot_api_dot_core_dot_v1_dot_generated__pb2._RESOURCEREQUIREMENTS
+_EGRESSGATEWAYCONFIG.fields_by_name['resources'].message_type = _RESOURCES
 _EGRESSGATEWAYCONFIG.fields_by_name['secretVolumes'].message_type = _SECRETVOLUME
 _EGRESSGATEWAYCONFIG.fields_by_name['serviceAnnotations'].message_type = _TYPEMAPSTRINGINTERFACE
 _EGRESSGATEWAYCONFIG.fields_by_name['zvpn'].message_type = _ZEROVPNCONFIG
+_ENVOYMETRICSCONFIG.fields_by_name['enabled'].message_type = github_dot_com_dot_gogo_dot_protobuf_dot_protobuf_dot_google_dot_protobuf_dot_wrappers__pb2._BOOLVALUE
 _GALLEYCONFIG_MESHENTRY.containing_type = _GALLEYCONFIG
+_GALLEYCONFIG.fields_by_name['enabled'].message_type = github_dot_com_dot_gogo_dot_protobuf_dot_protobuf_dot_google_dot_protobuf_dot_wrappers__pb2._BOOLVALUE
 _GALLEYCONFIG.fields_by_name['mesh'].message_type = _GALLEYCONFIG_MESHENTRY
 _GALLEYCONFIG.fields_by_name['podAntiAffinityLabelSelector'].message_type = _TYPESLICEOFMAPSTRINGINTERFACE
 _GALLEYCONFIG.fields_by_name['podAntiAffinityTermLabelSelector'].message_type = _TYPESLICEOFMAPSTRINGINTERFACE
-_GALLEYCONFIG.fields_by_name['resources'].message_type = k8s_dot_io_dot_api_dot_core_dot_v1_dot_generated__pb2._RESOURCEREQUIREMENTS
+_GALLEYCONFIG.fields_by_name['resources'].message_type = _RESOURCES
 _GATEWAYSCONFIG.fields_by_name['istioEgressgateway'].message_type = _EGRESSGATEWAYCONFIG
+_GATEWAYSCONFIG.fields_by_name['enabled'].message_type = github_dot_com_dot_gogo_dot_protobuf_dot_protobuf_dot_google_dot_protobuf_dot_wrappers__pb2._BOOLVALUE
 _GATEWAYSCONFIG.fields_by_name['istioIngressgateway'].message_type = _INGRESSGATEWAYCONFIG
 _GLOBALCONFIG_LOCALITYLBSETTINGENTRY.containing_type = _GLOBALCONFIG
 _GLOBALCONFIG.fields_by_name['arch'].message_type = _ARCHCONFIG
+_GLOBALCONFIG.fields_by_name['configValidation'].message_type = github_dot_com_dot_gogo_dot_protobuf_dot_protobuf_dot_google_dot_protobuf_dot_wrappers__pb2._BOOLVALUE
+_GLOBALCONFIG.fields_by_name['controlPlaneSecurityEnabled'].message_type = github_dot_com_dot_gogo_dot_protobuf_dot_protobuf_dot_google_dot_protobuf_dot_wrappers__pb2._BOOLVALUE
 _GLOBALCONFIG.fields_by_name['defaultNodeSelector'].message_type = _TYPEMAPSTRINGINTERFACE
 _GLOBALCONFIG.fields_by_name['defaultPodDisruptionBudget'].message_type = _DEFAULTPODDISRUPTIONBUDGETCONFIG
+_GLOBALCONFIG.fields_by_name['disablePolicyChecks'].message_type = github_dot_com_dot_gogo_dot_protobuf_dot_protobuf_dot_google_dot_protobuf_dot_wrappers__pb2._BOOLVALUE
 _GLOBALCONFIG.fields_by_name['defaultResources'].message_type = _DEFAULTRESOURCESCONFIG
+_GLOBALCONFIG.fields_by_name['enableHelmTest'].message_type = github_dot_com_dot_gogo_dot_protobuf_dot_protobuf_dot_google_dot_protobuf_dot_wrappers__pb2._BOOLVALUE
+_GLOBALCONFIG.fields_by_name['enableTracing'].message_type = github_dot_com_dot_gogo_dot_protobuf_dot_protobuf_dot_google_dot_protobuf_dot_wrappers__pb2._BOOLVALUE
 _GLOBALCONFIG.fields_by_name['localityLbSetting'].message_type = _GLOBALCONFIG_LOCALITYLBSETTINGENTRY
 _GLOBALCONFIG.fields_by_name['k8sIngress'].message_type = _KUBERNETESINGRESSCONFIG
 _GLOBALCONFIG.fields_by_name['logging'].message_type = _GLOBALLOGGINGCONFIG
@@ -4169,14 +4301,22 @@ _GLOBALCONFIG.fields_by_name['meshExpansion'].message_type = _MESHEXPANSIONCONFI
 _GLOBALCONFIG.fields_by_name['meshNetworks'].message_type = _TYPEMAPSTRINGINTERFACE
 _GLOBALCONFIG.fields_by_name['mtls'].message_type = _MTLSCONFIG
 _GLOBALCONFIG.fields_by_name['multiCluster'].message_type = _MULTICLUSTERCONFIG
+_GLOBALCONFIG.fields_by_name['oneNamespace'].message_type = github_dot_com_dot_gogo_dot_protobuf_dot_protobuf_dot_google_dot_protobuf_dot_wrappers__pb2._BOOLVALUE
 _GLOBALCONFIG.fields_by_name['outboundTrafficPolicy'].message_type = _OUTBOUNDTRAFFICPOLICYCONFIG
+_GLOBALCONFIG.fields_by_name['policyCheckFailOpen'].message_type = github_dot_com_dot_gogo_dot_protobuf_dot_protobuf_dot_google_dot_protobuf_dot_wrappers__pb2._BOOLVALUE
 _GLOBALCONFIG.fields_by_name['proxy'].message_type = _PROXYCONFIG
 _GLOBALCONFIG.fields_by_name['proxyInit'].message_type = _PROXYINITCONFIG
 _GLOBALCONFIG.fields_by_name['sds'].message_type = _SDSCONFIG
 _GLOBALCONFIG.fields_by_name['tracer'].message_type = _TRACERCONFIG
+_GLOBALCONFIG.fields_by_name['useMCP'].message_type = github_dot_com_dot_gogo_dot_protobuf_dot_protobuf_dot_google_dot_protobuf_dot_wrappers__pb2._BOOLVALUE
 _INGRESSGATEWAYCONFIG_ENVENTRY.containing_type = _INGRESSGATEWAYCONFIG
+_INGRESSGATEWAYCONFIG.fields_by_name['autoscaleEnabled'].message_type = github_dot_com_dot_gogo_dot_protobuf_dot_protobuf_dot_google_dot_protobuf_dot_wrappers__pb2._BOOLVALUE
 _INGRESSGATEWAYCONFIG.fields_by_name['cpu'].message_type = _CPUTARGETUTILIZATIONCONFIG
+_INGRESSGATEWAYCONFIG.fields_by_name['customService'].message_type = github_dot_com_dot_gogo_dot_protobuf_dot_protobuf_dot_google_dot_protobuf_dot_wrappers__pb2._BOOLVALUE
+_INGRESSGATEWAYCONFIG.fields_by_name['enabled'].message_type = github_dot_com_dot_gogo_dot_protobuf_dot_protobuf_dot_google_dot_protobuf_dot_wrappers__pb2._BOOLVALUE
 _INGRESSGATEWAYCONFIG.fields_by_name['env'].message_type = _INGRESSGATEWAYCONFIG_ENVENTRY
+_INGRESSGATEWAYCONFIG.fields_by_name['k8sIngress'].message_type = github_dot_com_dot_gogo_dot_protobuf_dot_protobuf_dot_google_dot_protobuf_dot_wrappers__pb2._BOOLVALUE
+_INGRESSGATEWAYCONFIG.fields_by_name['k8sIngressHttps'].message_type = github_dot_com_dot_gogo_dot_protobuf_dot_protobuf_dot_google_dot_protobuf_dot_wrappers__pb2._BOOLVALUE
 _INGRESSGATEWAYCONFIG.fields_by_name['labels'].message_type = _GATEWAYLABELSCONFIG
 _INGRESSGATEWAYCONFIG.fields_by_name['meshExpansionPorts'].message_type = _PORTSCONFIG
 _INGRESSGATEWAYCONFIG.fields_by_name['nodeSelector'].message_type = _TYPEMAPSTRINGINTERFACE
@@ -4189,27 +4329,46 @@ _INGRESSGATEWAYCONFIG.fields_by_name['sds'].message_type = _INGRESSGATEWAYSDSCON
 _INGRESSGATEWAYCONFIG.fields_by_name['secretVolumes'].message_type = _SECRETVOLUME
 _INGRESSGATEWAYCONFIG.fields_by_name['serviceAnnotations'].message_type = _TYPEMAPSTRINGINTERFACE
 _INGRESSGATEWAYCONFIG.fields_by_name['zvpn'].message_type = _INGRESSGATEWAYZVPNCONFIG
+_INGRESSGATEWAYSDSCONFIG.fields_by_name['enabled'].message_type = github_dot_com_dot_gogo_dot_protobuf_dot_protobuf_dot_google_dot_protobuf_dot_wrappers__pb2._BOOLVALUE
+_INGRESSGATEWAYZVPNCONFIG.fields_by_name['enabled'].message_type = github_dot_com_dot_gogo_dot_protobuf_dot_protobuf_dot_google_dot_protobuf_dot_wrappers__pb2._BOOLVALUE
+_KUBERNETESENVMIXERADAPTERCONFIG.fields_by_name['enabled'].message_type = github_dot_com_dot_gogo_dot_protobuf_dot_protobuf_dot_google_dot_protobuf_dot_wrappers__pb2._BOOLVALUE
+_KUBERNETESINGRESSCONFIG.fields_by_name['enabled'].message_type = github_dot_com_dot_gogo_dot_protobuf_dot_protobuf_dot_google_dot_protobuf_dot_wrappers__pb2._BOOLVALUE
+_KUBERNETESINGRESSCONFIG.fields_by_name['enableHttps'].message_type = github_dot_com_dot_gogo_dot_protobuf_dot_protobuf_dot_google_dot_protobuf_dot_wrappers__pb2._BOOLVALUE
 _LOADSHEDDINGCONFIG_MODE.containing_type = _LOADSHEDDINGCONFIG
+_MTLSCONFIG.fields_by_name['enabled'].message_type = github_dot_com_dot_gogo_dot_protobuf_dot_protobuf_dot_google_dot_protobuf_dot_wrappers__pb2._BOOLVALUE
+_MESHEXPANSIONCONFIG.fields_by_name['enabled'].message_type = github_dot_com_dot_gogo_dot_protobuf_dot_protobuf_dot_google_dot_protobuf_dot_wrappers__pb2._BOOLVALUE
+_MESHEXPANSIONCONFIG.fields_by_name['useILB'].message_type = github_dot_com_dot_gogo_dot_protobuf_dot_protobuf_dot_google_dot_protobuf_dot_wrappers__pb2._BOOLVALUE
 _MIXERADAPTERSCONFIG.fields_by_name['kubernetesenv'].message_type = _KUBERNETESENVMIXERADAPTERCONFIG
 _MIXERADAPTERSCONFIG.fields_by_name['prometheus'].message_type = _PROMETHEUSMIXERADAPTERCONFIG
 _MIXERADAPTERSCONFIG.fields_by_name['stdio'].message_type = _STDIOMIXERADAPTERCONFIG
+_MIXERADAPTERSCONFIG.fields_by_name['useAdapterCRDs'].message_type = github_dot_com_dot_gogo_dot_protobuf_dot_protobuf_dot_google_dot_protobuf_dot_wrappers__pb2._BOOLVALUE
 _MIXERCONFIG.fields_by_name['policy'].message_type = _MIXERPOLICYCONFIG
 _MIXERCONFIG.fields_by_name['telemetry'].message_type = _MIXERTELEMETRYCONFIG
+_MIXERPOLICYCONFIG.fields_by_name['autoscaleEnabled'].message_type = github_dot_com_dot_gogo_dot_protobuf_dot_protobuf_dot_google_dot_protobuf_dot_wrappers__pb2._BOOLVALUE
 _MIXERPOLICYCONFIG.fields_by_name['cpu'].message_type = _CPUTARGETUTILIZATIONCONFIG
+_MIXERPOLICYCONFIG.fields_by_name['enabled'].message_type = github_dot_com_dot_gogo_dot_protobuf_dot_protobuf_dot_google_dot_protobuf_dot_wrappers__pb2._BOOLVALUE
 _MIXERPOLICYCONFIG.fields_by_name['podAnnotations'].message_type = _TYPEMAPSTRINGINTERFACE
 _MIXERTELEMETRYCONFIG_ENVENTRY.containing_type = _MIXERTELEMETRYCONFIG
 _MIXERTELEMETRYCONFIG.fields_by_name['adapters'].message_type = _MIXERADAPTERSCONFIG
+_MIXERTELEMETRYCONFIG.fields_by_name['autoscaleEnabled'].message_type = github_dot_com_dot_gogo_dot_protobuf_dot_protobuf_dot_google_dot_protobuf_dot_wrappers__pb2._BOOLVALUE
 _MIXERTELEMETRYCONFIG.fields_by_name['cpu'].message_type = _CPUTARGETUTILIZATIONCONFIG
+_MIXERTELEMETRYCONFIG.fields_by_name['enabled'].message_type = github_dot_com_dot_gogo_dot_protobuf_dot_protobuf_dot_google_dot_protobuf_dot_wrappers__pb2._BOOLVALUE
 _MIXERTELEMETRYCONFIG.fields_by_name['env'].message_type = _MIXERTELEMETRYCONFIG_ENVENTRY
 _MIXERTELEMETRYCONFIG.fields_by_name['loadshedding'].message_type = _LOADSHEDDINGCONFIG
 _MIXERTELEMETRYCONFIG.fields_by_name['nodeSelector'].message_type = _TYPEMAPSTRINGINTERFACE
 _MIXERTELEMETRYCONFIG.fields_by_name['podAnnotations'].message_type = _TYPEMAPSTRINGINTERFACE
-_MIXERTELEMETRYCONFIG.fields_by_name['resources'].message_type = k8s_dot_io_dot_api_dot_core_dot_v1_dot_generated__pb2._RESOURCEREQUIREMENTS
+_MIXERTELEMETRYCONFIG.fields_by_name['resources'].message_type = _RESOURCES
+_MIXERTELEMETRYCONFIG.fields_by_name['sessionAffinityEnabled'].message_type = github_dot_com_dot_gogo_dot_protobuf_dot_protobuf_dot_google_dot_protobuf_dot_wrappers__pb2._BOOLVALUE
+_MULTICLUSTERCONFIG.fields_by_name['enabled'].message_type = github_dot_com_dot_gogo_dot_protobuf_dot_protobuf_dot_google_dot_protobuf_dot_wrappers__pb2._BOOLVALUE
+_NODEAGENTCONFIG.fields_by_name['enabled'].message_type = github_dot_com_dot_gogo_dot_protobuf_dot_protobuf_dot_google_dot_protobuf_dot_wrappers__pb2._BOOLVALUE
 _NODEAGENTCONFIG.fields_by_name['env'].message_type = _TYPEMAPSTRINGINTERFACE
 _NODEAGENTCONFIG.fields_by_name['nodeSelector'].message_type = _TYPEMAPSTRINGINTERFACE
 _OUTBOUNDTRAFFICPOLICYCONFIG_MODE.containing_type = _OUTBOUNDTRAFFICPOLICYCONFIG
 _PILOTCONFIG_ENVENTRY.containing_type = _PILOTCONFIG
-_PILOTCONFIG.fields_by_name['resources'].message_type = k8s_dot_io_dot_api_dot_core_dot_v1_dot_generated__pb2._RESOURCEREQUIREMENTS
+_PILOTCONFIG.fields_by_name['enabled'].message_type = github_dot_com_dot_gogo_dot_protobuf_dot_protobuf_dot_google_dot_protobuf_dot_wrappers__pb2._BOOLVALUE
+_PILOTCONFIG.fields_by_name['autoscaleEnabled'].message_type = github_dot_com_dot_gogo_dot_protobuf_dot_protobuf_dot_google_dot_protobuf_dot_wrappers__pb2._BOOLVALUE
+_PILOTCONFIG.fields_by_name['sidecar'].message_type = github_dot_com_dot_gogo_dot_protobuf_dot_protobuf_dot_google_dot_protobuf_dot_wrappers__pb2._BOOLVALUE
+_PILOTCONFIG.fields_by_name['resources'].message_type = _RESOURCES
 _PILOTCONFIG.fields_by_name['cpu'].message_type = _CPUTARGETUTILIZATIONCONFIG
 _PILOTCONFIG.fields_by_name['nodeSelector'].message_type = _TYPEMAPSTRINGINTERFACE
 _PILOTCONFIG.fields_by_name['keepaliveMaxServerConnectionAge'].message_type = google_dot_protobuf_dot_duration__pb2._DURATION
@@ -4217,45 +4376,71 @@ _PILOTCONFIG.fields_by_name['deploymentLabels'].message_type = _TYPEMAPSTRINGINT
 _PILOTCONFIG.fields_by_name['meshNetworks'].message_type = _TYPEMAPSTRINGINTERFACE
 _PILOTCONFIG.fields_by_name['podAntiAffinityLabelSelector'].message_type = _TYPESLICEOFMAPSTRINGINTERFACE
 _PILOTCONFIG.fields_by_name['podAntiAffinityTermLabelSelector'].message_type = _TYPESLICEOFMAPSTRINGINTERFACE
+_PILOTCONFIG.fields_by_name['configMap'].message_type = github_dot_com_dot_gogo_dot_protobuf_dot_protobuf_dot_google_dot_protobuf_dot_wrappers__pb2._BOOLVALUE
 _PILOTCONFIG.fields_by_name['ingress'].message_type = _PILOTINGRESSCONFIG
+_PILOTCONFIG.fields_by_name['useMCP'].message_type = github_dot_com_dot_gogo_dot_protobuf_dot_protobuf_dot_google_dot_protobuf_dot_wrappers__pb2._BOOLVALUE
 _PILOTCONFIG.fields_by_name['env'].message_type = _PILOTCONFIG_ENVENTRY
 _PILOTCONFIG.fields_by_name['policy'].message_type = _PILOTPOLICYCONFIG
 _PILOTCONFIG.fields_by_name['telemetry'].message_type = _PILOTTELEMETRYCONFIG
 _PILOTINGRESSCONFIG_INGRESSCONTROLLERMODE.containing_type = _PILOTINGRESSCONFIG
+_PILOTPOLICYCONFIG.fields_by_name['enabled'].message_type = github_dot_com_dot_gogo_dot_protobuf_dot_protobuf_dot_google_dot_protobuf_dot_wrappers__pb2._BOOLVALUE
+_PILOTTELEMETRYCONFIG.fields_by_name['enabled'].message_type = github_dot_com_dot_gogo_dot_protobuf_dot_protobuf_dot_google_dot_protobuf_dot_wrappers__pb2._BOOLVALUE
+_PROMETHEUSCONFIG.fields_by_name['createPrometheusResource'].message_type = github_dot_com_dot_gogo_dot_protobuf_dot_protobuf_dot_google_dot_protobuf_dot_wrappers__pb2._BOOLVALUE
+_PROMETHEUSCONFIG.fields_by_name['enabled'].message_type = github_dot_com_dot_gogo_dot_protobuf_dot_protobuf_dot_google_dot_protobuf_dot_wrappers__pb2._BOOLVALUE
 _PROMETHEUSCONFIG.fields_by_name['nodeSelector'].message_type = _TYPEMAPSTRINGINTERFACE
 _PROMETHEUSCONFIG.fields_by_name['scrapeInterval'].message_type = google_dot_protobuf_dot_duration__pb2._DURATION
 _PROMETHEUSCONFIG.fields_by_name['ingress'].message_type = _ADDONINGRESSCONFIG
 _PROMETHEUSCONFIG.fields_by_name['service'].message_type = _PROMETHEUSSERVICECONFIG
 _PROMETHEUSCONFIG.fields_by_name['security'].message_type = _PROMETHEUSSECURITYCONFIG
+_PROMETHEUSMIXERADAPTERCONFIG.fields_by_name['enabled'].message_type = github_dot_com_dot_gogo_dot_protobuf_dot_protobuf_dot_google_dot_protobuf_dot_wrappers__pb2._BOOLVALUE
 _PROMETHEUSMIXERADAPTERCONFIG.fields_by_name['metricsExpiryDuration'].message_type = google_dot_protobuf_dot_duration__pb2._DURATION
+_PROMETHEUSSECURITYCONFIG.fields_by_name['enabled'].message_type = github_dot_com_dot_gogo_dot_protobuf_dot_protobuf_dot_google_dot_protobuf_dot_wrappers__pb2._BOOLVALUE
 _PROMETHEUSSERVICECONFIG.fields_by_name['annotations'].message_type = _TYPEMAPSTRINGINTERFACE
 _PROMETHEUSSERVICECONFIG.fields_by_name['nodePort'].message_type = _PROMETHEUSSERVICENODEPORTCONFIG
+_PROMETHEUSSERVICENODEPORTCONFIG.fields_by_name['enabled'].message_type = github_dot_com_dot_gogo_dot_protobuf_dot_protobuf_dot_google_dot_protobuf_dot_wrappers__pb2._BOOLVALUE
 _PROXYCONFIG.fields_by_name['dnsRefreshRate'].message_type = google_dot_protobuf_dot_duration__pb2._DURATION
+_PROXYCONFIG.fields_by_name['enableCoreDump'].message_type = github_dot_com_dot_gogo_dot_protobuf_dot_protobuf_dot_google_dot_protobuf_dot_wrappers__pb2._BOOLVALUE
 _PROXYCONFIG.fields_by_name['envoyMetricsService'].message_type = _ENVOYMETRICSCONFIG
 _PROXYCONFIG.fields_by_name['envoyStatsd'].message_type = _ENVOYMETRICSCONFIG
-_PROXYCONFIG.fields_by_name['resources'].message_type = k8s_dot_io_dot_api_dot_core_dot_v1_dot_generated__pb2._RESOURCEREQUIREMENTS
+_PROXYCONFIG.fields_by_name['privileged'].message_type = github_dot_com_dot_gogo_dot_protobuf_dot_protobuf_dot_google_dot_protobuf_dot_wrappers__pb2._BOOLVALUE
+_PROXYCONFIG.fields_by_name['resources'].message_type = _RESOURCES
 _PROXYCONFIG_ACCESSLOGENCODING.containing_type = _PROXYCONFIG
 _PROXYCONFIG_AUTOINJECT.containing_type = _PROXYCONFIG
 _PROXYCONFIG_TRACER.containing_type = _PROXYCONFIG
+_SDSCONFIG.fields_by_name['enabled'].message_type = github_dot_com_dot_gogo_dot_protobuf_dot_protobuf_dot_google_dot_protobuf_dot_wrappers__pb2._BOOLVALUE
+_SDSCONFIG.fields_by_name['useNormalJwt'].message_type = github_dot_com_dot_gogo_dot_protobuf_dot_protobuf_dot_google_dot_protobuf_dot_wrappers__pb2._BOOLVALUE
+_SDSCONFIG.fields_by_name['useTrustworthyJwt'].message_type = github_dot_com_dot_gogo_dot_protobuf_dot_protobuf_dot_google_dot_protobuf_dot_wrappers__pb2._BOOLVALUE
 _SECURITYCONFIG_DNSCERTSENTRY.containing_type = _SECURITYCONFIG
+_SECURITYCONFIG.fields_by_name['enabled'].message_type = github_dot_com_dot_gogo_dot_protobuf_dot_protobuf_dot_google_dot_protobuf_dot_wrappers__pb2._BOOLVALUE
+_SECURITYCONFIG.fields_by_name['selfSigned'].message_type = github_dot_com_dot_gogo_dot_protobuf_dot_protobuf_dot_google_dot_protobuf_dot_wrappers__pb2._BOOLVALUE
 _SECURITYCONFIG.fields_by_name['dnsCerts'].message_type = _SECURITYCONFIG_DNSCERTSENTRY
+_SECURITYCONFIG.fields_by_name['createMeshPolicy'].message_type = github_dot_com_dot_gogo_dot_protobuf_dot_protobuf_dot_google_dot_protobuf_dot_wrappers__pb2._BOOLVALUE
 _SECURITYCONFIG.fields_by_name['nodeSelector'].message_type = _TYPEMAPSTRINGINTERFACE
 _SERVICECONFIG.fields_by_name['annotations'].message_type = _TYPEMAPSTRINGINTERFACE
+_SIDECARINJECTORCONFIG.fields_by_name['enabled'].message_type = github_dot_com_dot_gogo_dot_protobuf_dot_protobuf_dot_google_dot_protobuf_dot_wrappers__pb2._BOOLVALUE
+_SIDECARINJECTORCONFIG.fields_by_name['enableNamespacesByDefault'].message_type = github_dot_com_dot_gogo_dot_protobuf_dot_protobuf_dot_google_dot_protobuf_dot_wrappers__pb2._BOOLVALUE
 _SIDECARINJECTORCONFIG.fields_by_name['nodeSelector'].message_type = _TYPEMAPSTRINGINTERFACE
 _SIDECARINJECTORCONFIG.fields_by_name['neverInjectSelector'].message_type = _TYPESLICEOFMAPSTRINGINTERFACE
 _SIDECARINJECTORCONFIG.fields_by_name['alwaysInjectSelector'].message_type = _TYPESLICEOFMAPSTRINGINTERFACE
 _SIDECARINJECTORCONFIG.fields_by_name['podAntiAffinityLabelSelector'].message_type = _TYPESLICEOFMAPSTRINGINTERFACE
 _SIDECARINJECTORCONFIG.fields_by_name['podAntiAffinityTermLabelSelector'].message_type = _TYPESLICEOFMAPSTRINGINTERFACE
+_SIDECARINJECTORCONFIG.fields_by_name['rewriteAppHTTPProbe'].message_type = github_dot_com_dot_gogo_dot_protobuf_dot_protobuf_dot_google_dot_protobuf_dot_wrappers__pb2._BOOLVALUE
+_SIDECARINJECTORCONFIG.fields_by_name['selfSigned'].message_type = github_dot_com_dot_gogo_dot_protobuf_dot_protobuf_dot_google_dot_protobuf_dot_wrappers__pb2._BOOLVALUE
+_STDIOMIXERADAPTERCONFIG.fields_by_name['enabled'].message_type = github_dot_com_dot_gogo_dot_protobuf_dot_protobuf_dot_google_dot_protobuf_dot_wrappers__pb2._BOOLVALUE
+_STDIOMIXERADAPTERCONFIG.fields_by_name['outputAsJson'].message_type = github_dot_com_dot_gogo_dot_protobuf_dot_protobuf_dot_google_dot_protobuf_dot_wrappers__pb2._BOOLVALUE
 _TRACERCONFIG.fields_by_name['datadog'].message_type = _TRACERDATADOGCONFIG
 _TRACERCONFIG.fields_by_name['lightstep'].message_type = _TRACERLIGHTSTEPCONFIG
 _TRACERCONFIG.fields_by_name['zipkin'].message_type = _TRACERZIPKINCONFIG
+_TRACERLIGHTSTEPCONFIG.fields_by_name['secure'].message_type = github_dot_com_dot_gogo_dot_protobuf_dot_protobuf_dot_google_dot_protobuf_dot_wrappers__pb2._BOOLVALUE
+_TRACINGCONFIG.fields_by_name['enabled'].message_type = github_dot_com_dot_gogo_dot_protobuf_dot_protobuf_dot_google_dot_protobuf_dot_wrappers__pb2._BOOLVALUE
 _TRACINGCONFIG.fields_by_name['ingress'].message_type = _TRACINGINGRESSCONFIG
 _TRACINGCONFIG.fields_by_name['jaeger'].message_type = _TRACINGJAEGERCONFIG
 _TRACINGCONFIG.fields_by_name['nodeSelector'].message_type = _TYPEMAPSTRINGINTERFACE
 _TRACINGCONFIG.fields_by_name['service'].message_type = _SERVICECONFIG
 _TRACINGCONFIG.fields_by_name['zipkin'].message_type = _TRACINGZIPKINCONFIG
+_TRACINGINGRESSCONFIG.fields_by_name['enabled'].message_type = github_dot_com_dot_gogo_dot_protobuf_dot_protobuf_dot_google_dot_protobuf_dot_wrappers__pb2._BOOLVALUE
 _TRACINGJAEGERCONFIG.fields_by_name['memory'].message_type = _TRACINGJAEGERMEMORYCONFIG
-_TRACINGZIPKINCONFIG.fields_by_name['resources'].message_type = k8s_dot_io_dot_api_dot_core_dot_v1_dot_generated__pb2._RESOURCEREQUIREMENTS
+_TRACINGZIPKINCONFIG.fields_by_name['resources'].message_type = _RESOURCES
 _TRACINGZIPKINCONFIG.fields_by_name['node'].message_type = _TRACINGZIPKINNODECONFIG
 _VALUES.fields_by_name['certmanager'].message_type = _CERTMANAGERCONFIG
 _VALUES.fields_by_name['istio_cni'].message_type = _CNICONFIG
@@ -4271,11 +4456,13 @@ _VALUES.fields_by_name['prometheus'].message_type = _PROMETHEUSCONFIG
 _VALUES.fields_by_name['security'].message_type = _SECURITYCONFIG
 _VALUES.fields_by_name['sidecarInjectorWebhook'].message_type = _SIDECARINJECTORCONFIG
 _VALUES.fields_by_name['tracing'].message_type = _TRACINGCONFIG
+_ZEROVPNCONFIG.fields_by_name['enabled'].message_type = github_dot_com_dot_gogo_dot_protobuf_dot_protobuf_dot_google_dot_protobuf_dot_wrappers__pb2._BOOLVALUE
 DESCRIPTOR.message_types_by_name['AddonIngressConfig'] = _ADDONINGRESSCONFIG
 DESCRIPTOR.message_types_by_name['ArchConfig'] = _ARCHCONFIG
 DESCRIPTOR.message_types_by_name['CNIConfig'] = _CNICONFIG
 DESCRIPTOR.message_types_by_name['CPUTargetUtilizationConfig'] = _CPUTARGETUTILIZATIONCONFIG
 DESCRIPTOR.message_types_by_name['CertManagerConfig'] = _CERTMANAGERCONFIG
+DESCRIPTOR.message_types_by_name['Resources'] = _RESOURCES
 DESCRIPTOR.message_types_by_name['CoreDNSConfig'] = _COREDNSCONFIG
 DESCRIPTOR.message_types_by_name['DefaultPodDisruptionBudgetConfig'] = _DEFAULTPODDISRUPTIONBUDGETCONFIG
 DESCRIPTOR.message_types_by_name['DefaultResourcesConfig'] = _DEFAULTRESOURCESCONFIG
@@ -4339,56 +4526,79 @@ _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 AddonIngressConfig = _reflection.GeneratedProtocolMessageType('AddonIngressConfig', (_message.Message,), {
   'DESCRIPTOR' : _ADDONINGRESSCONFIG,
   '__module__' : 'pkg.apis.istio.v1alpha2.values.values_types_pb2'
-  # @@protoc_insertion_point(class_scope:values.AddonIngressConfig)
+  # @@protoc_insertion_point(class_scope:v1alpha2.AddonIngressConfig)
   })
 _sym_db.RegisterMessage(AddonIngressConfig)
 
 ArchConfig = _reflection.GeneratedProtocolMessageType('ArchConfig', (_message.Message,), {
   'DESCRIPTOR' : _ARCHCONFIG,
   '__module__' : 'pkg.apis.istio.v1alpha2.values.values_types_pb2'
-  # @@protoc_insertion_point(class_scope:values.ArchConfig)
+  # @@protoc_insertion_point(class_scope:v1alpha2.ArchConfig)
   })
 _sym_db.RegisterMessage(ArchConfig)
 
 CNIConfig = _reflection.GeneratedProtocolMessageType('CNIConfig', (_message.Message,), {
   'DESCRIPTOR' : _CNICONFIG,
   '__module__' : 'pkg.apis.istio.v1alpha2.values.values_types_pb2'
-  # @@protoc_insertion_point(class_scope:values.CNIConfig)
+  # @@protoc_insertion_point(class_scope:v1alpha2.CNIConfig)
   })
 _sym_db.RegisterMessage(CNIConfig)
 
 CPUTargetUtilizationConfig = _reflection.GeneratedProtocolMessageType('CPUTargetUtilizationConfig', (_message.Message,), {
   'DESCRIPTOR' : _CPUTARGETUTILIZATIONCONFIG,
   '__module__' : 'pkg.apis.istio.v1alpha2.values.values_types_pb2'
-  # @@protoc_insertion_point(class_scope:values.CPUTargetUtilizationConfig)
+  # @@protoc_insertion_point(class_scope:v1alpha2.CPUTargetUtilizationConfig)
   })
 _sym_db.RegisterMessage(CPUTargetUtilizationConfig)
 
 CertManagerConfig = _reflection.GeneratedProtocolMessageType('CertManagerConfig', (_message.Message,), {
   'DESCRIPTOR' : _CERTMANAGERCONFIG,
   '__module__' : 'pkg.apis.istio.v1alpha2.values.values_types_pb2'
-  # @@protoc_insertion_point(class_scope:values.CertManagerConfig)
+  # @@protoc_insertion_point(class_scope:v1alpha2.CertManagerConfig)
   })
 _sym_db.RegisterMessage(CertManagerConfig)
+
+Resources = _reflection.GeneratedProtocolMessageType('Resources', (_message.Message,), {
+
+  'LimitsEntry' : _reflection.GeneratedProtocolMessageType('LimitsEntry', (_message.Message,), {
+    'DESCRIPTOR' : _RESOURCES_LIMITSENTRY,
+    '__module__' : 'pkg.apis.istio.v1alpha2.values.values_types_pb2'
+    # @@protoc_insertion_point(class_scope:v1alpha2.Resources.LimitsEntry)
+    })
+  ,
+
+  'RequestsEntry' : _reflection.GeneratedProtocolMessageType('RequestsEntry', (_message.Message,), {
+    'DESCRIPTOR' : _RESOURCES_REQUESTSENTRY,
+    '__module__' : 'pkg.apis.istio.v1alpha2.values.values_types_pb2'
+    # @@protoc_insertion_point(class_scope:v1alpha2.Resources.RequestsEntry)
+    })
+  ,
+  'DESCRIPTOR' : _RESOURCES,
+  '__module__' : 'pkg.apis.istio.v1alpha2.values.values_types_pb2'
+  # @@protoc_insertion_point(class_scope:v1alpha2.Resources)
+  })
+_sym_db.RegisterMessage(Resources)
+_sym_db.RegisterMessage(Resources.LimitsEntry)
+_sym_db.RegisterMessage(Resources.RequestsEntry)
 
 CoreDNSConfig = _reflection.GeneratedProtocolMessageType('CoreDNSConfig', (_message.Message,), {
   'DESCRIPTOR' : _COREDNSCONFIG,
   '__module__' : 'pkg.apis.istio.v1alpha2.values.values_types_pb2'
-  # @@protoc_insertion_point(class_scope:values.CoreDNSConfig)
+  # @@protoc_insertion_point(class_scope:v1alpha2.CoreDNSConfig)
   })
 _sym_db.RegisterMessage(CoreDNSConfig)
 
 DefaultPodDisruptionBudgetConfig = _reflection.GeneratedProtocolMessageType('DefaultPodDisruptionBudgetConfig', (_message.Message,), {
   'DESCRIPTOR' : _DEFAULTPODDISRUPTIONBUDGETCONFIG,
   '__module__' : 'pkg.apis.istio.v1alpha2.values.values_types_pb2'
-  # @@protoc_insertion_point(class_scope:values.DefaultPodDisruptionBudgetConfig)
+  # @@protoc_insertion_point(class_scope:v1alpha2.DefaultPodDisruptionBudgetConfig)
   })
 _sym_db.RegisterMessage(DefaultPodDisruptionBudgetConfig)
 
 DefaultResourcesConfig = _reflection.GeneratedProtocolMessageType('DefaultResourcesConfig', (_message.Message,), {
   'DESCRIPTOR' : _DEFAULTRESOURCESCONFIG,
   '__module__' : 'pkg.apis.istio.v1alpha2.values.values_types_pb2'
-  # @@protoc_insertion_point(class_scope:values.DefaultResourcesConfig)
+  # @@protoc_insertion_point(class_scope:v1alpha2.DefaultResourcesConfig)
   })
 _sym_db.RegisterMessage(DefaultResourcesConfig)
 
@@ -4397,12 +4607,12 @@ EgressGatewayConfig = _reflection.GeneratedProtocolMessageType('EgressGatewayCon
   'EnvEntry' : _reflection.GeneratedProtocolMessageType('EnvEntry', (_message.Message,), {
     'DESCRIPTOR' : _EGRESSGATEWAYCONFIG_ENVENTRY,
     '__module__' : 'pkg.apis.istio.v1alpha2.values.values_types_pb2'
-    # @@protoc_insertion_point(class_scope:values.EgressGatewayConfig.EnvEntry)
+    # @@protoc_insertion_point(class_scope:v1alpha2.EgressGatewayConfig.EnvEntry)
     })
   ,
   'DESCRIPTOR' : _EGRESSGATEWAYCONFIG,
   '__module__' : 'pkg.apis.istio.v1alpha2.values.values_types_pb2'
-  # @@protoc_insertion_point(class_scope:values.EgressGatewayConfig)
+  # @@protoc_insertion_point(class_scope:v1alpha2.EgressGatewayConfig)
   })
 _sym_db.RegisterMessage(EgressGatewayConfig)
 _sym_db.RegisterMessage(EgressGatewayConfig.EnvEntry)
@@ -4410,7 +4620,7 @@ _sym_db.RegisterMessage(EgressGatewayConfig.EnvEntry)
 EnvoyMetricsConfig = _reflection.GeneratedProtocolMessageType('EnvoyMetricsConfig', (_message.Message,), {
   'DESCRIPTOR' : _ENVOYMETRICSCONFIG,
   '__module__' : 'pkg.apis.istio.v1alpha2.values.values_types_pb2'
-  # @@protoc_insertion_point(class_scope:values.EnvoyMetricsConfig)
+  # @@protoc_insertion_point(class_scope:v1alpha2.EnvoyMetricsConfig)
   })
 _sym_db.RegisterMessage(EnvoyMetricsConfig)
 
@@ -4419,12 +4629,12 @@ GalleyConfig = _reflection.GeneratedProtocolMessageType('GalleyConfig', (_messag
   'MeshEntry' : _reflection.GeneratedProtocolMessageType('MeshEntry', (_message.Message,), {
     'DESCRIPTOR' : _GALLEYCONFIG_MESHENTRY,
     '__module__' : 'pkg.apis.istio.v1alpha2.values.values_types_pb2'
-    # @@protoc_insertion_point(class_scope:values.GalleyConfig.MeshEntry)
+    # @@protoc_insertion_point(class_scope:v1alpha2.GalleyConfig.MeshEntry)
     })
   ,
   'DESCRIPTOR' : _GALLEYCONFIG,
   '__module__' : 'pkg.apis.istio.v1alpha2.values.values_types_pb2'
-  # @@protoc_insertion_point(class_scope:values.GalleyConfig)
+  # @@protoc_insertion_point(class_scope:v1alpha2.GalleyConfig)
   })
 _sym_db.RegisterMessage(GalleyConfig)
 _sym_db.RegisterMessage(GalleyConfig.MeshEntry)
@@ -4432,14 +4642,14 @@ _sym_db.RegisterMessage(GalleyConfig.MeshEntry)
 GatewayLabelsConfig = _reflection.GeneratedProtocolMessageType('GatewayLabelsConfig', (_message.Message,), {
   'DESCRIPTOR' : _GATEWAYLABELSCONFIG,
   '__module__' : 'pkg.apis.istio.v1alpha2.values.values_types_pb2'
-  # @@protoc_insertion_point(class_scope:values.GatewayLabelsConfig)
+  # @@protoc_insertion_point(class_scope:v1alpha2.GatewayLabelsConfig)
   })
 _sym_db.RegisterMessage(GatewayLabelsConfig)
 
 GatewaysConfig = _reflection.GeneratedProtocolMessageType('GatewaysConfig', (_message.Message,), {
   'DESCRIPTOR' : _GATEWAYSCONFIG,
   '__module__' : 'pkg.apis.istio.v1alpha2.values.values_types_pb2'
-  # @@protoc_insertion_point(class_scope:values.GatewaysConfig)
+  # @@protoc_insertion_point(class_scope:v1alpha2.GatewaysConfig)
   })
 _sym_db.RegisterMessage(GatewaysConfig)
 
@@ -4448,12 +4658,12 @@ GlobalConfig = _reflection.GeneratedProtocolMessageType('GlobalConfig', (_messag
   'LocalityLbSettingEntry' : _reflection.GeneratedProtocolMessageType('LocalityLbSettingEntry', (_message.Message,), {
     'DESCRIPTOR' : _GLOBALCONFIG_LOCALITYLBSETTINGENTRY,
     '__module__' : 'pkg.apis.istio.v1alpha2.values.values_types_pb2'
-    # @@protoc_insertion_point(class_scope:values.GlobalConfig.LocalityLbSettingEntry)
+    # @@protoc_insertion_point(class_scope:v1alpha2.GlobalConfig.LocalityLbSettingEntry)
     })
   ,
   'DESCRIPTOR' : _GLOBALCONFIG,
   '__module__' : 'pkg.apis.istio.v1alpha2.values.values_types_pb2'
-  # @@protoc_insertion_point(class_scope:values.GlobalConfig)
+  # @@protoc_insertion_point(class_scope:v1alpha2.GlobalConfig)
   })
 _sym_db.RegisterMessage(GlobalConfig)
 _sym_db.RegisterMessage(GlobalConfig.LocalityLbSettingEntry)
@@ -4461,7 +4671,7 @@ _sym_db.RegisterMessage(GlobalConfig.LocalityLbSettingEntry)
 GlobalLoggingConfig = _reflection.GeneratedProtocolMessageType('GlobalLoggingConfig', (_message.Message,), {
   'DESCRIPTOR' : _GLOBALLOGGINGCONFIG,
   '__module__' : 'pkg.apis.istio.v1alpha2.values.values_types_pb2'
-  # @@protoc_insertion_point(class_scope:values.GlobalLoggingConfig)
+  # @@protoc_insertion_point(class_scope:v1alpha2.GlobalLoggingConfig)
   })
 _sym_db.RegisterMessage(GlobalLoggingConfig)
 
@@ -4470,12 +4680,12 @@ IngressGatewayConfig = _reflection.GeneratedProtocolMessageType('IngressGatewayC
   'EnvEntry' : _reflection.GeneratedProtocolMessageType('EnvEntry', (_message.Message,), {
     'DESCRIPTOR' : _INGRESSGATEWAYCONFIG_ENVENTRY,
     '__module__' : 'pkg.apis.istio.v1alpha2.values.values_types_pb2'
-    # @@protoc_insertion_point(class_scope:values.IngressGatewayConfig.EnvEntry)
+    # @@protoc_insertion_point(class_scope:v1alpha2.IngressGatewayConfig.EnvEntry)
     })
   ,
   'DESCRIPTOR' : _INGRESSGATEWAYCONFIG,
   '__module__' : 'pkg.apis.istio.v1alpha2.values.values_types_pb2'
-  # @@protoc_insertion_point(class_scope:values.IngressGatewayConfig)
+  # @@protoc_insertion_point(class_scope:v1alpha2.IngressGatewayConfig)
   })
 _sym_db.RegisterMessage(IngressGatewayConfig)
 _sym_db.RegisterMessage(IngressGatewayConfig.EnvEntry)
@@ -4483,70 +4693,70 @@ _sym_db.RegisterMessage(IngressGatewayConfig.EnvEntry)
 IngressGatewaySdsConfig = _reflection.GeneratedProtocolMessageType('IngressGatewaySdsConfig', (_message.Message,), {
   'DESCRIPTOR' : _INGRESSGATEWAYSDSCONFIG,
   '__module__' : 'pkg.apis.istio.v1alpha2.values.values_types_pb2'
-  # @@protoc_insertion_point(class_scope:values.IngressGatewaySdsConfig)
+  # @@protoc_insertion_point(class_scope:v1alpha2.IngressGatewaySdsConfig)
   })
 _sym_db.RegisterMessage(IngressGatewaySdsConfig)
 
 IngressGatewayZvpnConfig = _reflection.GeneratedProtocolMessageType('IngressGatewayZvpnConfig', (_message.Message,), {
   'DESCRIPTOR' : _INGRESSGATEWAYZVPNCONFIG,
   '__module__' : 'pkg.apis.istio.v1alpha2.values.values_types_pb2'
-  # @@protoc_insertion_point(class_scope:values.IngressGatewayZvpnConfig)
+  # @@protoc_insertion_point(class_scope:v1alpha2.IngressGatewayZvpnConfig)
   })
 _sym_db.RegisterMessage(IngressGatewayZvpnConfig)
 
 KubernetesEnvMixerAdapterConfig = _reflection.GeneratedProtocolMessageType('KubernetesEnvMixerAdapterConfig', (_message.Message,), {
   'DESCRIPTOR' : _KUBERNETESENVMIXERADAPTERCONFIG,
   '__module__' : 'pkg.apis.istio.v1alpha2.values.values_types_pb2'
-  # @@protoc_insertion_point(class_scope:values.KubernetesEnvMixerAdapterConfig)
+  # @@protoc_insertion_point(class_scope:v1alpha2.KubernetesEnvMixerAdapterConfig)
   })
 _sym_db.RegisterMessage(KubernetesEnvMixerAdapterConfig)
 
 KubernetesIngressConfig = _reflection.GeneratedProtocolMessageType('KubernetesIngressConfig', (_message.Message,), {
   'DESCRIPTOR' : _KUBERNETESINGRESSCONFIG,
   '__module__' : 'pkg.apis.istio.v1alpha2.values.values_types_pb2'
-  # @@protoc_insertion_point(class_scope:values.KubernetesIngressConfig)
+  # @@protoc_insertion_point(class_scope:v1alpha2.KubernetesIngressConfig)
   })
 _sym_db.RegisterMessage(KubernetesIngressConfig)
 
 LoadSheddingConfig = _reflection.GeneratedProtocolMessageType('LoadSheddingConfig', (_message.Message,), {
   'DESCRIPTOR' : _LOADSHEDDINGCONFIG,
   '__module__' : 'pkg.apis.istio.v1alpha2.values.values_types_pb2'
-  # @@protoc_insertion_point(class_scope:values.LoadSheddingConfig)
+  # @@protoc_insertion_point(class_scope:v1alpha2.LoadSheddingConfig)
   })
 _sym_db.RegisterMessage(LoadSheddingConfig)
 
 MTLSConfig = _reflection.GeneratedProtocolMessageType('MTLSConfig', (_message.Message,), {
   'DESCRIPTOR' : _MTLSCONFIG,
   '__module__' : 'pkg.apis.istio.v1alpha2.values.values_types_pb2'
-  # @@protoc_insertion_point(class_scope:values.MTLSConfig)
+  # @@protoc_insertion_point(class_scope:v1alpha2.MTLSConfig)
   })
 _sym_db.RegisterMessage(MTLSConfig)
 
 MeshExpansionConfig = _reflection.GeneratedProtocolMessageType('MeshExpansionConfig', (_message.Message,), {
   'DESCRIPTOR' : _MESHEXPANSIONCONFIG,
   '__module__' : 'pkg.apis.istio.v1alpha2.values.values_types_pb2'
-  # @@protoc_insertion_point(class_scope:values.MeshExpansionConfig)
+  # @@protoc_insertion_point(class_scope:v1alpha2.MeshExpansionConfig)
   })
 _sym_db.RegisterMessage(MeshExpansionConfig)
 
 MixerAdaptersConfig = _reflection.GeneratedProtocolMessageType('MixerAdaptersConfig', (_message.Message,), {
   'DESCRIPTOR' : _MIXERADAPTERSCONFIG,
   '__module__' : 'pkg.apis.istio.v1alpha2.values.values_types_pb2'
-  # @@protoc_insertion_point(class_scope:values.MixerAdaptersConfig)
+  # @@protoc_insertion_point(class_scope:v1alpha2.MixerAdaptersConfig)
   })
 _sym_db.RegisterMessage(MixerAdaptersConfig)
 
 MixerConfig = _reflection.GeneratedProtocolMessageType('MixerConfig', (_message.Message,), {
   'DESCRIPTOR' : _MIXERCONFIG,
   '__module__' : 'pkg.apis.istio.v1alpha2.values.values_types_pb2'
-  # @@protoc_insertion_point(class_scope:values.MixerConfig)
+  # @@protoc_insertion_point(class_scope:v1alpha2.MixerConfig)
   })
 _sym_db.RegisterMessage(MixerConfig)
 
 MixerPolicyConfig = _reflection.GeneratedProtocolMessageType('MixerPolicyConfig', (_message.Message,), {
   'DESCRIPTOR' : _MIXERPOLICYCONFIG,
   '__module__' : 'pkg.apis.istio.v1alpha2.values.values_types_pb2'
-  # @@protoc_insertion_point(class_scope:values.MixerPolicyConfig)
+  # @@protoc_insertion_point(class_scope:v1alpha2.MixerPolicyConfig)
   })
 _sym_db.RegisterMessage(MixerPolicyConfig)
 
@@ -4555,12 +4765,12 @@ MixerTelemetryConfig = _reflection.GeneratedProtocolMessageType('MixerTelemetryC
   'EnvEntry' : _reflection.GeneratedProtocolMessageType('EnvEntry', (_message.Message,), {
     'DESCRIPTOR' : _MIXERTELEMETRYCONFIG_ENVENTRY,
     '__module__' : 'pkg.apis.istio.v1alpha2.values.values_types_pb2'
-    # @@protoc_insertion_point(class_scope:values.MixerTelemetryConfig.EnvEntry)
+    # @@protoc_insertion_point(class_scope:v1alpha2.MixerTelemetryConfig.EnvEntry)
     })
   ,
   'DESCRIPTOR' : _MIXERTELEMETRYCONFIG,
   '__module__' : 'pkg.apis.istio.v1alpha2.values.values_types_pb2'
-  # @@protoc_insertion_point(class_scope:values.MixerTelemetryConfig)
+  # @@protoc_insertion_point(class_scope:v1alpha2.MixerTelemetryConfig)
   })
 _sym_db.RegisterMessage(MixerTelemetryConfig)
 _sym_db.RegisterMessage(MixerTelemetryConfig.EnvEntry)
@@ -4568,21 +4778,21 @@ _sym_db.RegisterMessage(MixerTelemetryConfig.EnvEntry)
 MultiClusterConfig = _reflection.GeneratedProtocolMessageType('MultiClusterConfig', (_message.Message,), {
   'DESCRIPTOR' : _MULTICLUSTERCONFIG,
   '__module__' : 'pkg.apis.istio.v1alpha2.values.values_types_pb2'
-  # @@protoc_insertion_point(class_scope:values.MultiClusterConfig)
+  # @@protoc_insertion_point(class_scope:v1alpha2.MultiClusterConfig)
   })
 _sym_db.RegisterMessage(MultiClusterConfig)
 
 NodeAgentConfig = _reflection.GeneratedProtocolMessageType('NodeAgentConfig', (_message.Message,), {
   'DESCRIPTOR' : _NODEAGENTCONFIG,
   '__module__' : 'pkg.apis.istio.v1alpha2.values.values_types_pb2'
-  # @@protoc_insertion_point(class_scope:values.NodeAgentConfig)
+  # @@protoc_insertion_point(class_scope:v1alpha2.NodeAgentConfig)
   })
 _sym_db.RegisterMessage(NodeAgentConfig)
 
 OutboundTrafficPolicyConfig = _reflection.GeneratedProtocolMessageType('OutboundTrafficPolicyConfig', (_message.Message,), {
   'DESCRIPTOR' : _OUTBOUNDTRAFFICPOLICYCONFIG,
   '__module__' : 'pkg.apis.istio.v1alpha2.values.values_types_pb2'
-  # @@protoc_insertion_point(class_scope:values.OutboundTrafficPolicyConfig)
+  # @@protoc_insertion_point(class_scope:v1alpha2.OutboundTrafficPolicyConfig)
   })
 _sym_db.RegisterMessage(OutboundTrafficPolicyConfig)
 
@@ -4591,12 +4801,12 @@ PilotConfig = _reflection.GeneratedProtocolMessageType('PilotConfig', (_message.
   'EnvEntry' : _reflection.GeneratedProtocolMessageType('EnvEntry', (_message.Message,), {
     'DESCRIPTOR' : _PILOTCONFIG_ENVENTRY,
     '__module__' : 'pkg.apis.istio.v1alpha2.values.values_types_pb2'
-    # @@protoc_insertion_point(class_scope:values.PilotConfig.EnvEntry)
+    # @@protoc_insertion_point(class_scope:v1alpha2.PilotConfig.EnvEntry)
     })
   ,
   'DESCRIPTOR' : _PILOTCONFIG,
   '__module__' : 'pkg.apis.istio.v1alpha2.values.values_types_pb2'
-  # @@protoc_insertion_point(class_scope:values.PilotConfig)
+  # @@protoc_insertion_point(class_scope:v1alpha2.PilotConfig)
   })
 _sym_db.RegisterMessage(PilotConfig)
 _sym_db.RegisterMessage(PilotConfig.EnvEntry)
@@ -4604,98 +4814,98 @@ _sym_db.RegisterMessage(PilotConfig.EnvEntry)
 PilotIngressConfig = _reflection.GeneratedProtocolMessageType('PilotIngressConfig', (_message.Message,), {
   'DESCRIPTOR' : _PILOTINGRESSCONFIG,
   '__module__' : 'pkg.apis.istio.v1alpha2.values.values_types_pb2'
-  # @@protoc_insertion_point(class_scope:values.PilotIngressConfig)
+  # @@protoc_insertion_point(class_scope:v1alpha2.PilotIngressConfig)
   })
 _sym_db.RegisterMessage(PilotIngressConfig)
 
 PilotPolicyConfig = _reflection.GeneratedProtocolMessageType('PilotPolicyConfig', (_message.Message,), {
   'DESCRIPTOR' : _PILOTPOLICYCONFIG,
   '__module__' : 'pkg.apis.istio.v1alpha2.values.values_types_pb2'
-  # @@protoc_insertion_point(class_scope:values.PilotPolicyConfig)
+  # @@protoc_insertion_point(class_scope:v1alpha2.PilotPolicyConfig)
   })
 _sym_db.RegisterMessage(PilotPolicyConfig)
 
 PilotTelemetryConfig = _reflection.GeneratedProtocolMessageType('PilotTelemetryConfig', (_message.Message,), {
   'DESCRIPTOR' : _PILOTTELEMETRYCONFIG,
   '__module__' : 'pkg.apis.istio.v1alpha2.values.values_types_pb2'
-  # @@protoc_insertion_point(class_scope:values.PilotTelemetryConfig)
+  # @@protoc_insertion_point(class_scope:v1alpha2.PilotTelemetryConfig)
   })
 _sym_db.RegisterMessage(PilotTelemetryConfig)
 
 PortsConfig = _reflection.GeneratedProtocolMessageType('PortsConfig', (_message.Message,), {
   'DESCRIPTOR' : _PORTSCONFIG,
   '__module__' : 'pkg.apis.istio.v1alpha2.values.values_types_pb2'
-  # @@protoc_insertion_point(class_scope:values.PortsConfig)
+  # @@protoc_insertion_point(class_scope:v1alpha2.PortsConfig)
   })
 _sym_db.RegisterMessage(PortsConfig)
 
 PrometheusConfig = _reflection.GeneratedProtocolMessageType('PrometheusConfig', (_message.Message,), {
   'DESCRIPTOR' : _PROMETHEUSCONFIG,
   '__module__' : 'pkg.apis.istio.v1alpha2.values.values_types_pb2'
-  # @@protoc_insertion_point(class_scope:values.PrometheusConfig)
+  # @@protoc_insertion_point(class_scope:v1alpha2.PrometheusConfig)
   })
 _sym_db.RegisterMessage(PrometheusConfig)
 
 PrometheusMixerAdapterConfig = _reflection.GeneratedProtocolMessageType('PrometheusMixerAdapterConfig', (_message.Message,), {
   'DESCRIPTOR' : _PROMETHEUSMIXERADAPTERCONFIG,
   '__module__' : 'pkg.apis.istio.v1alpha2.values.values_types_pb2'
-  # @@protoc_insertion_point(class_scope:values.PrometheusMixerAdapterConfig)
+  # @@protoc_insertion_point(class_scope:v1alpha2.PrometheusMixerAdapterConfig)
   })
 _sym_db.RegisterMessage(PrometheusMixerAdapterConfig)
 
 PrometheusSecurityConfig = _reflection.GeneratedProtocolMessageType('PrometheusSecurityConfig', (_message.Message,), {
   'DESCRIPTOR' : _PROMETHEUSSECURITYCONFIG,
   '__module__' : 'pkg.apis.istio.v1alpha2.values.values_types_pb2'
-  # @@protoc_insertion_point(class_scope:values.PrometheusSecurityConfig)
+  # @@protoc_insertion_point(class_scope:v1alpha2.PrometheusSecurityConfig)
   })
 _sym_db.RegisterMessage(PrometheusSecurityConfig)
 
 PrometheusServiceConfig = _reflection.GeneratedProtocolMessageType('PrometheusServiceConfig', (_message.Message,), {
   'DESCRIPTOR' : _PROMETHEUSSERVICECONFIG,
   '__module__' : 'pkg.apis.istio.v1alpha2.values.values_types_pb2'
-  # @@protoc_insertion_point(class_scope:values.PrometheusServiceConfig)
+  # @@protoc_insertion_point(class_scope:v1alpha2.PrometheusServiceConfig)
   })
 _sym_db.RegisterMessage(PrometheusServiceConfig)
 
 PrometheusServiceNodePortConfig = _reflection.GeneratedProtocolMessageType('PrometheusServiceNodePortConfig', (_message.Message,), {
   'DESCRIPTOR' : _PROMETHEUSSERVICENODEPORTCONFIG,
   '__module__' : 'pkg.apis.istio.v1alpha2.values.values_types_pb2'
-  # @@protoc_insertion_point(class_scope:values.PrometheusServiceNodePortConfig)
+  # @@protoc_insertion_point(class_scope:v1alpha2.PrometheusServiceNodePortConfig)
   })
 _sym_db.RegisterMessage(PrometheusServiceNodePortConfig)
 
 ProxyConfig = _reflection.GeneratedProtocolMessageType('ProxyConfig', (_message.Message,), {
   'DESCRIPTOR' : _PROXYCONFIG,
   '__module__' : 'pkg.apis.istio.v1alpha2.values.values_types_pb2'
-  # @@protoc_insertion_point(class_scope:values.ProxyConfig)
+  # @@protoc_insertion_point(class_scope:v1alpha2.ProxyConfig)
   })
 _sym_db.RegisterMessage(ProxyConfig)
 
 ProxyInitConfig = _reflection.GeneratedProtocolMessageType('ProxyInitConfig', (_message.Message,), {
   'DESCRIPTOR' : _PROXYINITCONFIG,
   '__module__' : 'pkg.apis.istio.v1alpha2.values.values_types_pb2'
-  # @@protoc_insertion_point(class_scope:values.ProxyInitConfig)
+  # @@protoc_insertion_point(class_scope:v1alpha2.ProxyInitConfig)
   })
 _sym_db.RegisterMessage(ProxyInitConfig)
 
 ResourcesRequestsConfig = _reflection.GeneratedProtocolMessageType('ResourcesRequestsConfig', (_message.Message,), {
   'DESCRIPTOR' : _RESOURCESREQUESTSCONFIG,
   '__module__' : 'pkg.apis.istio.v1alpha2.values.values_types_pb2'
-  # @@protoc_insertion_point(class_scope:values.ResourcesRequestsConfig)
+  # @@protoc_insertion_point(class_scope:v1alpha2.ResourcesRequestsConfig)
   })
 _sym_db.RegisterMessage(ResourcesRequestsConfig)
 
 SDSConfig = _reflection.GeneratedProtocolMessageType('SDSConfig', (_message.Message,), {
   'DESCRIPTOR' : _SDSCONFIG,
   '__module__' : 'pkg.apis.istio.v1alpha2.values.values_types_pb2'
-  # @@protoc_insertion_point(class_scope:values.SDSConfig)
+  # @@protoc_insertion_point(class_scope:v1alpha2.SDSConfig)
   })
 _sym_db.RegisterMessage(SDSConfig)
 
 SecretVolume = _reflection.GeneratedProtocolMessageType('SecretVolume', (_message.Message,), {
   'DESCRIPTOR' : _SECRETVOLUME,
   '__module__' : 'pkg.apis.istio.v1alpha2.values.values_types_pb2'
-  # @@protoc_insertion_point(class_scope:values.SecretVolume)
+  # @@protoc_insertion_point(class_scope:v1alpha2.SecretVolume)
   })
 _sym_db.RegisterMessage(SecretVolume)
 
@@ -4704,12 +4914,12 @@ SecurityConfig = _reflection.GeneratedProtocolMessageType('SecurityConfig', (_me
   'DnsCertsEntry' : _reflection.GeneratedProtocolMessageType('DnsCertsEntry', (_message.Message,), {
     'DESCRIPTOR' : _SECURITYCONFIG_DNSCERTSENTRY,
     '__module__' : 'pkg.apis.istio.v1alpha2.values.values_types_pb2'
-    # @@protoc_insertion_point(class_scope:values.SecurityConfig.DnsCertsEntry)
+    # @@protoc_insertion_point(class_scope:v1alpha2.SecurityConfig.DnsCertsEntry)
     })
   ,
   'DESCRIPTOR' : _SECURITYCONFIG,
   '__module__' : 'pkg.apis.istio.v1alpha2.values.values_types_pb2'
-  # @@protoc_insertion_point(class_scope:values.SecurityConfig)
+  # @@protoc_insertion_point(class_scope:v1alpha2.SecurityConfig)
   })
 _sym_db.RegisterMessage(SecurityConfig)
 _sym_db.RegisterMessage(SecurityConfig.DnsCertsEntry)
@@ -4717,124 +4927,126 @@ _sym_db.RegisterMessage(SecurityConfig.DnsCertsEntry)
 ServiceConfig = _reflection.GeneratedProtocolMessageType('ServiceConfig', (_message.Message,), {
   'DESCRIPTOR' : _SERVICECONFIG,
   '__module__' : 'pkg.apis.istio.v1alpha2.values.values_types_pb2'
-  # @@protoc_insertion_point(class_scope:values.ServiceConfig)
+  # @@protoc_insertion_point(class_scope:v1alpha2.ServiceConfig)
   })
 _sym_db.RegisterMessage(ServiceConfig)
 
 SidecarInjectorConfig = _reflection.GeneratedProtocolMessageType('SidecarInjectorConfig', (_message.Message,), {
   'DESCRIPTOR' : _SIDECARINJECTORCONFIG,
   '__module__' : 'pkg.apis.istio.v1alpha2.values.values_types_pb2'
-  # @@protoc_insertion_point(class_scope:values.SidecarInjectorConfig)
+  # @@protoc_insertion_point(class_scope:v1alpha2.SidecarInjectorConfig)
   })
 _sym_db.RegisterMessage(SidecarInjectorConfig)
 
 StdioMixerAdapterConfig = _reflection.GeneratedProtocolMessageType('StdioMixerAdapterConfig', (_message.Message,), {
   'DESCRIPTOR' : _STDIOMIXERADAPTERCONFIG,
   '__module__' : 'pkg.apis.istio.v1alpha2.values.values_types_pb2'
-  # @@protoc_insertion_point(class_scope:values.StdioMixerAdapterConfig)
+  # @@protoc_insertion_point(class_scope:v1alpha2.StdioMixerAdapterConfig)
   })
 _sym_db.RegisterMessage(StdioMixerAdapterConfig)
 
 TracerConfig = _reflection.GeneratedProtocolMessageType('TracerConfig', (_message.Message,), {
   'DESCRIPTOR' : _TRACERCONFIG,
   '__module__' : 'pkg.apis.istio.v1alpha2.values.values_types_pb2'
-  # @@protoc_insertion_point(class_scope:values.TracerConfig)
+  # @@protoc_insertion_point(class_scope:v1alpha2.TracerConfig)
   })
 _sym_db.RegisterMessage(TracerConfig)
 
 TracerDatadogConfig = _reflection.GeneratedProtocolMessageType('TracerDatadogConfig', (_message.Message,), {
   'DESCRIPTOR' : _TRACERDATADOGCONFIG,
   '__module__' : 'pkg.apis.istio.v1alpha2.values.values_types_pb2'
-  # @@protoc_insertion_point(class_scope:values.TracerDatadogConfig)
+  # @@protoc_insertion_point(class_scope:v1alpha2.TracerDatadogConfig)
   })
 _sym_db.RegisterMessage(TracerDatadogConfig)
 
 TracerLightStepConfig = _reflection.GeneratedProtocolMessageType('TracerLightStepConfig', (_message.Message,), {
   'DESCRIPTOR' : _TRACERLIGHTSTEPCONFIG,
   '__module__' : 'pkg.apis.istio.v1alpha2.values.values_types_pb2'
-  # @@protoc_insertion_point(class_scope:values.TracerLightStepConfig)
+  # @@protoc_insertion_point(class_scope:v1alpha2.TracerLightStepConfig)
   })
 _sym_db.RegisterMessage(TracerLightStepConfig)
 
 TracerZipkinConfig = _reflection.GeneratedProtocolMessageType('TracerZipkinConfig', (_message.Message,), {
   'DESCRIPTOR' : _TRACERZIPKINCONFIG,
   '__module__' : 'pkg.apis.istio.v1alpha2.values.values_types_pb2'
-  # @@protoc_insertion_point(class_scope:values.TracerZipkinConfig)
+  # @@protoc_insertion_point(class_scope:v1alpha2.TracerZipkinConfig)
   })
 _sym_db.RegisterMessage(TracerZipkinConfig)
 
 TracingConfig = _reflection.GeneratedProtocolMessageType('TracingConfig', (_message.Message,), {
   'DESCRIPTOR' : _TRACINGCONFIG,
   '__module__' : 'pkg.apis.istio.v1alpha2.values.values_types_pb2'
-  # @@protoc_insertion_point(class_scope:values.TracingConfig)
+  # @@protoc_insertion_point(class_scope:v1alpha2.TracingConfig)
   })
 _sym_db.RegisterMessage(TracingConfig)
 
 TracingIngressConfig = _reflection.GeneratedProtocolMessageType('TracingIngressConfig', (_message.Message,), {
   'DESCRIPTOR' : _TRACINGINGRESSCONFIG,
   '__module__' : 'pkg.apis.istio.v1alpha2.values.values_types_pb2'
-  # @@protoc_insertion_point(class_scope:values.TracingIngressConfig)
+  # @@protoc_insertion_point(class_scope:v1alpha2.TracingIngressConfig)
   })
 _sym_db.RegisterMessage(TracingIngressConfig)
 
 TracingJaegerConfig = _reflection.GeneratedProtocolMessageType('TracingJaegerConfig', (_message.Message,), {
   'DESCRIPTOR' : _TRACINGJAEGERCONFIG,
   '__module__' : 'pkg.apis.istio.v1alpha2.values.values_types_pb2'
-  # @@protoc_insertion_point(class_scope:values.TracingJaegerConfig)
+  # @@protoc_insertion_point(class_scope:v1alpha2.TracingJaegerConfig)
   })
 _sym_db.RegisterMessage(TracingJaegerConfig)
 
 TracingJaegerMemoryConfig = _reflection.GeneratedProtocolMessageType('TracingJaegerMemoryConfig', (_message.Message,), {
   'DESCRIPTOR' : _TRACINGJAEGERMEMORYCONFIG,
   '__module__' : 'pkg.apis.istio.v1alpha2.values.values_types_pb2'
-  # @@protoc_insertion_point(class_scope:values.TracingJaegerMemoryConfig)
+  # @@protoc_insertion_point(class_scope:v1alpha2.TracingJaegerMemoryConfig)
   })
 _sym_db.RegisterMessage(TracingJaegerMemoryConfig)
 
 TracingZipkinConfig = _reflection.GeneratedProtocolMessageType('TracingZipkinConfig', (_message.Message,), {
   'DESCRIPTOR' : _TRACINGZIPKINCONFIG,
   '__module__' : 'pkg.apis.istio.v1alpha2.values.values_types_pb2'
-  # @@protoc_insertion_point(class_scope:values.TracingZipkinConfig)
+  # @@protoc_insertion_point(class_scope:v1alpha2.TracingZipkinConfig)
   })
 _sym_db.RegisterMessage(TracingZipkinConfig)
 
 TracingZipkinNodeConfig = _reflection.GeneratedProtocolMessageType('TracingZipkinNodeConfig', (_message.Message,), {
   'DESCRIPTOR' : _TRACINGZIPKINNODECONFIG,
   '__module__' : 'pkg.apis.istio.v1alpha2.values.values_types_pb2'
-  # @@protoc_insertion_point(class_scope:values.TracingZipkinNodeConfig)
+  # @@protoc_insertion_point(class_scope:v1alpha2.TracingZipkinNodeConfig)
   })
 _sym_db.RegisterMessage(TracingZipkinNodeConfig)
 
 Values = _reflection.GeneratedProtocolMessageType('Values', (_message.Message,), {
   'DESCRIPTOR' : _VALUES,
   '__module__' : 'pkg.apis.istio.v1alpha2.values.values_types_pb2'
-  # @@protoc_insertion_point(class_scope:values.Values)
+  # @@protoc_insertion_point(class_scope:v1alpha2.Values)
   })
 _sym_db.RegisterMessage(Values)
 
 TypeMapStringInterface = _reflection.GeneratedProtocolMessageType('TypeMapStringInterface', (_message.Message,), {
   'DESCRIPTOR' : _TYPEMAPSTRINGINTERFACE,
   '__module__' : 'pkg.apis.istio.v1alpha2.values.values_types_pb2'
-  # @@protoc_insertion_point(class_scope:values.TypeMapStringInterface)
+  # @@protoc_insertion_point(class_scope:v1alpha2.TypeMapStringInterface)
   })
 _sym_db.RegisterMessage(TypeMapStringInterface)
 
 TypeSliceOfMapStringInterface = _reflection.GeneratedProtocolMessageType('TypeSliceOfMapStringInterface', (_message.Message,), {
   'DESCRIPTOR' : _TYPESLICEOFMAPSTRINGINTERFACE,
   '__module__' : 'pkg.apis.istio.v1alpha2.values.values_types_pb2'
-  # @@protoc_insertion_point(class_scope:values.TypeSliceOfMapStringInterface)
+  # @@protoc_insertion_point(class_scope:v1alpha2.TypeSliceOfMapStringInterface)
   })
 _sym_db.RegisterMessage(TypeSliceOfMapStringInterface)
 
 ZeroVPNConfig = _reflection.GeneratedProtocolMessageType('ZeroVPNConfig', (_message.Message,), {
   'DESCRIPTOR' : _ZEROVPNCONFIG,
   '__module__' : 'pkg.apis.istio.v1alpha2.values.values_types_pb2'
-  # @@protoc_insertion_point(class_scope:values.ZeroVPNConfig)
+  # @@protoc_insertion_point(class_scope:v1alpha2.ZeroVPNConfig)
   })
 _sym_db.RegisterMessage(ZeroVPNConfig)
 
 
 DESCRIPTOR._options = None
+_RESOURCES_LIMITSENTRY._options = None
+_RESOURCES_REQUESTSENTRY._options = None
 _EGRESSGATEWAYCONFIG_ENVENTRY._options = None
 _GALLEYCONFIG_MESHENTRY._options = None
 _GLOBALCONFIG_LOCALITYLBSETTINGENTRY._options = None

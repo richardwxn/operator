@@ -15,6 +15,7 @@
 package values
 
 import (
+	"github.com/gogo/protobuf/jsonpb"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -26,7 +27,8 @@ import (
 	"github.com/ghodss/yaml"
 	"github.com/kylelemons/godebug/diff"
 
-	"istio.io/operator/pkg/apis/istio/v1alpha2"
+	v1alpha22 "istio.io/operator/pkg/apis/istio/v1alpha2/values"
+	"istio.io/operator/pkg/util"
 )
 
 const (
@@ -38,21 +40,22 @@ func TestUnmarshalRealValues(t *testing.T) {
 	if err != nil {
 		t.Fatalf("getFiles: %v", err)
 	}
-
 	for _, f := range files {
 		fs, err := readFile(f)
 		if err != nil {
 			t.Fatalf("readFile: %v", err)
 		}
 		t.Logf("Testing file %s", f)
-		v := &v1alpha2.Values{}
-		err = yaml.Unmarshal([]byte(fs), v)
+		v := &v1alpha22.Values{}
+		err = util.UnmarshalWithJSONPB(fs, v)
 		if err != nil {
-			t.Fatalf("yaml.Unmarshal(%s): got error %s", f, err)
+			t.Fatalf("jsonpb unmarshal(%s): got error %s", f, err)
 		}
-		s, err := yaml.Marshal(v)
+
+		ms := jsonpb.Marshaler{}
+		s, err := ms.MarshalToString(v)
 		if err != nil {
-			t.Fatalf("yaml.Marshal(%s): got error %s", f, err)
+			t.Fatalf("jsonpb marshal(%s): got error %s", f, err)
 		}
 		got, want := stripNL(string(s)), stripNL(fs)
 		if !util.IsYAMLEqual(got, want) {

@@ -17,8 +17,9 @@ syntax = 'proto3';
 
 import "google/protobuf/duration.proto";
 import "k8s.io/api/core/v1/generated.proto";
+import "github.com/gogo/protobuf/protobuf/google/protobuf/wrappers.proto";
 
-package values;
+package v1alpha2;
 
 // Package-wide variables from generator "generated".
 option go_package = "v1alpha2";
@@ -26,7 +27,7 @@ option go_package = "v1alpha2";
 // Configuration for the addon ingress.
 message AddonIngressConfig {
   // Controls whether addon ingress is enabled.
-  bool enabled = 1;
+  google.protobuf.BoolValue enabled = 1;
 
   repeated string hosts = 2;
 }
@@ -46,7 +47,7 @@ message ArchConfig {
 // Configuration for CNI.
 message CNIConfig {
   // Controls whether CNI is enabled.
-  bool enabled = 1;
+  google.protobuf.BoolValue enabled = 1;
 }
 
 // Configuration for CPU target utilization for HorizontalPodAutoscaler target.
@@ -60,7 +61,7 @@ message CPUTargetUtilizationConfig {
 // Configuration for CertManager.
 message CertManagerConfig {
   // Controls whether CertManager is enabled.
-  bool enabled = 1;
+  google.protobuf.BoolValue enabled = 1;
 
   // Image hub for the CertManager Deployment.
   string hub = 2;
@@ -76,13 +77,19 @@ message CertManagerConfig {
   // K8s resources settings.
   //
   // See https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container
-  k8s.io.api.core.v1.ResourceRequirements resources = 5;
+  Resources resources = 5;
+}
+
+// Mirrors Resources for unmarshaling.
+message Resources {
+  map<string, string> limits = 1;
+  map<string, string> requests = 2;
 }
 
 // Configuration for Core DNS.
 message CoreDNSConfig {
   // Controls whether CoreDNS is enabled.
-  bool enabled = 1;
+  google.protobuf.BoolValue enabled = 1;
 
   // Image for Core DNS.
   string coreDNSImage = 2;
@@ -103,7 +110,7 @@ message CoreDNSConfig {
 // See https://kubernetes.io/docs/concepts/workloads/pods/disruptions/
 message DefaultPodDisruptionBudgetConfig {
   // Controls whether a PodDisruptionBudget with a default minAvailable value of 1 is created for each deployment.
-  bool enabled = 1;
+  google.protobuf.BoolValue enabled = 1;
 }
 
 // DefaultResourcesConfig specifies the default k8s resources settings for all Istio control plane components.
@@ -117,7 +124,7 @@ message DefaultResourcesConfig {
 // Configuration for an egress gateway.
 message EgressGatewayConfig {
   // Controls whether auto scaling with a HorizontalPodAutoscaler is enabled.
-  bool autoscaleEnabled = 1;
+  google.protobuf.BoolValue autoscaleEnabled = 1;
 
   // maxReplicas setting for HorizontalPodAutoscaler.
   uint32 autoscaleMax = 2;
@@ -131,7 +138,7 @@ message EgressGatewayConfig {
   CPUTargetUtilizationConfig cpu = 5;
 
   // Controls whether an egress gateway is enabled.
-  bool enabled = 7;
+  google.protobuf.BoolValue enabled = 7;
 
   // Environment variables passed to the proxy container.
   map<string, string> env = 8;
@@ -184,7 +191,7 @@ message EgressGatewayConfig {
   // K8s resources settings.
   //
   // See https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container
-  k8s.io.api.core.v1.ResourceRequirements resources = 15;
+  Resources resources = 15;
 
   // Config for secret volume mounts.
   repeated SecretVolume secretVolumes = 16;
@@ -204,7 +211,7 @@ message EgressGatewayConfig {
 // EnvoyMetricsConfig is a set of configuration options for Envoy metrics.
 message EnvoyMetricsConfig {
   // Enables the Envoy Metrics Service.
-  bool enabled = 1;
+  google.protobuf.BoolValue enabled = 1;
 
   // Sets the destination Envoy Metrics Service address in Envoy.
   string host = 2;
@@ -216,7 +223,7 @@ message EnvoyMetricsConfig {
 // GalleyConfig is a set of Configuration for Galley.
 message GalleyConfig {
   // Controls whether Galley is enabled.
-  bool enabled = 1;
+  google.protobuf.BoolValue enabled = 1;
 
   // Image name used for Galley.
   //
@@ -240,7 +247,7 @@ message GalleyConfig {
   // K8s resources settings.
   //
   // See https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container
-  k8s.io.api.core.v1.ResourceRequirements resources = 7;
+  Resources resources = 7;
 }
 
 // GatewayLabelsConfig is a set of Configuration for gateway labels.
@@ -255,7 +262,7 @@ message GatewaysConfig {
   EgressGatewayConfig istioEgressgateway = 1;
 
   // Controls whether any gateways are enabled.
-  bool enabled = 2;
+  google.protobuf.BoolValue enabled = 2;
 
   // Configuration for an ingress gateway.
   IngressGatewayConfig istioIngressgateway = 4;
@@ -274,10 +281,10 @@ message GlobalConfig {
   string configNamespace = 2;
 
   // Controls whether the server-side validation is enabled.
-  bool configValidation = 3;
+  google.protobuf.BoolValue configValidation = 3;
 
   // Controls whether the MTLS for communication between the control plane components is enabled.
-  bool controlPlaneSecurityEnabled = 4;
+  google.protobuf.BoolValue controlPlaneSecurityEnabled = 4;
 
   // Default k8s node selector for all the Istio control plane components
   //
@@ -288,7 +295,7 @@ message GlobalConfig {
   DefaultPodDisruptionBudgetConfig defaultPodDisruptionBudget = 7;
 
   // Controls whether the policy enforcement is enabled.
-  bool disablePolicyChecks = 8;
+  google.protobuf.BoolValue disablePolicyChecks = 8;
 
   // Default k8s resources settings for all Istio control plane components.
   //
@@ -296,12 +303,12 @@ message GlobalConfig {
   DefaultResourcesConfig defaultResources = 9;
 
   // Controls whether the helm test templates are enabled.
-  bool enableHelmTest = 10;
+  google.protobuf.BoolValue enableHelmTest = 10;
 
   // Controls whether the distributed tracing for the applications is enabled.
   //
   // See https://opentracing.io/docs/overview/what-is-tracing/
-  bool enableTracing = 11;
+  google.protobuf.BoolValue enableTracing = 11;
 
   // Specifies the docker hub for Istio images.
   string hub = 12;
@@ -389,13 +396,13 @@ message GlobalConfig {
 
   // Controls whether to restrict the applications namespace the controller manages;
   // If set it to false, the controller watches all namespaces.
-  bool oneNamespace = 23;
+  google.protobuf.BoolValue oneNamespace = 23;
 
   // Controls the default behavior of the sidecar for handling outbound traffic from the application.
   OutboundTrafficPolicyConfig outboundTrafficPolicy = 24;
 
   // Controls whether to allow traffic in cases when the mixer policy service cannot be reached.
-  bool policyCheckFailOpen = 25;
+  google.protobuf.BoolValue policyCheckFailOpen = 25;
 
   // Specifies the namespace for the policy component.
   string policyNamespace = 26;
@@ -427,7 +434,7 @@ message GlobalConfig {
   string trustDomain = 34;
 
   // Controls whether to use of Mesh Configuration Protocol to distribute configuration.
-  bool useMCP = 35;
+  google.protobuf.BoolValue useMCP = 35;
 }
 
 // GlobalLoggingConfig specifies the global logging level settings for the Istio control plane components.
@@ -441,7 +448,7 @@ message GlobalLoggingConfig {
 // Configuration for an ingress gateway.
 message IngressGatewayConfig {
   // Controls whether auto scaling with a HorizontalPodAutoscaler is enabled.
-  bool autoscaleEnabled = 1;
+  google.protobuf.BoolValue autoscaleEnabled = 1;
 
   // maxReplicas setting for HorizontalPodAutoscaler.
   uint32 autoscaleMax = 2;
@@ -454,23 +461,23 @@ message IngressGatewayConfig {
   // See https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
   CPUTargetUtilizationConfig cpu = 5;
 
-  bool customService = 6;
+  google.protobuf.BoolValue customService = 6;
 
   string debug = 7;
 
   string domain = 8;
 
   // Controls whether an ingress gateway is enabled.
-  bool enabled = 10;
+  google.protobuf.BoolValue enabled = 10;
 
   // Environment variables passed to the proxy container.
   map<string, string> env = 11;
 
   repeated string externalIPs = 12;
 
-  bool k8sIngress = 13;
+  google.protobuf.BoolValue k8sIngress = 13;
 
-  bool k8sIngressHttps = 14;
+  google.protobuf.BoolValue k8sIngressHttps = 14;
 
   GatewayLabelsConfig labels = 15;
 
@@ -528,7 +535,7 @@ message IngressGatewayConfig {
 // Secret Discovery Service (SDS) Configuration for ingress gateway.
 message IngressGatewaySdsConfig {
   // If true, ingress gateway fetches credentials from SDS server to handle TLS connections.
-  bool enabled = 1;
+  google.protobuf.BoolValue enabled = 1;
 
   // SDS server that watches kubernetes secrets and provisions credentials to ingress gateway.
   // This server runs in the same pod as ingress gateway.
@@ -538,7 +545,7 @@ message IngressGatewaySdsConfig {
 // IngressGatewayZvpnConfig enables cross-cluster access using SNI matching.
 message IngressGatewayZvpnConfig {
   // Controls whether ZeroVPN is enabled.
-  bool enabled = 1;
+  google.protobuf.BoolValue enabled = 1;
 
   string suffix = 2;
 }
@@ -548,16 +555,16 @@ message KubernetesEnvMixerAdapterConfig {
   // Enables the Kubernetes env adapter in Mixer.
   //
   // See: https://istio.io/docs/reference/config/policy-and-telemetry/adapters/kubernetesenv/
-  bool enabled = 1;
+  google.protobuf.BoolValue enabled = 1;
 }
 
 // Configuration for the legacy kubernetes Ingress.
 message KubernetesIngressConfig {
   // Enables gateway for legacy k8s Ingress.
-  bool enabled = 1;
+  google.protobuf.BoolValue enabled = 1;
 
   // Enables HTTPS legacy k8s Ingress.
-  bool enableHttps = 2;
+  google.protobuf.BoolValue enableHttps = 2;
 
   // Sets the gateway name for legacy k8s Ingress.
   string gatewayName = 3;
@@ -581,16 +588,16 @@ message LoadSheddingConfig {
 // MTLS settings for the applications that Istio manages.
 message MTLSConfig {
   // Enables MTLS for service to service traffic.
-  bool enabled = 1;
+  google.protobuf.BoolValue enabled = 1;
 }
 
 // Configuration for Istio mesh expansion to bare metal.
 message MeshExpansionConfig {
   // Exposes Pilot and Citadel mTLS on the ingress gateway.
-  bool enabled = 1;
+  google.protobuf.BoolValue enabled = 1;
 
   // Exposes Pilot and Citadel mTLS and the plain text Pilot ports on an internal gateway.
-  bool useILB = 2;
+  google.protobuf.BoolValue useILB = 2;
 }
 
 // Configuration for Mixer adapters.
@@ -605,7 +612,7 @@ message MixerAdaptersConfig {
   StdioMixerAdapterConfig stdio = 3;
 
   // Sets the --useAdapterCRDs mixer startup argument.
-  bool useAdapterCRDs = 4;
+  google.protobuf.BoolValue useAdapterCRDs = 4;
 }
 
 // Configuration for Mixer.
@@ -620,7 +627,7 @@ message MixerConfig {
 // Configuration for Mixer Policy.
 message MixerPolicyConfig {
   // Controls whether a HorizontalPodAutoscaler is installed for Mixer Policy.
-  bool autoscaleEnabled = 1;
+  google.protobuf.BoolValue autoscaleEnabled = 1;
 
   // Maximum number of replicas in the HorizontalPodAutoscaler for Mixer Policy.
   uint32 autoscaleMax = 2;
@@ -634,7 +641,7 @@ message MixerPolicyConfig {
   CPUTargetUtilizationConfig cpu = 4;
 
   // Controls whether Mixer Policy is enabled
-  bool enabled = 5;
+  google.protobuf.BoolValue enabled = 5;
 
   // Image name used for Mixer Policy.
   //
@@ -658,7 +665,7 @@ message MixerTelemetryConfig {
   MixerAdaptersConfig adapters = 1;
 
   // Controls whether a HorizontalPodAutoscaler is installed for Mixer Telemetry.
-  bool autoscaleEnabled = 2;
+  google.protobuf.BoolValue autoscaleEnabled = 2;
 
   // Maximum number of replicas in the HorizontalPodAutoscaler for Mixer Telemetry.
   uint32 autoscaleMax = 3;
@@ -672,7 +679,7 @@ message MixerTelemetryConfig {
   CPUTargetUtilizationConfig cpu = 5;
 
   // Controls whether Mixer Telemetry is enabled.
-  bool enabled = 6;
+  google.protobuf.BoolValue enabled = 6;
 
   // Environment variables passed to the Mixer container.
   //
@@ -708,23 +715,23 @@ message MixerTelemetryConfig {
   // K8s resources settings.
   //
   // See https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container
-  k8s.io.api.core.v1.ResourceRequirements resources = 13;
+  Resources resources = 13;
 
   // Controls whether to enable the sticky session setting when choosing backend pods.
-  bool sessionAffinityEnabled = 14;
+  google.protobuf.BoolValue sessionAffinityEnabled = 14;
 }
 
 // MultiClusterConfig specifies the Configuration for Istio mesh across multiple clusters through the istio gateways.
 message MultiClusterConfig {
   // Enables the connection between two kubernetes clusters via their respective ingressgateway services.
   // Use if the pods in each cluster cannot directly talk to one another.
-  bool enabled = 1;
+  google.protobuf.BoolValue enabled = 1;
 }
 
 // Configuration for Node Agent Daemonset.
 message NodeAgentConfig {
   // Controls whether Node Agent is enabled.
-  bool enabled = 1;
+  google.protobuf.BoolValue enabled = 1;
 
   // Environment variables passed to the Node Agent container.
   //
@@ -757,10 +764,10 @@ message OutboundTrafficPolicyConfig {
 // Configuration for Pilot.
 message PilotConfig {
   // Controls whether Pilot is enabled.
-  bool enabled = 1;
+  google.protobuf.BoolValue enabled = 1;
 
   // Controls whether a HorizontalPodAutoscaler is installed for Pilot.
-  bool autoscaleEnabled = 2;
+  google.protobuf.BoolValue autoscaleEnabled = 2;
 
   // Minimum number of replicas in the HorizontalPodAutoscaler for Pilot.
   uint32 autoscaleMin = 3;
@@ -781,7 +788,7 @@ message PilotConfig {
   // Controls whether a sidecar proxy is installed in the Pilot pod.
   //
   // Setting to true installs a proxy in the Pilot pod, used primarily for collecting Pilot telemetry.
-  bool sidecar = 7;
+  google.protobuf.BoolValue sidecar = 7;
 
   // Trace sampling fraction.
   //
@@ -793,7 +800,7 @@ message PilotConfig {
   // K8s resources settings.
   //
   // See https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container
-  k8s.io.api.core.v1.ResourceRequirements resources = 9;
+  Resources resources = 9;
 
   // Namespace that the configuration management feature is installed into, if different from Pilot namespace.
   string configNamespace = 10;
@@ -833,7 +840,7 @@ message PilotConfig {
   //
   // This controls whether the mesh config map, generated from values.yaml is generated.
   // If false, pilot wil use default values or user-supplied values, in that order of preference.
-  bool configMap = 18;
+  google.protobuf.BoolValue configMap = 18;
 
   // Controls legacy k8s ingress. Only one pilot profile should enable ingress support.
   PilotIngressConfig ingress = 19;
@@ -841,7 +848,7 @@ message PilotConfig {
   // Controls whether Pilot is configured through the Mesh Control Protocol (MCP).
   //
   // If set to true, Pilot requires an MCP server (like Galley) to be installed.
-  bool useMCP = 20;
+  google.protobuf.BoolValue useMCP = 20;
 
   // Environment variables passed to the Pilot container.
   //
@@ -883,13 +890,13 @@ message PilotIngressConfig {
 // Controls whether Istio policy is applied to Pilot.
 message PilotPolicyConfig {
   // Controls whether Istio policy is applied to Pilot.
-  bool enabled = 1;
+  google.protobuf.BoolValue enabled = 1;
 }
 
 // Controls whether telemetry is exported for Pilot.
 message PilotTelemetryConfig {
   // Controls whether telemetry is exported for Pilot.
-  bool enabled = 1;
+  google.protobuf.BoolValue enabled = 1;
 }
 
 // Configuration for a port.
@@ -909,9 +916,9 @@ message PortsConfig {
 
 // Configuration for Prometheus.
 message PrometheusConfig {
-  bool createPrometheusResource = 1;
+  google.protobuf.BoolValue createPrometheusResource = 1;
 
-  bool enabled = 2;
+  google.protobuf.BoolValue enabled = 2;
 
   uint32 replicaCount = 3;
 
@@ -938,7 +945,7 @@ message PrometheusConfig {
 // Configuration for Prometheus adapter in mixer.
 message PrometheusMixerAdapterConfig {
   // Enables the Prometheus adapter in Mixer.
-  bool enabled = 1;
+  google.protobuf.BoolValue enabled = 1;
 
   // Sets the duration after which Prometheus registry purges a metric.
   //
@@ -949,7 +956,7 @@ message PrometheusMixerAdapterConfig {
 // Configuration for Prometheus adapter security.
 message PrometheusSecurityConfig {
   // Controls whether Prometheus security is enabled.
-  bool enabled = 1;
+  google.protobuf.BoolValue enabled = 1;
 }
 
 // Configuration for Prometheus adapter service.
@@ -961,7 +968,7 @@ message PrometheusServiceConfig {
 // Configuration for Prometheus Service NodePort.
 message PrometheusServiceNodePortConfig {
   // Controls whether Prometheus NodePort config is enabled.
-  bool enabled = 1;
+  google.protobuf.BoolValue enabled = 1;
 
   uint32 port = 2;
 }
@@ -1009,7 +1016,7 @@ message ProxyConfig {
   // Enables core dumps for newly injected sidecars.
   //
   // If set, newly injected sidecars will have core dumps enabled.
-  bool enableCoreDump = 9;
+  google.protobuf.BoolValue enableCoreDump = 9;
 
   // Configures Envoy Metrics Service.
   EnvoyMetricsConfig envoyMetricsService = 10;
@@ -1053,7 +1060,7 @@ message ProxyConfig {
   // Enables privileged securityContext for the istio-proxy container.
   //
   // See https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
-  bool privileged = 19;
+  google.protobuf.BoolValue privileged = 19;
 
   // Sets the initial delay for readiness probes in seconds.
   uint32 readinessInitialDelaySeconds = 20;
@@ -1070,7 +1077,7 @@ message ProxyConfig {
   // K8s resources settings.
   //
   // See https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container
-  k8s.io.api.core.v1.ResourceRequirements resources = 24;
+  Resources resources = 24;
 
   // Specifies which tracer to use.
   enum tracer {
@@ -1096,16 +1103,16 @@ message ResourcesRequestsConfig {
 // Configuration for the SecretDiscoveryService instead of using K8S secrets to mount the certificates.
 message SDSConfig {
   // Controls whether the SecretDiscoveryService is enabled.
-  bool enabled = 1;
+  google.protobuf.BoolValue enabled = 1;
 
   // Specifies the Unix Domain Socket through which Envoy communicates with NodeAgent SDS to get key/cert for mTLS.
   string udsPath = 2;
 
   // Enables SDS use of k8s normal JWT to request for certificates.
-  bool useNormalJwt = 3;
+  google.protobuf.BoolValue useNormalJwt = 3;
 
   // Enables SDS use of trustworthy JWT to request for certificates.
-  bool useTrustworthyJwt = 4;
+  google.protobuf.BoolValue useTrustworthyJwt = 4;
 }
 
 // Configuration for secret volume mounts.
@@ -1122,7 +1129,7 @@ message SecretVolume {
 // Configuration for Citadel.
 message SecurityConfig {
   // Controls whether Citadel is enabled.
-  bool enabled = 1;
+  google.protobuf.BoolValue enabled = 1;
 
   // Number of replicas in the Citadel Deployment.
   uint32 replicaCount = 2;
@@ -1137,7 +1144,7 @@ message SecurityConfig {
   // Controls whether self-signed CA is used for citadel to generate the certificate/key pair.
   //
   // Setting to false if you want to use your own root CA for Citade Deployment.
-  bool selfSigned = 4;
+  google.protobuf.BoolValue selfSigned = 4;
 
   // The trust domain corresponds to the trust root of a system
   // Refer to https://github.com/spiffe/spiffe/blob/master/standards/SPIFFE-ID.md#21-trust-domain
@@ -1157,7 +1164,7 @@ message SecurityConfig {
   // Controls whether the mesh-wide authentication policy is created or not.
   //
   // Setting to true creates the mesh-wide authentication policy with name "default".
-  bool createMeshPolicy = 7;
+  google.protobuf.BoolValue createMeshPolicy = 7;
 
   // K8s node selector.
   //
@@ -1179,10 +1186,10 @@ message ServiceConfig {
 // SidecarInjectorConfig is described in istio.io documentation.
 message SidecarInjectorConfig {
   // Controls whether Sidecar Injector is enabled.
-  bool enabled = 1;
+  google.protobuf.BoolValue enabled = 1;
 
   // Enables sidecar auto-injection in namespaces by default.
-  bool enableNamespacesByDefault = 2;
+  google.protobuf.BoolValue enableNamespacesByDefault = 2;
 
   // Image name used for Sidecar Injector.
   //
@@ -1216,21 +1223,21 @@ message SidecarInjectorConfig {
   uint32 replicaCount = 15;
 
   //  If true, webhook or istioctl injector will rewrite PodSpec for liveness health check to redirect request to sidecar. This makes liveness check work even when mTLS is enabled.
-  bool rewriteAppHTTPProbe = 16;
+  google.protobuf.BoolValue rewriteAppHTTPProbe = 16;
 
   // Controls whether self-signed CA is used for Sidecar Injector to generate the certificate/key pair.
   //
   // Setting to false if you want to use your own root CA.
-  bool selfSigned = 17;
+  google.protobuf.BoolValue selfSigned = 17;
 }
 
 // Configuration for stdio adapter in mixer, recommended for debug usage only.
 message StdioMixerAdapterConfig {
   // Enable stdio adapter to output logs and metrics to local machine.
-  bool enabled = 1;
+  google.protobuf.BoolValue enabled = 1;
 
   // Whether to output a console-friendly or json-friendly format.
-  bool outputAsJson = 2;
+  google.protobuf.BoolValue outputAsJson = 2;
 }
 
 
@@ -1264,7 +1271,7 @@ message TracerLightStepConfig {
   string cacertPath = 3;
 
   // Enables lightstep secure connection.
-  bool secure = 4;
+  google.protobuf.BoolValue secure = 4;
 }
 
 // Configuration for the zipkin tracing service.
@@ -1278,7 +1285,7 @@ message TracerZipkinConfig {
 // Configurations for different tracing system to be installed.
 message TracingConfig {
   // Enables tracing systems installation.
-  bool enabled = 1;
+  google.protobuf.BoolValue enabled = 1;
 
   // Controls legacy k8s ingress for addon tracing components.
   TracingIngressConfig ingress = 2;
@@ -1304,7 +1311,7 @@ message TracingConfig {
 // Controls legacy k8s ingress for addon tracing components.
 message TracingIngressConfig {
   // Enables k8s ingress for addon tracing components.
-  bool enabled = 1;
+  google.protobuf.BoolValue enabled = 1;
 }
 
 // Configuration for addon Jaeger tracing.
@@ -1342,7 +1349,7 @@ message TracingZipkinConfig {
   // K8s resources settings.
   //
   // See https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container
-  k8s.io.api.core.v1.ResourceRequirements resources = 5;
+  Resources resources = 5;
 
   // Configure java heap opts for Zipkin deployment
   string javaOptsHeap = 6;
@@ -1401,7 +1408,7 @@ message TypeSliceOfMapStringInterface {}
 // ZeroVPNConfig enables cross-cluster access using SNI matching.
 message ZeroVPNConfig {
   // Controls whether ZeroVPN is enabled.
-  bool enabled = 1;
+  google.protobuf.BoolValue enabled = 1;
 
   string suffix = 2;
 }

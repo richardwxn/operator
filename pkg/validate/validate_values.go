@@ -16,8 +16,8 @@ package validate
 
 import (
 	"github.com/ghodss/yaml"
+	v1alpha22 "istio.io/operator/pkg/apis/istio/v1alpha2/values"
 
-	"istio.io/operator/pkg/apis/istio/v1alpha2"
 	"istio.io/operator/pkg/util"
 )
 
@@ -37,8 +37,8 @@ func CheckValues(root map[string]interface{}) util.Errors {
 	if err != nil {
 		return util.Errors{err}
 	}
-	val := &v1alpha2.Values{}
-	if err := yaml.Unmarshal(vs, val); err != nil {
+	val := &v1alpha22.Values{}
+	if err := util.UnmarshalWithJSONPB(string(vs), val); err != nil {
 		return util.Errors{err}
 	}
 	return validateValues(defaultValuesValidations, root, nil)

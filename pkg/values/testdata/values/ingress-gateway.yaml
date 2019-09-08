@@ -32,16 +32,12 @@ gateways:
     k8sIngressHttps: false
     debug: info
     customService: false
-    drainDuration: 45s
-    connectTimeout: 10s
 
-    loadBalancerIP: ""
     loadBalancerSourceRanges:
       - "1.1.1.1"
       - "2.2.2.2"
     serviceAnnotations:
       key: value
-    domain: ""
     zvpn:
       enabled: true
       suffix: global

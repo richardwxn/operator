@@ -27,7 +27,7 @@ pilot:
     topologyKey: "kubernetes.io/hostname"
   podAntiAffinityTermLabelSelector: []
 
-  keepaliveMaxServerConnectionAge: 30m
+  keepaliveMaxServerConnectionAge: 1800s
 
   deploymentLabels:
     foo: bar
@@ -39,7 +39,6 @@ pilot:
 
   ingress:
     ingressService: istio-ingressgateway
-    ingressControllerMode: "OFF"
     ingressClass: istio
 
   telemetry:

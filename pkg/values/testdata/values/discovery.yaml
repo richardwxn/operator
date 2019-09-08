@@ -29,8 +29,7 @@ pilot:
 
   keepaliveMaxServerConnectionAge: 1800s
 
-  deploymentLabels:
-    foo: bar
+  deploymentLabels: "test"
 
   meshNetworks:
     networks: {}

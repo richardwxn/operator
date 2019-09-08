@@ -365,7 +365,7 @@ autoInjection:
 	for _, tt := range tests {
 		t.Run(tt.desc, func(t *testing.T) {
 			valueStruct := v1alpha22.Values{}
-			err := yaml.Unmarshal([]byte(tt.valueYAML), &valueStruct)
+			err := util.UnmarshalWithJSONPB(tt.valueYAML, &valueStruct)
 			if err != nil {
 				t.Fatalf("unmarshal(%s): got error %s", tt.desc, err)
 			}

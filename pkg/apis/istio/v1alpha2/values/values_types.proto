@@ -69,15 +69,18 @@ message CertManagerConfig {
   // Image tag for the CertManager Deployment.
   string tag = 3;
 
+  // Image name for the CertManager Deployment.
+  string image = 4;
+
   // K8s node selector.
   //
   // See https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector
-  TypeMapStringInterface nodeSelector = 4;
+  TypeMapStringInterface nodeSelector = 5;
 
   // K8s resources settings.
   //
   // See https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container
-  Resources resources = 5;
+  Resources resources = 6;
 }
 
 // Mirrors Resources for unmarshaling.
@@ -622,6 +625,9 @@ message MixerConfig {
 
   // MixerTelemetryConfig is set of configurations for Mixer Telemetry
   MixerTelemetryConfig telemetry = 2;
+
+  // Configuration for different mixer adapters.
+  MixerAdaptersConfig adapters = 3;
 }
 
 // Configuration for Mixer Policy.
@@ -661,9 +667,6 @@ message MixerPolicyConfig {
 
 // Configuration for Mixer Telemetry.
 message MixerTelemetryConfig {
-  // Configuration for different mixer adapters.
-  MixerAdaptersConfig adapters = 1;
-
   // Controls whether a HorizontalPodAutoscaler is installed for Mixer Telemetry.
   google.protobuf.BoolValue autoscaleEnabled = 2;
 

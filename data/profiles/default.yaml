@@ -445,8 +445,6 @@ spec:
         zvpn:
           suffix: global
           enabled: true
-        drainDuration: 45s
-        connectTimeout: 10s
         env:
           ISTIO_META_ROUTER_MODE: "sni-dnat"
         ports:

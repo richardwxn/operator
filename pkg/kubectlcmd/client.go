@@ -108,7 +108,7 @@ func consolidateError(errorMessage string) string {
 	for _, item := range stderrSlice {
 		_, exist := errorMap[item]
 		if exist {
-			errorMap[item] += 1
+			errorMap[item] ++
 		} else {
 			errorMap[item] = 1
 		}

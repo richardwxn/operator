@@ -89,14 +89,38 @@ func (c *Client) Apply(dryRun, verbose bool, kubeconfig, context, namespace stri
 	log.Infof("applying to namespace %s:\n%s\n", namespace, cmdStr)
 
 	err := c.cmdSite.Run(cmd)
+	csError := consolidateError(stderr.String())
+
 	if err != nil {
 		logAndPrint("error running kubectl apply: %s", err)
-		return stdout.String(), stderr.String(), fmt.Errorf("error running kubectl apply: %s", err)
+		return stdout.String(), csError, fmt.Errorf("error running kubectl apply: %s", err)
 	}
 
 	logAndPrint("kubectl apply success")
 
-	return stdout.String(), stderr.String(), nil
+	return stdout.String(), csError, nil
+}
+
+// consolidateError is a helper function to dedup the error messages
+func consolidateError(errorMessage string) string {
+	errorMap := make(map[string]int)
+	stderrSlice := strings.Split(errorMessage, "\n")
+	for _, item := range stderrSlice {
+		_, exist := errorMap[item]
+		if exist {
+			errorMap[item] += 1
+		} else {
+			errorMap[item] = 1
+		}
+	}
+	var sb strings.Builder
+	for msg, count := range errorMap {
+		if msg == "" {
+			continue
+		}
+		sb.WriteString(fmt.Sprintf("%s (repeated %v times)\n", msg, count))
+	}
+	return sb.String()
 }
 
 // GetConfig runs the kubectl get cm command with the provided argument

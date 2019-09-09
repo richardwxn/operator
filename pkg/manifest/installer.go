@@ -416,7 +416,7 @@ func waitForCRDs(objects object.K8sObjects, dryRun bool) error {
 
 	if errPoll != nil {
 		logAndPrint("failed to verify CRD creation; %s", errPoll)
-		return fmt.Errorf("failed to verify CRD creation: %s", errPoll)
+		return fmt.Errorf("failed to verify CRD creation: %s\n", errPoll)
 	}
 
 	logAndPrint("CRDs applied.")

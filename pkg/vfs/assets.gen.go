@@ -32126,6 +32126,7 @@ spec:
           suffix: global
           enabled: true
 <<<<<<< HEAD
+<<<<<<< HEAD
         drainDuration: 45s
         connectTimeout: 10s
 =======
@@ -32135,6 +32136,8 @@ spec:
 =======
 >>>>>>> Fix more fields
 >>>>>>> Fix more fields
+=======
+>>>>>>> Fix some more fields, adds todo
         env:
           ISTIO_META_ROUTER_MODE: "sni-dnat"
         ports:
@@ -32153,6 +32156,7 @@ spec:
             secretName: istio-egressgateway-ca-certs
             mountPath: /etc/istio/egressgateway-ca-certs
 
+<<<<<<< HEAD
 <<<<<<< HEAD
       istio-ingressgateway:
         autoscaleEnabled: true
@@ -32825,6 +32829,8 @@ spec:
     gateways:
 =======
 >>>>>>> Fix more fields
+=======
+>>>>>>> Fix some more fields, adds todo
       istio-ingressgateway:
         autoscaleEnabled: true
         rollingMaxSurge: 100%

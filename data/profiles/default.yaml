@@ -471,7 +471,6 @@ spec:
         zvpn:
           enabled: true
           suffix: global
-        telemetry_domain_name: ""
         env:
           ISTIO_META_ROUTER_MODE: "sni-dnat"
         ports:
@@ -515,31 +514,6 @@ spec:
           - name: ingressgateway-ca-certs
             secretName: istio-ingressgateway-ca-certs
             mountPath: /etc/istio/ingressgateway-ca-certs
-        telemetry_addon_gateways:
-          tracing_gateway:
-            name: tracing
-            port: 15032
-            desPort: 80
-            enabled: false
-            tls: false
-          kiali_gateway:
-            name: kiali
-            port: 15029
-            desPort: 20001
-            enabled: false
-            tls: false
-          grafana_gateway:
-            name: grafana
-            port: 15031
-            desPort: 3000
-            enabled: false
-            tls: false
-          prometheus_gateway:
-            name: prometheus
-            port: 15030
-            desPort: 9090
-            enabled: false
-            tls: false
 
     sidecarInjectorWebhook:
       image: sidecar_injector

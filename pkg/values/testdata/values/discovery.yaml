@@ -29,7 +29,8 @@ pilot:
 
   keepaliveMaxServerConnectionAge: 1800s
 
-  deploymentLabels: "test"
+#  Fix map[string]interface{}
+#  deploymentLabels: "test"
 
   meshNetworks:
     networks: {}

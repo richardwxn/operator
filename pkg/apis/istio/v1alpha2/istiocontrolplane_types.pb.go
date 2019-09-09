@@ -256,9 +256,9 @@ type IstioControlPlaneSpec struct {
 	AutoInjection     *AutoInjectionFeatureSpec     `protobuf:"bytes,30,opt,name=auto_injection,json=autoInjection,proto3" json:"auto_injection,omitempty"`
 	Gateways          *GatewayFeatureSpec           `protobuf:"bytes,31,opt,name=gateways,proto3" json:"gateways,omitempty"`
 	// Overrides for default global values.yaml.
-	Values *TypeMapStringInterface `protobuf:"bytes,50,opt,name=values,proto3" json:"values,omitempty"`
+	Values map[string]interface{} `protobuf:"bytes,50,opt,name=values,proto3" json:"values,omitempty"`
 	// Unvalidated overrides for default global values.yaml.
-	UnvalidatedValues *TypeMapStringInterface `protobuf:"bytes,51,opt,name=unvalidatedValues,proto3" json:"unvalidatedValues,omitempty"`
+	UnvalidatedValues map[string]interface{} `protobuf:"bytes,51,opt,name=unvalidatedValues,proto3" json:"unvalidatedValues,omitempty"`
 	// Path or name for the profile e.g.
 	//     - minimal (looks in profiles dir for a file called minimal.yaml)
 	//     - /tmp/istio/install/values/custom/custom-install.yaml (local file path)
@@ -359,14 +359,14 @@ func (m *IstioControlPlaneSpec) GetGateways() *GatewayFeatureSpec {
 	return nil
 }
 
-func (m *IstioControlPlaneSpec) GetValues() *TypeMapStringInterface {
+func (m *IstioControlPlaneSpec) GetValues() map[string]interface{} {
 	if m != nil {
 		return m.Values
 	}
 	return nil
 }
 
-func (m *IstioControlPlaneSpec) GetUnvalidatedValues() *TypeMapStringInterface {
+func (m *IstioControlPlaneSpec) GetUnvalidatedValues() map[string]interface{} {
 	if m != nil {
 		return m.UnvalidatedValues
 	}
@@ -2000,7 +2000,7 @@ type K8SObjectOverlay_PathValue struct {
 	// For delete, value should be unset.
 	// For replace, path should reference an existing node.
 	// All values are strings but are converted into appropriate type based on schema.
-	Value                *TypeInterface `protobuf:"bytes,2,opt,name=value,proto3" json:"value,omitempty"`
+	Value                interface{} `protobuf:"bytes,2,opt,name=value,proto3" json:"value,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
 	XXX_unrecognized     []byte         `json:"-"`
 	XXX_sizecache        int32          `json:"-"`
@@ -2038,7 +2038,7 @@ func (m *K8SObjectOverlay_PathValue) GetPath() string {
 	return ""
 }
 
-func (m *K8SObjectOverlay_PathValue) GetValue() *TypeInterface {
+func (m *K8SObjectOverlay_PathValue) GetValue() interface{} {
 	if m != nil {
 		return m.Value
 	}
@@ -2359,7 +2359,7 @@ func (m *ExecAction) GetCommand() []string {
 // Mirrors k8s.io.api.core.v1.HTTPGetAction for unmarshaling
 type HTTPGetAction struct {
 	Path                 string                `protobuf:"bytes,1,opt,name=path,proto3" json:"path,omitempty"`
-	Port                 *TypeIntOrStringForPB `protobuf:"bytes,2,opt,name=port,proto3" json:"port,omitempty"`
+	Port                 *IntOrStringForPB `protobuf:"bytes,2,opt,name=port,proto3" json:"port,omitempty"`
 	Host                 string                `protobuf:"bytes,3,opt,name=host,proto3" json:"host,omitempty"`
 	Scheme               string                `protobuf:"bytes,4,opt,name=scheme,proto3" json:"scheme,omitempty"`
 	HttpHeaders          []*HTTPHeader         `protobuf:"bytes,5,rep,name=httpHeaders,proto3" json:"httpHeaders,omitempty"`
@@ -2400,7 +2400,7 @@ func (m *HTTPGetAction) GetPath() string {
 	return ""
 }
 
-func (m *HTTPGetAction) GetPort() *TypeIntOrStringForPB {
+func (m *HTTPGetAction) GetPort() *IntOrStringForPB {
 	if m != nil {
 		return m.Port
 	}
@@ -2478,7 +2478,7 @@ func (m *HTTPHeader) GetValue() string {
 
 // Mirrors k8s.io.api.core.v1.TCPSocketAction for unmarshaling
 type TCPSocketAction struct {
-	Port                 *TypeIntOrStringForPB `protobuf:"bytes,1,opt,name=port,proto3" json:"port,omitempty"`
+	Port                 *IntOrStringForPB `protobuf:"bytes,1,opt,name=port,proto3" json:"port,omitempty"`
 	Host                 string                `protobuf:"bytes,2,opt,name=host,proto3" json:"host,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}              `json:"-"`
 	XXX_unrecognized     []byte                `json:"-"`
@@ -2510,7 +2510,7 @@ func (m *TCPSocketAction) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_TCPSocketAction proto.InternalMessageInfo
 
-func (m *TCPSocketAction) GetPort() *TypeIntOrStringForPB {
+func (m *TCPSocketAction) GetPort() *IntOrStringForPB {
 	if m != nil {
 		return m.Port
 	}
@@ -2630,8 +2630,8 @@ func (m *DeploymentStrategy) GetRollingUpdate() *RollingUpdateDeployment {
 
 // Mirrors k8s.io.api.apps.v1.RollingUpdateDeployment for unmarshaling.
 type RollingUpdateDeployment struct {
-	MaxUnavailable       *TypeIntOrStringForPB `protobuf:"bytes,1,opt,name=maxUnavailable,proto3" json:"maxUnavailable,omitempty"`
-	MaxSurge             *TypeIntOrStringForPB `protobuf:"bytes,2,opt,name=maxSurge,proto3" json:"maxSurge,omitempty"`
+	MaxUnavailable       *IntOrStringForPB `protobuf:"bytes,1,opt,name=maxUnavailable,proto3" json:"maxUnavailable,omitempty"`
+	MaxSurge             *IntOrStringForPB `protobuf:"bytes,2,opt,name=maxSurge,proto3" json:"maxSurge,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}              `json:"-"`
 	XXX_unrecognized     []byte                `json:"-"`
 	XXX_sizecache        int32                 `json:"-"`
@@ -2662,14 +2662,14 @@ func (m *RollingUpdateDeployment) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_RollingUpdateDeployment proto.InternalMessageInfo
 
-func (m *RollingUpdateDeployment) GetMaxUnavailable() *TypeIntOrStringForPB {
+func (m *RollingUpdateDeployment) GetMaxUnavailable() *IntOrStringForPB {
 	if m != nil {
 		return m.MaxUnavailable
 	}
 	return nil
 }
 
-func (m *RollingUpdateDeployment) GetMaxSurge() *TypeIntOrStringForPB {
+func (m *RollingUpdateDeployment) GetMaxSurge() *IntOrStringForPB {
 	if m != nil {
 		return m.MaxSurge
 	}
@@ -2724,101 +2724,8 @@ func (m *ObjectMeta) GetNamespace() string {
 	return ""
 }
 
-// GOTYPE: map[string]interface{}
-type TypeMapStringInterface struct {
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
-}
 
-func (m *TypeMapStringInterface) Reset()         { *m = TypeMapStringInterface{} }
-func (m *TypeMapStringInterface) String() string { return proto.CompactTextString(m) }
-func (*TypeMapStringInterface) ProtoMessage()    {}
-func (*TypeMapStringInterface) Descriptor() ([]byte, []int) {
-	return fileDescriptor_daac92937abd81a4, []int{33}
-}
 
-func (m *TypeMapStringInterface) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_TypeMapStringInterface.Unmarshal(m, b)
-}
-func (m *TypeMapStringInterface) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_TypeMapStringInterface.Marshal(b, m, deterministic)
-}
-func (m *TypeMapStringInterface) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_TypeMapStringInterface.Merge(m, src)
-}
-func (m *TypeMapStringInterface) XXX_Size() int {
-	return xxx_messageInfo_TypeMapStringInterface.Size(m)
-}
-func (m *TypeMapStringInterface) XXX_DiscardUnknown() {
-	xxx_messageInfo_TypeMapStringInterface.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_TypeMapStringInterface proto.InternalMessageInfo
-
-// GOTYPE: interface{}
-type TypeInterface struct {
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
-}
-
-func (m *TypeInterface) Reset()         { *m = TypeInterface{} }
-func (m *TypeInterface) String() string { return proto.CompactTextString(m) }
-func (*TypeInterface) ProtoMessage()    {}
-func (*TypeInterface) Descriptor() ([]byte, []int) {
-	return fileDescriptor_daac92937abd81a4, []int{34}
-}
-
-func (m *TypeInterface) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_TypeInterface.Unmarshal(m, b)
-}
-func (m *TypeInterface) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_TypeInterface.Marshal(b, m, deterministic)
-}
-func (m *TypeInterface) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_TypeInterface.Merge(m, src)
-}
-func (m *TypeInterface) XXX_Size() int {
-	return xxx_messageInfo_TypeInterface.Size(m)
-}
-func (m *TypeInterface) XXX_DiscardUnknown() {
-	xxx_messageInfo_TypeInterface.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_TypeInterface proto.InternalMessageInfo
-
-// GOTYPE: *IntOrStringForPB
-type TypeIntOrStringForPB struct {
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
-}
-
-func (m *TypeIntOrStringForPB) Reset()         { *m = TypeIntOrStringForPB{} }
-func (m *TypeIntOrStringForPB) String() string { return proto.CompactTextString(m) }
-func (*TypeIntOrStringForPB) ProtoMessage()    {}
-func (*TypeIntOrStringForPB) Descriptor() ([]byte, []int) {
-	return fileDescriptor_daac92937abd81a4, []int{35}
-}
-
-func (m *TypeIntOrStringForPB) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_TypeIntOrStringForPB.Unmarshal(m, b)
-}
-func (m *TypeIntOrStringForPB) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_TypeIntOrStringForPB.Marshal(b, m, deterministic)
-}
-func (m *TypeIntOrStringForPB) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_TypeIntOrStringForPB.Merge(m, src)
-}
-func (m *TypeIntOrStringForPB) XXX_Size() int {
-	return xxx_messageInfo_TypeIntOrStringForPB.Size(m)
-}
-func (m *TypeIntOrStringForPB) XXX_DiscardUnknown() {
-	xxx_messageInfo_TypeIntOrStringForPB.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_TypeIntOrStringForPB proto.InternalMessageInfo
 
 func init() {
 	proto.RegisterEnum("v1alpha2.InstallStatus_Status", InstallStatus_Status_name, InstallStatus_Status_value)
@@ -2868,9 +2775,6 @@ func init() {
 	proto.RegisterType((*DeploymentStrategy)(nil), "v1alpha2.DeploymentStrategy")
 	proto.RegisterType((*RollingUpdateDeployment)(nil), "v1alpha2.RollingUpdateDeployment")
 	proto.RegisterType((*ObjectMeta)(nil), "v1alpha2.ObjectMeta")
-	proto.RegisterType((*TypeMapStringInterface)(nil), "v1alpha2.TypeMapStringInterface")
-	proto.RegisterType((*TypeInterface)(nil), "v1alpha2.TypeInterface")
-	proto.RegisterType((*TypeIntOrStringForPB)(nil), "v1alpha2.TypeIntOrStringForPB")
 }
 
 func init() {

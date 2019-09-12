@@ -31,6 +31,18 @@ number_of_entries: 77
 <td>
 </td>
 </tr>
+<tr id="AddonIngressConfig-annotations">
+<td><code>annotations</code></td>
+<td><code><a href="#TypeMapStringInterface">TypeMapStringInterface</a></code></td>
+<td>
+</td>
+</tr>
+<tr id="AddonIngressConfig-tls">
+<td><code>tls</code></td>
+<td><code><a href="#TypeMapStringInterface">TypeMapStringInterface</a></code></td>
+<td>
+</td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -1968,6 +1980,21 @@ env:
 
 </td>
 </tr>
+<<<<<<< HEAD
+=======
+<tr id="MixerTelemetryConfig-reportBatchMaxTime">
+<td><code>reportBatchMaxTime</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+</tr>
+<tr id="MixerTelemetryConfig-reportBatchMaxEntries">
+<td><code>reportBatchMaxEntries</code></td>
+<td><code>uint32</code></td>
+<td>
+</td>
+</tr>
+>>>>>>> Add more fields
 <tr id="MixerTelemetryConfig-resources">
 <td><code>resources</code></td>
 <td><code><a href="#Resources">Resources</a></code></td>
@@ -1984,6 +2011,24 @@ env:
 <td>
 <p>Controls whether to enable the sticky session setting when choosing backend pods.</p>
 
+</td>
+</tr>
+<tr id="MixerTelemetryConfig-podAntiAffinityLabelSelector">
+<td><code>podAntiAffinityLabelSelector</code></td>
+<td><code><a href="#TypeSliceOfMapStringInterface">TypeSliceOfMapStringInterface</a></code></td>
+<td>
+</td>
+</tr>
+<tr id="MixerTelemetryConfig-podAntiAffinityTermLabelSelector">
+<td><code>podAntiAffinityTermLabelSelector</code></td>
+<td><code><a href="#TypeSliceOfMapStringInterface">TypeSliceOfMapStringInterface</a></code></td>
+<td>
+</td>
+</tr>
+<tr id="MixerTelemetryConfig-tolerations">
+<td><code>tolerations</code></td>
+<td><code><a href="#TypeSliceOfMapStringInterface">TypeSliceOfMapStringInterface</a></code></td>
+<td>
 </td>
 </tr>
 </tbody>
@@ -2348,6 +2393,22 @@ env:
 
 </td>
 </tr>
+<<<<<<< HEAD
+=======
+<tr id="PilotConfig-tolerations">
+<td><code>tolerations</code></td>
+<td><code><a href="#TypeSliceOfMapStringInterface">TypeSliceOfMapStringInterface</a></code></td>
+<td>
+
+</td>
+</tr>
+<tr id="PilotConfig-appNamespaces">
+<td><code>appNamespaces</code></td>
+<td><code><a href="#TypeSliceOfMapStringInterface">TypeSliceOfMapStringInterface</a></code></td>
+<td>
+</td>
+</tr>
+>>>>>>> Add more fields
 </tbody>
 </table>
 </section>
@@ -2603,6 +2664,24 @@ env:
 <tr id="PrometheusConfig-security">
 <td><code>security</code></td>
 <td><code><a href="#PrometheusSecurityConfig">PrometheusSecurityConfig</a></code></td>
+<td>
+</td>
+</tr>
+<tr id="PrometheusConfig-tolerations">
+<td><code>tolerations</code></td>
+<td><code><a href="#TypeSliceOfMapStringInterface">TypeSliceOfMapStringInterface</a></code></td>
+<td>
+</td>
+</tr>
+<tr id="PrometheusConfig-podAntiAffinityLabelSelector">
+<td><code>podAntiAffinityLabelSelector</code></td>
+<td><code><a href="#TypeSliceOfMapStringInterface">TypeSliceOfMapStringInterface</a></code></td>
+<td>
+</td>
+</tr>
+<tr id="PrometheusConfig-podAntiAffinityTermLabelSelector">
+<td><code>podAntiAffinityTermLabelSelector</code></td>
+<td><code><a href="#TypeSliceOfMapStringInterface">TypeSliceOfMapStringInterface</a></code></td>
 <td>
 </td>
 </tr>
@@ -3062,6 +3141,44 @@ This would only capture egress traffic on those two IP Ranges, all other outboun
 
 </td>
 </tr>
+<tr id="ProxyInitConfig-resources">
+<td><code>resources</code></td>
+<td><code><a href="#Resources">Resources</a></code></td>
+<td>
+<p>K8s resources settings.</p>
+
+<p>See https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="Resources">Resources</h2>
+<section>
+<p>Mirrors Resources for unmarshaling.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="Resources-limits">
+<td><code>limits</code></td>
+<td><code>map&lt;string,&nbsp;string&gt;</code></td>
+<td>
+</td>
+</tr>
+<tr id="Resources-requests">
+<td><code>requests</code></td>
+<td><code>map&lt;string,&nbsp;string&gt;</code></td>
+<td>
+</td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -3455,6 +3572,130 @@ See https://istio.io/docs/setup/kubernetes/additional-setup/sidecar-injection/#m
 
 <p>Setting to false if you want to use your own root CA.</p>
 
+</td>
+</tr>
+<tr id="SidecarInjectorConfig-injectLabel">
+<td><code>injectLabel</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="StackdriverAuthConfig">StackdriverAuthConfig</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="StackdriverAuthConfig-appCredentials">
+<td><code>appCredentials</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
+<td>
+</td>
+</tr>
+<tr id="StackdriverAuthConfig-apiKey">
+<td><code>apiKey</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+</tr>
+<tr id="StackdriverAuthConfig-serviceAccountPath">
+<td><code>serviceAccountPath</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="StackdriverContextGraph">StackdriverContextGraph</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="StackdriverContextGraph-enabled">
+<td><code>enabled</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
+<td>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="StackdriverMixerAdapterConfig">StackdriverMixerAdapterConfig</h2>
+<section>
+<p>Configuration for stackdriver adapter in mixer.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="StackdriverMixerAdapterConfig-enabled">
+<td><code>enabled</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
+<td>
+</td>
+</tr>
+<tr id="StackdriverMixerAdapterConfig-auth">
+<td><code>auth</code></td>
+<td><code><a href="#StackdriverAuthConfig">StackdriverAuthConfig</a></code></td>
+<td>
+</td>
+</tr>
+<tr id="StackdriverMixerAdapterConfig-tracer">
+<td><code>tracer</code></td>
+<td><code><a href="#StackdriverTracerConfig">StackdriverTracerConfig</a></code></td>
+<td>
+</td>
+</tr>
+<tr id="StackdriverMixerAdapterConfig-contextGraph">
+<td><code>contextGraph</code></td>
+<td><code><a href="#StackdriverContextGraph">StackdriverContextGraph</a></code></td>
+<td>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="StackdriverTracerConfig">StackdriverTracerConfig</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="StackdriverTracerConfig-enabled">
+<td><code>enabled</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
+<td>
+</td>
+</tr>
+<tr id="StackdriverTracerConfig-sampleProbability">
+<td><code>sampleProbability</code></td>
+<td><code>uint32</code></td>
+<td>
 </td>
 </tr>
 </tbody>

@@ -32641,7 +32641,7 @@ spec:
         concurrency: 2
         accessLogFile: ""
         accessLogFormat: ""
-        accessLogEncoding: TEXT
+#        accessLogEncoding: TEXT
         envoyAccessLogService:
           enabled: false
           host: # example: accesslog-service.istio-system
@@ -32661,7 +32661,8 @@ spec:
         kubevirtInterfaces: ""
         includeInboundPorts: "*"
         excludeInboundPorts: ""
-        autoInject: enabled
+#        TODO
+#        autoInject: enabled
         envoyStatsd:
           enabled: false
           host: # example: statsd-svc.istio-system
@@ -32670,7 +32671,7 @@ spec:
           enabled: false
           host: # example: metrics-service.istio-system
           port: # example: 15000
-        tracer: "zipkin"
+#        tracer: "zipkin"
       proxy_init:
         image: proxy_init
         resources:
@@ -32718,14 +32719,18 @@ spec:
       priorityClassName: ""
       useMCP: true
       trustDomain: ""
-      outboundTrafficPolicy:
-        mode: ALLOW_ANY
+#      outboundTrafficPolicy:
+#        mode: ALLOW_ANY
       sds:
         enabled: false
         udsPath: ""
       meshNetworks: {}
       localityLbSetting:
-        enabled: true
+        - distribute:
+            from: "us-central1/*"
+            to:
+              "us-central1/*": 80
+              "us-central2/*": 20
       enableHelmTest: false
 
     pilot:
@@ -32754,7 +32759,8 @@ spec:
       configMap: true
       ingress:
         ingressService: istio-ingressgateway
-        ingressControllerMode: "OFF"
+#        TODO
+#        ingressControllerMode: "OFF"
         ingressClass: istio
       telemetry:
         enabled: true
@@ -32791,7 +32797,7 @@ spec:
         autoscaleEnabled: true
         sessionAffinityEnabled: false
         loadshedding:
-          mode: enforce
+#          mode: enforce
           latencyThreshold: 100ms
         reportBatchMaxEntries: 100
         reportBatchMaxTime: 1s
@@ -32846,7 +32852,6 @@ spec:
         zvpn:
           enabled: true
           suffix: global
-        telemetry_domain_name: ""
         env:
           ISTIO_META_ROUTER_MODE: "sni-dnat"
         ports:
@@ -32890,6 +32895,7 @@ spec:
           - name: ingressgateway-ca-certs
             secretName: istio-ingressgateway-ca-certs
             mountPath: /etc/istio/ingressgateway-ca-certs
+<<<<<<< HEAD
         telemetry_addon_gateways:
           tracing_gateway:
             name: tracing
@@ -32951,6 +32957,8 @@ spec:
         podAntiAffinityTermLabelSelector: []
 =======
 >>>>>>> 598103cf7e20c05c6aa466d2a6a30c1b4ce1f71b
+=======
+>>>>>>> Add more fields
 
     sidecarInjectorWebhook:
       rollingMaxSurge: 100%

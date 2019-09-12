@@ -1,4 +1,4 @@
-package values
+package v1alpha1
 
 import (
 	"github.com/gogo/protobuf/jsonpb"

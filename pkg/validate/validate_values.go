@@ -16,16 +16,15 @@ package validate
 
 import (
 	"github.com/ghodss/yaml"
-	v1alpha22 "istio.io/operator/pkg/apis/istio/v1alpha2/values"
-
+	"istio.io/operator/pkg/apis/istio/v1alpha1"
 	"istio.io/operator/pkg/util"
 )
 
 var (
 	// defaultValidations maps a data path to a validation function.
 	defaultValuesValidations = map[string]ValidatorFunc{
-		"global.proxy.includeIpRanges":     validateIPRangesOrStar,
-		"global.proxy.excludeIpRanges":     validateIPRangesOrStar,
+		"global.proxy.includeIPRanges":     validateIPRangesOrStar,
+		"global.proxy.excludeIPRanges":     validateIPRangesOrStar,
 		"global.proxy.includeInboundPorts": validateStringList(validatePortNumberString),
 		"global.proxy.excludeInboundPorts": validateStringList(validatePortNumberString),
 	}
@@ -37,7 +36,7 @@ func CheckValues(root map[string]interface{}) util.Errors {
 	if err != nil {
 		return util.Errors{err}
 	}
-	val := &v1alpha22.Values{}
+	val := &v1alpha1.Values{}
 	if err := util.UnmarshalWithJSONPB(string(vs), val); err != nil {
 		return util.Errors{err}
 	}

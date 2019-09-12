@@ -2,7 +2,7 @@
 title: values
 layout: protoc-gen-docs
 generator: protoc-gen-docs
-number_of_entries: 77
+number_of_entries: 78
 ---
 <h2 id="AddonIngressConfig">AddonIngressConfig</h2>
 <section>
@@ -1466,6 +1466,22 @@ This server runs in the same pod as ingress gateway.</p>
 <td>
 </td>
 </tr>
+<tr id="KialiConfig-hub">
+<td><code>hub</code></td>
+<td><code>string</code></td>
+<td>
+<p>Image hub for kiali deployment.</p>
+
+</td>
+</tr>
+<tr id="KialiConfig-tag">
+<td><code>tag</code></td>
+<td><code>string</code></td>
+<td>
+<p>Image tag for kiali deployment.</p>
+
+</td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -1980,8 +1996,6 @@ env:
 
 </td>
 </tr>
-<<<<<<< HEAD
-=======
 <tr id="MixerTelemetryConfig-reportBatchMaxTime">
 <td><code>reportBatchMaxTime</code></td>
 <td><code>string</code></td>
@@ -1994,7 +2008,10 @@ env:
 <td>
 </td>
 </tr>
+<<<<<<< HEAD:pkg/apis/istio/v1alpha2/values/values.pb.html
 >>>>>>> Add more fields
+=======
+>>>>>>> Address comments:pkg/apis/istio/v1alpha1/values.pb.html
 <tr id="MixerTelemetryConfig-resources">
 <td><code>resources</code></td>
 <td><code><a href="#Resources">Resources</a></code></td>
@@ -2393,8 +2410,6 @@ env:
 
 </td>
 </tr>
-<<<<<<< HEAD
-=======
 <tr id="PilotConfig-tolerations">
 <td><code>tolerations</code></td>
 <td><code><a href="#TypeSliceOfMapStringInterface">TypeSliceOfMapStringInterface</a></code></td>
@@ -2408,7 +2423,10 @@ env:
 <td>
 </td>
 </tr>
+<<<<<<< HEAD:pkg/apis/istio/v1alpha2/values/values.pb.html
 >>>>>>> Add more fields
+=======
+>>>>>>> Address comments:pkg/apis/istio/v1alpha1/values.pb.html
 </tbody>
 </table>
 </section>
@@ -2817,6 +2835,12 @@ env:
 </tr>
 </thead>
 <tbody>
+<tr id="ProxyConfig-enabled">
+<td><code>enabled</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
+<td>
+</td>
+</tr>
 <tr id="ProxyConfig-accessLogFile">
 <td><code>accessLogFile</code></td>
 <td><code>string</code></td>
@@ -3037,6 +3061,30 @@ This would only capture egress traffic on those two IP Ranges, all other outboun
 <td>
 </td>
 </tr>
+<tr id="ProxyConfig-drainDuration">
+<td><code>drainDuration</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">google.protobuf.Duration</a></code></td>
+<td>
+</td>
+</tr>
+<tr id="ProxyConfig-connectTimeout">
+<td><code>connectTimeout</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+</tr>
+<tr id="ProxyConfig-podDnsSearchNamespaces">
+<td><code>podDnsSearchNamespaces</code></td>
+<td><code>string[]</code></td>
+<td>
+</td>
+</tr>
+<tr id="ProxyConfig-parentShutdownDuration">
+<td><code>parentShutdownDuration</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">google.protobuf.Duration</a></code></td>
+<td>
+</td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -3149,34 +3197,6 @@ This would only capture egress traffic on those two IP Ranges, all other outboun
 
 <p>See https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container</p>
 
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="Resources">Resources</h2>
-<section>
-<p>Mirrors Resources for unmarshaling.</p>
-
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr id="Resources-limits">
-<td><code>limits</code></td>
-<td><code>map&lt;string,&nbsp;string&gt;</code></td>
-<td>
-</td>
-</tr>
-<tr id="Resources-requests">
-<td><code>requests</code></td>
-<td><code>map&lt;string,&nbsp;string&gt;</code></td>
-<td>
 </td>
 </tr>
 </tbody>
@@ -3408,6 +3428,13 @@ The default depends on the environment.
 
 </td>
 </tr>
+<tr id="SecurityConfig-enableNamespacesByDefault">
+<td><code>enableNamespacesByDefault</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
+<td>
+
+</td>
+</tr>
 <tr id="SecurityConfig-nodeSelector">
 <td><code>nodeSelector</code></td>
 <td><code><a href="#TypeMapStringInterface">TypeMapStringInterface</a></code></td>
@@ -3577,124 +3604,6 @@ See https://istio.io/docs/setup/kubernetes/additional-setup/sidecar-injection/#m
 <tr id="SidecarInjectorConfig-injectLabel">
 <td><code>injectLabel</code></td>
 <td><code>string</code></td>
-<td>
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="StackdriverAuthConfig">StackdriverAuthConfig</h2>
-<section>
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr id="StackdriverAuthConfig-appCredentials">
-<td><code>appCredentials</code></td>
-<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
-<td>
-</td>
-</tr>
-<tr id="StackdriverAuthConfig-apiKey">
-<td><code>apiKey</code></td>
-<td><code>string</code></td>
-<td>
-</td>
-</tr>
-<tr id="StackdriverAuthConfig-serviceAccountPath">
-<td><code>serviceAccountPath</code></td>
-<td><code>string</code></td>
-<td>
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="StackdriverContextGraph">StackdriverContextGraph</h2>
-<section>
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr id="StackdriverContextGraph-enabled">
-<td><code>enabled</code></td>
-<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
-<td>
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="StackdriverMixerAdapterConfig">StackdriverMixerAdapterConfig</h2>
-<section>
-<p>Configuration for stackdriver adapter in mixer.</p>
-
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr id="StackdriverMixerAdapterConfig-enabled">
-<td><code>enabled</code></td>
-<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
-<td>
-</td>
-</tr>
-<tr id="StackdriverMixerAdapterConfig-auth">
-<td><code>auth</code></td>
-<td><code><a href="#StackdriverAuthConfig">StackdriverAuthConfig</a></code></td>
-<td>
-</td>
-</tr>
-<tr id="StackdriverMixerAdapterConfig-tracer">
-<td><code>tracer</code></td>
-<td><code><a href="#StackdriverTracerConfig">StackdriverTracerConfig</a></code></td>
-<td>
-</td>
-</tr>
-<tr id="StackdriverMixerAdapterConfig-contextGraph">
-<td><code>contextGraph</code></td>
-<td><code><a href="#StackdriverContextGraph">StackdriverContextGraph</a></code></td>
-<td>
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="StackdriverTracerConfig">StackdriverTracerConfig</h2>
-<section>
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr id="StackdriverTracerConfig-enabled">
-<td><code>enabled</code></td>
-<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
-<td>
-</td>
-</tr>
-<tr id="StackdriverTracerConfig-sampleProbability">
-<td><code>sampleProbability</code></td>
-<td><code>uint32</code></td>
 <td>
 </td>
 </tr>
@@ -4060,6 +3969,28 @@ See https://istio.io/docs/setup/kubernetes/additional-setup/sidecar-injection/#m
 
 </td>
 </tr>
+<tr id="TracingConfig-opencensus">
+<td><code>opencensus</code></td>
+<td><code><a href="#TracingOpencensusConfig">TracingOpencensusConfig</a></code></td>
+<td>
+</td>
+</tr>
+<tr id="TracingConfig-podAntiAffinityLabelSelector">
+<td><code>podAntiAffinityLabelSelector</code></td>
+<td><code><a href="#TypeSliceOfMapStringInterface">TypeSliceOfMapStringInterface</a></code></td>
+<td>
+<p>See EgressGatewayConfig.</p>
+
+</td>
+</tr>
+<tr id="TracingConfig-podAntiAffinityTermLabelSelector">
+<td><code>podAntiAffinityTermLabelSelector</code></td>
+<td><code><a href="#TypeSliceOfMapStringInterface">TypeSliceOfMapStringInterface</a></code></td>
+<td>
+<p>See EgressGatewayConfig.</p>
+
+</td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -4082,6 +4013,24 @@ See https://istio.io/docs/setup/kubernetes/additional-setup/sidecar-injection/#m
 <td>
 <p>Enables k8s ingress for addon tracing components.</p>
 
+</td>
+</tr>
+<tr id="TracingIngressConfig-annotations">
+<td><code>annotations</code></td>
+<td><code><a href="#TypeMapStringInterface">TypeMapStringInterface</a></code></td>
+<td>
+</td>
+</tr>
+<tr id="TracingIngressConfig-hosts">
+<td><code>hosts</code></td>
+<td><code>string[]</code></td>
+<td>
+</td>
+</tr>
+<tr id="TracingIngressConfig-tls">
+<td><code>tls</code></td>
+<td><code><a href="#TypeMapStringInterface">TypeMapStringInterface</a></code></td>
+<td>
 </td>
 </tr>
 </tbody>
@@ -4110,7 +4059,7 @@ See https://istio.io/docs/setup/kubernetes/additional-setup/sidecar-injection/#m
 </tr>
 <tr id="TracingJaegerConfig-tag">
 <td><code>tag</code></td>
-<td><code>string</code></td>
+<td><code><a href="#TypeIntOrStringForPB">TypeIntOrStringForPB</a></code></td>
 <td>
 <p>Image tag for Jaeger tracing deployment.</p>
 
@@ -4122,6 +4071,30 @@ See https://istio.io/docs/setup/kubernetes/additional-setup/sidecar-injection/#m
 <td>
 <p>Configures Jaeger in-memory storage setting.</p>
 
+</td>
+</tr>
+<tr id="TracingJaegerConfig-spanStorageType">
+<td><code>spanStorageType</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+</tr>
+<tr id="TracingJaegerConfig-persist">
+<td><code>persist</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
+<td>
+</td>
+</tr>
+<tr id="TracingJaegerConfig-storageClassName">
+<td><code>storageClassName</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+</tr>
+<tr id="TracingJaegerConfig-accessMode">
+<td><code>accessMode</code></td>
+<td><code>string</code></td>
+<td>
 </td>
 </tr>
 </tbody>
@@ -4145,6 +4118,46 @@ See https://istio.io/docs/setup/kubernetes/additional-setup/sidecar-injection/#m
 <td><code>uint32</code></td>
 <td>
 <p>Set limit of the amount of traces stored in memory for Jaeger</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="TracingOpencensusConfig">TracingOpencensusConfig</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="TracingOpencensusConfig-hub">
+<td><code>hub</code></td>
+<td><code>string</code></td>
+<td>
+<p>Image hub for Opencensus tracing deployment.</p>
+
+</td>
+</tr>
+<tr id="TracingOpencensusConfig-tag">
+<td><code>tag</code></td>
+<td><code>string</code></td>
+<td>
+<p>Image tag for Opencensus tracing deployment.</p>
+
+</td>
+</tr>
+<tr id="TracingOpencensusConfig-resources">
+<td><code>resources</code></td>
+<td><code><a href="#TypeMapStringInterface">TypeMapStringInterface</a></code></td>
+<td>
+<p>K8s resources settings.</p>
+
+<p>See https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container</p>
 
 </td>
 </tr>
@@ -4208,7 +4221,7 @@ See https://istio.io/docs/setup/kubernetes/additional-setup/sidecar-injection/#m
 </tr>
 <tr id="TracingZipkinConfig-javaOptsHeap">
 <td><code>javaOptsHeap</code></td>
-<td><code>string</code></td>
+<td><code>uint32</code></td>
 <td>
 <p>Configure java heap opts for Zipkin deployment</p>
 

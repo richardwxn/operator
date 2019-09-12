@@ -31926,6 +31926,7 @@ spec:
         gatewayName: ingressgateway
         enableHttps: false
       proxy:
+<<<<<<< HEAD
 #        image: proxyv2
 #        clusterDomain: "cluster.local"
 #        resources:
@@ -31993,6 +31994,76 @@ spec:
 #          address: ""
 #        datadog:
 #          address: "$(HOST_IP):8126"
+=======
+        image: proxyv2
+        clusterDomain: "cluster.local"
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 2000m
+            memory: 1024Mi
+        concurrency: 2
+        accessLogFile: ""
+        accessLogFormat: ""
+#        accessLogEncoding: TEXT
+        envoyAccessLogService:
+          enabled: false
+          host: # example: accesslog-service.istio-system
+          port: # example: 15000
+        logLevel: warning
+        componentLogLevel: "misc:error"
+        dnsRefreshRate: 300s
+        protocolDetectionTimeout: 1s
+        privileged: false
+        enableCoreDump: false
+        statusPort: 15020
+        readinessInitialDelaySeconds: 1
+        readinessPeriodSeconds: 2
+        readinessFailureThreshold: 30
+        includeIPRanges: "*"
+        excludeIPRanges: ""
+        excludeOutboundPorts: ""
+        kubevirtInterfaces: ""
+        includeInboundPorts: "*"
+        excludeInboundPorts: ""
+#        TODO
+#        autoInject: enabled
+        envoyStatsd:
+          enabled: false
+          host: # example: statsd-svc.istio-system
+          port: # example: 9125
+        envoyMetricsService:
+          enabled: false
+          host: # example: metrics-service.istio-system
+          port: # example: 15000
+#        tracer: "zipkin"
+      proxy_init:
+        image: proxy_init
+        resources:
+          limits:
+            cpu: 100m
+            memory: 50Mi
+          requests:
+            cpu: 10m
+            memory: 10Mi
+      imagePullPolicy: Always
+      controlPlaneSecurityEnabled: true
+      disablePolicyChecks: true
+      policyCheckFailOpen: false
+      enableTracing: true
+      tracer:
+        lightstep:
+          address: ""                # example: lightstep-satellite:443
+          accessToken: ""            # example: abcdefg1234567
+          secure: true               # example: true|false
+          cacertPath: ""             # example: /etc/lightstep/cacert.pem
+        zipkin:
+          address: ""
+        datadog:
+          address: "$(HOST_IP):8126"
+>>>>>>> Address comments
       mtls:
         enabled: false
       imagePullSecrets: []
@@ -32105,10 +32176,14 @@ spec:
           kubernetesenv:
             enabled: true
 <<<<<<< HEAD
+<<<<<<< HEAD
 
+=======
+#
+>>>>>>> Address comments
     galley:
 
-    citadel:
+    security:
       image: citadel
       selfSigned: true # indicate if self-signed CA is used.
       trustDomain: cluster.local # indicate the domain used in SPIFFE identity URL
@@ -33049,7 +33124,7 @@ spec:
       podAntiAffinityTermLabelSelector: []
       jaeger:
         hub: docker.io/jaegertracing
-        tag: 1.12
+        tag: "1.12"
         memory:
           max_traces: 50000
         spanStorageType: badger
@@ -33077,14 +33152,11 @@ spec:
         tag: 0.1.9
         resources:
           limits:
-            cpu: 1
+            cpu: 1Gi
             memory: 2Gi
           requests:
             cpu: 200m
             memory: 400Mi
-        exporters:
-          stackdriver:
-            enable_tracing: true
       service:
         annotations: {}
         name: http
@@ -33098,6 +33170,7 @@ spec:
 
     kiali:
       enabled: false
+<<<<<<< HEAD
       replicaCount: 1
       hub: docker.io/kiali
       tag: v1.1.0
@@ -33383,6 +33456,8 @@ spec:
 #        cert_file: /kiali-cert/cert-chain.pem
 #        private_key_file: /kiali-cert/key.pem
 >>>>>>> Add more fields
+=======
+>>>>>>> Address comments
 
     # TODO: derive from operator API
     version: ""

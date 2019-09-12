@@ -15,13 +15,13 @@
 package translate
 
 import (
+	"istio.io/operator/pkg/apis/istio/v1alpha1"
 	"testing"
 
 	"github.com/ghodss/yaml"
 	"github.com/gogo/protobuf/jsonpb"
 	"github.com/kr/pretty"
 
-	v1alpha22 "istio.io/operator/pkg/apis/istio/v1alpha2/values"
 	"istio.io/operator/pkg/util"
 	"istio.io/operator/pkg/version"
 )
@@ -364,7 +364,7 @@ autoInjection:
 
 	for _, tt := range tests {
 		t.Run(tt.desc, func(t *testing.T) {
-			valueStruct := v1alpha22.Values{}
+			valueStruct := v1alpha1.Values{}
 			err := util.UnmarshalWithJSONPB(tt.valueYAML, &valueStruct)
 			if err != nil {
 				t.Fatalf("unmarshal(%s): got error %s", tt.desc, err)

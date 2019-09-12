@@ -15,28 +15,28 @@
 package validation
 
 import (
+	"istio.io/operator/pkg/apis/istio/v1alpha1"
 	"reflect"
 	"testing"
 
 	"github.com/gogo/protobuf/types"
-	v1alpha22 "istio.io/operator/pkg/apis/istio/v1alpha2/values"
 )
 
 func TestValidate(t *testing.T) {
 	tests := []struct {
 		name       string
-		toValidate *v1alpha22.Values
+		toValidate *v1alpha1.Values
 		validated  bool
 	}{
 		{
 			name:       "Empty struct",
-			toValidate: &v1alpha22.Values{},
+			toValidate: &v1alpha1.Values{},
 			validated:  true,
 		},
 		{
 			name: "With CNI defined",
-			toValidate: &v1alpha22.Values{
-				IstioCni: &v1alpha22.CNIConfig{
+			toValidate: &v1alpha1.Values{
+				IstioCni: &v1alpha1.CNIConfig{
 					Enabled: &types.BoolValue{Value: true},
 				},
 			},
@@ -44,11 +44,11 @@ func TestValidate(t *testing.T) {
 		},
 		{
 			name: "With Slice",
-			toValidate: &v1alpha22.Values{
-				Gateways: &v1alpha22.GatewaysConfig{
+			toValidate: &v1alpha1.Values{
+				Gateways: &v1alpha1.GatewaysConfig{
 					Enabled: &types.BoolValue{Value: true},
-					IstioEgressgateway: &v1alpha22.EgressGatewayConfig{
-						Ports: []*v1alpha22.PortsConfig{
+					IstioEgressgateway: &v1alpha1.EgressGatewayConfig{
+						Ports: []*v1alpha1.PortsConfig{
 							{
 								Name: "port1",
 							},

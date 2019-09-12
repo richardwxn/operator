@@ -54,11 +54,11 @@ global:
     includeInboundPorts: "111,222"
     excludeInboundPorts: "333,444"
     clusterDomain: "my.domain"
-    podDnsSearchNamespaces: "my-namespace"
-    interceptionMode: TPROXY
+    podDnsSearchNamespaces: 
+    - "my-namespace"
     connectTimeout: "11s"
     drainDuration: "22s"
-    parentShutdownDuration : "33s"
+    parentShutdownDuration: "33s"
     concurrency: 5
 `,
 		},

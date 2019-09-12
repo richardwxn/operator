@@ -31926,73 +31926,73 @@ spec:
         gatewayName: ingressgateway
         enableHttps: false
       proxy:
-        image: proxyv2
-        clusterDomain: "cluster.local"
-        resources:
-          requests:
-            cpu: 100m
-            memory: 128Mi
-          limits:
-            cpu: 2000m
-            memory: 1024Mi
-        concurrency: 2
-        accessLogFile: ""
-        accessLogFormat: ""
-        accessLogEncoding: TEXT
-        envoyAccessLogService:
-          enabled: false
-          host: # example: accesslog-service.istio-system
-          port: # example: 15000
-        logLevel: warning
-        componentLogLevel: "misc:error"
-        dnsRefreshRate: 300s
-        protocolDetectionTimeout: 1s
-        privileged: false
-        enableCoreDump: false
-        statusPort: 15020
-        readinessInitialDelaySeconds: 1
-        readinessPeriodSeconds: 2
-        readinessFailureThreshold: 30
-        includeIPRanges: "*"
-        excludeIPRanges: ""
-        excludeOutboundPorts: ""
-        kubevirtInterfaces: ""
-        includeInboundPorts: "*"
-        excludeInboundPorts: ""
-        autoInject: enabled
-        envoyStatsd:
-          enabled: false
-          host: # example: statsd-svc.istio-system
-          port: # example: 9125
-        envoyMetricsService:
-          enabled: false
-          host: # example: metrics-service.istio-system
-          port: # example: 15000
-        tracer: "zipkin"
-      proxy_init:
-        image: proxy_init
-        resources:
-          limits:
-            cpu: 100m
-            memory: 50Mi
-          requests:
-            cpu: 10m
-            memory: 10Mi
-      imagePullPolicy: Always
-      controlPlaneSecurityEnabled: true
-      disablePolicyChecks: true
-      policyCheckFailOpen: false
-      enableTracing: true
-      tracer:
-        lightstep:
-          address: ""                # example: lightstep-satellite:443
-          accessToken: ""            # example: abcdefg1234567
-          secure: true               # example: true|false
-          cacertPath: ""             # example: /etc/lightstep/cacert.pem
-        zipkin:
-          address: ""
-        datadog:
-          address: "$(HOST_IP):8126"
+#        image: proxyv2
+#        clusterDomain: "cluster.local"
+#        resources:
+#          requests:
+#            cpu: 100m
+#            memory: 128Mi
+#          limits:
+#            cpu: 2000m
+#            memory: 1024Mi
+#        concurrency: 2
+#        accessLogFile: ""
+#        accessLogFormat: ""
+##        accessLogEncoding: TEXT
+#        envoyAccessLogService:
+#          enabled: false
+#          host: # example: accesslog-service.istio-system
+#          port: # example: 15000
+#        logLevel: warning
+#        componentLogLevel: "misc:error"
+#        dnsRefreshRate: 300s
+#        protocolDetectionTimeout: 1s
+#        privileged: false
+#        enableCoreDump: false
+#        statusPort: 15020
+#        readinessInitialDelaySeconds: 1
+#        readinessPeriodSeconds: 2
+#        readinessFailureThreshold: 30
+#        includeIPRanges: "*"
+#        excludeIPRanges: ""
+#        excludeOutboundPorts: ""
+#        kubevirtInterfaces: ""
+#        includeInboundPorts: "*"
+#        excludeInboundPorts: ""
+#        autoInject: enabled
+#        envoyStatsd:
+#          enabled: false
+#          host: # example: statsd-svc.istio-system
+#          port: # example: 9125
+#        envoyMetricsService:
+#          enabled: false
+#          host: # example: metrics-service.istio-system
+#          port: # example: 15000
+##        tracer: "zipkin"
+#      proxy_init:
+#        image: proxy_init
+#        resources:
+#          limits:
+#            cpu: 100m
+#            memory: 50Mi
+#          requests:
+#            cpu: 10m
+#            memory: 10Mi
+#      imagePullPolicy: Always
+#      controlPlaneSecurityEnabled: true
+#      disablePolicyChecks: true
+#      policyCheckFailOpen: false
+#      enableTracing: true
+#      tracer:
+#        lightstep:
+#          address: ""                # example: lightstep-satellite:443
+#          accessToken: ""            # example: abcdefg1234567
+#          secure: true               # example: true|false
+#          cacertPath: ""             # example: /etc/lightstep/cacert.pem
+#        zipkin:
+#          address: ""
+#        datadog:
+#          address: "$(HOST_IP):8126"
       mtls:
         enabled: false
       imagePullSecrets: []
@@ -32016,14 +32016,18 @@ spec:
       priorityClassName: ""
       useMCP: true
       trustDomain: ""
-      outboundTrafficPolicy:
-        mode: ALLOW_ANY
+#      outboundTrafficPolicy:
+#        mode: ALLOW_ANY
       sds:
         enabled: false
         udsPath: ""
       meshNetworks: {}
       localityLbSetting:
-        enabled: true
+        - distribute:
+            from: "us-central1/*"
+            to:
+              "us-central1/*": 80
+              "us-central2/*": 20
       enableHelmTest: false
 
     pilot:
@@ -32085,7 +32089,7 @@ spec:
         autoscaleEnabled: true
         sessionAffinityEnabled: false
         loadshedding:
-          mode: enforce
+#          mode: enforce
           latencyThreshold: 100ms
         reportBatchMaxEntries: 100
         reportBatchMaxTime: 1s
@@ -32100,6 +32104,7 @@ spec:
         adapters:
           kubernetesenv:
             enabled: true
+<<<<<<< HEAD
 
     galley:
 
@@ -33111,6 +33116,265 @@ spec:
         enabled: true
         cert_file: /kiali-cert/cert-chain.pem
         private_key_file: /kiali-cert/key.pem
+=======
+#
+#    galley:
+#
+#    citadel:
+#      image: citadel
+#      selfSigned: true # indicate if self-signed CA is used.
+#      trustDomain: cluster.local # indicate the domain used in SPIFFE identity URL
+#      enableNamespacesByDefault: true
+#      dnsCerts:
+#        istio-pilot-service-account.istio-system: istio-pilot.istio-system
+#
+#    certmanager:
+#      hub: quay.io/jetstack
+#      tag: v0.6.2
+#      image: cert-manager-controller
+#
+#    nodeagent:
+#      image: node-agent-k8s
+#
+#    gateways:
+#      istio-egressgateway:
+#        autoscaleEnabled: true
+#        zvpn:
+#          suffix: global
+#          enabled: true
+#        env:
+#          ISTIO_META_ROUTER_MODE: "sni-dnat"
+#        ports:
+#          - port: 80
+#            name: http2
+#          - port: 443
+#            name: https
+#          - port: 15443
+#            targetPort: 15443
+#            name: tls
+#        secretVolumes:
+#          - name: egressgateway-certs
+#            secretName: istio-egressgateway-certs
+#            mountPath: /etc/istio/egressgateway-certs
+#          - name: egressgateway-ca-certs
+#            secretName: istio-egressgateway-ca-certs
+#            mountPath: /etc/istio/egressgateway-ca-certs
+#
+#      istio-ingressgateway:
+#        autoscaleEnabled: true
+#        applicationPorts: ""
+#        debug: info
+#        domain: ""
+#        zvpn:
+#          enabled: true
+#          suffix: global
+#        env:
+#          ISTIO_META_ROUTER_MODE: "sni-dnat"
+#        ports:
+#          - port: 15020
+#            targetPort: 15020
+#            name: status-port
+#          - port: 80
+#            targetPort: 80
+#            name: http2
+#          - port: 443
+#            name: https
+#          - port: 15029
+#            targetPort: 15029
+#            name: kiali
+#          - port: 15030
+#            targetPort: 15030
+#            name: prometheus
+#          - port: 15031
+#            targetPort: 15031
+#            name: grafana
+#          - port: 15032
+#            targetPort: 15032
+#            name: tracing
+#          - port: 15443
+#            targetPort: 15443
+#            name: tls
+#        meshExpansionPorts:
+#          - port: 15011
+#            targetPort: 15011
+#            name: tcp-pilot-grpc-tls
+#          - port: 8060
+#            targetPort: 8060
+#            name: tcp-citadel-grpc-tls
+#          - port: 853
+#            targetPort: 853
+#            name: tcp-dns-tls
+#        secretVolumes:
+#          - name: ingressgateway-certs
+#            secretName: istio-ingressgateway-certs
+#            mountPath: /etc/istio/ingressgateway-certs
+#          - name: ingressgateway-ca-certs
+#            secretName: istio-ingressgateway-ca-certs
+#            mountPath: /etc/istio/ingressgateway-ca-certs
+#
+#    sidecarInjectorWebhook:
+#      image: sidecar_injector
+#      enableNamespacesByDefault: false
+#      rewriteAppHTTPProbe: false
+#      selfSigned: false
+#      injectLabel: istio-injection
+#
+#    prometheus:
+#      enabled: true
+#      replicaCount: 1
+#      hub: docker.io/prom
+#      tag: v2.8.0
+#      retention: 6h
+#      scrapeInterval: 15s
+#      contextPath: /prometheus
+#      ingress:
+#        enabled: false
+#        hosts:
+#          - prometheus.local
+#        annotations:
+#        tls:
+#      security:
+#        enabled: true
+#      nodeSelector: {}
+#      tolerations: []
+#      podAntiAffinityLabelSelector: []
+#      podAntiAffinityTermLabelSelector: []
+
+#    grafana:
+#      enabled: false
+#      replicaCount: 1
+#      image:
+#        repository: grafana/grafana
+#        tag: 6.1.6
+#      persist: false
+#      storageClassName: ""
+#      accessMode: ReadWriteMany
+#      security:
+#        enabled: false
+#        secretName: grafana
+#        usernameKey: username
+#        passphraseKey: passphrase
+#
+#      contextPath: /grafana
+#      service:
+#        annotations: {}
+#        name: http
+#        type: ClusterIP
+#        externalPort: 3000
+#        loadBalancerIP:
+#        loadBalancerSourceRanges:
+#      ingress:
+#        enabled: false
+#        hosts:
+#          - grafana.local
+#        annotations:
+#        tls:
+#      datasources:
+#        datasources.yaml:
+#          apiVersion: 1
+#          datasources:
+#      dashboardProviders:
+#        dashboardproviders.yaml:
+#          apiVersion: 1
+#          providers:
+#            - name: 'istio'
+#              orgId: 1
+#              folder: 'istio'
+#              type: file
+#              disableDeletion: false
+#              options:
+#                path: /var/lib/grafana/dashboards/istio
+#      nodeSelector: {}
+#      tolerations: []
+#      podAntiAffinityLabelSelector: []
+#      podAntiAffinityTermLabelSelector: []
+#      env: {}
+#      envSecrets: {}
+#
+#    tracing:
+#      enabled: false
+#      provider: jaeger
+#      nodeSelector: {}
+#      podAntiAffinityLabelSelector: []
+#      podAntiAffinityTermLabelSelector: []
+#      jaeger:
+#        hub: docker.io/jaegertracing
+#        tag: 1.12
+#        memory:
+#          max_traces: 50000
+#        spanStorageType: badger
+#        persist: false
+#        storageClassName: ""
+#        accessMode: ReadWriteMany
+#      zipkin:
+#        hub: docker.io/openzipkin
+#        tag: 2.14.2
+#        probeStartupDelay: 200
+#        queryPort: 9411
+#        resources:
+#          limits:
+#            cpu: 300m
+#            memory: 900Mi
+#          requests:
+#            cpu: 150m
+#            memory: 900Mi
+#        javaOptsHeap: 700
+#        maxSpans: 500000
+#        node:
+#          cpus: 2
+#      opencensus:
+#        hub: docker.io/omnition
+#        tag: 0.1.9
+#        resources:
+#          limits:
+#            cpu: 1
+#            memory: 2Gi
+#          requests:
+#            cpu: 200m
+#            memory: 400Mi
+#        exporters:
+#          stackdriver:
+#            enable_tracing: true
+#      service:
+#        annotations: {}
+#        name: http
+#        type: ClusterIP
+#        externalPort: 9411
+#      ingress:
+#        enabled: false
+#        hosts:
+#        annotations:
+#        tls:
+#
+#    kiali:
+#      enabled: false
+#      replicaCount: 1
+#      hub: docker.io/kiali
+#      tag: v1.1.0
+#      contextPath: /kiali
+#      nodeSelector: {}
+#      podAntiAffinityLabelSelector: []
+#      podAntiAffinityTermLabelSelector: []
+#      ingress:
+#        enabled: false
+#        hosts:
+#          - kiali.local
+#        annotations:
+#        tls:
+#      dashboard:
+#        secretName: kiali
+#        usernameKey: username
+#        passphraseKey: passphrase
+#        viewOnlyMode: false
+#        grafanaURL:
+#        jaegerURL:
+#      prometheusNamespace:
+#      createDemoSecret: true
+#      security:
+#        enabled: true
+#        cert_file: /kiali-cert/cert-chain.pem
+#        private_key_file: /kiali-cert/key.pem
+>>>>>>> Add more fields
 
     # TODO: derive from operator API
     version: ""

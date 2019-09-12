@@ -2,7 +2,7 @@
 title: values
 layout: protoc-gen-docs
 generator: protoc-gen-docs
-number_of_entries: 70
+number_of_entries: 77
 ---
 <h2 id="AddonIngressConfig">AddonIngressConfig</h2>
 <section>
@@ -19,7 +19,7 @@ number_of_entries: 70
 <tbody>
 <tr id="AddonIngressConfig-enabled">
 <td><code>enabled</code></td>
-<td><code>bool</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
 <td>
 <p>Controls whether addon ingress is enabled.</p>
 
@@ -89,7 +89,7 @@ number_of_entries: 70
 <tbody>
 <tr id="CNIConfig-enabled">
 <td><code>enabled</code></td>
-<td><code>bool</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
 <td>
 <p>Controls whether CNI is enabled.</p>
 
@@ -139,7 +139,7 @@ number_of_entries: 70
 <tbody>
 <tr id="CertManagerConfig-enabled">
 <td><code>enabled</code></td>
-<td><code>bool</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
 <td>
 <p>Controls whether CertManager is enabled.</p>
 
@@ -161,6 +161,14 @@ number_of_entries: 70
 
 </td>
 </tr>
+<tr id="CertManagerConfig-image">
+<td><code>image</code></td>
+<td><code>string</code></td>
+<td>
+<p>Image name for the CertManager Deployment.</p>
+
+</td>
+</tr>
 <tr id="CertManagerConfig-nodeSelector">
 <td><code>nodeSelector</code></td>
 <td><code><a href="#TypeMapStringInterface">TypeMapStringInterface</a></code></td>
@@ -173,7 +181,7 @@ number_of_entries: 70
 </tr>
 <tr id="CertManagerConfig-resources">
 <td><code>resources</code></td>
-<td><code><a href="#k8s-io-api-core-v1-ResourceRequirements">k8s.io.api.core.v1.ResourceRequirements</a></code></td>
+<td><code><a href="#Resources">Resources</a></code></td>
 <td>
 <p>K8s resources settings.</p>
 
@@ -199,7 +207,7 @@ number_of_entries: 70
 <tbody>
 <tr id="CoreDNSConfig-enabled">
 <td><code>enabled</code></td>
-<td><code>bool</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
 <td>
 <p>Controls whether CoreDNS is enabled.</p>
 
@@ -257,7 +265,7 @@ number_of_entries: 70
 <tbody>
 <tr id="DefaultPodDisruptionBudgetConfig-enabled">
 <td><code>enabled</code></td>
-<td><code>bool</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
 <td>
 <p>Controls whether a PodDisruptionBudget with a default minAvailable value of 1 is created for each deployment.</p>
 
@@ -307,7 +315,7 @@ number_of_entries: 70
 <tbody>
 <tr id="EgressGatewayConfig-autoscaleEnabled">
 <td><code>autoscaleEnabled</code></td>
-<td><code>bool</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
 <td>
 <p>Controls whether auto scaling with a HorizontalPodAutoscaler is enabled.</p>
 
@@ -329,6 +337,12 @@ number_of_entries: 70
 
 </td>
 </tr>
+<tr id="EgressGatewayConfig-connectTimeout">
+<td><code>connectTimeout</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+</tr>
 <tr id="EgressGatewayConfig-cpu">
 <td><code>cpu</code></td>
 <td><code><a href="#CPUTargetUtilizationConfig">CPUTargetUtilizationConfig</a></code></td>
@@ -339,9 +353,15 @@ number_of_entries: 70
 
 </td>
 </tr>
+<tr id="EgressGatewayConfig-drainDuration">
+<td><code>drainDuration</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">google.protobuf.Duration</a></code></td>
+<td>
+</td>
+</tr>
 <tr id="EgressGatewayConfig-enabled">
 <td><code>enabled</code></td>
-<td><code>bool</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
 <td>
 <p>Controls whether an egress gateway is enabled.</p>
 
@@ -431,7 +451,7 @@ onto a node if that node is already running a pod with label having key
 </tr>
 <tr id="EgressGatewayConfig-resources">
 <td><code>resources</code></td>
-<td><code><a href="#k8s-io-api-core-v1-ResourceRequirements">k8s.io.api.core.v1.ResourceRequirements</a></code></td>
+<td><code><a href="#Resources">Resources</a></code></td>
 <td>
 <p>K8s resources settings.</p>
 
@@ -476,6 +496,38 @@ onto a node if that node is already running a pod with label having key
 </tbody>
 </table>
 </section>
+<h2 id="EnvoyAccessLogConfig">EnvoyAccessLogConfig</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="EnvoyAccessLogConfig-enabled">
+<td><code>enabled</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
+<td>
+</td>
+</tr>
+<tr id="EnvoyAccessLogConfig-host">
+<td><code>host</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+</tr>
+<tr id="EnvoyAccessLogConfig-port">
+<td><code>port</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
 <h2 id="EnvoyMetricsConfig">EnvoyMetricsConfig</h2>
 <section>
 <p>EnvoyMetricsConfig is a set of configuration options for Envoy metrics.</p>
@@ -491,7 +543,7 @@ onto a node if that node is already running a pod with label having key
 <tbody>
 <tr id="EnvoyMetricsConfig-enabled">
 <td><code>enabled</code></td>
-<td><code>bool</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
 <td>
 <p>Enables the Envoy Metrics Service.</p>
 
@@ -531,7 +583,7 @@ onto a node if that node is already running a pod with label having key
 <tbody>
 <tr id="GalleyConfig-enabled">
 <td><code>enabled</code></td>
-<td><code>bool</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
 <td>
 <p>Controls whether Galley is enabled.</p>
 
@@ -583,7 +635,7 @@ onto a node if that node is already running a pod with label having key
 </tr>
 <tr id="GalleyConfig-resources">
 <td><code>resources</code></td>
-<td><code><a href="#k8s-io-api-core-v1-ResourceRequirements">k8s.io.api.core.v1.ResourceRequirements</a></code></td>
+<td><code><a href="#Resources">Resources</a></code></td>
 <td>
 <p>K8s resources settings.</p>
 
@@ -635,7 +687,7 @@ onto a node if that node is already running a pod with label having key
 </tr>
 </thead>
 <tbody>
-<tr id="GatewaysConfig-istioEgressgateway">
+<tr id="GatewaysConfig-istio_egressgateway">
 <td><code>istioEgressgateway</code></td>
 <td><code><a href="#EgressGatewayConfig">EgressGatewayConfig</a></code></td>
 <td>
@@ -645,13 +697,13 @@ onto a node if that node is already running a pod with label having key
 </tr>
 <tr id="GatewaysConfig-enabled">
 <td><code>enabled</code></td>
-<td><code>bool</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
 <td>
 <p>Controls whether any gateways are enabled.</p>
 
 </td>
 </tr>
-<tr id="GatewaysConfig-istioIngressgateway">
+<tr id="GatewaysConfig-istio_ingressgateway">
 <td><code>istioIngressgateway</code></td>
 <td><code><a href="#IngressGatewayConfig">IngressGatewayConfig</a></code></td>
 <td>
@@ -697,7 +749,7 @@ onto a node if that node is already running a pod with label having key
 </tr>
 <tr id="GlobalConfig-configValidation">
 <td><code>configValidation</code></td>
-<td><code>bool</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
 <td>
 <p>Controls whether the server-side validation is enabled.</p>
 
@@ -705,7 +757,7 @@ onto a node if that node is already running a pod with label having key
 </tr>
 <tr id="GlobalConfig-controlPlaneSecurityEnabled">
 <td><code>controlPlaneSecurityEnabled</code></td>
-<td><code>bool</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
 <td>
 <p>Controls whether the MTLS for communication between the control plane components is enabled.</p>
 
@@ -731,7 +783,7 @@ onto a node if that node is already running a pod with label having key
 </tr>
 <tr id="GlobalConfig-disablePolicyChecks">
 <td><code>disablePolicyChecks</code></td>
-<td><code>bool</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
 <td>
 <p>Controls whether the policy enforcement is enabled.</p>
 
@@ -749,7 +801,7 @@ onto a node if that node is already running a pod with label having key
 </tr>
 <tr id="GlobalConfig-enableHelmTest">
 <td><code>enableHelmTest</code></td>
-<td><code>bool</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
 <td>
 <p>Controls whether the helm test templates are enabled.</p>
 
@@ -757,7 +809,7 @@ onto a node if that node is already running a pod with label having key
 </tr>
 <tr id="GlobalConfig-enableTracing">
 <td><code>enableTracing</code></td>
-<td><code>bool</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
 <td>
 <p>Controls whether the distributed tracing for the applications is enabled.</p>
 
@@ -784,6 +836,12 @@ Defaults to Always if :latest tag is specified, or IfNotPresent otherwise. Canno
 
 </td>
 </tr>
+<tr id="GlobalConfig-imagePullSecrets">
+<td><code>imagePullSecrets</code></td>
+<td><code><a href="#TypeSliceOfMapStringInterface">TypeSliceOfMapStringInterface</a></code></td>
+<td>
+</td>
+</tr>
 <tr id="GlobalConfig-istioNamespace">
 <td><code>istioNamespace</code></td>
 <td><code>string</code></td>
@@ -794,7 +852,7 @@ Defaults to Always if :latest tag is specified, or IfNotPresent otherwise. Canno
 </tr>
 <tr id="GlobalConfig-localityLbSetting">
 <td><code>localityLbSetting</code></td>
-<td><code>map&lt;string,&nbsp;string&gt;</code></td>
+<td><code><a href="#TypeSliceOfMapStringInterface">TypeSliceOfMapStringInterface</a></code></td>
 <td>
 <p>Specifies the global locality load balancing settings.
 Locality-weighted load balancing allows administrators to control the distribution of traffic to
@@ -902,7 +960,7 @@ it still need to be configured manually).</p>
 </tr>
 <tr id="GlobalConfig-oneNamespace">
 <td><code>oneNamespace</code></td>
-<td><code>bool</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
 <td>
 <p>Controls whether to restrict the applications namespace the controller manages;
 If set it to false, the controller watches all namespaces.</p>
@@ -919,7 +977,7 @@ If set it to false, the controller watches all namespaces.</p>
 </tr>
 <tr id="GlobalConfig-policyCheckFailOpen">
 <td><code>policyCheckFailOpen</code></td>
-<td><code>bool</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
 <td>
 <p>Controls whether to allow traffic in cases when the mixer policy service cannot be reached.</p>
 
@@ -951,7 +1009,7 @@ If set it to false, the controller watches all namespaces.</p>
 
 </td>
 </tr>
-<tr id="GlobalConfig-proxyInit">
+<tr id="GlobalConfig-proxy_init">
 <td><code>proxyInit</code></td>
 <td><code><a href="#ProxyInitConfig">ProxyInitConfig</a></code></td>
 <td>
@@ -1001,10 +1059,16 @@ If set it to false, the controller watches all namespaces.</p>
 </tr>
 <tr id="GlobalConfig-useMCP">
 <td><code>useMCP</code></td>
-<td><code>bool</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
 <td>
 <p>Controls whether to use of Mesh Configuration Protocol to distribute configuration.</p>
 
+</td>
+</tr>
+<tr id="GlobalConfig-logAsJson">
+<td><code>logAsJson</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
+<td>
 </td>
 </tr>
 </tbody>
@@ -1051,7 +1115,7 @@ If empty, default scope and level will be used as configured in code</p>
 <tbody>
 <tr id="IngressGatewayConfig-autoscaleEnabled">
 <td><code>autoscaleEnabled</code></td>
-<td><code>bool</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
 <td>
 <p>Controls whether auto scaling with a HorizontalPodAutoscaler is enabled.</p>
 
@@ -1073,6 +1137,12 @@ If empty, default scope and level will be used as configured in code</p>
 
 </td>
 </tr>
+<tr id="IngressGatewayConfig-connectTimeout">
+<td><code>connectTimeout</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+</tr>
 <tr id="IngressGatewayConfig-cpu">
 <td><code>cpu</code></td>
 <td><code><a href="#CPUTargetUtilizationConfig">CPUTargetUtilizationConfig</a></code></td>
@@ -1085,7 +1155,7 @@ If empty, default scope and level will be used as configured in code</p>
 </tr>
 <tr id="IngressGatewayConfig-customService">
 <td><code>customService</code></td>
-<td><code>bool</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
 <td>
 </td>
 </tr>
@@ -1101,9 +1171,15 @@ If empty, default scope and level will be used as configured in code</p>
 <td>
 </td>
 </tr>
+<tr id="IngressGatewayConfig-drainDuration">
+<td><code>drainDuration</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">google.protobuf.Duration</a></code></td>
+<td>
+</td>
+</tr>
 <tr id="IngressGatewayConfig-enabled">
 <td><code>enabled</code></td>
-<td><code>bool</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
 <td>
 <p>Controls whether an ingress gateway is enabled.</p>
 
@@ -1125,13 +1201,13 @@ If empty, default scope and level will be used as configured in code</p>
 </tr>
 <tr id="IngressGatewayConfig-k8sIngress">
 <td><code>k8sIngress</code></td>
-<td><code>bool</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
 <td>
 </td>
 </tr>
 <tr id="IngressGatewayConfig-k8sIngressHttps">
 <td><code>k8sIngressHttps</code></td>
-<td><code>bool</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
 <td>
 </td>
 </tr>
@@ -1263,6 +1339,30 @@ If empty, default scope and level will be used as configured in code</p>
 
 </td>
 </tr>
+<tr id="IngressGatewayConfig-rollingMaxSurge">
+<td><code>rollingMaxSurge</code></td>
+<td><code><a href="#TypeIntOrStringForPB">TypeIntOrStringForPB</a></code></td>
+<td>
+<p>K8s rolling update strategy</p>
+
+</td>
+</tr>
+<tr id="IngressGatewayConfig-rollingMaxUnavailable">
+<td><code>rollingMaxUnavailable</code></td>
+<td><code><a href="#TypeIntOrStringForPB">TypeIntOrStringForPB</a></code></td>
+<td>
+<p>K8s rolling update strategy</p>
+
+</td>
+</tr>
+<tr id="IngressGatewayConfig-applicationPorts">
+<td><code>applicationPorts</code></td>
+<td><code>string</code></td>
+<td>
+<p>Ports to explicitly check for readiness</p>
+
+</td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -1281,7 +1381,7 @@ If empty, default scope and level will be used as configured in code</p>
 <tbody>
 <tr id="IngressGatewaySdsConfig-enabled">
 <td><code>enabled</code></td>
-<td><code>bool</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
 <td>
 <p>If true, ingress gateway fetches credentials from SDS server to handle TLS connections.</p>
 
@@ -1314,7 +1414,7 @@ This server runs in the same pod as ingress gateway.</p>
 <tbody>
 <tr id="IngressGatewayZvpnConfig-enabled">
 <td><code>enabled</code></td>
-<td><code>bool</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
 <td>
 <p>Controls whether ZeroVPN is enabled.</p>
 
@@ -1323,6 +1423,34 @@ This server runs in the same pod as ingress gateway.</p>
 <tr id="IngressGatewayZvpnConfig-suffix">
 <td><code>suffix</code></td>
 <td><code>string</code></td>
+<td>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="KialiConfig">KialiConfig</h2>
+<section>
+<p>Configuration for Kiali addon.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="KialiConfig-enabled">
+<td><code>enabled</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
+<td>
+</td>
+</tr>
+<tr id="KialiConfig-createDemoSecret">
+<td><code>createDemoSecret</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
 <td>
 </td>
 </tr>
@@ -1344,7 +1472,7 @@ This server runs in the same pod as ingress gateway.</p>
 <tbody>
 <tr id="KubernetesEnvMixerAdapterConfig-enabled">
 <td><code>enabled</code></td>
-<td><code>bool</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
 <td>
 <p>Enables the Kubernetes env adapter in Mixer.</p>
 
@@ -1370,7 +1498,7 @@ This server runs in the same pod as ingress gateway.</p>
 <tbody>
 <tr id="KubernetesIngressConfig-enabled">
 <td><code>enabled</code></td>
-<td><code>bool</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
 <td>
 <p>Enables gateway for legacy k8s Ingress.</p>
 
@@ -1378,7 +1506,7 @@ This server runs in the same pod as ingress gateway.</p>
 </tr>
 <tr id="KubernetesIngressConfig-enableHttps">
 <td><code>enableHttps</code></td>
-<td><code>bool</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
 <td>
 <p>Enables HTTPS legacy k8s Ingress.</p>
 
@@ -1468,7 +1596,7 @@ This server runs in the same pod as ingress gateway.</p>
 <tbody>
 <tr id="MTLSConfig-enabled">
 <td><code>enabled</code></td>
-<td><code>bool</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
 <td>
 <p>Enables MTLS for service to service traffic.</p>
 
@@ -1492,7 +1620,7 @@ This server runs in the same pod as ingress gateway.</p>
 <tbody>
 <tr id="MeshExpansionConfig-enabled">
 <td><code>enabled</code></td>
-<td><code>bool</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
 <td>
 <p>Exposes Pilot and Citadel mTLS on the ingress gateway.</p>
 
@@ -1500,7 +1628,7 @@ This server runs in the same pod as ingress gateway.</p>
 </tr>
 <tr id="MeshExpansionConfig-useILB">
 <td><code>useILB</code></td>
-<td><code>bool</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
 <td>
 <p>Exposes Pilot and Citadel mTLS and the plain text Pilot ports on an internal gateway.</p>
 
@@ -1546,9 +1674,16 @@ This server runs in the same pod as ingress gateway.</p>
 
 </td>
 </tr>
+<tr id="MixerAdaptersConfig-stackdriver">
+<td><code>stackdriver</code></td>
+<td><code><a href="#StackdriverMixerAdapterConfig">StackdriverMixerAdapterConfig</a></code></td>
+<td>
+
+</td>
+</tr>
 <tr id="MixerAdaptersConfig-useAdapterCRDs">
 <td><code>useAdapterCRDs</code></td>
-<td><code>bool</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
 <td>
 <p>Sets the &ndash;useAdapterCRDs mixer startup argument.</p>
 
@@ -1586,6 +1721,14 @@ This server runs in the same pod as ingress gateway.</p>
 
 </td>
 </tr>
+<tr id="MixerConfig-adapters">
+<td><code>adapters</code></td>
+<td><code><a href="#MixerAdaptersConfig">MixerAdaptersConfig</a></code></td>
+<td>
+<p>Configuration for different mixer adapters.</p>
+
+</td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -1604,7 +1747,7 @@ This server runs in the same pod as ingress gateway.</p>
 <tbody>
 <tr id="MixerPolicyConfig-autoscaleEnabled">
 <td><code>autoscaleEnabled</code></td>
-<td><code>bool</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
 <td>
 <p>Controls whether a HorizontalPodAutoscaler is installed for Mixer Policy.</p>
 
@@ -1638,7 +1781,7 @@ This server runs in the same pod as ingress gateway.</p>
 </tr>
 <tr id="MixerPolicyConfig-enabled">
 <td><code>enabled</code></td>
-<td><code>bool</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
 <td>
 <p>Controls whether Mixer Policy is enabled</p>
 
@@ -1674,6 +1817,14 @@ This server runs in the same pod as ingress gateway.</p>
 
 </td>
 </tr>
+<tr id="MixerPolicyConfig-adapters">
+<td><code>adapters</code></td>
+<td><code><a href="#MixerAdaptersConfig">MixerAdaptersConfig</a></code></td>
+<td>
+<p>Configuration for different mixer adapters.</p>
+
+</td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -1690,17 +1841,9 @@ This server runs in the same pod as ingress gateway.</p>
 </tr>
 </thead>
 <tbody>
-<tr id="MixerTelemetryConfig-adapters">
-<td><code>adapters</code></td>
-<td><code><a href="#MixerAdaptersConfig">MixerAdaptersConfig</a></code></td>
-<td>
-<p>Configuration for different mixer adapters.</p>
-
-</td>
-</tr>
 <tr id="MixerTelemetryConfig-autoscaleEnabled">
 <td><code>autoscaleEnabled</code></td>
-<td><code>bool</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
 <td>
 <p>Controls whether a HorizontalPodAutoscaler is installed for Mixer Telemetry.</p>
 
@@ -1734,7 +1877,7 @@ This server runs in the same pod as ingress gateway.</p>
 </tr>
 <tr id="MixerTelemetryConfig-enabled">
 <td><code>enabled</code></td>
-<td><code>bool</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
 <td>
 <p>Controls whether Mixer Telemetry is enabled.</p>
 
@@ -1801,9 +1944,33 @@ env:
 
 </td>
 </tr>
+<tr id="MixerTelemetryConfig-rollingMaxSurge">
+<td><code>rollingMaxSurge</code></td>
+<td><code><a href="#TypeIntOrStringForPB">TypeIntOrStringForPB</a></code></td>
+<td>
+<p>K8s rolling update strategy</p>
+
+</td>
+</tr>
+<tr id="MixerTelemetryConfig-rollingMaxUnavailable">
+<td><code>rollingMaxUnavailable</code></td>
+<td><code><a href="#TypeIntOrStringForPB">TypeIntOrStringForPB</a></code></td>
+<td>
+<p>K8s rolling update strategy</p>
+
+</td>
+</tr>
+<tr id="MixerTelemetryConfig-useMCP">
+<td><code>useMCP</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
+<td>
+<p>Controls whether to use of Mesh Configuration Protocol to distribute configuration.</p>
+
+</td>
+</tr>
 <tr id="MixerTelemetryConfig-resources">
 <td><code>resources</code></td>
-<td><code><a href="#k8s-io-api-core-v1-ResourceRequirements">k8s.io.api.core.v1.ResourceRequirements</a></code></td>
+<td><code><a href="#Resources">Resources</a></code></td>
 <td>
 <p>K8s resources settings.</p>
 
@@ -1813,7 +1980,7 @@ env:
 </tr>
 <tr id="MixerTelemetryConfig-sessionAffinityEnabled">
 <td><code>sessionAffinityEnabled</code></td>
-<td><code>bool</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
 <td>
 <p>Controls whether to enable the sticky session setting when choosing backend pods.</p>
 
@@ -1837,7 +2004,7 @@ env:
 <tbody>
 <tr id="MultiClusterConfig-enabled">
 <td><code>enabled</code></td>
-<td><code>bool</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
 <td>
 <p>Enables the connection between two kubernetes clusters via their respective ingressgateway services.
 Use if the pods in each cluster cannot directly talk to one another.</p>
@@ -1862,7 +2029,7 @@ Use if the pods in each cluster cannot directly talk to one another.</p>
 <tbody>
 <tr id="NodeAgentConfig-enabled">
 <td><code>enabled</code></td>
-<td><code>bool</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
 <td>
 <p>Controls whether Node Agent is enabled.</p>
 
@@ -1951,7 +2118,7 @@ env:
 <tbody>
 <tr id="PilotConfig-enabled">
 <td><code>enabled</code></td>
-<td><code>bool</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
 <td>
 <p>Controls whether Pilot is enabled.</p>
 
@@ -1959,7 +2126,7 @@ env:
 </tr>
 <tr id="PilotConfig-autoscaleEnabled">
 <td><code>autoscaleEnabled</code></td>
-<td><code>bool</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
 <td>
 <p>Controls whether a HorizontalPodAutoscaler is installed for Pilot.</p>
 
@@ -2003,7 +2170,7 @@ env:
 </tr>
 <tr id="PilotConfig-sidecar">
 <td><code>sidecar</code></td>
-<td><code>bool</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
 <td>
 <p>Controls whether a sidecar proxy is installed in the Pilot pod.</p>
 
@@ -2025,7 +2192,7 @@ env:
 </tr>
 <tr id="PilotConfig-resources">
 <td><code>resources</code></td>
-<td><code><a href="#k8s-io-api-core-v1-ResourceRequirements">k8s.io.api.core.v1.ResourceRequirements</a></code></td>
+<td><code><a href="#Resources">Resources</a></code></td>
 <td>
 <p>K8s resources settings.</p>
 
@@ -2109,7 +2276,7 @@ env:
 </tr>
 <tr id="PilotConfig-configMap">
 <td><code>configMap</code></td>
-<td><code>bool</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
 <td>
 <p>Configuration settings passed to Pilot as a ConfigMap.</p>
 
@@ -2128,7 +2295,7 @@ If false, pilot wil use default values or user-supplied values, in that order of
 </tr>
 <tr id="PilotConfig-useMCP">
 <td><code>useMCP</code></td>
-<td><code>bool</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
 <td>
 <p>Controls whether Pilot is configured through the Mesh Control Protocol (MCP).</p>
 
@@ -2162,6 +2329,22 @@ env:
 <td><code><a href="#PilotTelemetryConfig">PilotTelemetryConfig</a></code></td>
 <td>
 <p>Controls whether telemetry is exported for Pilot.</p>
+
+</td>
+</tr>
+<tr id="PilotConfig-rollingMaxSurge">
+<td><code>rollingMaxSurge</code></td>
+<td><code><a href="#TypeIntOrStringForPB">TypeIntOrStringForPB</a></code></td>
+<td>
+<p>K8s rolling update strategy</p>
+
+</td>
+</tr>
+<tr id="PilotConfig-rollingMaxUnavailable">
+<td><code>rollingMaxUnavailable</code></td>
+<td><code><a href="#TypeIntOrStringForPB">TypeIntOrStringForPB</a></code></td>
+<td>
+<p>K8s rolling update strategy</p>
 
 </td>
 </tr>
@@ -2255,7 +2438,7 @@ env:
 <tbody>
 <tr id="PilotPolicyConfig-enabled">
 <td><code>enabled</code></td>
-<td><code>bool</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
 <td>
 <p>Controls whether Istio policy is applied to Pilot.</p>
 
@@ -2279,7 +2462,7 @@ env:
 <tbody>
 <tr id="PilotTelemetryConfig-enabled">
 <td><code>enabled</code></td>
-<td><code>bool</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
 <td>
 <p>Controls whether telemetry is exported for Pilot.</p>
 
@@ -2351,13 +2534,13 @@ env:
 <tbody>
 <tr id="PrometheusConfig-createPrometheusResource">
 <td><code>createPrometheusResource</code></td>
-<td><code>bool</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
 <td>
 </td>
 </tr>
 <tr id="PrometheusConfig-enabled">
 <td><code>enabled</code></td>
-<td><code>bool</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
 <td>
 </td>
 </tr>
@@ -2441,7 +2624,7 @@ env:
 <tbody>
 <tr id="PrometheusMixerAdapterConfig-enabled">
 <td><code>enabled</code></td>
-<td><code>bool</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
 <td>
 <p>Enables the Prometheus adapter in Mixer.</p>
 
@@ -2475,7 +2658,7 @@ env:
 <tbody>
 <tr id="PrometheusSecurityConfig-enabled">
 <td><code>enabled</code></td>
-<td><code>bool</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
 <td>
 <p>Controls whether Prometheus security is enabled.</p>
 
@@ -2527,7 +2710,7 @@ env:
 <tbody>
 <tr id="PrometheusServiceNodePortConfig-enabled">
 <td><code>enabled</code></td>
-<td><code>bool</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
 <td>
 <p>Controls whether Prometheus NodePort config is enabled.</p>
 
@@ -2613,7 +2796,7 @@ env:
 </tr>
 <tr id="ProxyConfig-enableCoreDump">
 <td><code>enableCoreDump</code></td>
-<td><code>bool</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
 <td>
 <p>Enables core dumps for newly injected sidecars.</p>
 
@@ -2707,7 +2890,7 @@ This would only capture egress traffic on those two IP Ranges, all other outboun
 </tr>
 <tr id="ProxyConfig-privileged">
 <td><code>privileged</code></td>
-<td><code>bool</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
 <td>
 <p>Enables privileged securityContext for the istio-proxy container.</p>
 
@@ -2749,12 +2932,30 @@ This would only capture egress traffic on those two IP Ranges, all other outboun
 </tr>
 <tr id="ProxyConfig-resources">
 <td><code>resources</code></td>
-<td><code><a href="#k8s-io-api-core-v1-ResourceRequirements">k8s.io.api.core.v1.ResourceRequirements</a></code></td>
+<td><code><a href="#Resources">Resources</a></code></td>
 <td>
 <p>K8s resources settings.</p>
 
 <p>See https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container</p>
 
+</td>
+</tr>
+<tr id="ProxyConfig-protocolDetectionTimeout">
+<td><code>protocolDetectionTimeout</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+</tr>
+<tr id="ProxyConfig-envoyAccessLogService">
+<td><code>envoyAccessLogService</code></td>
+<td><code><a href="#EnvoyAccessLogConfig">EnvoyAccessLogConfig</a></code></td>
+<td>
+</td>
+</tr>
+<tr id="ProxyConfig-excludeOutboundPorts">
+<td><code>excludeOutboundPorts</code></td>
+<td><code>string</code></td>
+<td>
 </td>
 </tr>
 </tbody>
@@ -2864,6 +3065,34 @@ This would only capture egress traffic on those two IP Ranges, all other outboun
 </tbody>
 </table>
 </section>
+<h2 id="Resources">Resources</h2>
+<section>
+<p>Mirrors Resources for unmarshaling.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="Resources-limits">
+<td><code>limits</code></td>
+<td><code>map&lt;string,&nbsp;string&gt;</code></td>
+<td>
+</td>
+</tr>
+<tr id="Resources-requests">
+<td><code>requests</code></td>
+<td><code>map&lt;string,&nbsp;string&gt;</code></td>
+<td>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
 <h2 id="ResourcesRequestsConfig">ResourcesRequestsConfig</h2>
 <section>
 <p>Configuration for K8s resource requests.</p>
@@ -2907,7 +3136,7 @@ This would only capture egress traffic on those two IP Ranges, all other outboun
 <tbody>
 <tr id="SDSConfig-enabled">
 <td><code>enabled</code></td>
-<td><code>bool</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
 <td>
 <p>Controls whether the SecretDiscoveryService is enabled.</p>
 
@@ -2923,7 +3152,7 @@ This would only capture egress traffic on those two IP Ranges, all other outboun
 </tr>
 <tr id="SDSConfig-useNormalJwt">
 <td><code>useNormalJwt</code></td>
-<td><code>bool</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
 <td>
 <p>Enables SDS use of k8s normal JWT to request for certificates.</p>
 
@@ -2931,7 +3160,7 @@ This would only capture egress traffic on those two IP Ranges, all other outboun
 </tr>
 <tr id="SDSConfig-useTrustworthyJwt">
 <td><code>useTrustworthyJwt</code></td>
-<td><code>bool</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
 <td>
 <p>Enables SDS use of trustworthy JWT to request for certificates.</p>
 
@@ -2991,7 +3220,7 @@ This would only capture egress traffic on those two IP Ranges, all other outboun
 <tbody>
 <tr id="SecurityConfig-enabled">
 <td><code>enabled</code></td>
-<td><code>bool</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
 <td>
 <p>Controls whether Citadel is enabled.</p>
 
@@ -3019,7 +3248,7 @@ This would only capture egress traffic on those two IP Ranges, all other outboun
 </tr>
 <tr id="SecurityConfig-selfSigned">
 <td><code>selfSigned</code></td>
-<td><code>bool</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
 <td>
 <p>Controls whether self-signed CA is used for citadel to generate the certificate/key pair.</p>
 
@@ -3054,7 +3283,7 @@ The default depends on the environment.
 </tr>
 <tr id="SecurityConfig-createMeshPolicy">
 <td><code>createMeshPolicy</code></td>
-<td><code>bool</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
 <td>
 <p>Controls whether the mesh-wide authentication policy is created or not.</p>
 
@@ -3130,7 +3359,7 @@ The default depends on the environment.
 <tbody>
 <tr id="SidecarInjectorConfig-enabled">
 <td><code>enabled</code></td>
-<td><code>bool</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
 <td>
 <p>Controls whether Sidecar Injector is enabled.</p>
 
@@ -3138,7 +3367,7 @@ The default depends on the environment.
 </tr>
 <tr id="SidecarInjectorConfig-enableNamespacesByDefault">
 <td><code>enableNamespacesByDefault</code></td>
-<td><code>bool</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
 <td>
 <p>Enables sidecar auto-injection in namespaces by default.</p>
 
@@ -3212,7 +3441,7 @@ See https://istio.io/docs/setup/kubernetes/additional-setup/sidecar-injection/#m
 </tr>
 <tr id="SidecarInjectorConfig-rewriteAppHTTPProbe">
 <td><code>rewriteAppHTTPProbe</code></td>
-<td><code>bool</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
 <td>
 <p>If true, webhook or istioctl injector will rewrite PodSpec for liveness health check to redirect request to sidecar. This makes liveness check work even when mTLS is enabled.</p>
 
@@ -3220,12 +3449,130 @@ See https://istio.io/docs/setup/kubernetes/additional-setup/sidecar-injection/#m
 </tr>
 <tr id="SidecarInjectorConfig-selfSigned">
 <td><code>selfSigned</code></td>
-<td><code>bool</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
 <td>
 <p>Controls whether self-signed CA is used for Sidecar Injector to generate the certificate/key pair.</p>
 
 <p>Setting to false if you want to use your own root CA.</p>
 
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="StackdriverAuthConfig">StackdriverAuthConfig</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="StackdriverAuthConfig-appCredentials">
+<td><code>appCredentials</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
+<td>
+</td>
+</tr>
+<tr id="StackdriverAuthConfig-apiKey">
+<td><code>apiKey</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+</tr>
+<tr id="StackdriverAuthConfig-serviceAccountPath">
+<td><code>serviceAccountPath</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="StackdriverContextGraph">StackdriverContextGraph</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="StackdriverContextGraph-enabled">
+<td><code>enabled</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
+<td>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="StackdriverMixerAdapterConfig">StackdriverMixerAdapterConfig</h2>
+<section>
+<p>Configuration for stackdriver adapter in mixer.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="StackdriverMixerAdapterConfig-enabled">
+<td><code>enabled</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
+<td>
+</td>
+</tr>
+<tr id="StackdriverMixerAdapterConfig-auth">
+<td><code>auth</code></td>
+<td><code><a href="#StackdriverAuthConfig">StackdriverAuthConfig</a></code></td>
+<td>
+</td>
+</tr>
+<tr id="StackdriverMixerAdapterConfig-tracer">
+<td><code>tracer</code></td>
+<td><code><a href="#StackdriverTracerConfig">StackdriverTracerConfig</a></code></td>
+<td>
+</td>
+</tr>
+<tr id="StackdriverMixerAdapterConfig-contextGraph">
+<td><code>contextGraph</code></td>
+<td><code><a href="#StackdriverContextGraph">StackdriverContextGraph</a></code></td>
+<td>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="StackdriverTracerConfig">StackdriverTracerConfig</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="StackdriverTracerConfig-enabled">
+<td><code>enabled</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
+<td>
+</td>
+</tr>
+<tr id="StackdriverTracerConfig-sampleProbability">
+<td><code>sampleProbability</code></td>
+<td><code>uint32</code></td>
+<td>
 </td>
 </tr>
 </tbody>
@@ -3246,7 +3593,7 @@ See https://istio.io/docs/setup/kubernetes/additional-setup/sidecar-injection/#m
 <tbody>
 <tr id="StdioMixerAdapterConfig-enabled">
 <td><code>enabled</code></td>
-<td><code>bool</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
 <td>
 <p>Enable stdio adapter to output logs and metrics to local machine.</p>
 
@@ -3254,7 +3601,7 @@ See https://istio.io/docs/setup/kubernetes/additional-setup/sidecar-injection/#m
 </tr>
 <tr id="StdioMixerAdapterConfig-outputAsJson">
 <td><code>outputAsJson</code></td>
-<td><code>bool</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
 <td>
 <p>Whether to output a console-friendly or json-friendly format.</p>
 
@@ -3366,7 +3713,7 @@ See https://istio.io/docs/setup/kubernetes/additional-setup/sidecar-injection/#m
 </tr>
 <tr id="TracerLightStepConfig-secure">
 <td><code>secure</code></td>
-<td><code>bool</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
 <td>
 <p>Enables lightstep secure connection.</p>
 
@@ -3416,7 +3763,7 @@ See https://istio.io/docs/setup/kubernetes/additional-setup/sidecar-injection/#m
 <tbody>
 <tr id="TracingConfig-enabled">
 <td><code>enabled</code></td>
-<td><code>bool</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
 <td>
 <p>Enables tracing systems installation.</p>
 
@@ -3490,7 +3837,7 @@ See https://istio.io/docs/setup/kubernetes/additional-setup/sidecar-injection/#m
 <tbody>
 <tr id="TracingIngressConfig-enabled">
 <td><code>enabled</code></td>
-<td><code>bool</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
 <td>
 <p>Enables k8s ingress for addon tracing components.</p>
 
@@ -3610,7 +3957,7 @@ See https://istio.io/docs/setup/kubernetes/additional-setup/sidecar-injection/#m
 </tr>
 <tr id="TracingZipkinConfig-resources">
 <td><code>resources</code></td>
-<td><code><a href="#k8s-io-api-core-v1-ResourceRequirements">k8s.io.api.core.v1.ResourceRequirements</a></code></td>
+<td><code><a href="#Resources">Resources</a></code></td>
 <td>
 <p>K8s resources settings.</p>
 
@@ -3670,6 +4017,11 @@ See https://istio.io/docs/setup/kubernetes/additional-setup/sidecar-injection/#m
 </tr>
 </tbody>
 </table>
+</section>
+<h2 id="TypeIntOrStringForPB">TypeIntOrStringForPB</h2>
+<section>
+<p>GOTYPE: *IntOrStringForPB</p>
+
 </section>
 <h2 id="TypeMapStringInterface">TypeMapStringInterface</h2>
 <section>
@@ -3776,6 +4128,24 @@ See https://istio.io/docs/setup/kubernetes/additional-setup/sidecar-injection/#m
 <td>
 </td>
 </tr>
+<tr id="Values-kiali">
+<td><code>kiali</code></td>
+<td><code><a href="#KialiConfig">KialiConfig</a></code></td>
+<td>
+</td>
+</tr>
+<tr id="Values-version">
+<td><code>version</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+</tr>
+<tr id="Values-clusterResources">
+<td><code>clusterResources</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
+<td>
+</td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -3794,7 +4164,7 @@ See https://istio.io/docs/setup/kubernetes/additional-setup/sidecar-injection/#m
 <tbody>
 <tr id="ZeroVPNConfig-enabled">
 <td><code>enabled</code></td>
-<td><code>bool</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
 <td>
 <p>Controls whether ZeroVPN is enabled.</p>
 
@@ -3804,44 +4174,6 @@ See https://istio.io/docs/setup/kubernetes/additional-setup/sidecar-injection/#m
 <td><code>suffix</code></td>
 <td><code>string</code></td>
 <td>
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="k8s-io-api-core-v1-ResourceRequirements">k8s.io.api.core.v1.ResourceRequirements</h2>
-<section>
-<p>ResourceRequirements describes the compute resource requirements.</p>
-
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr id="k8s-io-api-core-v1-ResourceRequirements-limits">
-<td><code>limits</code></td>
-<td><code>map&lt;string,&nbsp;<a href="#k8s-io-apimachinery-pkg-api-resource-Quantity">k8s.io.apimachinery.pkg.api.resource.Quantity</a>&gt;</code></td>
-<td>
-<p>Limits describes the maximum amount of compute resources allowed.
-More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-+optional</p>
-
-</td>
-</tr>
-<tr id="k8s-io-api-core-v1-ResourceRequirements-requests">
-<td><code>requests</code></td>
-<td><code>map&lt;string,&nbsp;<a href="#k8s-io-apimachinery-pkg-api-resource-Quantity">k8s.io.apimachinery.pkg.api.resource.Quantity</a>&gt;</code></td>
-<td>
-<p>Requests describes the minimum amount of compute resources required.
-If Requests is omitted for a container, it defaults to Limits if that is explicitly specified,
-otherwise to an implementation-defined value.
-More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-+optional</p>
-
 </td>
 </tr>
 </tbody>

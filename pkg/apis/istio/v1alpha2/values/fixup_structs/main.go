@@ -111,11 +111,31 @@ func main() {
 		}
 	}
 
+	if strings.Contains(filePath, "values_types") {
+		out = patchValues(out)
+	}
 	if err := ioutil.WriteFile(filePath, []byte(strings.Join(out, "\n")), 0644); err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}
+}
 
+// patchValues is helper function to patch specific fields of the generated values_types.pb.go
+func patchValues(lines []string) (output[] string){
+	for _, line := range lines {
+		// patching naming issues
+		if strings.Contains(line, "istioEgressgateway") {
+			line = strings.ReplaceAll(line, "istioEgressgateway", "istio-egressgateway")
+		}
+		if strings.Contains(line, "istioIngressgateway") {
+			line = strings.ReplaceAll(line, "istioIngressgateway", "istio-ingressgateway")
+		}
+		if strings.Contains(line, "ProxyInit *ProxyInitConfig") {
+			line = strings.ReplaceAll(line, "proxyInit", "proxy_init")
+		}
+		output = append(output, line)
+	}
+	return output
 }
 
 // getFileLines reads the text file at filePath and returns it as a slice of strings.

@@ -2126,8 +2126,25 @@ env:
 <section>
 <p>OutboundTrafficPolicyConfig controls the default behavior of the sidecar for handling outbound traffic from the application.</p>
 
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="OutboundTrafficPolicyConfig-mode">
+<td><code>mode</code></td>
+<td><code><a href="#OutboundTrafficPolicyConfig-Mode">OutboundTrafficPolicyConfig.Mode</a></code></td>
+<td>
+</td>
+</tr>
+</tbody>
+</table>
 </section>
-<h2 id="OutboundTrafficPolicyConfig-mode">OutboundTrafficPolicyConfig.mode</h2>
+<h2 id="OutboundTrafficPolicyConfig-Mode">OutboundTrafficPolicyConfig.Mode</h2>
 <section>
 <p>Specifies the sidecar&rsquo;s default behavior when handling outbound traffic from the application.</p>
 
@@ -2139,14 +2156,14 @@ env:
 </tr>
 </thead>
 <tbody>
-<tr id="OutboundTrafficPolicyConfig-mode-ALLOW_ANY">
+<tr id="OutboundTrafficPolicyConfig-Mode-ALLOW_ANY">
 <td><code>ALLOW_ANY</code></td>
 <td>
 <p>Outbound traffic to unknown destinations will be allowed, in case there are no services or ServiceEntries for the destination port</p>
 
 </td>
 </tr>
-<tr id="OutboundTrafficPolicyConfig-mode-REGISTRY_ONLY">
+<tr id="OutboundTrafficPolicyConfig-Mode-REGISTRY_ONLY">
 <td><code>REGISTRY_ONLY</code></td>
 <td>
 <p>Restrict outbound traffic to services defined in the service registry as well as those defined through ServiceEntries</p>

@@ -339,7 +339,7 @@ spec:
       trustDomain: ""
 #      TODO
 #      outboundTrafficPolicy:
-#        mode: ALLOW_ANY
+#        mode: 0
       sds:
         enabled: false
         udsPath: ""

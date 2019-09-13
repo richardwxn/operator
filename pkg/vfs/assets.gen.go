@@ -215,7 +215,10 @@
 // ../../data/profiles/demo.yaml
 // ../../data/profiles/minimal.yaml
 // ../../data/profiles/sds.yaml
+<<<<<<< HEAD
 // ../../data/translateConfig/translateConfig-1.3.yaml
+=======
+>>>>>>> Try to fix enum issue
 // DO NOT EDIT!
 
 package vfs
@@ -31926,75 +31929,6 @@ spec:
         gatewayName: ingressgateway
         enableHttps: false
       proxy:
-<<<<<<< HEAD
-#        image: proxyv2
-#        clusterDomain: "cluster.local"
-#        resources:
-#          requests:
-#            cpu: 100m
-#            memory: 128Mi
-#          limits:
-#            cpu: 2000m
-#            memory: 1024Mi
-#        concurrency: 2
-#        accessLogFile: ""
-#        accessLogFormat: ""
-##        accessLogEncoding: TEXT
-#        envoyAccessLogService:
-#          enabled: false
-#          host: # example: accesslog-service.istio-system
-#          port: # example: 15000
-#        logLevel: warning
-#        componentLogLevel: "misc:error"
-#        dnsRefreshRate: 300s
-#        protocolDetectionTimeout: 1s
-#        privileged: false
-#        enableCoreDump: false
-#        statusPort: 15020
-#        readinessInitialDelaySeconds: 1
-#        readinessPeriodSeconds: 2
-#        readinessFailureThreshold: 30
-#        includeIPRanges: "*"
-#        excludeIPRanges: ""
-#        excludeOutboundPorts: ""
-#        kubevirtInterfaces: ""
-#        includeInboundPorts: "*"
-#        excludeInboundPorts: ""
-#        autoInject: enabled
-#        envoyStatsd:
-#          enabled: false
-#          host: # example: statsd-svc.istio-system
-#          port: # example: 9125
-#        envoyMetricsService:
-#          enabled: false
-#          host: # example: metrics-service.istio-system
-#          port: # example: 15000
-##        tracer: "zipkin"
-#      proxy_init:
-#        image: proxy_init
-#        resources:
-#          limits:
-#            cpu: 100m
-#            memory: 50Mi
-#          requests:
-#            cpu: 10m
-#            memory: 10Mi
-#      imagePullPolicy: Always
-#      controlPlaneSecurityEnabled: true
-#      disablePolicyChecks: true
-#      policyCheckFailOpen: false
-#      enableTracing: true
-#      tracer:
-#        lightstep:
-#          address: ""                # example: lightstep-satellite:443
-#          accessToken: ""            # example: abcdefg1234567
-#          secure: true               # example: true|false
-#          cacertPath: ""             # example: /etc/lightstep/cacert.pem
-#        zipkin:
-#          address: ""
-#        datadog:
-#          address: "$(HOST_IP):8126"
-=======
         image: proxyv2
         clusterDomain: "cluster.local"
         resources:
@@ -32063,7 +31997,6 @@ spec:
           address: ""
         datadog:
           address: "$(HOST_IP):8126"
->>>>>>> Address comments
       mtls:
         enabled: false
       imagePullSecrets: []
@@ -32087,8 +32020,9 @@ spec:
       priorityClassName: ""
       useMCP: true
       trustDomain: ""
-#      outboundTrafficPolicy:
-#        mode: ALLOW_ANY
+#      TODO
+      outboundTrafficPolicy:
+        mode: 0
       sds:
         enabled: false
         udsPath: ""
@@ -32125,7 +32059,8 @@ spec:
       configMap: true
       ingress:
         ingressService: istio-ingressgateway
-        ingressControllerMode: "OFF"
+#        TODO
+#        ingressControllerMode: "OFF"
         ingressClass: istio
       telemetry:
         enabled: true
@@ -32160,7 +32095,8 @@ spec:
         autoscaleEnabled: true
         sessionAffinityEnabled: false
         loadshedding:
-#          mode: enforce
+#        TODO
+#         mode: enforce
           latencyThreshold: 100ms
         reportBatchMaxEntries: 100
         reportBatchMaxTime: 1s
@@ -32175,12 +32111,7 @@ spec:
         adapters:
           kubernetesenv:
             enabled: true
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-=======
 #
->>>>>>> Address comments
     galley:
 
     security:
@@ -32205,19 +32136,6 @@ spec:
         zvpn:
           suffix: global
           enabled: true
-<<<<<<< HEAD
-<<<<<<< HEAD
-        drainDuration: 45s
-        connectTimeout: 10s
-=======
-<<<<<<< HEAD
-        drainDuration: 45s
-        connectTimeout: 10s
-=======
->>>>>>> Fix more fields
->>>>>>> Fix more fields
-=======
->>>>>>> Fix some more fields, adds todo
         env:
           ISTIO_META_ROUTER_MODE: "sni-dnat"
         ports:
@@ -32236,8 +32154,6 @@ spec:
             secretName: istio-egressgateway-ca-certs
             mountPath: /etc/istio/egressgateway-ca-certs
 
-<<<<<<< HEAD
-<<<<<<< HEAD
       istio-ingressgateway:
         autoscaleEnabled: true
         applicationPorts: ""
@@ -32246,7 +32162,6 @@ spec:
         zvpn:
           enabled: true
           suffix: global
-        telemetry_domain_name: ""
         env:
           ISTIO_META_ROUTER_MODE: "sni-dnat"
         ports:
@@ -32290,31 +32205,6 @@ spec:
           - name: ingressgateway-ca-certs
             secretName: istio-ingressgateway-ca-certs
             mountPath: /etc/istio/ingressgateway-ca-certs
-        telemetry_addon_gateways:
-          tracing_gateway:
-            name: tracing
-            port: 15032
-            desPort: 80
-            enabled: false
-            tls: false
-          kiali_gateway:
-            name: kiali
-            port: 15029
-            desPort: 20001
-            enabled: false
-            tls: false
-          grafana_gateway:
-            name: grafana
-            port: 15031
-            desPort: 3000
-            enabled: false
-            tls: false
-          prometheus_gateway:
-            name: prometheus
-            port: 15030
-            desPort: 9090
-            enabled: false
-            tls: false
 
     sidecarInjectorWebhook:
       image: sidecar_injector
@@ -32403,7 +32293,7 @@ spec:
       podAntiAffinityTermLabelSelector: []
       jaeger:
         hub: docker.io/jaegertracing
-        tag: 1.12
+        tag: "1.12"
         memory:
           max_traces: 50000
         spanStorageType: badger
@@ -32431,14 +32321,11 @@ spec:
         tag: 0.1.9
         resources:
           limits:
-            cpu: 1
+            cpu: 1Gi
             memory: 2Gi
           requests:
             cpu: 200m
             memory: 400Mi
-        exporters:
-          stackdriver:
-            enable_tracing: true
       service:
         annotations: {}
         name: http
@@ -32452,32 +32339,6 @@ spec:
 
     kiali:
       enabled: false
-      replicaCount: 1
-      hub: docker.io/kiali
-      tag: v1.1.0
-      contextPath: /kiali
-      nodeSelector: {}
-      podAntiAffinityLabelSelector: []
-      podAntiAffinityTermLabelSelector: []
-      ingress:
-        enabled: false
-        hosts:
-          - kiali.local
-        annotations:
-        tls:
-      dashboard:
-        secretName: kiali
-        usernameKey: username
-        passphraseKey: passphrase
-        viewOnlyMode: false
-        grafanaURL:
-        jaegerURL:
-      prometheusNamespace:
-      createDemoSecret: true
-      security:
-        enabled: true
-        cert_file: /kiali-cert/cert-chain.pem
-        private_key_file: /kiali-cert/key.pem
 
     # TODO: derive from operator API
     version: ""
@@ -32499,6 +32360,7 @@ func profilesDefaultYaml() (*asset, error) {
 	return a, nil
 }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 var _profilesDefaultYamlOrig = []byte(`apiVersion: install.istio.io/v1alpha2
@@ -33480,6 +33342,8 @@ func profilesDefaultYamlOrig() (*asset, error) {
 }
 
 >>>>>>> Fix more fields
+=======
+>>>>>>> Try to fix enum issue
 var _profilesDemoAuthYaml = []byte(`apiVersion: install.istio.io/v1alpha2
 kind: IstioControlPlane
 spec:
@@ -33831,6 +33695,7 @@ func profilesSdsYaml() (*asset, error) {
 	return a, nil
 }
 
+<<<<<<< HEAD
 var _translateconfigTranslateconfig13Yaml = []byte(`apiMapping:
   Hub:
     outPath: "global.hub"
@@ -34051,6 +33916,8 @@ func translateconfigTranslateconfig13Yaml() (*asset, error) {
 	return a, nil
 }
 
+=======
+>>>>>>> Try to fix enum issue
 // Asset loads and returns the asset for the given name.
 // It returns an error if the asset could not be found or
 // could not be loaded.
@@ -34318,7 +34185,10 @@ var _bindata = map[string]func() (*asset, error){
 	"profiles/demo.yaml": profilesDemoYaml,
 	"profiles/minimal.yaml": profilesMinimalYaml,
 	"profiles/sds.yaml": profilesSdsYaml,
+<<<<<<< HEAD
 	"translateConfig/translateConfig-1.3.yaml": translateconfigTranslateconfig13Yaml,
+=======
+>>>>>>> Try to fix enum issue
 }
 
 // AssetDir returns the file names below a certain
@@ -34669,9 +34539,12 @@ var _bintree = &bintree{nil, map[string]*bintree{
 		"demo.yaml": &bintree{profilesDemoYaml, map[string]*bintree{}},
 		"minimal.yaml": &bintree{profilesMinimalYaml, map[string]*bintree{}},
 		"sds.yaml": &bintree{profilesSdsYaml, map[string]*bintree{}},
+<<<<<<< HEAD
 	}},
 	"translateConfig": &bintree{nil, map[string]*bintree{
 		"translateConfig-1.3.yaml": &bintree{translateconfigTranslateconfig13Yaml, map[string]*bintree{}},
+=======
+>>>>>>> Try to fix enum issue
 	}},
 }}
 

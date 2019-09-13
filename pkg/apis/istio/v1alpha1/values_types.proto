@@ -802,12 +802,13 @@ message NodeAgentConfig {
 // OutboundTrafficPolicyConfig controls the default behavior of the sidecar for handling outbound traffic from the application.
 message OutboundTrafficPolicyConfig {
   // Specifies the sidecar's default behavior when handling outbound traffic from the application.
-  enum mode {
+  enum Mode {
     // Outbound traffic to unknown destinations will be allowed, in case there are no services or ServiceEntries for the destination port
     ALLOW_ANY = 0;
     // Restrict outbound traffic to services defined in the service registry as well as those defined through ServiceEntries
     REGISTRY_ONLY = 1;
   }
+  Mode mode = 2;
 }
 
 // Configuration for Pilot.

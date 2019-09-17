@@ -353,7 +353,7 @@ message GlobalConfig {
   //     to: eu-west
   //   - from: us-west
   //     to: us-east
-  TypeSliceOfMapStringInterface localityLbSetting = 15;
+  TypeMapStringInterface localityLbSetting = 15;
   // 	LocalityLbSetting map[string]interface{}    `json:"localityLbSetting"`
 
   // Specifies the Configuration for the legacy kubernetes Ingress.
@@ -597,17 +597,19 @@ message KubernetesIngressConfig {
 // Configuration for when mixer starts rejecting grpc requests.
 message LoadSheddingConfig {
   string latencyThreshold = 1;
-
-  // Throttling behavior for mixer.
-  enum mode {
-    // Removes throttling behavior for mixer.
-    DISABLED = 0;
-    // Enables an advisory mode for throttling behavior for mixer.
-    LOG_ONLY = 1;
-    // Turn on throttling behavior for mixer.
-    ENFORCE = 2;
-  }
+  mode mode = 2;
 }
+
+// Throttling behavior for mixer.
+enum mode {
+  // Removes throttling behavior for mixer.
+  disabled = 0;
+  // Enables an advisory mode for throttling behavior for mixer.
+  log_only = 1;
+  // Turn on throttling behavior for mixer.
+  enforce = 2;
+}
+
 
 // MTLS settings for the applications that Istio manages.
 message MTLSConfig {
@@ -935,17 +937,19 @@ message PilotIngressConfig {
   // Allowed values: node-port, istio-ingressgateway, ingress
   string ingressService = 1;
 
-  // Mode for the ingress controller.
-  enum ingressControllerMode {
-    // Selects all Ingress resources, with or without Istio annotation.
-    DEFAULT = 0;
-    // Selects only resources with istio annotation.
-    STRICT = 1;
-    // No ingress or sync.
-    OFF = 2;
-  }
+  ingressControllerMode ingressControllerMode = 2;
   // If mode is STRICT, this value must be set on "kubernetes.io/ingress.class" annotation to activate.
   string ingressClass = 3;
+}
+
+// Mode for the ingress controller.
+enum ingressControllerMode {
+  // Selects all Ingress resources, with or without Istio annotation.
+  DEFAULT = 0;
+  // Selects only resources with istio annotation.
+  STRICT = 1;
+  // No ingress or sync.
+  OFF = 2;
 }
 
 // Controls whether Istio policy is applied to Pilot.
@@ -1040,6 +1044,12 @@ message PrometheusServiceNodePortConfig {
   uint32 port = 2;
 }
 
+// Configures the access log for sidecar to JSON or TEXT
+enum accessLogEncoding {
+  JSON = 0;
+  TEXT = 1;
+}
+
 // Configuration for Proxy.
 message ProxyConfig {
   google.protobuf.BoolValue enabled = 35;
@@ -1050,17 +1060,9 @@ message ProxyConfig {
   // Configures how and what fields are displayed in sidecar access log.
   string accessLogFormat = 2;
 
-  // Configures the access log for sidecar to JSON or TEXT
-  enum accessLogEncoding {
-    JSON = 0;
-    TEXT = 1;
-  }
+  accessLogEncoding accessLogEncoding = 3;
 
-  // Controls whether automatic sidecar injection is enabled.
-  enum autoInject {
-    ENABLED = 0;
-    DISABLED = 1;
-  }
+  string autoInject = 4;
 
   // Domain for the cluster, default: "cluster.local".
   //
@@ -1148,12 +1150,7 @@ message ProxyConfig {
   // See https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container
   Resources resources = 24;
 
-  // Specifies which tracer to use.
-  enum tracer {
-    ZIPKIN = 0;
-    LIGHTSTEP = 1;
-    DATADOG = 2;
-  }
+  tracer tracer = 25;
 
   string protocolDetectionTimeout = 26;
 
@@ -1168,6 +1165,13 @@ message ProxyConfig {
   repeated string podDnsSearchNamespaces = 31;
 
   google.protobuf.Duration parentShutdownDuration = 32;
+}
+
+// Specifies which tracer to use.
+enum tracer {
+  zipkin = 0;
+  lightstep = 1;
+  datadog = 2;
 }
 
 message EnvoyAccessLogConfig {
@@ -1475,7 +1479,7 @@ message TracingJaegerConfig {
   string hub = 1;
 
   // Image tag for Jaeger tracing deployment.
-  TypeIntOrStringForPB tag = 2;
+  string tag = 2;
 
   // Configures Jaeger in-memory storage setting.
   TracingJaegerMemoryConfig memory = 3;

@@ -37,7 +37,7 @@ func CheckValues(root map[string]interface{}) util.Errors {
 		return util.Errors{err}
 	}
 	val := &v1alpha1.Values{}
-	if err := util.UnmarshalWithJSONPB(string(vs), val); err != nil {
+	if err := util.UnmarshalValuesWithJSONPB(string(vs), val); err != nil {
 		return util.Errors{err}
 	}
 	return validateValues(defaultValuesValidations, root, nil)

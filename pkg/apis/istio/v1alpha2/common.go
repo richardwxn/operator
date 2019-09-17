@@ -1,4 +1,4 @@
-// Copyright 2017 Istio Authors
+// Copyright 2019 Istio Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,34 +17,9 @@ package v1alpha2
 // TODO: create remaining enum types.
 
 import (
-	"bufio"
-	"fmt"
 	"github.com/gogo/protobuf/jsonpb"
 	"k8s.io/apimachinery/pkg/util/intstr"
-	"os"
 )
-
-// GetFileLines reads the text file at filePath and returns it as a slice of strings.
-func GetFileLines(filePath string) ([]string, error) {
-	file, err := os.Open(filePath)
-	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
-	}
-	defer file.Close()
-
-	var out []string
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
-		out = append(out, scanner.Text())
-	}
-
-	if err := scanner.Err(); err != nil {
-		return nil, err
-	}
-
-	return out, nil
-}
 
 // define new type from k8s intstr to marshal/unmarshal jsonpb
 type IntOrStringForPB struct {

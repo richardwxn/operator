@@ -31918,7 +31918,7 @@ spec:
               maxSurge: "100%"
               maxUnavailable: "25%"
 
-  # Global values passed through to helm global.yaml.
+#  # Global values passed through to helm global.yaml.
   values:
     global:
       logging:
@@ -31941,7 +31941,7 @@ spec:
         concurrency: 2
         accessLogFile: ""
         accessLogFormat: ""
-#        accessLogEncoding: TEXT
+        accessLogEncoding: TEXT
         envoyAccessLogService:
           enabled: false
           host: # example: accesslog-service.istio-system
@@ -31962,8 +31962,7 @@ spec:
         kubevirtInterfaces: ""
         includeInboundPorts: "*"
         excludeInboundPorts: ""
-#        TODO
-#        autoInject: enabled
+        autoInject: enabled
         envoyStatsd:
           enabled: false
           host: # example: statsd-svc.istio-system
@@ -31972,7 +31971,7 @@ spec:
           enabled: false
           host: # example: metrics-service.istio-system
           port: # example: 15000
-#        tracer: "zipkin"
+        tracer: "zipkin"
       proxy_init:
         image: proxy_init
         resources:
@@ -32020,21 +32019,20 @@ spec:
       priorityClassName: ""
       useMCP: true
       trustDomain: ""
-#      TODO
       outboundTrafficPolicy:
-        mode: 0
+        mode: ALLOW_ANY
       sds:
         enabled: false
         udsPath: ""
       meshNetworks: {}
       localityLbSetting:
-        - distribute:
-            from: "us-central1/*"
-            to:
-              "us-central1/*": 80
-              "us-central2/*": 20
+        enabled: false
+#        - distribute:
+#            from: "us-central1/*"
+#            to:
+#              "us-central1/*": 80
+#              "us-central2/*": 20
       enableHelmTest: false
-
     pilot:
       autoscaleEnabled: true
       autoscaleMin: 1
@@ -32059,15 +32057,14 @@ spec:
       configMap: true
       ingress:
         ingressService: istio-ingressgateway
-#        TODO
-#        ingressControllerMode: "OFF"
+        ingressControllerMode: "OFF"
         ingressClass: istio
       telemetry:
         enabled: true
       policy:
         enabled: false
       useMCP: true
-
+#
     mixer:
       adapters:
         stdio:
@@ -32095,8 +32092,7 @@ spec:
         autoscaleEnabled: true
         sessionAffinityEnabled: false
         loadshedding:
-#        TODO
-#         mode: enforce
+          mode: enforce
           latencyThreshold: 100ms
         reportBatchMaxEntries: 100
         reportBatchMaxTime: 1s
@@ -32129,7 +32125,7 @@ spec:
 
     nodeagent:
       image: node-agent-k8s
-
+#
     gateways:
       istio-egressgateway:
         autoscaleEnabled: true
@@ -32248,7 +32244,6 @@ spec:
         secretName: grafana
         usernameKey: username
         passphraseKey: passphrase
-
       contextPath: /grafana
       service:
         annotations: {}
@@ -32284,7 +32279,7 @@ spec:
       podAntiAffinityTermLabelSelector: []
       env: {}
       envSecrets: {}
-
+#
     tracing:
       enabled: false
       provider: jaeger

@@ -2,7 +2,7 @@
 title: v1alpha1
 layout: protoc-gen-docs
 generator: protoc-gen-docs
-number_of_entries: 78
+number_of_entries: 77
 ---
 <h2 id="AddonIngressConfig">AddonIngressConfig</h2>
 <section>
@@ -861,7 +861,7 @@ Defaults to Always if :latest tag is specified, or IfNotPresent otherwise. Canno
 </tr>
 <tr id="GlobalConfig-localityLbSetting">
 <td><code>localityLbSetting</code></td>
-<td><code><a href="#TypeSliceOfMapStringInterface">TypeSliceOfMapStringInterface</a></code></td>
+<td><code><a href="#TypeMapStringInterface">TypeMapStringInterface</a></code></td>
 <td>
 <p>Specifies the global locality load balancing settings.
 Locality-weighted load balancing allows administrators to control the distribution of traffic to
@@ -1565,40 +1565,10 @@ This server runs in the same pod as ingress gateway.</p>
 <td>
 </td>
 </tr>
-</tbody>
-</table>
-</section>
-<h2 id="LoadSheddingConfig-mode">LoadSheddingConfig.mode</h2>
-<section>
-<p>Throttling behavior for mixer.</p>
-
-<table class="enum-values">
-<thead>
-<tr>
-<th>Name</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr id="LoadSheddingConfig-mode-DISABLED">
-<td><code>DISABLED</code></td>
+<tr id="LoadSheddingConfig-mode">
+<td><code>mode</code></td>
+<td><code><a href="#mode">mode</a></code></td>
 <td>
-<p>Removes throttling behavior for mixer.</p>
-
-</td>
-</tr>
-<tr id="LoadSheddingConfig-mode-LOG_ONLY">
-<td><code>LOG_ONLY</code></td>
-<td>
-<p>Enables an advisory mode for throttling behavior for mixer.</p>
-
-</td>
-</tr>
-<tr id="LoadSheddingConfig-mode-ENFORCE">
-<td><code>ENFORCE</code></td>
-<td>
-<p>Turn on throttling behavior for mixer.</p>
-
 </td>
 </tr>
 </tbody>
@@ -2459,47 +2429,17 @@ env:
 
 </td>
 </tr>
+<tr id="PilotIngressConfig-ingressControllerMode">
+<td><code>ingressControllerMode</code></td>
+<td><code><a href="#ingressControllerMode">ingressControllerMode</a></code></td>
+<td>
+</td>
+</tr>
 <tr id="PilotIngressConfig-ingressClass">
 <td><code>ingressClass</code></td>
 <td><code>string</code></td>
 <td>
 <p>If mode is STRICT, this value must be set on &ldquo;kubernetes.io/ingress.class&rdquo; annotation to activate.</p>
-
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="PilotIngressConfig-ingressControllerMode">PilotIngressConfig.ingressControllerMode</h2>
-<section>
-<p>Mode for the ingress controller.</p>
-
-<table class="enum-values">
-<thead>
-<tr>
-<th>Name</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr id="PilotIngressConfig-ingressControllerMode-DEFAULT">
-<td><code>DEFAULT</code></td>
-<td>
-<p>Selects all Ingress resources, with or without Istio annotation.</p>
-
-</td>
-</tr>
-<tr id="PilotIngressConfig-ingressControllerMode-STRICT">
-<td><code>STRICT</code></td>
-<td>
-<p>Selects only resources with istio annotation.</p>
-
-</td>
-</tr>
-<tr id="PilotIngressConfig-ingressControllerMode-OFF">
-<td><code>OFF</code></td>
-<td>
-<p>No ingress or sync.</p>
 
 </td>
 </tr>
@@ -2861,6 +2801,18 @@ env:
 
 </td>
 </tr>
+<tr id="ProxyConfig-accessLogEncoding">
+<td><code>accessLogEncoding</code></td>
+<td><code><a href="#accessLogEncoding">accessLogEncoding</a></code></td>
+<td>
+</td>
+</tr>
+<tr id="ProxyConfig-autoInject">
+<td><code>autoInject</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+</tr>
 <tr id="ProxyConfig-clusterDomain">
 <td><code>clusterDomain</code></td>
 <td><code>string</code></td>
@@ -3047,6 +2999,12 @@ This would only capture egress traffic on those two IP Ranges, all other outboun
 
 </td>
 </tr>
+<tr id="ProxyConfig-tracer">
+<td><code>tracer</code></td>
+<td><code><a href="#tracer">tracer</a></code></td>
+<td>
+</td>
+</tr>
 <tr id="ProxyConfig-protocolDetectionTimeout">
 <td><code>protocolDetectionTimeout</code></td>
 <td><code>string</code></td>
@@ -3086,86 +3044,6 @@ This would only capture egress traffic on those two IP Ranges, all other outboun
 <tr id="ProxyConfig-parentShutdownDuration">
 <td><code>parentShutdownDuration</code></td>
 <td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">google.protobuf.Duration</a></code></td>
-<td>
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="ProxyConfig-accessLogEncoding">ProxyConfig.accessLogEncoding</h2>
-<section>
-<p>Configures the access log for sidecar to JSON or TEXT</p>
-
-<table class="enum-values">
-<thead>
-<tr>
-<th>Name</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr id="ProxyConfig-accessLogEncoding-JSON">
-<td><code>JSON</code></td>
-<td>
-</td>
-</tr>
-<tr id="ProxyConfig-accessLogEncoding-TEXT">
-<td><code>TEXT</code></td>
-<td>
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="ProxyConfig-autoInject">ProxyConfig.autoInject</h2>
-<section>
-<p>Controls whether automatic sidecar injection is enabled.</p>
-
-<table class="enum-values">
-<thead>
-<tr>
-<th>Name</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr id="ProxyConfig-autoInject-ENABLED">
-<td><code>ENABLED</code></td>
-<td>
-</td>
-</tr>
-<tr id="ProxyConfig-autoInject-DISABLED">
-<td><code>DISABLED</code></td>
-<td>
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="ProxyConfig-tracer">ProxyConfig.tracer</h2>
-<section>
-<p>Specifies which tracer to use.</p>
-
-<table class="enum-values">
-<thead>
-<tr>
-<th>Name</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr id="ProxyConfig-tracer-ZIPKIN">
-<td><code>ZIPKIN</code></td>
-<td>
-</td>
-</tr>
-<tr id="ProxyConfig-tracer-LIGHTSTEP">
-<td><code>LIGHTSTEP</code></td>
-<td>
-</td>
-</tr>
-<tr id="ProxyConfig-tracer-DATADOG">
-<td><code>DATADOG</code></td>
 <td>
 </td>
 </tr>
@@ -4063,7 +3941,7 @@ See https://istio.io/docs/setup/kubernetes/additional-setup/sidecar-injection/#m
 </tr>
 <tr id="TracingJaegerConfig-tag">
 <td><code>tag</code></td>
-<td><code><a href="#TypeIntOrStringForPB">TypeIntOrStringForPB</a></code></td>
+<td><code>string</code></td>
 <td>
 <p>Image tag for Jaeger tracing deployment.</p>
 
@@ -4431,6 +4309,133 @@ See https://istio.io/docs/setup/kubernetes/additional-setup/sidecar-injection/#m
 <tr id="ZeroVPNConfig-suffix">
 <td><code>suffix</code></td>
 <td><code>string</code></td>
+<td>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="accessLogEncoding">accessLogEncoding</h2>
+<section>
+<p>Configures the access log for sidecar to JSON or TEXT</p>
+
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="accessLogEncoding-JSON">
+<td><code>JSON</code></td>
+<td>
+</td>
+</tr>
+<tr id="accessLogEncoding-TEXT">
+<td><code>TEXT</code></td>
+<td>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="ingressControllerMode">ingressControllerMode</h2>
+<section>
+<p>Mode for the ingress controller.</p>
+
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="ingressControllerMode-DEFAULT">
+<td><code>DEFAULT</code></td>
+<td>
+<p>Selects all Ingress resources, with or without Istio annotation.</p>
+
+</td>
+</tr>
+<tr id="ingressControllerMode-STRICT">
+<td><code>STRICT</code></td>
+<td>
+<p>Selects only resources with istio annotation.</p>
+
+</td>
+</tr>
+<tr id="ingressControllerMode-OFF">
+<td><code>OFF</code></td>
+<td>
+<p>No ingress or sync.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="mode">mode</h2>
+<section>
+<p>Throttling behavior for mixer.</p>
+
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="mode-disabled">
+<td><code>disabled</code></td>
+<td>
+<p>Removes throttling behavior for mixer.</p>
+
+</td>
+</tr>
+<tr id="mode-log_only">
+<td><code>log_only</code></td>
+<td>
+<p>Enables an advisory mode for throttling behavior for mixer.</p>
+
+</td>
+</tr>
+<tr id="mode-enforce">
+<td><code>enforce</code></td>
+<td>
+<p>Turn on throttling behavior for mixer.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="tracer">tracer</h2>
+<section>
+<p>Specifies which tracer to use.</p>
+
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="tracer-zipkin">
+<td><code>zipkin</code></td>
+<td>
+</td>
+</tr>
+<tr id="tracer-lightstep">
+<td><code>lightstep</code></td>
+<td>
+</td>
+</tr>
+<tr id="tracer-datadog">
+<td><code>datadog</code></td>
 <td>
 </td>
 </tr>

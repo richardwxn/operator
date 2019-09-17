@@ -15,9 +15,7 @@
 package values
 
 import (
-	"github.com/gogo/protobuf/jsonpb"
 	"io/ioutil"
-	"istio.io/operator/pkg/apis/istio/v1alpha1"
 	"os"
 	"path/filepath"
 	"strings"
@@ -28,6 +26,7 @@ import (
 	"github.com/ghodss/yaml"
 	"github.com/kylelemons/godebug/diff"
 
+	"istio.io/operator/pkg/apis/istio/v1alpha1"
 	"istio.io/operator/pkg/util"
 )
 
@@ -47,13 +46,11 @@ func TestUnmarshalRealValues(t *testing.T) {
 		}
 		t.Logf("Testing file %s", f)
 		v := &v1alpha1.Values{}
-		err = util.UnmarshalWithJSONPB(fs, v)
+		err = util.UnmarshalValuesWithJSONPB(fs, v)
 		if err != nil {
 			t.Fatalf("jsonpb unmarshal(%s): got error %s", f, err)
 		}
-
-		ms := jsonpb.Marshaler{}
-		s, err := ms.MarshalToString(v)
+		s, err := util.MarshalWithJSONPB(v)
 		if err != nil {
 			t.Fatalf("jsonpb marshal(%s): got error %s", f, err)
 		}

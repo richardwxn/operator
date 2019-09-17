@@ -25,8 +25,7 @@ global:
         cpu: 2000m
         memory: 128Mi
     concurrency: 2
-    #   TODO: fix enum unmarshall
-#    accessLogEncoding: TEXT
+    accessLogEncoding: TEXT
     logLevel: warning
     componentLogLevel: "misc:error"
     dnsRefreshRate: 5s
@@ -38,15 +37,13 @@ global:
     readinessFailureThreshold: 30
     includeIPRanges: "*"
     includeInboundPorts: "*"
-#    TODO: fix enum unmarshall
-#    autoInject: enabled
+    autoInject: enabled
     envoyStatsd:
       enabled: false
     envoyMetricsService:
       enabled: false
       host: metrics-service.istio-system
       port: 15000
-#   TODO: fix enum unmarshall
 #    tracer: "zipkin"
 
   proxy_init:
@@ -92,11 +89,8 @@ global:
   defaultPodDisruptionBudget:
     enabled: true
 
-
   useMCP: true
 
-
-#  TODO: fix enum unmarshall
 #  outboundTrafficPolicy:
 #    mode: ALLOW_ANY
 
@@ -120,10 +114,11 @@ global:
         port: 443
 
   localityLbSetting:
-  - distribute:
-      from: "us-central1/*"
-      to:
-        "us-central1/*": 80
-        "us-central2/*": 20
+    enabled: false
+#  - distribute:
+#      from: "us-central1/*"
+#      to:
+#        "us-central1/*": 80
+#        "us-central2/*": 20
 
   enableHelmTest: false

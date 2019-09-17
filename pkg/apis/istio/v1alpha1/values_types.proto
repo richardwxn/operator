@@ -1455,11 +1455,16 @@ message TracingOpencensusConfig {
   // Image tag for Opencensus tracing deployment.
   string tag = 2;
 
+  TracingOpencensusExportersConfig exporters  = 3;
   // K8s resources settings.
   //
   // See https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container
   TypeMapStringInterface resources = 5;
 
+}
+
+message TracingOpencensusExportersConfig {
+  TypeMapStringInterface stackdriver = 1;
 }
 // Controls legacy k8s ingress for addon tracing components.
 message TracingIngressConfig {
@@ -1536,6 +1541,37 @@ message TracingZipkinNodeConfig {
   uint32 cpus = 1;
 }
 
+message KialiSecurityConfig {
+  google.protobuf.BoolValue enabled = 1;
+
+  string cert_file = 2;
+
+  string private_key_file = 3;
+}
+
+message KialiDashboardConfig {
+  string secretName = 1;
+
+  string usernameKey = 2;
+
+  string passphraseKey = 3;
+
+  google.protobuf.BoolValue viewOnlyMode = 4;
+
+  string grafanaURL = 5;
+
+  string jaegerURL = 6;
+}
+
+message KialiIngressConfig {
+  google.protobuf.BoolValue enabled = 1;
+
+  string annotations = 2;
+
+  string tls = 3;
+
+  repeated string hosts = 4;
+}
 // Configuration for Kiali addon.
 message KialiConfig {
   google.protobuf.BoolValue enabled = 1;
@@ -1547,6 +1583,56 @@ message KialiConfig {
 
   // Image tag for kiali deployment.
   string tag = 4;
+
+  // Number of replicas for Kiali.
+  uint32 replicaCount = 5;
+
+  string prometheusNamespace = 6;
+
+  KialiSecurityConfig security = 7;
+
+  KialiDashboardConfig dashboard = 8;
+
+  KialiIngressConfig ingress = 9;
+
+  string contextPath = 15;
+
+  // K8s node selector.
+  //
+  // See https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector
+  TypeMapStringInterface nodeSelector = 10;
+
+  // K8s annotations for pods.
+  //
+  // See: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  TypeMapStringInterface podAnnotations = 11;
+
+  // Pod anti-affinity label selector.
+  //
+  // Specify the pod anti-affinity that allows you to constrain which nodes
+  // your pod is eligible to be scheduled based on labels on pods that are
+  // already running on the node rather than based on labels on nodes.
+  // There are currently two types of anti-affinity:
+  //    "requiredDuringSchedulingIgnoredDuringExecution"
+  //    "preferredDuringSchedulingIgnoredDuringExecution"
+  // which denote “hard” vs. “soft” requirements, you can define your values
+  // in "podAntiAffinityLabelSelector" and "podAntiAffinityTermLabelSelector"
+  // correspondingly.
+  // See https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  //
+  // Examples:
+  // podAntiAffinityLabelSelector:
+  //  - key: security
+  //    operator: In
+  //    values: S1,S2
+  //    topologyKey: "kubernetes.io/hostname"
+  //  This pod anti-affinity rule says that the pod requires not to be scheduled
+  //  onto a node if that node is already running a pod with label having key
+  //  “security” and value “S1”.
+  TypeSliceOfMapStringInterface podAntiAffinityLabelSelector = 12;
+
+  // See PodAntiAffinityLabelSelector.
+  TypeSliceOfMapStringInterface podAntiAffinityTermLabelSelector = 13;
 }
 
 message Values {

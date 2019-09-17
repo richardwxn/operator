@@ -16,6 +16,7 @@ package validate
 
 import (
 	"github.com/ghodss/yaml"
+
 	"istio.io/operator/pkg/apis/istio/v1alpha1"
 	"istio.io/operator/pkg/util"
 )

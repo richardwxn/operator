@@ -69,7 +69,7 @@ func ToYAMLWithJSONPB(val proto.Message) string {
 
 // MarshalWithJSONPB returns a YAML string representation of val (using jsonpb).
 func MarshalWithJSONPB(val proto.Message) (string, error) {
-	m := jsonpb2.Marshaler{}
+	m := jsonpb.Marshaler{}
 	js, err := m.MarshalToString(val)
 	if err != nil {
 		return "", err

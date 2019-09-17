@@ -121,7 +121,7 @@ func main() {
 }
 
 // patchValues is helper function to patch specific fields of the generated values_types.pb.go
-func patchValues(lines []string) (output[] string){
+func patchValues(lines []string) (output []string) {
 	for _, line := range lines {
 		// patching naming issues
 		if strings.Contains(line, "istioEgressgateway") {
@@ -130,8 +130,11 @@ func patchValues(lines []string) (output[] string){
 		if strings.Contains(line, "istioIngressgateway") {
 			line = strings.ReplaceAll(line, "istioIngressgateway", "istio-ingressgateway")
 		}
-		if strings.Contains(line, "ProxyInit *ProxyInitConfig") {
+		if strings.Contains(line, "name=proxy_init") {
 			line = strings.ReplaceAll(line, "proxyInit", "proxy_init")
+		}
+		if strings.Contains(line, "name=istio_cni") {
+			line = strings.ReplaceAll(line, "istioCni", "istio_cni")
 		}
 		output = append(output, line)
 	}

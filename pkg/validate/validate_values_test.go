@@ -16,7 +16,6 @@ package validate
 
 import (
 	"fmt"
-	"istio.io/operator/pkg/apis/istio/v1alpha2"
 	"testing"
 
 	"github.com/ghodss/yaml"
@@ -26,23 +25,6 @@ import (
 	"istio.io/operator/pkg/util"
 )
 
-func TestSb(t *testing.T) {
-	t.Run("hehe", func(t *testing.T) {
-
-		yamlStr := `
-status:
-  trafficManagement:
-    status: 1
-`
-		iscp := &v1alpha2.IstioControlPlane{}
-		err := util.UnmarshalWithJSONPB(yamlStr, iscp)
-		if err != nil {
-			fmt.Print(err)
-		}
-
-
-	})
-}
 func TestValidateValues(t *testing.T) {
 	tests := []struct {
 		desc     string

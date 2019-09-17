@@ -2,7 +2,7 @@
 title: v1alpha1
 layout: protoc-gen-docs
 generator: protoc-gen-docs
-number_of_entries: 77
+number_of_entries: 81
 ---
 <h2 id="AddonIngressConfig">AddonIngressConfig</h2>
 <section>
@@ -1475,6 +1475,221 @@ This server runs in the same pod as ingress gateway.</p>
 <td>
 <p>Image tag for kiali deployment.</p>
 
+</td>
+</tr>
+<tr id="KialiConfig-replicaCount">
+<td><code>replicaCount</code></td>
+<td><code>uint32</code></td>
+<td>
+<p>Number of replicas for Kiali.</p>
+
+</td>
+</tr>
+<tr id="KialiConfig-prometheusNamespace">
+<td><code>prometheusNamespace</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+</tr>
+<tr id="KialiConfig-security">
+<td><code>security</code></td>
+<td><code><a href="#KialiSecurityConfig">KialiSecurityConfig</a></code></td>
+<td>
+</td>
+</tr>
+<tr id="KialiConfig-dashboard">
+<td><code>dashboard</code></td>
+<td><code><a href="#KialiDashboardConfig">KialiDashboardConfig</a></code></td>
+<td>
+</td>
+</tr>
+<tr id="KialiConfig-ingress">
+<td><code>ingress</code></td>
+<td><code><a href="#KialiIngressConfig">KialiIngressConfig</a></code></td>
+<td>
+</td>
+</tr>
+<tr id="KialiConfig-contextPath">
+<td><code>contextPath</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+</tr>
+<tr id="KialiConfig-nodeSelector">
+<td><code>nodeSelector</code></td>
+<td><code><a href="#TypeMapStringInterface">TypeMapStringInterface</a></code></td>
+<td>
+<p>K8s node selector.</p>
+
+<p>See https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector</p>
+
+</td>
+</tr>
+<tr id="KialiConfig-podAnnotations">
+<td><code>podAnnotations</code></td>
+<td><code><a href="#TypeMapStringInterface">TypeMapStringInterface</a></code></td>
+<td>
+<p>K8s annotations for pods.</p>
+
+<p>See: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/</p>
+
+</td>
+</tr>
+<tr id="KialiConfig-podAntiAffinityLabelSelector">
+<td><code>podAntiAffinityLabelSelector</code></td>
+<td><code><a href="#TypeSliceOfMapStringInterface">TypeSliceOfMapStringInterface</a></code></td>
+<td>
+<p>Pod anti-affinity label selector.</p>
+
+<p>Specify the pod anti-affinity that allows you to constrain which nodes
+your pod is eligible to be scheduled based on labels on pods that are
+already running on the node rather than based on labels on nodes.
+There are currently two types of anti-affinity:
+   &ldquo;requiredDuringSchedulingIgnoredDuringExecution&rdquo;
+   &ldquo;preferredDuringSchedulingIgnoredDuringExecution&rdquo;
+which denote “hard” vs. “soft” requirements, you can define your values
+in &ldquo;podAntiAffinityLabelSelector&rdquo; and &ldquo;podAntiAffinityTermLabelSelector&rdquo;
+correspondingly.
+See https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity</p>
+
+<p>Examples:
+podAntiAffinityLabelSelector:
+ - key: security
+   operator: In
+   values: S1,S2
+   topologyKey: &ldquo;kubernetes.io/hostname&rdquo;
+ This pod anti-affinity rule says that the pod requires not to be scheduled
+ onto a node if that node is already running a pod with label having key
+ “security” and value “S1”.</p>
+
+</td>
+</tr>
+<tr id="KialiConfig-podAntiAffinityTermLabelSelector">
+<td><code>podAntiAffinityTermLabelSelector</code></td>
+<td><code><a href="#TypeSliceOfMapStringInterface">TypeSliceOfMapStringInterface</a></code></td>
+<td>
+<p>See PodAntiAffinityLabelSelector.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="KialiDashboardConfig">KialiDashboardConfig</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="KialiDashboardConfig-secretName">
+<td><code>secretName</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+</tr>
+<tr id="KialiDashboardConfig-usernameKey">
+<td><code>usernameKey</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+</tr>
+<tr id="KialiDashboardConfig-passphraseKey">
+<td><code>passphraseKey</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+</tr>
+<tr id="KialiDashboardConfig-viewOnlyMode">
+<td><code>viewOnlyMode</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
+<td>
+</td>
+</tr>
+<tr id="KialiDashboardConfig-grafanaURL">
+<td><code>grafanaURL</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+</tr>
+<tr id="KialiDashboardConfig-jaegerURL">
+<td><code>jaegerURL</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="KialiIngressConfig">KialiIngressConfig</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="KialiIngressConfig-enabled">
+<td><code>enabled</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
+<td>
+</td>
+</tr>
+<tr id="KialiIngressConfig-annotations">
+<td><code>annotations</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+</tr>
+<tr id="KialiIngressConfig-tls">
+<td><code>tls</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+</tr>
+<tr id="KialiIngressConfig-hosts">
+<td><code>hosts</code></td>
+<td><code>string[]</code></td>
+<td>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="KialiSecurityConfig">KialiSecurityConfig</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="KialiSecurityConfig-enabled">
+<td><code>enabled</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
+<td>
+</td>
+</tr>
+<tr id="KialiSecurityConfig-cert_file">
+<td><code>certFile</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+</tr>
+<tr id="KialiSecurityConfig-private_key_file">
+<td><code>privateKeyFile</code></td>
+<td><code>string</code></td>
+<td>
 </td>
 </tr>
 </tbody>
@@ -4033,6 +4248,12 @@ See https://istio.io/docs/setup/kubernetes/additional-setup/sidecar-injection/#m
 
 </td>
 </tr>
+<tr id="TracingOpencensusConfig-exporters">
+<td><code>exporters</code></td>
+<td><code><a href="#TracingOpencensusExportersConfig">TracingOpencensusExportersConfig</a></code></td>
+<td>
+</td>
+</tr>
 <tr id="TracingOpencensusConfig-resources">
 <td><code>resources</code></td>
 <td><code><a href="#TypeMapStringInterface">TypeMapStringInterface</a></code></td>
@@ -4041,6 +4262,26 @@ See https://istio.io/docs/setup/kubernetes/additional-setup/sidecar-injection/#m
 
 <p>See https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container</p>
 
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="TracingOpencensusExportersConfig">TracingOpencensusExportersConfig</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="TracingOpencensusExportersConfig-stackdriver">
+<td><code>stackdriver</code></td>
+<td><code><a href="#TypeMapStringInterface">TypeMapStringInterface</a></code></td>
+<td>
 </td>
 </tr>
 </tbody>

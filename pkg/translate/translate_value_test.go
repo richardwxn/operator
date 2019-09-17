@@ -15,13 +15,13 @@
 package translate
 
 import (
-	"istio.io/operator/pkg/apis/istio/v1alpha1"
 	"testing"
 
 	"github.com/ghodss/yaml"
 	"github.com/gogo/protobuf/jsonpb"
 	"github.com/kr/pretty"
 
+	"istio.io/operator/pkg/apis/istio/v1alpha1"
 	"istio.io/operator/pkg/util"
 	"istio.io/operator/pkg/version"
 )

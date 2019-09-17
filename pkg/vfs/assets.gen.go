@@ -31918,7 +31918,7 @@ spec:
               maxSurge: "100%"
               maxUnavailable: "25%"
 
-#  # Global values passed through to helm global.yaml.
+# Global values passed through to helm global.yaml.
   values:
     global:
       logging:
@@ -32026,12 +32026,7 @@ spec:
         udsPath: ""
       meshNetworks: {}
       localityLbSetting:
-        enabled: false
-#        - distribute:
-#            from: "us-central1/*"
-#            to:
-#              "us-central1/*": 80
-#              "us-central2/*": 20
+        enabled: true
       enableHelmTest: false
     pilot:
       autoscaleEnabled: true
@@ -32064,7 +32059,7 @@ spec:
       policy:
         enabled: false
       useMCP: true
-#
+
     mixer:
       adapters:
         stdio:
@@ -32107,7 +32102,7 @@ spec:
         adapters:
           kubernetesenv:
             enabled: true
-#
+
     galley:
 
     security:
@@ -32125,7 +32120,7 @@ spec:
 
     nodeagent:
       image: node-agent-k8s
-#
+
     gateways:
       istio-egressgateway:
         autoscaleEnabled: true
@@ -32321,6 +32316,9 @@ spec:
           requests:
             cpu: 200m
             memory: 400Mi
+        exporters:
+          stackdriver:
+            enable_tracing: true
       service:
         annotations: {}
         name: http
@@ -32334,6 +32332,32 @@ spec:
 
     kiali:
       enabled: false
+      replicaCount: 1
+      hub: docker.io/kiali
+      tag: v1.1.0
+      contextPath: /kiali
+      nodeSelector: {}
+      podAntiAffinityLabelSelector: []
+      podAntiAffinityTermLabelSelector: []
+      ingress:
+        enabled: false
+        hosts:
+          - kiali.local
+        annotations:
+        tls:
+      dashboard:
+        secretName: kiali
+        usernameKey: username
+        passphraseKey: passphrase
+        viewOnlyMode: false
+        grafanaURL:
+        jaegerURL:
+      prometheusNamespace:
+      createDemoSecret: true
+      security:
+        enabled: true
+        cert_file: /kiali-cert/cert-chain.pem
+        private_key_file: /kiali-cert/key.pem
 
     # TODO: derive from operator API
     version: ""

@@ -1,2 +1,2 @@
-istioCni:
+istio_cni:
   enabled: false

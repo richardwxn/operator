@@ -16,9 +16,9 @@ package validation
 
 import (
 	"fmt"
-	"istio.io/operator/pkg/apis/istio/v1alpha1"
 	"reflect"
 
+	"istio.io/operator/pkg/apis/istio/v1alpha1"
 	"istio.io/operator/pkg/apis/istio/v1alpha2"
 	"istio.io/operator/pkg/util"
 )

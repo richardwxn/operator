@@ -12,13 +12,8 @@ require (
 	github.com/evanphx/json-patch v4.5.0+incompatible
 	github.com/fsnotify/fsnotify v1.4.7
 	github.com/ghodss/yaml v1.0.0
+	github.com/go-openapi/spec v0.19.0
 	github.com/gobuffalo/packr v1.30.1 // indirect
-	github.com/go-logr/zapr v0.1.1 // indirect
-	github.com/go-openapi/jsonpointer v0.19.0 // indirect
-	github.com/go-openapi/jsonreference v0.19.0 // indirect
-	github.com/go-openapi/spec v0.17.2
-	github.com/go-openapi/swag v0.19.0 // indirect
-	github.com/gobwas/glob v0.2.3 // indirect
 	github.com/gogo/protobuf v1.3.0
 	github.com/golang/glog v0.0.0-20160126235308-23def4e6c14b
 	github.com/golang/protobuf v1.3.2

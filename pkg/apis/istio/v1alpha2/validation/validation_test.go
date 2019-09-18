@@ -15,11 +15,12 @@
 package validation
 
 import (
-	"istio.io/operator/pkg/apis/istio/v1alpha1"
 	"reflect"
 	"testing"
 
 	"github.com/gogo/protobuf/types"
+
+	"istio.io/operator/pkg/apis/istio/v1alpha1"
 )
 
 func TestValidate(t *testing.T) {

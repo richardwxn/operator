@@ -428,7 +428,7 @@ spec:
       trustDomain: cluster.local # indicate the domain used in SPIFFE identity URL
       enableNamespacesByDefault: true
       dnsCerts:
-        istio-pilot-service-account.istio-system: istio-pilot.istio-system
+        istio-pilot-service-account.istio-control: istio-pilot.istio-control
 
     certmanager:
       hub: quay.io/jetstack

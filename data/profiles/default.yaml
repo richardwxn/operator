@@ -628,7 +628,7 @@ spec:
         tag: 0.1.9
         resources:
           limits:
-            cpu: 1Gi
+            cpu: "1"
             memory: 2Gi
           requests:
             cpu: 200m

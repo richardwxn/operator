@@ -47,6 +47,15 @@ const (
 	goTypeToken = "// GOTYPE: "
 )
 
+var (
+	nameMapping = map[string]string{
+		"istioEgressgateway":  "istio-egressgateway",
+		"istioIngressgateway": "istio-ingressgateway",
+		"proxyInit":           "proxy_init",
+		"istioCni":            "istio_cni",
+	}
+)
+
 func main() {
 	var filePath string
 	flag.StringVar(&filePath, "f", "", "path to input file")
@@ -88,7 +97,6 @@ func main() {
 			i++
 			l = lines[i]
 		}
-
 		tmp = append(tmp, l)
 		i++
 	}
@@ -120,21 +128,14 @@ func main() {
 	}
 }
 
-// patchValues is helper function to patch specific fields of the generated values_types.pb.go
+// patchValues is helper function to patch specific naming of fields of the generated values_types.pb.go
+// some fields namings are inconsistent between proto file and values.yaml file, eg. istio-ingressgateway
+// is not a valid field name in proto but used in values.yaml.
 func patchValues(lines []string) (output []string) {
 	for _, line := range lines {
 		// patching naming issues
-		if strings.Contains(line, "istioEgressgateway") {
-			line = strings.ReplaceAll(line, "istioEgressgateway", "istio-egressgateway")
-		}
-		if strings.Contains(line, "istioIngressgateway") {
-			line = strings.ReplaceAll(line, "istioIngressgateway", "istio-ingressgateway")
-		}
-		if strings.Contains(line, "name=proxy_init") {
-			line = strings.ReplaceAll(line, "proxyInit", "proxy_init")
-		}
-		if strings.Contains(line, "name=istio_cni") {
-			line = strings.ReplaceAll(line, "istioCni", "istio_cni")
+		for oldv, newv := range nameMapping {
+			line = strings.ReplaceAll(line, oldv, newv)
 		}
 		output = append(output, line)
 	}

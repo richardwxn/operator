@@ -12,6 +12,7 @@ require (
 	github.com/evanphx/json-patch v4.5.0+incompatible
 	github.com/fsnotify/fsnotify v1.4.7
 	github.com/ghodss/yaml v1.0.0
+	github.com/go-logr/logr v0.1.0
 	github.com/go-openapi/spec v0.19.0
 	github.com/gobuffalo/packr v1.30.1 // indirect
 	github.com/gogo/protobuf v1.3.0

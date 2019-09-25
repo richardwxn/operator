@@ -128,7 +128,7 @@ func (h *HelmReconciler) Reconcile() error {
 		if err != nil {
 			allErrors = append(allErrors, err)
 		}
-		err = h.processManifests(chartManifests)
+		err = h.ProcessManifests(chartManifests)
 		if err != nil {
 			allErrors = append(allErrors, err)
 		}
@@ -143,7 +143,7 @@ func (h *HelmReconciler) Reconcile() error {
 	if err != nil {
 		allErrors = append(allErrors, err)
 	}
-	err = h.prune(false)
+	err = h.Prune(false)
 	if err != nil {
 		allErrors = append(allErrors, err)
 	}
@@ -176,7 +176,7 @@ func (h *HelmReconciler) Delete() error {
 	if err != nil {
 		allErrors = append(allErrors, err)
 	}
-	err = h.prune(true)
+	err = h.Prune(true)
 	if err != nil {
 		allErrors = append(allErrors, err)
 	}
@@ -203,4 +203,14 @@ func (h *HelmReconciler) GetLogger() logr.Logger {
 // GetClient returns the kubernetes client associated with this HelmReconciler
 func (h *HelmReconciler) GetClient() client.Client {
 	return h.client
+}
+
+// GetClient returns the customizer associated with this HelmReconciler
+func (h *HelmReconciler) GetCustomizer() RenderingCustomizer {
+	return h.customizer
+}
+
+// GetClient returns the instance associated with this HelmReconciler
+func (h *HelmReconciler) GetInstance() runtime.Object {
+	return h.instance
 }

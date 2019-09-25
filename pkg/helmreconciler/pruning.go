@@ -24,22 +24,22 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
-func (h *HelmReconciler) prune(all bool) error {
+func (h *HelmReconciler) Prune(all bool) error {
 	allErrors := []error{}
 	namespacedResources, nonNamespacedResources := h.customizer.PruningDetails().GetResourceTypes()
 	targetNamespace := h.customizer.Input().GetTargetNamespace()
-	err := h.pruneResources(namespacedResources, all, targetNamespace)
+	err := h.PruneResources(namespacedResources, all, targetNamespace)
 	if err != nil {
 		allErrors = append(allErrors, err)
 	}
-	err = h.pruneResources(nonNamespacedResources, all, "")
+	err = h.PruneResources(nonNamespacedResources, all, "")
 	if err != nil {
 		allErrors = append(allErrors, err)
 	}
 	return utilerrors.NewAggregate(allErrors)
 }
 
-func (h *HelmReconciler) pruneResources(gvks []schema.GroupVersionKind, all bool, namespace string) error {
+func (h *HelmReconciler) PruneResources(gvks []schema.GroupVersionKind, all bool, namespace string) error {
 	allErrors := []error{}
 	ownerLabels := h.customizer.PruningDetails().GetOwnerLabels()
 	ownerAnnotations := h.customizer.PruningDetails().GetOwnerAnnotations()

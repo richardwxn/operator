@@ -35,6 +35,7 @@ import (
 var log = logf.Log.WithName("controller_istiocontrolplane")
 
 const finalizer = "istio-operator"
+const v1 = "v1alpha1"
 
 /**
 * USER ACTION REQUIRED: This is a scaffold file intended for the user to modify with their own Controller
@@ -44,13 +45,17 @@ const finalizer = "istio-operator"
 // Add creates a new IstioControlPlane Controller and adds it to the Manager. The Manager will set fields on the Controller
 // and Start it when the Manager is Started.
 func Add(mgr manager.Manager) error {
-	return add(mgr, newReconciler(mgr))
+	return add(mgr, newReconciler(mgr, v1))
 }
 
 // newReconciler returns a new reconcile.Reconciler
-func newReconciler(mgr manager.Manager) reconcile.Reconciler {
+func newReconciler(mgr manager.Manager, apiVersion string) reconcile.Reconciler {
 	factory := &helmreconciler.Factory{CustomizerFactory: &IstioRenderingCustomizerFactory{}}
-	return &ReconcileIstioControlPlane{client: mgr.GetClient(), scheme: mgr.GetScheme(), factory: factory}
+	if apiVersion == v1 {
+		return &ReconcileIstioControlPlane{client: mgr.GetClient(), scheme: mgr.GetScheme(), factory: factory}
+	} else {
+		return &ReconcileIstioControlPlaneV2{client: mgr.GetClient(), scheme: mgr.GetScheme(), factory: factory}
+	}
 }
 
 // add adds a new Controller to mgr with r as the reconcile.Reconciler
@@ -89,6 +94,7 @@ type ReconcileIstioControlPlane struct {
 	client  client.Client
 	scheme  *runtime.Scheme
 	factory *helmreconciler.Factory
+	instance runtime.Object
 }
 
 // Reconcile reads that state of the cluster for a IstioControlPlane object and makes changes based on the state read

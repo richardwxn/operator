@@ -19,6 +19,10 @@ import (
 	"fmt"
 	"strings"
 
+	"k8s.io/helm/pkg/releaseutil"
+	"k8s.io/kubernetes/pkg/kubectl"
+	"sigs.k8s.io/controller-runtime/pkg/client"
+
 	"github.com/ghodss/yaml"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
@@ -26,12 +30,9 @@ import (
 	"k8s.io/helm/pkg/chartutil"
 	"k8s.io/helm/pkg/manifest"
 	"k8s.io/helm/pkg/proto/hapi/chart"
-	"k8s.io/helm/pkg/releaseutil"
 	"k8s.io/helm/pkg/renderutil"
 	"k8s.io/helm/pkg/tiller"
 	"k8s.io/helm/pkg/timeconv"
-	"k8s.io/kubernetes/pkg/kubectl"
-	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
 func (h *HelmReconciler) renderCharts(input RenderingInput) (ChartManifestsMap, error) {
@@ -63,12 +64,12 @@ func (h *HelmReconciler) renderCharts(input RenderingInput) (ChartManifestsMap, 
 		return ChartManifestsMap{}, err
 	}
 
-	return collectManifestsByChart(manifest.SplitManifests(renderedTemplates)), err
+	return CollectManifestsByChart(manifest.SplitManifests(renderedTemplates)), err
 }
 
 // collectManifestsByChart returns a map of chart->[]manifest.  names for subcharts
 // will be of the form <root-name>/charts/<subchart-name>, e.g. istio/charts/galley
-func collectManifestsByChart(manifests []manifest.Manifest) ChartManifestsMap {
+func CollectManifestsByChart(manifests []manifest.Manifest) ChartManifestsMap {
 	manifestsByChart := make(ChartManifestsMap)
 	for _, chartManifest := range manifests {
 		pathSegments := strings.Split(chartManifest.Name, "/")
@@ -90,7 +91,7 @@ func collectManifestsByChart(manifests []manifest.Manifest) ChartManifestsMap {
 	return manifestsByChart
 }
 
-func (h *HelmReconciler) processManifests(manifests []manifest.Manifest) error {
+func (h *HelmReconciler) ProcessManifests(manifests []manifest.Manifest) error {
 	allErrors := []error{}
 	origLogger := h.logger
 	defer func() { h.logger = origLogger }()
@@ -117,7 +118,7 @@ func (h *HelmReconciler) processManifests(manifests []manifest.Manifest) error {
 				allErrors = append(allErrors, err)
 				continue
 			}
-			err = h.processObject(obj)
+			err = h.ProcessObject(obj)
 			if err != nil {
 				allErrors = append(allErrors, err)
 			}
@@ -127,7 +128,7 @@ func (h *HelmReconciler) processManifests(manifests []manifest.Manifest) error {
 	return utilerrors.NewAggregate(allErrors)
 }
 
-func (h *HelmReconciler) processObject(obj *unstructured.Unstructured) error {
+func (h *HelmReconciler) ProcessObject(obj *unstructured.Unstructured) error {
 	if obj.GetKind() == "List" {
 		allErrors := []error{}
 		list, err := obj.ToList()
@@ -136,7 +137,7 @@ func (h *HelmReconciler) processObject(obj *unstructured.Unstructured) error {
 			return err
 		}
 		for _, item := range list.Items {
-			err = h.processObject(&item)
+			err = h.ProcessObject(&item)
 			if err != nil {
 				allErrors = append(allErrors, err)
 			}

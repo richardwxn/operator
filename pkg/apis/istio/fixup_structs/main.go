@@ -48,6 +48,8 @@ const (
 )
 
 var (
+	// nameMapping defines special mapping of fields names between proto and value.yaml.
+	// some fields naming is not a valid field name in proto but used in values.yaml, eg. istio-ingressgateway.
 	nameMapping = map[string]string{
 		"istioEgressgateway":  "istio-egressgateway",
 		"istioIngressgateway": "istio-ingressgateway",
@@ -128,9 +130,7 @@ func main() {
 	}
 }
 
-// patchValues is helper function to patch specific naming of fields of the generated values_types.pb.go
-// some fields namings are inconsistent between proto file and values.yaml file, eg. istio-ingressgateway
-// is not a valid field name in proto but used in values.yaml.
+// patchValues is helper function to patch generated values_types.pb.go based on special mapping.
 func patchValues(lines []string) (output []string) {
 	for _, line := range lines {
 		// patching naming issues

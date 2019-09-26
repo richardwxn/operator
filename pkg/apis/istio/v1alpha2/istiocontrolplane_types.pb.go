@@ -137,14 +137,14 @@
 package v1alpha2
 
 import (
-	"fmt"
+	fmt "fmt"
 	protobuf "github.com/gogo/protobuf/types"
-	"github.com/golang/protobuf/proto"
+	proto "github.com/golang/protobuf/proto"
 	_ "k8s.io/api/apps/v1"
-	"k8s.io/api/autoscaling/v2beta1"
+	v2beta1 "k8s.io/api/autoscaling/v2beta1"
 	v1 "k8s.io/api/core/v1"
 	v11 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"math"
+	math "math"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.

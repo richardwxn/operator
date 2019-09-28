@@ -7,6 +7,8 @@ import (
 	"k8s.io/apimachinery/pkg/runtime"
 	utilerrors "k8s.io/apimachinery/pkg/util/errors"
 	"sigs.k8s.io/controller-runtime/pkg/client"
+
+	"istio.io/operator/pkg/util"
 )
 
 // ISCPReconciler reconciles resources rendered by a set of helm charts for a specific instances of a custom resource,
@@ -61,7 +63,7 @@ func (rc *ISCPReconciler) Reconcile() error {
 	}
 
 	// collect the errors.  from here on, we'll process everything with the assumption that any error is not fatal.
-	allErrors := []error{}
+	allErrors := util.Errors{}
 
 	// process the charts
 	for _, chartName := range chartOrder {
@@ -84,8 +86,13 @@ func (rc *ISCPReconciler) Reconcile() error {
 		}
 	}
 
+	return utilerrors.NewAggregate(append(allErrors, h.postprocess()))
+}
+
+func(h *HelmReconciler) postprocess() util.Errors {
+	allErrors := util.Errors{}
 	// delete any obsolete resources
-	err = h.GetCustomizer().Listener().BeginPrune(false)
+	err := h.GetCustomizer().Listener().BeginPrune(false)
 	if err != nil {
 		allErrors = append(allErrors, err)
 	}
@@ -105,7 +112,7 @@ func (rc *ISCPReconciler) Reconcile() error {
 	}
 
 	// return any errors
-	return utilerrors.NewAggregate(allErrors)
+	return allErrors
 }
 
 // Delete resources associated with the custom resource instance

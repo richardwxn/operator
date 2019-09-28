@@ -6,10 +6,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/ghodss/yaml"
 	binversion "istio.io/operator/version"
-	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
-	utilerrors "k8s.io/apimachinery/pkg/util/errors"
 	"k8s.io/helm/pkg/manifest"
 	"k8s.io/helm/pkg/releaseutil"
 
@@ -85,35 +82,4 @@ func convert(manifestMap name.ManifestMap) (ChartManifestsMap, error) {
 	return CollectManifestsByChart(listManifests), nil
 }
 
-func (rc *ISCPReconciler) ProcessManifests(manifests []manifest.Manifest) error {
-	allErrors := []error{}
-	h := rc.Helmreconciler
-	logger, origLogger := h.GetLogger(), h.GetLogger()
-	defer func() { logger = origLogger }()
-	for _, manifest := range manifests {
-		logger = origLogger.WithValues("manifest", manifest.Name)
-		logger.V(2).Info("Processing resources from manifest")
-		// split the manifest into individual objects
-		objects := releaseutil.SplitManifests(manifest.Content)
-		for _, raw := range objects {
-			rawJSON, err := yaml.YAMLToJSON([]byte(raw))
-			if err != nil {
-				logger.Error(err, "unable to convert raw data to JSON")
-				allErrors = append(allErrors, err)
-				continue
-			}
-			obj := &unstructured.Unstructured{}
-			_, _, err = unstructured.UnstructuredJSONScheme.Decode(rawJSON, nil, obj)
-			if err != nil {
-				logger.Error(err, "unable to decode object into Unstructured")
-				allErrors = append(allErrors, err)
-				continue
-			}
-			if err = h.ProcessObject(obj); err != nil {
-				allErrors = append(allErrors, err)
-			}
-		}
-	}
 
-	return utilerrors.NewAggregate(allErrors)
-}

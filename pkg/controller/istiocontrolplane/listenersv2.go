@@ -42,10 +42,10 @@ func NewIstioStatusUpdaterV2(instance *v1alpha2.IstioControlPlane) helmreconcile
 //TODO
 func (u *IstioStatusUpdaterV2) EndReconcile(_ runtime.Object, err error) error {
 	status := u.instance.Status
-	vstatus := &v1alpha2.InstallStatus_VersionStatus{}
-	if err == nil {
-		vstatus.Status = v1alpha2.InstallStatus_HEALTHY
-	} else {
+	vstatus := &v1alpha2.InstallStatus_VersionStatus{
+		Status: v1alpha2.InstallStatus_HEALTHY,
+	}
+	if err != nil {
 		vstatus.Status = v1alpha2.InstallStatus_ERROR
 	}
 	status.TrafficManagement = vstatus

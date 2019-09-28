@@ -45,17 +45,13 @@ const v1 = "v1alpha1"
 // Add creates a new IstioControlPlane Controller and adds it to the Manager. The Manager will set fields on the Controller
 // and Start it when the Manager is Started.
 func Add(mgr manager.Manager) error {
-	return add(mgr, newReconciler(mgr, v1))
+	return add(mgr, newReconciler(mgr))
 }
 
 // newReconciler returns a new reconcile.Reconciler
-func newReconciler(mgr manager.Manager, apiVersion string) reconcile.Reconciler {
+func newReconciler(mgr manager.Manager) reconcile.Reconciler {
 	factory := &helmreconciler.Factory{CustomizerFactory: &IstioRenderingCustomizerFactory{}}
-	if apiVersion == v1 {
-		return &ReconcileIstioControlPlane{client: mgr.GetClient(), scheme: mgr.GetScheme(), factory: factory}
-	} else {
-		return &ReconcileIstioControlPlaneV2{client: mgr.GetClient(), scheme: mgr.GetScheme(), factory: factory}
-	}
+	return &ReconcileIstioControlPlane{client: mgr.GetClient(), scheme: mgr.GetScheme(), factory: factory}
 }
 
 // add adds a new Controller to mgr with r as the reconcile.Reconciler

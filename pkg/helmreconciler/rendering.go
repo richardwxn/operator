@@ -97,10 +97,10 @@ func (h *HelmReconciler) ProcessManifests(manifests []manifest.Manifest) error {
 	defer func() { h.logger = origLogger }()
 	for _, manifest := range manifests {
 		h.logger = origLogger.WithValues("manifest", manifest.Name)
-		if !strings.HasSuffix(manifest.Name, ".yaml") {
-			h.logger.V(2).Info("Skipping rendering of manifest")
-			continue
-		}
+		//if !strings.HasSuffix(manifest.Name, ".yaml") {
+		//	h.logger.V(2).Info("Skipping rendering of manifest")
+		//	continue
+		//}
 		h.logger.V(2).Info("Processing resources from manifest")
 		// split the manifest into individual objects
 		objects := releaseutil.SplitManifests(manifest.Content)

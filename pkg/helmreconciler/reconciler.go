@@ -22,6 +22,8 @@ import (
 	"k8s.io/apimachinery/pkg/runtime"
 	utilerrors "k8s.io/apimachinery/pkg/util/errors"
 	"sigs.k8s.io/controller-runtime/pkg/client"
+
+	"istio.io/operator/pkg/util"
 )
 
 // HelmReconciler reconciles resources rendered by a set of helm charts for a specific instances of a custom resource,
@@ -115,7 +117,7 @@ func (h *HelmReconciler) Reconcile() error {
 	}
 
 	// collect the errors.  from here on, we'll process everything with the assumption that any error is not fatal.
-	allErrors := []error{}
+	allErrors := util.Errors{}
 
 	// process the charts
 	for _, chartName := range chartOrder {
@@ -138,28 +140,8 @@ func (h *HelmReconciler) Reconcile() error {
 		}
 	}
 
-	// delete any obsolete resources
-	err = h.customizer.Listener().BeginPrune(false)
-	if err != nil {
-		allErrors = append(allErrors, err)
-	}
-	err = h.Prune(false)
-	if err != nil {
-		allErrors = append(allErrors, err)
-	}
-	err = h.customizer.Listener().EndPrune()
-	if err != nil {
-		allErrors = append(allErrors, err)
-	}
-
-	// any post processing required after updating
-	err = h.customizer.Listener().EndReconcile(h.instance, utilerrors.NewAggregate(allErrors))
-	if err != nil {
-		allErrors = append(allErrors, err)
-	}
-
 	// return any errors
-	return utilerrors.NewAggregate(allErrors)
+	return utilerrors.NewAggregate(append(allErrors, h.postprocess()))
 }
 
 // Delete resources associated with the custom resource instance

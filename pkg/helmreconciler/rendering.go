@@ -123,7 +123,7 @@ func unmarshalAndValidateICP(crYAML string) (*v1alpha2.IstioControlPlaneSpec, st
 	}
 	icps, _, err := istiomanifest.ParseK8SYAMLToIstioControlPlaneSpec(crYAML)
 	if err != nil {
-		return nil, "", fmt.Errorf("could not unmarshal the overlay file: %s\n\nOriginal YAML:\n%s", err, crYAML)
+		return nil, "", fmt.Errorf("could not parse the overlay file: %s\n\nOriginal YAML:\n%s", err, crYAML)
 	}
 	if errs := validate.CheckIstioControlPlaneSpec(icps, false); len(errs) != 0 {
 		return nil, "", fmt.Errorf("input file failed validation with the following errors: %s\n\nOriginal YAML:\n%s", errs, crYAML)

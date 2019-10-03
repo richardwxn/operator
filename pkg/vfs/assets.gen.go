@@ -219,6 +219,7 @@
 // ../../data/profiles/minimal.yaml
 // ../../data/profiles/sds.yaml
 // ../../data/profiles/sds.yaml.orig
+// ../../data/translateConfig/translateConfig-1.3.yaml
 // DO NOT EDIT!
 
 package vfs
@@ -31917,8 +31918,14 @@ spec:
             rollingUpdate:
               maxSurge: "100%"
               maxUnavailable: "25%"
+  # Istio CNI feature
+  cni:
+    enabled: false
+    components:
+      cni:
+        enabled: false
 
-  # Global values passed through to helm global.yaml.
+# Global values passed through to helm global.yaml.
   values:
     global:
       logging:
@@ -32028,7 +32035,6 @@ spec:
       localityLbSetting:
         enabled: true
       enableHelmTest: false
-
     pilot:
       autoscaleEnabled: true
       autoscaleMin: 1
@@ -32106,13 +32112,13 @@ spec:
 
     galley:
 
-    citadel:
+    security:
       image: citadel
       selfSigned: true # indicate if self-signed CA is used.
       trustDomain: cluster.local # indicate the domain used in SPIFFE identity URL
       enableNamespacesByDefault: true
       dnsCerts:
-        istio-pilot-service-account.istio-system: istio-pilot.istio-system
+        istio-pilot-service-account.istio-control: istio-pilot.istio-control
 
     certmanager:
       hub: quay.io/jetstack
@@ -32128,8 +32134,6 @@ spec:
         zvpn:
           suffix: global
           enabled: true
-        drainDuration: 45s
-        connectTimeout: 10s
         env:
           ISTIO_META_ROUTER_MODE: "sni-dnat"
         ports:
@@ -32156,7 +32160,6 @@ spec:
         zvpn:
           enabled: true
           suffix: global
-        telemetry_domain_name: ""
         env:
           ISTIO_META_ROUTER_MODE: "sni-dnat"
         ports:
@@ -32200,31 +32203,6 @@ spec:
           - name: ingressgateway-ca-certs
             secretName: istio-ingressgateway-ca-certs
             mountPath: /etc/istio/ingressgateway-ca-certs
-        telemetry_addon_gateways:
-          tracing_gateway:
-            name: tracing
-            port: 15032
-            desPort: 80
-            enabled: false
-            tls: false
-          kiali_gateway:
-            name: kiali
-            port: 15029
-            desPort: 20001
-            enabled: false
-            tls: false
-          grafana_gateway:
-            name: grafana
-            port: 15031
-            desPort: 3000
-            enabled: false
-            tls: false
-          prometheus_gateway:
-            name: prometheus
-            port: 15030
-            desPort: 9090
-            enabled: false
-            tls: false
 
     sidecarInjectorWebhook:
       image: sidecar_injector
@@ -32268,7 +32246,6 @@ spec:
         secretName: grafana
         usernameKey: username
         passphraseKey: passphrase
-
       contextPath: /grafana
       service:
         annotations: {}
@@ -32304,7 +32281,7 @@ spec:
       podAntiAffinityTermLabelSelector: []
       env: {}
       envSecrets: {}
-
+#
     tracing:
       enabled: false
       provider: jaeger
@@ -32313,7 +32290,7 @@ spec:
       podAntiAffinityTermLabelSelector: []
       jaeger:
         hub: docker.io/jaegertracing
-        tag: 1.12
+        tag: "1.12"
         memory:
           max_traces: 50000
         spanStorageType: badger
@@ -32341,7 +32318,7 @@ spec:
         tag: 0.1.9
         resources:
           limits:
-            cpu: 1
+            cpu: "1"
             memory: 2Gi
           requests:
             cpu: 200m
@@ -33695,18 +33672,17 @@ spec:
   values:
     global:
       useMCP: false
+      proxy:
+        envoyStatsd:
+          enabled: false
+          host:
+          port:
 
     pilot:
       sidecar: false
 
-    proxy:
-      envoyStatsd:
-        enabled: false
-        host:
-        port:
-
     prometheus:
-      enabeld: false
+      enabled: false
 `)
 
 func profilesMinimalYamlBytes() ([]byte, error) {
@@ -33829,6 +33805,235 @@ func profilesSdsYamlOrig() (*asset, error) {
 	}
 
 	info := bindataFileInfo{name: "profiles/sds.yaml.orig", size: 0, mode: os.FileMode(0), modTime: time.Unix(0, 0)}
+	a := &asset{bytes: bytes, info: info}
+	return a, nil
+}
+
+var _translateconfigTranslateconfig13Yaml = []byte(`apiMapping:
+  Hub:
+    outPath: "global.hub"
+  Tag:
+    outPath: "global.tag"
+  K8SDefaults:
+    outPath: "global.resources"
+  DefaultNamespace:
+    outPath: "global.istioNamespace"
+  Values.Proxy:
+    outPath: "global.proxy"
+  ConfigManagement.Components.Namespace:
+    outPath: "global.configNamespace"
+  Policy.Components.Namespace:
+    outPath: "global.policyNamespace"
+  Telemetry.Components.Namespace:
+    outPath: "global.telemetryNamespace"
+  Security.Components.Namespace:
+    outPath: "global.securityNamespace"
+kubernetesMapping:
+  "{{.FeatureName}}.Components.{{.ComponentName}}.K8S.Affinity":
+    outPath: "[{{.ResourceType}}:{{.ResourceName}}].spec.template.spec.containers.[name:{{.ContainerName}}].affinity"
+  "{{.FeatureName}}.Components.{{.ComponentName}}.K8S.Env":
+    outPath: "[{{.ResourceType}}:{{.ResourceName}}].spec.template.spec.containers.[name:{{.ContainerName}}].env"
+  "{{.FeatureName}}.Components.{{.ComponentName}}.K8S.HpaSpec":
+    outPath: "[HorizontalPodAutoscaler:{{.ResourceName}}].spec"
+  "{{.FeatureName}}.Components.{{.ComponentName}}.K8S.ImagePullPolicy":
+    outPath: "[{{.ResourceType}}:{{.ResourceName}}].spec.template.spec.containers.[name:{{.ContainerName}}].imagePullPolicy"
+  "{{.FeatureName}}.Components.{{.ComponentName}}.K8S.NodeSelector":
+    outPath: "[{{.ResourceType}}:{{.ResourceName}}].spec.template.spec.nodeSelector"
+  "{{.FeatureName}}.Components.{{.ComponentName}}.K8S.PodDisruptionBudget":
+    outPath: "[PodDisruptionBudget:{{.ResourceName}}].spec"
+  "{{.FeatureName}}.Components.{{.ComponentName}}.K8S.PodAnnotations":
+    outPath: "[{{.ResourceType}}:{{.ResourceName}}].spec.template.metadata.annotations"
+  "{{.FeatureName}}.Components.{{.ComponentName}}.K8S.PriorityClassName":
+    outPath: "[{{.ResourceType}}:{{.ResourceName}}].spec.template.spec.priorityClassName."
+  "{{.FeatureName}}.Components.{{.ComponentName}}.K8S.ReadinessProbe":
+    outPath: "[{{.ResourceType}}:{{.ResourceName}}].spec.template.spec.containers.[name:{{.ContainerName}}].readinessProbe"
+  "{{.FeatureName}}.Components.{{.ComponentName}}.K8S.ReplicaCount":
+    outPath: "[{{.ResourceType}}:{{.ResourceName}}].spec.replicas"
+  "{{.FeatureName}}.Components.{{.ComponentName}}.K8S.Resources":
+    outPath: "[{{.ResourceType}}:{{.ResourceName}}].spec.template.spec.containers.[name:{{.ContainerName}}].resources"
+  "{{.FeatureName}}.Components.{{.ComponentName}}.K8S.Strategy":
+    outPath: "[{{.ResourceType}}:{{.ResourceName}}].spec.strategy"
+  "{{.FeatureName}}.Components.{{.ComponentName}}.K8S.Tolerations":
+    outPath: "[{{.ResourceType}}:{{.ResourceName}}].spec.template.spec.tolerations"
+toFeature:
+    crds:               Base
+    Pilot:              TrafficManagement
+    Galley:             ConfigManagement
+    Injector:           AutoInjection
+    Policy:             Policy
+    Telemetry:          Telemetry
+    Citadel:            Security
+    CertManager:        Security
+    NodeAgent:          Security
+    IngressGateway:     Gateways
+    EgressGateway:      Gateways
+    Cni:                Cni
+    Grafana:            ThirdParty
+    Prometheus:         ThirdParty
+    Tracing:            ThirdParty
+    PrometheusOperator: ThirdParty
+    Kiali:              ThirdParty
+globalNamespaces:
+  Pilot:      "istioNamespace"
+  Galley:     "configNamespace"
+  Telemetry:  "telemetryNamespace"
+  Policy:     "policyNamespace"
+  Prometheus: "prometheusNamespace"
+  Citadel:    "securityNamespace"
+featureMaps:
+  Base:
+    alwaysEnabled: true
+    Components:
+      - crds
+  TrafficManagement:
+    Components:
+      - Pilot
+  Policy:
+    Components:
+      - Policy
+  Telemetry:
+    Components:
+      - Telemetry
+  Security:
+    Components:
+      - Citadel
+      - CertManager
+      - NodeAgent
+  ConfigManagement:
+    Components:
+      - Galley
+  AutoInjection:
+    Components:
+      - Injector
+  Gateways:
+    Components:
+      - IngressGateway
+      - EgressGateway
+  Cni:
+    Components:
+      - Cni
+  ThirdParty:
+    Components:
+      - Grafana
+      - Prometheus
+      - Tracing
+      - PrometheusOperator
+      - Kiali
+
+componentMaps:
+  crds:
+    ToHelmValuesTreeRoot: "global"
+    HelmSubdir:           "crds"
+    AlwaysEnabled:        true
+  Pilot:
+    ResourceType:         "Deployment"
+    ResourceName:         "istio-pilot"
+    ContainerName:        "discovery"
+    HelmSubdir:           "istio-control/istio-discovery"
+    ToHelmValuesTreeRoot: "pilot"
+  Galley:
+    ResourceType:         "Deployment"
+    ResourceName:         "istio-galley"
+    ContainerName:        "galley"
+    HelmSubdir:           "istio-control/istio-config"
+    ToHelmValuesTreeRoot: "galley"
+  Injector:
+    ResourceType:         "Deployment"
+    ResourceName:         "istio-sidecar-injector"
+    ContainerName:        "sidecar-injector-webhook"
+    HelmSubdir:           "istio-control/istio-autoinject"
+    ToHelmValuesTreeRoot: "sidecarInjectorWebhook"
+  Policy:
+    ResourceType:         "Deployment"
+    ResourceName:         "istio-policy"
+    ContainerName:        "mixer"
+    HelmSubdir:           "istio-policy"
+    ToHelmValuesTreeRoot: "mixer.policy"
+  Telemetry:
+    ResourceType:        "Deployment"
+    ResourceName:         "istio-telemetry"
+    ContainerName:        "mixer"
+    HelmSubdir:           "istio-telemetry/mixer-telemetry"
+    ToHelmValuesTreeRoot: "mixer.telemetry"
+  Citadel:
+    ResourceType:        "Deployment"
+    ResourceName:         "istio-citadel"
+    ContainerName:        "citadel"
+    HelmSubdir:           "security/citadel"
+    ToHelmValuesTreeRoot: "security"
+  NodeAgent:
+    ResourceType:         "DaemonSet"
+    ResourceName:         "istio-nodeagent"
+    ContainerName:        "nodeagent"
+    HelmSubdir:           "security/nodeagent"
+    ToHelmValuesTreeRoot: "nodeagent"
+  CertManager:
+    ResourceType:        "Deployment"
+    ResourceName:         "certmanager"
+    ContainerName:        "certmanager"
+    HelmSubdir:           "security/certmanager"
+    ToHelmValuesTreeRoot: "certmanager"
+  IngressGateway:
+    ResourceType:         "Deployment"
+    ResourceName:         "istio-ingressgateway"
+    ContainerName:        "istio-proxy"
+    HelmSubdir:           "gateways/istio-ingress"
+    ToHelmValuesTreeRoot: "gateways.istio-ingressgateway"
+  EgressGateway:
+    ResourceType:         "Deployment"
+    ResourceName:         "istio-egressgateway"
+    ContainerName:        "istio-proxy"
+    HelmSubdir:           "gateways/istio-egress"
+    ToHelmValuesTreeRoot: "gateways.istio-egressgateway"
+  Cni:
+    ResourceType:         "DaemonSet"
+    ResourceName:         "istio-cni-node"
+    ContainerName:        "install-cni"
+    HelmSubdir:           "istio-cni"
+    ToHelmValuesTreeRoot: "cni"
+  Tracing:
+    ResourceType:         "Deployment"
+    ResourceName:         "istio-tracing"
+    ContainerName:        "jaeger"
+    HelmSubdir:           "istio-telemetry/tracing"
+    ToHelmValuesTreeRoot: "tracing.jaeger"
+  PrometheusOperator:
+    ResourceType:         "Deployment"
+    ResourceName:         "prometheus"
+    ContainerName:        "prometheus"
+    HelmSubdir:           "istio-telemetry/prometheus-operator"
+    ToHelmValuesTreeRoot: "prometheus"
+  Kiali:
+    ResourceType:         "Deployment"
+    ResourceName:         "kiali"
+    ContainerName:        "kiali"
+    HelmSubdir:           "istio-telemetry/kiali"
+    ToHelmValuesTreeRoot: "kiali"
+  Grafana:
+    ResourceType:        "Deployment"
+    ResourceName:         "grafana"
+    ContainerName:        "grafana"
+    HelmSubdir:           "istio-telemetry/grafana"
+    ToHelmValuesTreeRoot: "grafana"
+  Prometheus:
+    ResourceType:         "Deployment"
+    ResourceName:         "prometheus"
+    ContainerName:        "prometheus"
+    HelmSubdir:           "istio-telemetry/prometheus"
+    ToHelmValuesTreeRoot: "prometheus"
+`)
+
+func translateconfigTranslateconfig13YamlBytes() ([]byte, error) {
+	return _translateconfigTranslateconfig13Yaml, nil
+}
+
+func translateconfigTranslateconfig13Yaml() (*asset, error) {
+	bytes, err := translateconfigTranslateconfig13YamlBytes()
+	if err != nil {
+		return nil, err
+	}
+
+	info := bindataFileInfo{name: "translateConfig/translateConfig-1.3.yaml", size: 0, mode: os.FileMode(0), modTime: time.Unix(0, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -34104,6 +34309,7 @@ var _bindata = map[string]func() (*asset, error){
 	"profiles/minimal.yaml": profilesMinimalYaml,
 	"profiles/sds.yaml": profilesSdsYaml,
 	"profiles/sds.yaml.orig": profilesSdsYamlOrig,
+	"translateConfig/translateConfig-1.3.yaml": translateconfigTranslateconfig13Yaml,
 }
 
 // AssetDir returns the file names below a certain
@@ -34458,6 +34664,9 @@ var _bintree = &bintree{nil, map[string]*bintree{
 		"minimal.yaml": &bintree{profilesMinimalYaml, map[string]*bintree{}},
 		"sds.yaml": &bintree{profilesSdsYaml, map[string]*bintree{}},
 		"sds.yaml.orig": &bintree{profilesSdsYamlOrig, map[string]*bintree{}},
+	}},
+	"translateConfig": &bintree{nil, map[string]*bintree{
+		"translateConfig-1.3.yaml": &bintree{translateconfigTranslateconfig13Yaml, map[string]*bintree{}},
 	}},
 }}
 

@@ -13,9 +13,6 @@
 # limitations under the License.
 
 export GO111MODULE=on
-ifeq ($(BUILD_WITH_CONTAINER),0)
-override GOBIN := $(GOPATH)/bin
-endif
 
 pwd := $(shell pwd)
 
@@ -24,7 +21,7 @@ pwd := $(shell pwd)
 
 build: mesh
 
-lint: lint-copyright-banner lint-go lint-python lint-scripts lint-yaml lint-dockerfiles
+lint: lint-copyright-banner lint-go lint-python lint-scripts lint-yaml lint-dockerfiles lint-licenses
 
 test:
 	@go test -race ./...
@@ -37,6 +34,7 @@ mandiff: update-charts
 	@PATH=${PATH}:${GOPATH}/bin scripts/run_mandiff.sh
 
 fmt: format-go
+	go mod tidy
 
 update-charts: installer.sha
 	@scripts/run_update_charts.sh `cat installer.sha`
@@ -45,14 +43,21 @@ update-charts: installer.sha
 vfsgen: data/ update-charts
 	go generate ./...
 
-generate: generate-values generate-types vfsgen
+clean-vfs:
+	@rm -fr pkg/vfs/assets.gen.go
 
-clean: clean-values clean-types
+gen: generate-values generate-types vfsgen
+generate: gen
+
+gen-check: clean gen check-clean-repo
+
+clean: clean-values clean-types clean-vfs
 
 default: mesh
 
 mesh: vfsgen
-	go build -o ${GOBIN}/mesh ./cmd/mesh.go
+	go build -o $(GOPATH)/bin/mesh ./cmd/mesh.go
+	GOARCH=$(TARGET_ARCH) GOOS=$(TARGET_OS) go build -o /work/mesh ./cmd/mesh.go
 
 update-goldens:
 	export REFRESH_GOLDEN=true
@@ -85,30 +90,32 @@ types_v1alpha2_openapi := $(types_v1alpha2_protos:.proto=.json)
 $(types_v1alpha2_pb_gos) $(types_v1alpha2_pb_docs) $(types_v1alpha2_pb_pythons): $(types_v1alpha2_protos)
 	@$(protoc) $(go_plugin) $(protoc_gen_docs_plugin)$(types_v1alpha2_path) $(protoc_gen_python_plugin) $^
 	@cp -r ${TMPDIR}/pkg/* pkg/
-	@sed -i -e 's|github.com/gogo/protobuf/protobuf/google/protobuf|github.com/gogo/protobuf/types|g' $(types_v1alpha2_path)/istiocontrolplane_types.pb.go
-	@GOARCH=amd64 GOOS=linux go run $(values_v1alpha2_path)/fixup_structs/main.go -f $(types_v1alpha2_path)/istiocontrolplane_types.pb.go
+	@sed -i 's|github.com/gogo/protobuf/protobuf/google/protobuf|github.com/gogo/protobuf/types|g' $(types_v1alpha2_path)/istiocontrolplane_types.pb.go
+	@go run $(repo_dir)/pkg/apis/istio/fixup_structs/main.go -f $(types_v1alpha2_path)/istiocontrolplane_types.pb.go
+	@sed -i 's|<key,value,effect>|\&lt\;key,value,effect\&gt\;|g' $(types_v1alpha2_path)/v1alpha2.pb.html
+	@sed -i 's|<operator>|\&lt\;operator\&gt\;|g' $(types_v1alpha2_path)/v1alpha2.pb.html
 
 generate-types: $(types_v1alpha2_pb_gos) $(types_v1alpha2_pb_docs) $(types_v1alpha2_pb_pythons)
 
 clean-types:
 	@rm -fr $(types_v1alpha2_pb_gos) $(types_v1alpha2_pb_docs) $(types_v1alpha2_pb_pythons)
 
-values_v1alpha2_path := pkg/apis/istio/v1alpha2/values
-values_v1alpha2_protos := $(wildcard $(values_v1alpha2_path)/*.proto)
-values_v1alpha2_pb_gos := $(values_v1alpha2_protos:.proto=.pb.go)
-values_v1alpha2_pb_pythons := $(patsubst $(values_v1alpha2_path)/%.proto,$(python_output_path)/$(values_v1alpha2_path)/%_pb2.py,$(values_v1alpha2_protos))
-values_v1alpha2_pb_docs := $(values_v1alpha2_protos:.proto=.pb.html)
-values_v1alpha2_openapi := $(values_v1alpha2_protos:.proto=.json)
+values_v1alpha1_path := pkg/apis/istio/v1alpha1/
+values_v1alpha1_protos := $(wildcard $(values_v1alpha1_path)/values_types*.proto)
+values_v1alpha1_pb_gos := $(values_v1alpha1_protos:.proto=.pb.go)
+values_v1alpha1_pb_pythons := $(patsubst $(values_v1alpha1_path)/%.proto,$(python_output_path)/$(values_v1alpha1_path)/%_pb2.py,$(values_v1alpha1_protos))
+values_v1alpha1_pb_docs := $(values_v1alpha1_protos:.proto=.pb.html)
+values_v1alpha1_openapi := $(values_v1alpha1_protos:.proto=.json)
 
-$(values_v1alpha2_pb_gos) $(values_v1alpha2_pb_docs) $(values_v1alpha2_pb_pythons): $(values_v1alpha2_protos)
-	@$(protoc) $(go_plugin) $(protoc_gen_docs_plugin)$(values_v1alpha2_path) $(protoc_gen_python_plugin) $^
+$(values_v1alpha1_pb_gos) $(values_v1alpha1_pb_docs) $(values_v1alpha1_pb_pythons): $(values_v1alpha1_protos)
+	@$(protoc) $(go_plugin) $(protoc_gen_docs_plugin)$(values_v1alpha1_path) $(protoc_gen_python_plugin) $^
 	@cp -r ${TMPDIR}/pkg/* pkg/
-	@sed -i -e 's|github.com/gogo/protobuf/protobuf/google/protobuf|github.com/gogo/protobuf/types|g' $(values_v1alpha2_path)/values_types.pb.go
-	@GOARCH=amd64 GOOS=linux go run $(values_v1alpha2_path)/fixup_structs/main.go -f $(values_v1alpha2_path)/values_types.pb.go
+	@sed -i 's|github.com/gogo/protobuf/protobuf/google/protobuf|github.com/gogo/protobuf/types|g' $(values_v1alpha1_path)/values_types.pb.go
+	@GOARCH=amd64 GOOS=linux go run $(repo_dir)/pkg/apis/istio/fixup_structs/main.go -f $(values_v1alpha1_path)/values_types.pb.go
 
-generate-values: $(values_v1alpha2_pb_gos) $(values_v1alpha2_pb_docs) $(values_v1alpha2_pb_pythons)
+generate-values: $(values_v1alpha1_pb_gos) $(values_v1alpha1_pb_docs) $(values_v1alpha1_pb_pythons)
 
 clean-values:
-	@rm -fr $(values_v1alpha2_pb_gos) $(values_v1alpha2_pb_docs) $(values_v1alpha2_pb_pythons)
+	@rm -fr $(values_v1alpha1_pb_gos) $(values_v1alpha1_pb_docs) $(values_v1alpha1_pb_pythons)
 
 include common/Makefile.common.mk

@@ -72,8 +72,8 @@ type ChartManifestsMap map[string][]manifest.Manifest
 type RenderingInput interface {
 	// GetChartPath returns the absolute path locating the chart to be rendered.
 	GetChartPath() string
-	// GetValues returns the values object used during rendering.
-	GetValues() map[string]interface{}
+	// GetInputConfig returns the values object used during rendering.
+	GetInputConfig() interface{}
 	// GetTargetNamespace returns the target namespace which should be applied to namespaced resources
 	// (i.e. used to set Release.Namespace)
 	GetTargetNamespace() string
@@ -83,18 +83,6 @@ type RenderingInput interface {
 	// <main-chart-name>/charts/<subchart-name>
 	GetProcessingOrder(manifests ChartManifestsMap) ([]string, error)
 }
-
-// RenderingInputV2 specifies the details used for rendering charts for v1alpha2 IstioControlPlane.
-type RenderingInputV2 interface {
-	// GetCRtPath returns the path locating the IstioControlPlane CR.
-	GetCRPath() string
-	// GetProcessingOrder is a hook which allows a user to specify the order in which the generated charts
-	// should be applied.  manifests maps chart name to a list of manifests.  Examples of chart names:
-	// istio, istio/charts/security, istio/charts/galley, etc.  Subcharts will have the form:
-	// <main-chart-name>/charts/<subchart-name>
-	GetProcessingOrder(manifests ChartManifestsMap) ([]string, error)
-}
-
 
 // RenderingListener is the main hook into the rendering process.  The methods represent each stage in the
 // rendering process.
@@ -188,13 +176,6 @@ type ChartCustomizerFactory interface {
 type ReconcilerListener interface {
 	// RegisterReconciler is the callback function that allows the HelmReconciler to be registered.
 	RegisterReconciler(reconciler *HelmReconciler)
-}
-
-// ReconcilerListener is an interface that may be implemented by objects which require access to the HelmReconciler.
-// These objects would typically require access to the kubernetes client or logger.
-type ReconcilerListenerV2 interface {
-	// RegisterReconciler is the callback function that allows the HelmReconciler to be registered.
-	RegisterReconciler(reconciler *ISCPReconciler)
 }
 
 // Patch represents a "patch" for an object

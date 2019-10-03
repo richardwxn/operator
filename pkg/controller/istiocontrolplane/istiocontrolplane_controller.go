@@ -17,6 +17,8 @@ package istiocontrolplane
 import (
 	"context"
 
+	"istio.io/operator/pkg/apis/istio/v1alpha2"
+
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/runtime"
@@ -28,7 +30,6 @@ import (
 	logf "sigs.k8s.io/controller-runtime/pkg/runtime/log"
 	"sigs.k8s.io/controller-runtime/pkg/source"
 
-	istiov1alpha1 "istio.io/operator/pkg/apis/istio/v1alpha1"
 	"istio.io/operator/pkg/helmreconciler"
 )
 
@@ -51,11 +52,7 @@ func Add(mgr manager.Manager) error {
 // newReconciler returns a new reconcile.Reconciler
 func newReconciler(mgr manager.Manager, apiVersion string) reconcile.Reconciler {
 	factory := &helmreconciler.Factory{CustomizerFactory: &IstioRenderingCustomizerFactory{}}
-	if apiVersion == v1 {
-		return &ReconcileIstioControlPlane{client: mgr.GetClient(), scheme: mgr.GetScheme(), factory: factory}
-	} else {
-		return &ReconcileIstioControlPlaneV2{client: mgr.GetClient(), scheme: mgr.GetScheme(), factory: factory}
-	}
+	return &ReconcileIstioControlPlane{client: mgr.GetClient(), scheme: mgr.GetScheme(), factory: factory}
 }
 
 // add adds a new Controller to mgr with r as the reconcile.Reconciler
@@ -67,7 +64,7 @@ func add(mgr manager.Manager, r reconcile.Reconciler) error {
 	}
 
 	// Watch for changes to primary resource IstioControlPlane
-	err = c.Watch(&source.Kind{Type: &istiov1alpha1.IstioControlPlane{}}, &handler.EnqueueRequestForObject{})
+	err = c.Watch(&source.Kind{Type: &v1alpha2.IstioControlPlane{}}, &handler.EnqueueRequestForObject{})
 	if err != nil {
 		return err
 	}
@@ -76,7 +73,7 @@ func add(mgr manager.Manager, r reconcile.Reconciler) error {
 	// Watch for changes to secondary resource Pods and requeue the owner IstioControlPlane
 	err = c.Watch(&source.Kind{Type: &corev1.Pod{}}, &handler.EnqueueRequestForOwner{
 		IsController: true,
-		OwnerType:    &istiov1alpha1.IstioControlPlane{},
+		OwnerType:    &v1alpha2.IstioControlPlane{},
 	})
 	if err != nil {
 		return err
@@ -91,9 +88,9 @@ var _ reconcile.Reconciler = &ReconcileIstioControlPlane{}
 type ReconcileIstioControlPlane struct {
 	// This client, initialized using mgr.Client() above, is a split client
 	// that reads objects from the cache and writes to the apiserver
-	client  client.Client
-	scheme  *runtime.Scheme
-	factory *helmreconciler.Factory
+	client   client.Client
+	scheme   *runtime.Scheme
+	factory  *helmreconciler.Factory
 	instance runtime.Object
 }
 
@@ -109,7 +106,7 @@ func (r *ReconcileIstioControlPlane) Reconcile(request reconcile.Request) (recon
 	reqLogger.Info("Reconciling IstioControlPlane")
 
 	// Fetch the IstioControlPlane instance
-	instance := &istiov1alpha1.IstioControlPlane{}
+	instance := &v1alpha2.IstioControlPlane{}
 	err := r.client.Get(context.TODO(), request.NamespacedName, instance)
 	if err != nil {
 		if errors.IsNotFound(err) {
@@ -139,7 +136,7 @@ func (r *ReconcileIstioControlPlane) Reconcile(request reconcile.Request) (recon
 		} else {
 			reqLogger.Error(err, "failed to create reconciler")
 		}
-		// XXX: for now, nuke the resources, regardless of errors
+		// TODO: for now, nuke the resources, regardless of errors
 		finalizers = append(finalizers[:finalizerIndex], finalizers[finalizerIndex+1:]...)
 		instance.SetFinalizers(finalizers)
 		finalizerError := r.client.Update(context.TODO(), instance)
@@ -163,12 +160,6 @@ func (r *ReconcileIstioControlPlane) Reconcile(request reconcile.Request) (recon
 		instance.SetFinalizers(finalizers)
 		err = r.client.Update(context.TODO(), instance)
 		return reconcile.Result{}, err
-	}
-
-	if instance.GetGeneration() == instance.Status.ObservedGeneration &&
-		instance.Status.GetCondition(istiov1alpha1.ConditionTypeReconciled).Status == istiov1alpha1.ConditionStatusTrue {
-		reqLogger.Info("nothing to reconcile, generations match")
-		return reconcile.Result{}, nil
 	}
 
 	reqLogger.Info("Updating IstioControlPlane")

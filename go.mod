@@ -84,6 +84,7 @@ require (
 	github.com/peterbourgon/diskv v2.0.1+incompatible // indirect
 	github.com/pierrec/lz4 v2.2.5+incompatible // indirect
 	github.com/pkg/errors v0.8.1
+	github.com/prometheus/common v0.4.0
 	github.com/prometheus/procfs v0.0.0-20190425082905-87a4384529e0 // indirect
 	github.com/prometheus/prom2json v1.2.1 // indirect
 	github.com/soheilhy/cmux v0.1.4 // indirect

@@ -59,18 +59,6 @@ func (c *SimpleRenderingCustomizer) RegisterReconciler(reconciler *HelmReconcile
 	}
 }
 
-func (c *SimpleRenderingCustomizer) RegisterReconcilerV2(reconciler *ISCPReconciler) {
-	if registrar, ok := c.InputValue.(ReconcilerListenerV2); ok {
-		registrar.RegisterReconciler(reconciler)
-	}
-	if registrar, ok := c.PruningDetailsValue.(ReconcilerListenerV2); ok {
-		registrar.RegisterReconciler(reconciler)
-	}
-	if registrar, ok := c.ListenerValue.(ReconcilerListenerV2); ok {
-		registrar.RegisterReconciler(reconciler)
-	}
-}
-
 // SimplePruningDetails is a helper to implement PruningDetails from a known set of labels,
 // annotations, and resource types.
 type SimplePruningDetails struct {

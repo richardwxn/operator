@@ -26,7 +26,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='v1alpha2',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=_b('\n5pkg/apis/istio/v1alpha2/istiocontrolplane_types.proto\x12\x08v1alpha2\x1a\"k8s.io/api/core/v1/generated.proto\x1a\"k8s.io/api/apps/v1/generated.proto\x1a.k8s.io/api/autoscaling/v2beta1/generated.proto\x1a\x34k8s.io/apimachinery/pkg/apis/meta/v1/generated.proto\x1a/k8s.io/apimachinery/pkg/runtime/generated.proto\x1a@github.com/gogo/protobuf/protobuf/google/protobuf/wrappers.proto\"\xf3\x01\n\x11IstioControlPlane\x12@\n\x08typemeta\x18\x01 \x01(\x0b\x32..k8s.io.apimachinery.pkg.apis.meta.v1.TypeMeta\x12\x44\n\nobjectmeta\x18\x02 \x01(\x0b\x32\x30.k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta\x12-\n\x04spec\x18\x03 \x01(\x0b\x32\x1f.v1alpha2.IstioControlPlaneSpec\x12\'\n\x06status\x18\x04 \x01(\x0b\x32\x17.v1alpha2.InstallStatus\"\xed\x04\n\x15IstioControlPlaneSpec\x12\x19\n\x11\x64\x65\x66\x61ult_namespace\x18\x05 \x01(\t\x12\x42\n\x12traffic_management\x18\x19 \x01(\x0b\x32&.v1alpha2.TrafficManagementFeatureSpec\x12+\n\x06policy\x18\x1a \x01(\x0b\x32\x1b.v1alpha2.PolicyFeatureSpec\x12\x31\n\ttelemetry\x18\x1b \x01(\x0b\x32\x1e.v1alpha2.TelemetryFeatureSpec\x12/\n\x08security\x18\x1c \x01(\x0b\x32\x1d.v1alpha2.SecurityFeatureSpec\x12@\n\x11\x63onfig_management\x18\x1d \x01(\x0b\x32%.v1alpha2.ConfigManagementFeatureSpec\x12:\n\x0e\x61uto_injection\x18\x1e \x01(\x0b\x32\".v1alpha2.AutoInjectionFeatureSpec\x12.\n\x08gateways\x18\x1f \x01(\x0b\x32\x1c.v1alpha2.GatewayFeatureSpec\x12\x30\n\x06values\x18\x32 \x01(\x0b\x32 .v1alpha2.TypeMapStringInterface\x12;\n\x11unvalidatedValues\x18\x33 \x01(\x0b\x32 .v1alpha2.TypeMapStringInterface\x12\x0f\n\x07profile\x18\x64 \x01(\t\x12\x1c\n\x14install_package_path\x18\x66 \x01(\t\x12\x0b\n\x03hub\x18n \x01(\t\x12\x0b\n\x03tag\x18o \x01(\t\"\x8d\x02\n\x1cTrafficManagementFeatureSpec\x12+\n\x07\x65nabled\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x45\n\ncomponents\x18\x32 \x01(\x0b\x32\x31.v1alpha2.TrafficManagementFeatureSpec.Components\x1ay\n\nComponents\x12\x11\n\tnamespace\x18\x01 \x01(\t\x12+\n\x05pilot\x18\x14 \x01(\x0b\x32\x1c.v1alpha2.PilotComponentSpec\x12+\n\x05proxy\x18\x15 \x01(\x0b\x32\x1c.v1alpha2.ProxyComponentSpec\"\xcc\x01\n\x11PolicyFeatureSpec\x12+\n\x07\x65nabled\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12:\n\ncomponents\x18\x32 \x01(\x0b\x32&.v1alpha2.PolicyFeatureSpec.Components\x1aN\n\nComponents\x12\x11\n\tnamespace\x18\x01 \x01(\t\x12-\n\x06policy\x18\x14 \x01(\x0b\x32\x1d.v1alpha2.PolicyComponentSpec\"\xd8\x01\n\x14TelemetryFeatureSpec\x12+\n\x07\x65nabled\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12=\n\ncomponents\x18\x32 \x01(\x0b\x32).v1alpha2.TelemetryFeatureSpec.Components\x1aT\n\nComponents\x12\x11\n\tnamespace\x18\x01 \x01(\t\x12\x33\n\ttelemetry\x18\x14 \x01(\x0b\x32 .v1alpha2.TelemetryComponentSpec\"\xc3\x02\n\x13SecurityFeatureSpec\x12+\n\x07\x65nabled\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12<\n\ncomponents\x18\x32 \x01(\x0b\x32(.v1alpha2.SecurityFeatureSpec.Components\x1a\xc0\x01\n\nComponents\x12\x11\n\tnamespace\x18\x01 \x01(\t\x12/\n\x07\x63itadel\x18\x14 \x01(\x0b\x32\x1e.v1alpha2.CitadelComponentSpec\x12\x38\n\x0c\x63\x65rt_manager\x18\x15 \x01(\x0b\x32\".v1alpha2.CertManagerComponentSpec\x12\x34\n\nnode_agent\x18\x16 \x01(\x0b\x32 .v1alpha2.NodeAgentComponentSpec\"\xe0\x01\n\x1b\x43onfigManagementFeatureSpec\x12+\n\x07\x65nabled\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x44\n\ncomponents\x18\x32 \x01(\x0b\x32\x30.v1alpha2.ConfigManagementFeatureSpec.Components\x1aN\n\nComponents\x12\x11\n\tnamespace\x18\x01 \x01(\t\x12-\n\x06galley\x18\x14 \x01(\x0b\x32\x1d.v1alpha2.GalleyComponentSpec\"\xe5\x01\n\x18\x41utoInjectionFeatureSpec\x12+\n\x07\x65nabled\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x41\n\ncomponents\x18\x32 \x01(\x0b\x32-.v1alpha2.AutoInjectionFeatureSpec.Components\x1aY\n\nComponents\x12\x11\n\tnamespace\x18\x01 \x01(\t\x12\x38\n\x08injector\x18\x14 \x01(\x0b\x32&.v1alpha2.SidecarInjectorComponentSpec\"\x9e\x02\n\x12GatewayFeatureSpec\x12+\n\x07\x65nabled\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12;\n\ncomponents\x18\x32 \x01(\x0b\x32\'.v1alpha2.GatewayFeatureSpec.Components\x1a\x9d\x01\n\nComponents\x12\x11\n\tnamespace\x18\x01 \x01(\t\x12>\n\x0fingress_gateway\x18\x1f \x01(\x0b\x32%.v1alpha2.IngressGatewayComponentSpec\x12<\n\x0e\x65gress_gateway\x18  \x01(\x0b\x32$.v1alpha2.EgressGatewayComponentSpec\"\x84\x01\n\x12PilotComponentSpec\x12+\n\x07\x65nabled\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x11\n\tnamespace\x18\x02 \x01(\t\x12.\n\x03k8s\x18P \x01(\x0b\x32!.v1alpha2.KubernetesResourcesSpec\"\x84\x01\n\x12ProxyComponentSpec\x12+\n\x07\x65nabled\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x11\n\tnamespace\x18\x02 \x01(\t\x12.\n\x03k8s\x18P \x01(\x0b\x32!.v1alpha2.KubernetesResourcesSpec\"\x8e\x01\n\x1cSidecarInjectorComponentSpec\x12+\n\x07\x65nabled\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x11\n\tnamespace\x18\x02 \x01(\t\x12.\n\x03k8s\x18P \x01(\x0b\x32!.v1alpha2.KubernetesResourcesSpec\"\x85\x01\n\x13PolicyComponentSpec\x12+\n\x07\x65nabled\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x11\n\tnamespace\x18\x02 \x01(\t\x12.\n\x03k8s\x18P \x01(\x0b\x32!.v1alpha2.KubernetesResourcesSpec\"\x88\x01\n\x16TelemetryComponentSpec\x12+\n\x07\x65nabled\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x11\n\tnamespace\x18\x02 \x01(\t\x12.\n\x03k8s\x18P \x01(\x0b\x32!.v1alpha2.KubernetesResourcesSpec\"\x86\x01\n\x14\x43itadelComponentSpec\x12+\n\x07\x65nabled\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x11\n\tnamespace\x18\x02 \x01(\t\x12.\n\x03k8s\x18P \x01(\x0b\x32!.v1alpha2.KubernetesResourcesSpec\"\x8a\x01\n\x18\x43\x65rtManagerComponentSpec\x12+\n\x07\x65nabled\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x11\n\tnamespace\x18\x02 \x01(\t\x12.\n\x03k8s\x18P \x01(\x0b\x32!.v1alpha2.KubernetesResourcesSpec\"\x88\x01\n\x16NodeAgentComponentSpec\x12+\n\x07\x65nabled\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x11\n\tnamespace\x18\x02 \x01(\t\x12.\n\x03k8s\x18P \x01(\x0b\x32!.v1alpha2.KubernetesResourcesSpec\"\x85\x01\n\x13GalleyComponentSpec\x12+\n\x07\x65nabled\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x11\n\tnamespace\x18\x02 \x01(\t\x12.\n\x03k8s\x18P \x01(\x0b\x32!.v1alpha2.KubernetesResourcesSpec\"\x8d\x01\n\x1bIngressGatewayComponentSpec\x12+\n\x07\x65nabled\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x11\n\tnamespace\x18\x02 \x01(\t\x12.\n\x03k8s\x18P \x01(\x0b\x32!.v1alpha2.KubernetesResourcesSpec\"\x8c\x01\n\x1a\x45gressGatewayComponentSpec\x12+\n\x07\x65nabled\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x11\n\tnamespace\x18\x02 \x01(\t\x12.\n\x03k8s\x18P \x01(\x0b\x32!.v1alpha2.KubernetesResourcesSpec\"\xfa\x06\n\x17KubernetesResourcesSpec\x12.\n\x08\x61\x66\x66inity\x18\x01 \x01(\x0b\x32\x1c.k8s.io.api.core.v1.Affinity\x12\'\n\x03\x65nv\x18\x02 \x03(\x0b\x32\x1a.k8s.io.api.core.v1.EnvVar\x12M\n\x08hpa_spec\x18\x03 \x01(\x0b\x32;.k8s.io.api.autoscaling.v2beta1.HorizontalPodAutoscalerSpec\x12\x19\n\x11image_pull_policy\x18\x04 \x01(\t\x12J\n\rnode_selector\x18\x05 \x03(\x0b\x32\x33.v1alpha2.KubernetesResourcesSpec.NodeSelectorEntry\x12@\n\x15pod_disruption_budget\x18\x06 \x01(\x0b\x32!.v1alpha2.PodDisruptionBudgetSpec\x12N\n\x0fpod_annotations\x18\x07 \x03(\x0b\x32\x35.v1alpha2.KubernetesResourcesSpec.PodAnnotationsEntry\x12\x1b\n\x13priority_class_name\x18\x08 \x01(\t\x12\x31\n\x0freadiness_probe\x18\t \x01(\x0b\x32\x18.v1alpha2.ReadinessProbe\x12\x15\n\rreplica_count\x18\n \x01(\r\x12&\n\tresources\x18\x0b \x01(\x0b\x32\x13.v1alpha2.Resources\x12\x30\n\x07service\x18\x0c \x01(\x0b\x32\x1f.k8s.io.api.core.v1.ServiceSpec\x12.\n\x08strategy\x18\r \x01(\x0b\x32\x1c.v1alpha2.DeploymentStrategy\x12\x33\n\x0btolerations\x18\x0e \x03(\x0b\x32\x1e.k8s.io.api.core.v1.Toleration\x12,\n\x08overlays\x18\x64 \x03(\x0b\x32\x1a.v1alpha2.k8sObjectOverlay\x1a\x33\n\x11NodeSelectorEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x1a\x35\n\x13PodAnnotationsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\xbd\x01\n\x10k8sObjectOverlay\x12\x13\n\x0b\x61pi_version\x18\x01 \x01(\t\x12\x0c\n\x04kind\x18\x02 \x01(\t\x12\x0c\n\x04name\x18\x03 \x01(\t\x12\x35\n\x07patches\x18\x04 \x03(\x0b\x32$.v1alpha2.k8sObjectOverlay.PathValue\x1a\x41\n\tPathValue\x12\x0c\n\x04path\x18\x01 \x01(\t\x12&\n\x05value\x18\x02 \x01(\x0b\x32\x17.v1alpha2.TypeInterface\"\x99\x04\n\rInstallStatus\x12\x41\n\x12traffic_management\x18\x01 \x01(\x0b\x32%.v1alpha2.InstallStatus.VersionStatus\x12?\n\x10policy_telemetry\x18\x02 \x01(\x0b\x32%.v1alpha2.InstallStatus.VersionStatus\x12\x37\n\x08security\x18\x03 \x01(\x0b\x32%.v1alpha2.InstallStatus.VersionStatus\x12@\n\x11\x63onfig_management\x18\x04 \x01(\x0b\x32%.v1alpha2.InstallStatus.VersionStatus\x12>\n\x0fingress_gateway\x18\x05 \x01(\x0b\x32%.v1alpha2.InstallStatus.VersionStatus\x12=\n\x0e\x65gress_gateway\x18\x06 \x01(\x0b\x32%.v1alpha2.InstallStatus.VersionStatus\x1aP\n\rVersionStatus\x12\x0f\n\x07version\x18\x01 \x01(\t\x12.\n\x06status\x18\x02 \x01(\x0e\x32\x1e.v1alpha2.InstallStatus.Status\"8\n\x06Status\x12\x08\n\x04NONE\x10\x00\x12\x0c\n\x08UPDATING\x10\x01\x12\x0b\n\x07HEALTHY\x10\x02\x12\t\n\x05\x45RROR\x10\x03\"\xd1\x01\n\tResources\x12/\n\x06limits\x18\x01 \x03(\x0b\x32\x1f.v1alpha2.Resources.LimitsEntry\x12\x33\n\x08requests\x18\x02 \x03(\x0b\x32!.v1alpha2.Resources.RequestsEntry\x1a-\n\x0bLimitsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x1a/\n\rRequestsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\x8c\x02\n\x0eReadinessProbe\x12\"\n\x04\x65xec\x18\x01 \x01(\x0b\x32\x14.v1alpha2.ExecAction\x12(\n\x07httpGet\x18\x02 \x01(\x0b\x32\x17.v1alpha2.HTTPGetAction\x12,\n\ttcpSocket\x18\x03 \x01(\x0b\x32\x19.v1alpha2.TCPSocketAction\x12\x1b\n\x13initialDelaySeconds\x18\x04 \x01(\x05\x12\x16\n\x0etimeoutSeconds\x18\x05 \x01(\x05\x12\x15\n\rperiodSeconds\x18\x06 \x01(\x05\x12\x18\n\x10successThreshold\x18\x07 \x01(\x05\x12\x18\n\x10\x66\x61ilureThreshold\x18\x08 \x01(\x05\"\x1d\n\nExecAction\x12\x0f\n\x07\x63ommand\x18\x01 \x03(\t\"\x94\x01\n\rHTTPGetAction\x12\x0c\n\x04path\x18\x01 \x01(\t\x12,\n\x04port\x18\x02 \x01(\x0b\x32\x1e.v1alpha2.TypeIntOrStringForPB\x12\x0c\n\x04host\x18\x03 \x01(\t\x12\x0e\n\x06scheme\x18\x04 \x01(\t\x12)\n\x0bhttpHeaders\x18\x05 \x03(\x0b\x32\x14.v1alpha2.HTTPHeader\")\n\nHTTPHeader\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t\"M\n\x0fTCPSocketAction\x12,\n\x04port\x18\x01 \x01(\x0b\x32\x1e.v1alpha2.TypeIntOrStringForPB\x12\x0c\n\x04host\x18\x02 \x01(\t\"\x8e\x01\n\x17PodDisruptionBudgetSpec\x12\x14\n\x0cminAvailable\x18\x01 \x01(\r\x12\x45\n\x08selector\x18\x02 \x01(\x0b\x32\x33.k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector\x12\x16\n\x0emaxUnavailable\x18\x03 \x01(\r\"\\\n\x12\x44\x65ploymentStrategy\x12\x0c\n\x04type\x18\x01 \x01(\t\x12\x38\n\rrollingUpdate\x18\x02 \x01(\x0b\x32!.v1alpha2.RollingUpdateDeployment\"\x83\x01\n\x17RollingUpdateDeployment\x12\x36\n\x0emaxUnavailable\x18\x01 \x01(\x0b\x32\x1e.v1alpha2.TypeIntOrStringForPB\x12\x30\n\x08maxSurge\x18\x02 \x01(\x0b\x32\x1e.v1alpha2.TypeIntOrStringForPB\"-\n\nObjectMeta\x12\x0c\n\x04name\x18\x05 \x01(\t\x12\x11\n\tnamespace\x18\x06 \x01(\t\"\x18\n\x16TypeMapStringInterface\"\x0f\n\rTypeInterface\"\x16\n\x14TypeIntOrStringForPBb\x06proto3')
+  serialized_pb=_b('\n5pkg/apis/istio/v1alpha2/istiocontrolplane_types.proto\x12\x08v1alpha2\x1a\"k8s.io/api/core/v1/generated.proto\x1a\"k8s.io/api/apps/v1/generated.proto\x1a.k8s.io/api/autoscaling/v2beta1/generated.proto\x1a\x34k8s.io/apimachinery/pkg/apis/meta/v1/generated.proto\x1a/k8s.io/apimachinery/pkg/runtime/generated.proto\x1a@github.com/gogo/protobuf/protobuf/google/protobuf/wrappers.proto\"k\n\x11IstioControlPlane\x12-\n\x04spec\x18\x03 \x01(\x0b\x32\x1f.v1alpha2.IstioControlPlaneSpec\x12\'\n\x06status\x18\x04 \x01(\x0b\x32\x17.v1alpha2.InstallStatus\"\xed\x04\n\x15IstioControlPlaneSpec\x12\x19\n\x11\x64\x65\x66\x61ult_namespace\x18\x05 \x01(\t\x12\x42\n\x12traffic_management\x18\x19 \x01(\x0b\x32&.v1alpha2.TrafficManagementFeatureSpec\x12+\n\x06policy\x18\x1a \x01(\x0b\x32\x1b.v1alpha2.PolicyFeatureSpec\x12\x31\n\ttelemetry\x18\x1b \x01(\x0b\x32\x1e.v1alpha2.TelemetryFeatureSpec\x12/\n\x08security\x18\x1c \x01(\x0b\x32\x1d.v1alpha2.SecurityFeatureSpec\x12@\n\x11\x63onfig_management\x18\x1d \x01(\x0b\x32%.v1alpha2.ConfigManagementFeatureSpec\x12:\n\x0e\x61uto_injection\x18\x1e \x01(\x0b\x32\".v1alpha2.AutoInjectionFeatureSpec\x12.\n\x08gateways\x18\x1f \x01(\x0b\x32\x1c.v1alpha2.GatewayFeatureSpec\x12\x30\n\x06values\x18\x32 \x01(\x0b\x32 .v1alpha2.TypeMapStringInterface\x12;\n\x11unvalidatedValues\x18\x33 \x01(\x0b\x32 .v1alpha2.TypeMapStringInterface\x12\x0f\n\x07profile\x18\x64 \x01(\t\x12\x1c\n\x14install_package_path\x18\x66 \x01(\t\x12\x0b\n\x03hub\x18n \x01(\t\x12\x0b\n\x03tag\x18o \x01(\t\"\x8d\x02\n\x1cTrafficManagementFeatureSpec\x12+\n\x07\x65nabled\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x45\n\ncomponents\x18\x32 \x01(\x0b\x32\x31.v1alpha2.TrafficManagementFeatureSpec.Components\x1ay\n\nComponents\x12\x11\n\tnamespace\x18\x01 \x01(\t\x12+\n\x05pilot\x18\x14 \x01(\x0b\x32\x1c.v1alpha2.PilotComponentSpec\x12+\n\x05proxy\x18\x15 \x01(\x0b\x32\x1c.v1alpha2.ProxyComponentSpec\"\xcc\x01\n\x11PolicyFeatureSpec\x12+\n\x07\x65nabled\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12:\n\ncomponents\x18\x32 \x01(\x0b\x32&.v1alpha2.PolicyFeatureSpec.Components\x1aN\n\nComponents\x12\x11\n\tnamespace\x18\x01 \x01(\t\x12-\n\x06policy\x18\x14 \x01(\x0b\x32\x1d.v1alpha2.PolicyComponentSpec\"\xd8\x01\n\x14TelemetryFeatureSpec\x12+\n\x07\x65nabled\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12=\n\ncomponents\x18\x32 \x01(\x0b\x32).v1alpha2.TelemetryFeatureSpec.Components\x1aT\n\nComponents\x12\x11\n\tnamespace\x18\x01 \x01(\t\x12\x33\n\ttelemetry\x18\x14 \x01(\x0b\x32 .v1alpha2.TelemetryComponentSpec\"\xc3\x02\n\x13SecurityFeatureSpec\x12+\n\x07\x65nabled\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12<\n\ncomponents\x18\x32 \x01(\x0b\x32(.v1alpha2.SecurityFeatureSpec.Components\x1a\xc0\x01\n\nComponents\x12\x11\n\tnamespace\x18\x01 \x01(\t\x12/\n\x07\x63itadel\x18\x14 \x01(\x0b\x32\x1e.v1alpha2.CitadelComponentSpec\x12\x38\n\x0c\x63\x65rt_manager\x18\x15 \x01(\x0b\x32\".v1alpha2.CertManagerComponentSpec\x12\x34\n\nnode_agent\x18\x16 \x01(\x0b\x32 .v1alpha2.NodeAgentComponentSpec\"\xe0\x01\n\x1b\x43onfigManagementFeatureSpec\x12+\n\x07\x65nabled\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x44\n\ncomponents\x18\x32 \x01(\x0b\x32\x30.v1alpha2.ConfigManagementFeatureSpec.Components\x1aN\n\nComponents\x12\x11\n\tnamespace\x18\x01 \x01(\t\x12-\n\x06galley\x18\x14 \x01(\x0b\x32\x1d.v1alpha2.GalleyComponentSpec\"\xe5\x01\n\x18\x41utoInjectionFeatureSpec\x12+\n\x07\x65nabled\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x41\n\ncomponents\x18\x32 \x01(\x0b\x32-.v1alpha2.AutoInjectionFeatureSpec.Components\x1aY\n\nComponents\x12\x11\n\tnamespace\x18\x01 \x01(\t\x12\x38\n\x08injector\x18\x14 \x01(\x0b\x32&.v1alpha2.SidecarInjectorComponentSpec\"\x9e\x02\n\x12GatewayFeatureSpec\x12+\n\x07\x65nabled\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12;\n\ncomponents\x18\x32 \x01(\x0b\x32\'.v1alpha2.GatewayFeatureSpec.Components\x1a\x9d\x01\n\nComponents\x12\x11\n\tnamespace\x18\x01 \x01(\t\x12>\n\x0fingress_gateway\x18\x1f \x01(\x0b\x32%.v1alpha2.IngressGatewayComponentSpec\x12<\n\x0e\x65gress_gateway\x18  \x01(\x0b\x32$.v1alpha2.EgressGatewayComponentSpec\"\x84\x01\n\x12PilotComponentSpec\x12+\n\x07\x65nabled\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x11\n\tnamespace\x18\x02 \x01(\t\x12.\n\x03k8s\x18P \x01(\x0b\x32!.v1alpha2.KubernetesResourcesSpec\"\x84\x01\n\x12ProxyComponentSpec\x12+\n\x07\x65nabled\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x11\n\tnamespace\x18\x02 \x01(\t\x12.\n\x03k8s\x18P \x01(\x0b\x32!.v1alpha2.KubernetesResourcesSpec\"\x8e\x01\n\x1cSidecarInjectorComponentSpec\x12+\n\x07\x65nabled\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x11\n\tnamespace\x18\x02 \x01(\t\x12.\n\x03k8s\x18P \x01(\x0b\x32!.v1alpha2.KubernetesResourcesSpec\"\x85\x01\n\x13PolicyComponentSpec\x12+\n\x07\x65nabled\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x11\n\tnamespace\x18\x02 \x01(\t\x12.\n\x03k8s\x18P \x01(\x0b\x32!.v1alpha2.KubernetesResourcesSpec\"\x88\x01\n\x16TelemetryComponentSpec\x12+\n\x07\x65nabled\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x11\n\tnamespace\x18\x02 \x01(\t\x12.\n\x03k8s\x18P \x01(\x0b\x32!.v1alpha2.KubernetesResourcesSpec\"\x86\x01\n\x14\x43itadelComponentSpec\x12+\n\x07\x65nabled\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x11\n\tnamespace\x18\x02 \x01(\t\x12.\n\x03k8s\x18P \x01(\x0b\x32!.v1alpha2.KubernetesResourcesSpec\"\x8a\x01\n\x18\x43\x65rtManagerComponentSpec\x12+\n\x07\x65nabled\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x11\n\tnamespace\x18\x02 \x01(\t\x12.\n\x03k8s\x18P \x01(\x0b\x32!.v1alpha2.KubernetesResourcesSpec\"\x88\x01\n\x16NodeAgentComponentSpec\x12+\n\x07\x65nabled\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x11\n\tnamespace\x18\x02 \x01(\t\x12.\n\x03k8s\x18P \x01(\x0b\x32!.v1alpha2.KubernetesResourcesSpec\"\x85\x01\n\x13GalleyComponentSpec\x12+\n\x07\x65nabled\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x11\n\tnamespace\x18\x02 \x01(\t\x12.\n\x03k8s\x18P \x01(\x0b\x32!.v1alpha2.KubernetesResourcesSpec\"\x8d\x01\n\x1bIngressGatewayComponentSpec\x12+\n\x07\x65nabled\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x11\n\tnamespace\x18\x02 \x01(\t\x12.\n\x03k8s\x18P \x01(\x0b\x32!.v1alpha2.KubernetesResourcesSpec\"\x8c\x01\n\x1a\x45gressGatewayComponentSpec\x12+\n\x07\x65nabled\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x11\n\tnamespace\x18\x02 \x01(\t\x12.\n\x03k8s\x18P \x01(\x0b\x32!.v1alpha2.KubernetesResourcesSpec\"\xfa\x06\n\x17KubernetesResourcesSpec\x12.\n\x08\x61\x66\x66inity\x18\x01 \x01(\x0b\x32\x1c.k8s.io.api.core.v1.Affinity\x12\'\n\x03\x65nv\x18\x02 \x03(\x0b\x32\x1a.k8s.io.api.core.v1.EnvVar\x12M\n\x08hpa_spec\x18\x03 \x01(\x0b\x32;.k8s.io.api.autoscaling.v2beta1.HorizontalPodAutoscalerSpec\x12\x19\n\x11image_pull_policy\x18\x04 \x01(\t\x12J\n\rnode_selector\x18\x05 \x03(\x0b\x32\x33.v1alpha2.KubernetesResourcesSpec.NodeSelectorEntry\x12@\n\x15pod_disruption_budget\x18\x06 \x01(\x0b\x32!.v1alpha2.PodDisruptionBudgetSpec\x12N\n\x0fpod_annotations\x18\x07 \x03(\x0b\x32\x35.v1alpha2.KubernetesResourcesSpec.PodAnnotationsEntry\x12\x1b\n\x13priority_class_name\x18\x08 \x01(\t\x12\x31\n\x0freadiness_probe\x18\t \x01(\x0b\x32\x18.v1alpha2.ReadinessProbe\x12\x15\n\rreplica_count\x18\n \x01(\r\x12&\n\tresources\x18\x0b \x01(\x0b\x32\x13.v1alpha2.Resources\x12\x30\n\x07service\x18\x0c \x01(\x0b\x32\x1f.k8s.io.api.core.v1.ServiceSpec\x12.\n\x08strategy\x18\r \x01(\x0b\x32\x1c.v1alpha2.DeploymentStrategy\x12\x33\n\x0btolerations\x18\x0e \x03(\x0b\x32\x1e.k8s.io.api.core.v1.Toleration\x12,\n\x08overlays\x18\x64 \x03(\x0b\x32\x1a.v1alpha2.k8sObjectOverlay\x1a\x33\n\x11NodeSelectorEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x1a\x35\n\x13PodAnnotationsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\xbd\x01\n\x10k8sObjectOverlay\x12\x13\n\x0b\x61pi_version\x18\x01 \x01(\t\x12\x0c\n\x04kind\x18\x02 \x01(\t\x12\x0c\n\x04name\x18\x03 \x01(\t\x12\x35\n\x07patches\x18\x04 \x03(\x0b\x32$.v1alpha2.k8sObjectOverlay.PathValue\x1a\x41\n\tPathValue\x12\x0c\n\x04path\x18\x01 \x01(\t\x12&\n\x05value\x18\x02 \x01(\x0b\x32\x17.v1alpha2.TypeInterface\"\x99\x04\n\rInstallStatus\x12\x41\n\x12traffic_management\x18\x01 \x01(\x0b\x32%.v1alpha2.InstallStatus.VersionStatus\x12?\n\x10policy_telemetry\x18\x02 \x01(\x0b\x32%.v1alpha2.InstallStatus.VersionStatus\x12\x37\n\x08security\x18\x03 \x01(\x0b\x32%.v1alpha2.InstallStatus.VersionStatus\x12@\n\x11\x63onfig_management\x18\x04 \x01(\x0b\x32%.v1alpha2.InstallStatus.VersionStatus\x12>\n\x0fingress_gateway\x18\x05 \x01(\x0b\x32%.v1alpha2.InstallStatus.VersionStatus\x12=\n\x0e\x65gress_gateway\x18\x06 \x01(\x0b\x32%.v1alpha2.InstallStatus.VersionStatus\x1aP\n\rVersionStatus\x12\x0f\n\x07version\x18\x01 \x01(\t\x12.\n\x06status\x18\x02 \x01(\x0e\x32\x1e.v1alpha2.InstallStatus.Status\"8\n\x06Status\x12\x08\n\x04NONE\x10\x00\x12\x0c\n\x08UPDATING\x10\x01\x12\x0b\n\x07HEALTHY\x10\x02\x12\t\n\x05\x45RROR\x10\x03\"\xd1\x01\n\tResources\x12/\n\x06limits\x18\x01 \x03(\x0b\x32\x1f.v1alpha2.Resources.LimitsEntry\x12\x33\n\x08requests\x18\x02 \x03(\x0b\x32!.v1alpha2.Resources.RequestsEntry\x1a-\n\x0bLimitsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x1a/\n\rRequestsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\x8c\x02\n\x0eReadinessProbe\x12\"\n\x04\x65xec\x18\x01 \x01(\x0b\x32\x14.v1alpha2.ExecAction\x12(\n\x07httpGet\x18\x02 \x01(\x0b\x32\x17.v1alpha2.HTTPGetAction\x12,\n\ttcpSocket\x18\x03 \x01(\x0b\x32\x19.v1alpha2.TCPSocketAction\x12\x1b\n\x13initialDelaySeconds\x18\x04 \x01(\x05\x12\x16\n\x0etimeoutSeconds\x18\x05 \x01(\x05\x12\x15\n\rperiodSeconds\x18\x06 \x01(\x05\x12\x18\n\x10successThreshold\x18\x07 \x01(\x05\x12\x18\n\x10\x66\x61ilureThreshold\x18\x08 \x01(\x05\"\x1d\n\nExecAction\x12\x0f\n\x07\x63ommand\x18\x01 \x03(\t\"\x94\x01\n\rHTTPGetAction\x12\x0c\n\x04path\x18\x01 \x01(\t\x12,\n\x04port\x18\x02 \x01(\x0b\x32\x1e.v1alpha2.TypeIntOrStringForPB\x12\x0c\n\x04host\x18\x03 \x01(\t\x12\x0e\n\x06scheme\x18\x04 \x01(\t\x12)\n\x0bhttpHeaders\x18\x05 \x03(\x0b\x32\x14.v1alpha2.HTTPHeader\")\n\nHTTPHeader\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t\"M\n\x0fTCPSocketAction\x12,\n\x04port\x18\x01 \x01(\x0b\x32\x1e.v1alpha2.TypeIntOrStringForPB\x12\x0c\n\x04host\x18\x02 \x01(\t\"\x8e\x01\n\x17PodDisruptionBudgetSpec\x12\x14\n\x0cminAvailable\x18\x01 \x01(\r\x12\x45\n\x08selector\x18\x02 \x01(\x0b\x32\x33.k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector\x12\x16\n\x0emaxUnavailable\x18\x03 \x01(\r\"\\\n\x12\x44\x65ploymentStrategy\x12\x0c\n\x04type\x18\x01 \x01(\t\x12\x38\n\rrollingUpdate\x18\x02 \x01(\x0b\x32!.v1alpha2.RollingUpdateDeployment\"\x83\x01\n\x17RollingUpdateDeployment\x12\x36\n\x0emaxUnavailable\x18\x01 \x01(\x0b\x32\x1e.v1alpha2.TypeIntOrStringForPB\x12\x30\n\x08maxSurge\x18\x02 \x01(\x0b\x32\x1e.v1alpha2.TypeIntOrStringForPB\"-\n\nObjectMeta\x12\x0c\n\x04name\x18\x05 \x01(\t\x12\x11\n\tnamespace\x18\x06 \x01(\t\"\x18\n\x16TypeMapStringInterface\"\x0f\n\rTypeInterface\"\x16\n\x14TypeIntOrStringForPBb\x06proto3')
   ,
   dependencies=[k8s_dot_io_dot_api_dot_core_dot_v1_dot_generated__pb2.DESCRIPTOR,k8s_dot_io_dot_api_dot_apps_dot_v1_dot_generated__pb2.DESCRIPTOR,k8s_dot_io_dot_api_dot_autoscaling_dot_v2beta1_dot_generated__pb2.DESCRIPTOR,k8s_dot_io_dot_apimachinery_dot_pkg_dot_apis_dot_meta_dot_v1_dot_generated__pb2.DESCRIPTOR,k8s_dot_io_dot_apimachinery_dot_pkg_dot_runtime_dot_generated__pb2.DESCRIPTOR,github_dot_com_dot_gogo_dot_protobuf_dot_protobuf_dot_google_dot_protobuf_dot_wrappers__pb2.DESCRIPTOR,])
 
@@ -57,8 +57,8 @@ _INSTALLSTATUS_STATUS = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=6095,
-  serialized_end=6151,
+  serialized_start=5958,
+  serialized_end=6014,
 )
 _sym_db.RegisterEnumDescriptor(_INSTALLSTATUS_STATUS)
 
@@ -71,28 +71,14 @@ _ISTIOCONTROLPLANE = _descriptor.Descriptor(
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='typemeta', full_name='v1alpha2.IstioControlPlane.typemeta', index=0,
-      number=1, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='objectmeta', full_name='v1alpha2.IstioControlPlane.objectmeta', index=1,
-      number=2, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='spec', full_name='v1alpha2.IstioControlPlane.spec', index=2,
+      name='spec', full_name='v1alpha2.IstioControlPlane.spec', index=0,
       number=3, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='status', full_name='v1alpha2.IstioControlPlane.status', index=3,
+      name='status', full_name='v1alpha2.IstioControlPlane.status', index=1,
       number=4, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
@@ -110,8 +96,8 @@ _ISTIOCONTROLPLANE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=357,
-  serialized_end=600,
+  serialized_start=356,
+  serialized_end=463,
 )
 
 
@@ -232,8 +218,8 @@ _ISTIOCONTROLPLANESPEC = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=603,
-  serialized_end=1224,
+  serialized_start=466,
+  serialized_end=1087,
 )
 
 
@@ -277,8 +263,8 @@ _TRAFFICMANAGEMENTFEATURESPEC_COMPONENTS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1375,
-  serialized_end=1496,
+  serialized_start=1238,
+  serialized_end=1359,
 )
 
 _TRAFFICMANAGEMENTFEATURESPEC = _descriptor.Descriptor(
@@ -314,8 +300,8 @@ _TRAFFICMANAGEMENTFEATURESPEC = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1227,
-  serialized_end=1496,
+  serialized_start=1090,
+  serialized_end=1359,
 )
 
 
@@ -352,8 +338,8 @@ _POLICYFEATURESPEC_COMPONENTS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1625,
-  serialized_end=1703,
+  serialized_start=1488,
+  serialized_end=1566,
 )
 
 _POLICYFEATURESPEC = _descriptor.Descriptor(
@@ -389,8 +375,8 @@ _POLICYFEATURESPEC = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1499,
-  serialized_end=1703,
+  serialized_start=1362,
+  serialized_end=1566,
 )
 
 
@@ -427,8 +413,8 @@ _TELEMETRYFEATURESPEC_COMPONENTS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1838,
-  serialized_end=1922,
+  serialized_start=1701,
+  serialized_end=1785,
 )
 
 _TELEMETRYFEATURESPEC = _descriptor.Descriptor(
@@ -464,8 +450,8 @@ _TELEMETRYFEATURESPEC = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1706,
-  serialized_end=1922,
+  serialized_start=1569,
+  serialized_end=1785,
 )
 
 
@@ -516,8 +502,8 @@ _SECURITYFEATURESPEC_COMPONENTS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2056,
-  serialized_end=2248,
+  serialized_start=1919,
+  serialized_end=2111,
 )
 
 _SECURITYFEATURESPEC = _descriptor.Descriptor(
@@ -553,8 +539,8 @@ _SECURITYFEATURESPEC = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1925,
-  serialized_end=2248,
+  serialized_start=1788,
+  serialized_end=2111,
 )
 
 
@@ -591,8 +577,8 @@ _CONFIGMANAGEMENTFEATURESPEC_COMPONENTS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2397,
-  serialized_end=2475,
+  serialized_start=2260,
+  serialized_end=2338,
 )
 
 _CONFIGMANAGEMENTFEATURESPEC = _descriptor.Descriptor(
@@ -628,8 +614,8 @@ _CONFIGMANAGEMENTFEATURESPEC = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2251,
-  serialized_end=2475,
+  serialized_start=2114,
+  serialized_end=2338,
 )
 
 
@@ -666,8 +652,8 @@ _AUTOINJECTIONFEATURESPEC_COMPONENTS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2618,
-  serialized_end=2707,
+  serialized_start=2481,
+  serialized_end=2570,
 )
 
 _AUTOINJECTIONFEATURESPEC = _descriptor.Descriptor(
@@ -703,8 +689,8 @@ _AUTOINJECTIONFEATURESPEC = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2478,
-  serialized_end=2707,
+  serialized_start=2341,
+  serialized_end=2570,
 )
 
 
@@ -748,8 +734,8 @@ _GATEWAYFEATURESPEC_COMPONENTS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2839,
-  serialized_end=2996,
+  serialized_start=2702,
+  serialized_end=2859,
 )
 
 _GATEWAYFEATURESPEC = _descriptor.Descriptor(
@@ -785,8 +771,8 @@ _GATEWAYFEATURESPEC = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2710,
-  serialized_end=2996,
+  serialized_start=2573,
+  serialized_end=2859,
 )
 
 
@@ -830,8 +816,8 @@ _PILOTCOMPONENTSPEC = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2999,
-  serialized_end=3131,
+  serialized_start=2862,
+  serialized_end=2994,
 )
 
 
@@ -875,8 +861,8 @@ _PROXYCOMPONENTSPEC = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3134,
-  serialized_end=3266,
+  serialized_start=2997,
+  serialized_end=3129,
 )
 
 
@@ -920,8 +906,8 @@ _SIDECARINJECTORCOMPONENTSPEC = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3269,
-  serialized_end=3411,
+  serialized_start=3132,
+  serialized_end=3274,
 )
 
 
@@ -965,8 +951,8 @@ _POLICYCOMPONENTSPEC = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3414,
-  serialized_end=3547,
+  serialized_start=3277,
+  serialized_end=3410,
 )
 
 
@@ -1010,8 +996,8 @@ _TELEMETRYCOMPONENTSPEC = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3550,
-  serialized_end=3686,
+  serialized_start=3413,
+  serialized_end=3549,
 )
 
 
@@ -1055,8 +1041,8 @@ _CITADELCOMPONENTSPEC = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3689,
-  serialized_end=3823,
+  serialized_start=3552,
+  serialized_end=3686,
 )
 
 
@@ -1100,8 +1086,8 @@ _CERTMANAGERCOMPONENTSPEC = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3826,
-  serialized_end=3964,
+  serialized_start=3689,
+  serialized_end=3827,
 )
 
 
@@ -1145,8 +1131,8 @@ _NODEAGENTCOMPONENTSPEC = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3967,
-  serialized_end=4103,
+  serialized_start=3830,
+  serialized_end=3966,
 )
 
 
@@ -1190,8 +1176,8 @@ _GALLEYCOMPONENTSPEC = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4106,
-  serialized_end=4239,
+  serialized_start=3969,
+  serialized_end=4102,
 )
 
 
@@ -1235,8 +1221,8 @@ _INGRESSGATEWAYCOMPONENTSPEC = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4242,
-  serialized_end=4383,
+  serialized_start=4105,
+  serialized_end=4246,
 )
 
 
@@ -1280,8 +1266,8 @@ _EGRESSGATEWAYCOMPONENTSPEC = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4386,
-  serialized_end=4526,
+  serialized_start=4249,
+  serialized_end=4389,
 )
 
 
@@ -1318,8 +1304,8 @@ _KUBERNETESRESOURCESSPEC_NODESELECTORENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5313,
-  serialized_end=5364,
+  serialized_start=5176,
+  serialized_end=5227,
 )
 
 _KUBERNETESRESOURCESSPEC_PODANNOTATIONSENTRY = _descriptor.Descriptor(
@@ -1355,8 +1341,8 @@ _KUBERNETESRESOURCESSPEC_PODANNOTATIONSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5366,
-  serialized_end=5419,
+  serialized_start=5229,
+  serialized_end=5282,
 )
 
 _KUBERNETESRESOURCESSPEC = _descriptor.Descriptor(
@@ -1483,8 +1469,8 @@ _KUBERNETESRESOURCESSPEC = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4529,
-  serialized_end=5419,
+  serialized_start=4392,
+  serialized_end=5282,
 )
 
 
@@ -1521,8 +1507,8 @@ _K8SOBJECTOVERLAY_PATHVALUE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5546,
-  serialized_end=5611,
+  serialized_start=5409,
+  serialized_end=5474,
 )
 
 _K8SOBJECTOVERLAY = _descriptor.Descriptor(
@@ -1572,8 +1558,8 @@ _K8SOBJECTOVERLAY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5422,
-  serialized_end=5611,
+  serialized_start=5285,
+  serialized_end=5474,
 )
 
 
@@ -1610,8 +1596,8 @@ _INSTALLSTATUS_VERSIONSTATUS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6013,
-  serialized_end=6093,
+  serialized_start=5876,
+  serialized_end=5956,
 )
 
 _INSTALLSTATUS = _descriptor.Descriptor(
@@ -1676,8 +1662,8 @@ _INSTALLSTATUS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5614,
-  serialized_end=6151,
+  serialized_start=5477,
+  serialized_end=6014,
 )
 
 
@@ -1714,8 +1700,8 @@ _RESOURCES_LIMITSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6269,
-  serialized_end=6314,
+  serialized_start=6132,
+  serialized_end=6177,
 )
 
 _RESOURCES_REQUESTSENTRY = _descriptor.Descriptor(
@@ -1751,8 +1737,8 @@ _RESOURCES_REQUESTSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6316,
-  serialized_end=6363,
+  serialized_start=6179,
+  serialized_end=6226,
 )
 
 _RESOURCES = _descriptor.Descriptor(
@@ -1788,8 +1774,8 @@ _RESOURCES = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6154,
-  serialized_end=6363,
+  serialized_start=6017,
+  serialized_end=6226,
 )
 
 
@@ -1868,8 +1854,8 @@ _READINESSPROBE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6366,
-  serialized_end=6634,
+  serialized_start=6229,
+  serialized_end=6497,
 )
 
 
@@ -1899,8 +1885,8 @@ _EXECACTION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6636,
-  serialized_end=6665,
+  serialized_start=6499,
+  serialized_end=6528,
 )
 
 
@@ -1958,8 +1944,8 @@ _HTTPGETACTION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6668,
-  serialized_end=6816,
+  serialized_start=6531,
+  serialized_end=6679,
 )
 
 
@@ -1996,8 +1982,8 @@ _HTTPHEADER = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6818,
-  serialized_end=6859,
+  serialized_start=6681,
+  serialized_end=6722,
 )
 
 
@@ -2034,8 +2020,8 @@ _TCPSOCKETACTION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6861,
-  serialized_end=6938,
+  serialized_start=6724,
+  serialized_end=6801,
 )
 
 
@@ -2079,8 +2065,8 @@ _PODDISRUPTIONBUDGETSPEC = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6941,
-  serialized_end=7083,
+  serialized_start=6804,
+  serialized_end=6946,
 )
 
 
@@ -2117,8 +2103,8 @@ _DEPLOYMENTSTRATEGY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=7085,
-  serialized_end=7177,
+  serialized_start=6948,
+  serialized_end=7040,
 )
 
 
@@ -2155,8 +2141,8 @@ _ROLLINGUPDATEDEPLOYMENT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=7180,
-  serialized_end=7311,
+  serialized_start=7043,
+  serialized_end=7174,
 )
 
 
@@ -2193,8 +2179,8 @@ _OBJECTMETA = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=7313,
-  serialized_end=7358,
+  serialized_start=7176,
+  serialized_end=7221,
 )
 
 
@@ -2217,8 +2203,8 @@ _TYPEMAPSTRINGINTERFACE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=7360,
-  serialized_end=7384,
+  serialized_start=7223,
+  serialized_end=7247,
 )
 
 
@@ -2241,8 +2227,8 @@ _TYPEINTERFACE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=7386,
-  serialized_end=7401,
+  serialized_start=7249,
+  serialized_end=7264,
 )
 
 
@@ -2265,12 +2251,10 @@ _TYPEINTORSTRINGFORPB = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=7403,
-  serialized_end=7425,
+  serialized_start=7266,
+  serialized_end=7288,
 )
 
-_ISTIOCONTROLPLANE.fields_by_name['typemeta'].message_type = k8s_dot_io_dot_apimachinery_dot_pkg_dot_apis_dot_meta_dot_v1_dot_generated__pb2._TYPEMETA
-_ISTIOCONTROLPLANE.fields_by_name['objectmeta'].message_type = k8s_dot_io_dot_apimachinery_dot_pkg_dot_apis_dot_meta_dot_v1_dot_generated__pb2._OBJECTMETA
 _ISTIOCONTROLPLANE.fields_by_name['spec'].message_type = _ISTIOCONTROLPLANESPEC
 _ISTIOCONTROLPLANE.fields_by_name['status'].message_type = _INSTALLSTATUS
 _ISTIOCONTROLPLANESPEC.fields_by_name['traffic_management'].message_type = _TRAFFICMANAGEMENTFEATURESPEC

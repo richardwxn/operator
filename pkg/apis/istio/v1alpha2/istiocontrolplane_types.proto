@@ -167,10 +167,6 @@ package v1alpha2;
 
 // IstioControlPlane is a CustomResourceDefinition (CRD) describing an Istio control plane.
 message IstioControlPlane {
-
-    k8s.io.apimachinery.pkg.apis.meta.v1.TypeMeta typemeta = 1;
-
-    k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta objectmeta = 2;
     // Spec defines the desired state of IstioControlPlane.
     IstioControlPlaneSpec spec = 3;
     // Status reports the status of the Istio control plane.

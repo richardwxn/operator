@@ -35,8 +35,12 @@ import (
 
 var log = logf.Log.WithName("controller_istiocontrolplane")
 
-const finalizer = "istio-operator"
-const v1 = "v1alpha1"
+const (
+	finalizer = "istio-operator"
+	v1        = "v1alpha1"
+	// finalizerMaxRetries defines the maximum number of attempts to add finalizers.
+	finalizerMaxRetries = 10
+)
 
 /**
 * USER ACTION REQUIRED: This is a scaffold file intended for the user to modify with their own Controller
@@ -140,9 +144,9 @@ func (r *ReconcileIstioControlPlane) Reconcile(request reconcile.Request) (recon
 		finalizers = append(finalizers[:finalizerIndex], finalizers[finalizerIndex+1:]...)
 		instance.SetFinalizers(finalizers)
 		finalizerError := r.client.Update(context.TODO(), instance)
-		for retryCount := 0; errors.IsConflict(finalizerError) && retryCount < 5; retryCount++ {
+		for retryCount := 0; errors.IsConflict(finalizerError) && retryCount < finalizerMaxRetries; retryCount++ {
 			// workaround for https://github.com/kubernetes/kubernetes/issues/73098 for k8s < 1.14
-			reqLogger.Info("confilict during finalizer removal, retrying")
+			reqLogger.Info("conflict during finalizer removal, retrying")
 			_ = r.client.Get(context.TODO(), request.NamespacedName, instance)
 			finalizers = instance.GetFinalizers()
 			finalizerIndex = indexOf(finalizers, finalizer)
@@ -155,7 +159,7 @@ func (r *ReconcileIstioControlPlane) Reconcile(request reconcile.Request) (recon
 		}
 		return reconcile.Result{}, err
 	} else if finalizerIndex < 0 {
-		reqLogger.V(1).Info("Adding finalizer", "finalizer", finalizer)
+		reqLogger.V(2).Info("Adding finalizer", "finalizer", finalizer)
 		finalizers = append(finalizers, finalizer)
 		instance.SetFinalizers(finalizers)
 		err = r.client.Update(context.TODO(), instance)

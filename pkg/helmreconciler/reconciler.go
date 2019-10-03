@@ -15,13 +15,18 @@
 package helmreconciler
 
 import (
-	"fmt"
+	"sync"
+
+	"istio.io/operator/pkg/util"
+
+	"istio.io/pkg/log"
 
 	"github.com/go-logr/logr"
-	"github.com/pkg/errors"
 	"k8s.io/apimachinery/pkg/runtime"
 	utilerrors "k8s.io/apimachinery/pkg/util/errors"
 	"sigs.k8s.io/controller-runtime/pkg/client"
+
+	"istio.io/operator/pkg/name"
 )
 
 // HelmReconciler reconciles resources rendered by a set of helm charts for a specific instances of a custom resource,
@@ -95,71 +100,53 @@ func (h *HelmReconciler) Reconcile() error {
 	// render charts
 	manifestMap, err := h.renderCharts(h.customizer.Input())
 	if err != nil {
-		err = errors.Wrap(err, fmt.Sprintf("error rendering charts"))
-		listenerErr := h.customizer.Listener().EndReconcile(h.instance, err)
-		if listenerErr != nil {
-			h.logger.Error(listenerErr, "unexpected error invoking EndReconcile")
-		}
 		return err
 	}
 
-	// determine processing order
-	chartOrder, err := h.customizer.Input().GetProcessingOrder(manifestMap)
-	if err != nil {
-		err = errors.Wrap(err, fmt.Sprintf("error ordering charts"))
-		listenerErr := h.customizer.Listener().EndReconcile(h.instance, err)
-		if listenerErr != nil {
-			h.logger.Error(listenerErr, "unexpected error invoking EndReconcile")
-		}
-		return err
-	}
-
-	// collect the errors.  from here on, we'll process everything with the assumption that any error is not fatal.
-	allErrors := []error{}
-
-	// process the charts
-	for _, chartName := range chartOrder {
-		chartManifests, ok := manifestMap[chartName]
-		if !ok {
-			// TODO: log warning about missing chart
-			continue
-		}
-		chartManifests, err := h.customizer.Listener().BeginChart(chartName, chartManifests)
-		if err != nil {
-			allErrors = append(allErrors, err)
-		}
-		err = h.ProcessManifests(chartManifests)
-		if err != nil {
-			allErrors = append(allErrors, err)
-		}
-		err = h.customizer.Listener().EndChart(chartName)
-		if err != nil {
-			allErrors = append(allErrors, err)
-		}
-	}
+	errs := h.processRecursive(manifestMap)
 
 	// delete any obsolete resources
-	err = h.customizer.Listener().BeginPrune(false)
-	if err != nil {
-		allErrors = append(allErrors, err)
-	}
-	err = h.Prune(false)
-	if err != nil {
-		allErrors = append(allErrors, err)
-	}
-	err = h.customizer.Listener().EndPrune()
-	if err != nil {
-		allErrors = append(allErrors, err)
-	}
+	errs = util.AppendErr(errs, h.customizer.Listener().BeginPrune(false))
+	errs = util.AppendErr(errs, h.Prune(false))
+	errs = util.AppendErr(errs, h.customizer.Listener().EndPrune())
+	errs = util.AppendErr(errs, h.customizer.Listener().EndReconcile(h.instance, utilerrors.NewAggregate(errs)))
 
-	// any post processing required after updating
-	err = h.customizer.Listener().EndReconcile(h.instance, utilerrors.NewAggregate(allErrors))
-	if err != nil {
-		allErrors = append(allErrors, err)
-	}
+	return errs.ToError()
+}
 
-	// return any errors
-	return utilerrors.NewAggregate(allErrors)
+// processRecursive processes the given manifests in an order of dependencies defined in h. Dependencies are a tree,
+// where a child must wait for the parent to complete before starting.
+func (h *HelmReconciler) processRecursive(manifests ChartManifestsMap) util.Errors {
+	deps, dch := h.customizer.Input().GetProcessingOrder(manifests)
+	var errs []error
+
+	var wg sync.WaitGroup
+	for c, m := range manifests {
+		c := c
+		m := m
+		wg.Add(1)
+		go func() {
+			if s := dch[name.ComponentName(c)]; s != nil {
+				log.Infof("%s is waiting on parent dependency...", c)
+				<-s
+				log.Infof("Parent dependency for %s has unblocked, proceeding.", c)
+			}
+
+			if len(m) != 0 {
+				errs = util.AppendErr(errs, h.ProcessManifest(m[0]))
+			}
+
+			// Signal all the components that depend on us.
+			for _, ch := range deps[name.ComponentName(c)] {
+				log.Infof("unblocking child dependency %s.", ch)
+				dch[ch] <- struct{}{}
+			}
+			wg.Done()
+		}()
+	}
+	wg.Wait()
+
+	return errs
 }
 
 // Delete resources associated with the custom resource instance

@@ -76,6 +76,7 @@ func NewIstioStatusUpdater(instance *v1alpha2.IstioControlPlane) helmreconciler.
 
 // EndReconcile updates the status field on the IstioControlPlane instance based on the resulting err parameter.
 func (u *IstioStatusUpdater) EndReconcile(_ runtime.Object, err error) error {
+	// TODO: status should track actual component status.
 	status := u.instance.Status
 	vstatus := &v1alpha2.InstallStatus_VersionStatus{}
 	if err == nil {

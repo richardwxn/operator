@@ -17,13 +17,13 @@ package helmreconciler
 import (
 	"context"
 	"fmt"
-	"strings"
 
 	"istio.io/operator/pkg/apis/istio/v1alpha2"
 	"istio.io/operator/pkg/helm"
 	istiomanifest "istio.io/operator/pkg/manifest"
 	"istio.io/operator/pkg/util"
 	"istio.io/operator/pkg/validate"
+	"istio.io/pkg/log"
 
 	"istio.io/operator/pkg/component/controlplane"
 	"istio.io/operator/pkg/name"
@@ -146,41 +146,32 @@ func unmarshalAndValidateICPS(icpsYAML string) (*v1alpha2.IstioControlPlaneSpec,
 	return icps, nil
 }
 
-func (h *HelmReconciler) ProcessManifests(manifests []manifest.Manifest) error {
-	allErrors := []error{}
-	origLogger := h.logger
-	defer func() { h.logger = origLogger }()
-	for _, manifest := range manifests {
-		h.logger = origLogger.WithValues("manifest", manifest.Name)
-		if !strings.HasSuffix(manifest.Name, ".yaml") {
-			h.logger.V(2).Info("Skipping rendering of manifest")
+func (h *HelmReconciler) ProcessManifest(manifest manifest.Manifest) error {
+	var errs []error
+	log.Info("Processing resources from manifest")
+	// split the manifest into individual objects
+	objects := releaseutil.SplitManifests(manifest.Content)
+	for _, raw := range objects {
+		rawJSON, err := yaml.YAMLToJSON([]byte(raw))
+		if err != nil {
+			h.logger.Error(err, "unable to convert raw data to JSON")
+			errs = append(errs, err)
 			continue
 		}
-		h.logger.V(2).Info("Processing resources from manifest")
-		// split the manifest into individual objects
-		objects := releaseutil.SplitManifests(manifest.Content)
-		for _, raw := range objects {
-			rawJSON, err := yaml.YAMLToJSON([]byte(raw))
-			if err != nil {
-				h.logger.Error(err, "unable to convert raw data to JSON")
-				allErrors = append(allErrors, err)
-				continue
-			}
-			obj := &unstructured.Unstructured{}
-			_, _, err = unstructured.UnstructuredJSONScheme.Decode(rawJSON, nil, obj)
-			if err != nil {
-				h.logger.Error(err, "unable to decode object into Unstructured")
-				allErrors = append(allErrors, err)
-				continue
-			}
-			err = h.ProcessObject(obj)
-			if err != nil {
-				allErrors = append(allErrors, err)
-			}
+		obj := &unstructured.Unstructured{}
+		_, _, err = unstructured.UnstructuredJSONScheme.Decode(rawJSON, nil, obj)
+		if err != nil {
+			h.logger.Error(err, "unable to decode object into Unstructured")
+			errs = append(errs, err)
+			continue
+		}
+		err = h.ProcessObject(obj)
+		if err != nil {
+			errs = append(errs, err)
 		}
 	}
 
-	return utilerrors.NewAggregate(allErrors)
+	return utilerrors.NewAggregate(errs)
 }
 
 func (h *HelmReconciler) ProcessObject(obj *unstructured.Unstructured) error {

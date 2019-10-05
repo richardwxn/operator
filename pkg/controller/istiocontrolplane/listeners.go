@@ -75,22 +75,8 @@ func NewIstioStatusUpdater(instance *v1alpha2.IstioControlPlane) helmreconciler.
 }
 
 // EndReconcile updates the status field on the IstioControlPlane instance based on the resulting err parameter.
-func (u *IstioStatusUpdater) EndReconcile(_ runtime.Object, err error) error {
-	// TODO: status should track actual component status.
-	status := u.instance.Status
-	vstatus := &v1alpha2.InstallStatus_VersionStatus{}
-	if err == nil {
-		vstatus.Status = v1alpha2.InstallStatus_HEALTHY
-	} else {
-		vstatus.Status = v1alpha2.InstallStatus_ERROR
-	}
-	status.TrafficManagement = vstatus
-	status.ConfigManagement = vstatus
-	status.PolicyTelemetry = vstatus
-	status.Security = vstatus
-	status.IngressGateway = vstatus
-	status.EgressGateway = vstatus
-	return u.reconciler.GetClient().Status().Update(context.TODO(), u.instance)
+func (u *IstioStatusUpdater) EndReconcile(_ runtime.Object, status *v1alpha2.InstallStatus) error {
+	return u.reconciler.GetClient().Status().Update(context.TODO(), u.instance.DeepCopyObject())
 }
 
 // RegisterReconciler registers the HelmReconciler with this object

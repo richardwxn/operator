@@ -73,6 +73,8 @@ func (h *HelmReconciler) renderCharts(in RenderingInput) (ChartManifestsMap, err
 	return toChartManifestsMap(manifests), err
 }
 
+// mergeICPSWithProfile overlays the values in icp on top of the defaults for the profile given by icp.profile and
+// returns the merged result.
 func mergeICPSWithProfile(icp *v1alpha2.IstioControlPlaneSpec) (*v1alpha2.IstioControlPlaneSpec, error) {
 	profile := icp.Profile
 
@@ -113,11 +115,13 @@ func mergeICPSWithProfile(icp *v1alpha2.IstioControlPlaneSpec) (*v1alpha2.IstioC
 	if err != nil {
 		return nil, fmt.Errorf("could not overlay user config over base: %s", err)
 	}
-	return unmarshalAndValidateICPS(mergedYAML)
+	return unmarshalAndValidateICPSpec(mergedYAML)
 }
 
+// unmarshalAndValidateICP unmarshals the IstioControlPlane in the crYAML string and validates it.
+// If successful, it returns both a struct and string YAML representations of the IstioControlPlaneSpec embedded in icp.
 func unmarshalAndValidateICP(crYAML string) (*v1alpha2.IstioControlPlaneSpec, string, error) {
-	// TODO: add GVK handling as appropriate.
+	// TODO: add GroupVersionKind handling as appropriate.
 	if crYAML == "" {
 		return &v1alpha2.IstioControlPlaneSpec{}, "", nil
 	}
@@ -135,7 +139,9 @@ func unmarshalAndValidateICP(crYAML string) (*v1alpha2.IstioControlPlaneSpec, st
 	return icps, icpsYAML, nil
 }
 
-func unmarshalAndValidateICPS(icpsYAML string) (*v1alpha2.IstioControlPlaneSpec, error) {
+// unmarshalAndValidateICPSpec unmarshals the IstioControlPlaneSpec in the icpsYAML string and validates it.
+// If succesful, it returns a struct representation of icpsYAML.
+func unmarshalAndValidateICPSpec(icpsYAML string) (*v1alpha2.IstioControlPlaneSpec, error) {
 	icps := &v1alpha2.IstioControlPlaneSpec{}
 	if err := util.UnmarshalWithJSONPB(icpsYAML, icps); err != nil {
 		return nil, fmt.Errorf("could not unmarshal the merged YAML: %s\n\nYAML:\n%s", err, icpsYAML)
@@ -161,7 +167,6 @@ func (h *HelmReconciler) ProcessManifest(manifest manifest.Manifest) error {
 		obj := &unstructured.Unstructured{}
 		_, _, err = unstructured.UnstructuredJSONScheme.Decode(rawJSON, nil, obj)
 		if err != nil {
-			h.logger.Error(err, "unable to decode object into Unstructured")
 			errs = append(errs, err)
 			continue
 		}

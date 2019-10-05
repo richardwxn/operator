@@ -5,11 +5,12 @@ package v1alpha1
 
 import (
 	fmt "fmt"
-	protobuf "github.com/gogo/protobuf/protobuf/google/protobuf"
+	math "math"
+
+	protobuf "github.com/gogo/protobuf/types"
 	proto "github.com/golang/protobuf/proto"
 	duration "github.com/golang/protobuf/ptypes/duration"
 	_ "k8s.io/api/core/v1"
-	math "math"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.

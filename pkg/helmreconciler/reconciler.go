@@ -17,6 +17,8 @@ package helmreconciler
 import (
 	"sync"
 
+	"istio.io/operator/pkg/apis/istio/v1alpha2"
+
 	"istio.io/operator/pkg/util"
 
 	"istio.io/pkg/log"
@@ -100,45 +102,53 @@ func (h *HelmReconciler) Reconcile() error {
 	// render charts
 	manifestMap, err := h.renderCharts(h.customizer.Input())
 	if err != nil {
+		// TODO: this needs to update status to RECONCILING.
 		return err
 	}
 
-	errs := h.processRecursive(manifestMap)
+	status := h.processRecursive(manifestMap)
 
-	// delete any obsolete resources
+	// Delete any resources not in the manifest but managed by operator.
+	var errs util.Errors
 	errs = util.AppendErr(errs, h.customizer.Listener().BeginPrune(false))
 	errs = util.AppendErr(errs, h.Prune(false))
 	errs = util.AppendErr(errs, h.customizer.Listener().EndPrune())
-	errs = util.AppendErr(errs, h.customizer.Listener().EndReconcile(h.instance, utilerrors.NewAggregate(errs)))
+
+	errs = util.AppendErr(errs, h.customizer.Listener().EndReconcile(h.instance, status))
 
 	return errs.ToError()
 }
 
 // processRecursive processes the given manifests in an order of dependencies defined in h. Dependencies are a tree,
 // where a child must wait for the parent to complete before starting.
-func (h *HelmReconciler) processRecursive(manifests ChartManifestsMap) util.Errors {
+func (h *HelmReconciler) processRecursive(manifests ChartManifestsMap) *v1alpha2.InstallStatus {
 	deps, dch := h.customizer.Input().GetProcessingOrder(manifests)
-	var errs []error
+	out := &v1alpha2.InstallStatus{}
 
 	var wg sync.WaitGroup
 	for c, m := range manifests {
-		c := c
-		m := m
+		c, m := c, m
 		wg.Add(1)
 		go func() {
-			if s := dch[name.ComponentName(c)]; s != nil {
-				log.Infof("%s is waiting on parent dependency...", c)
+			cn := name.ComponentName(c)
+			if s := dch[cn]; s != nil {
+				log.Infof("%s is waiting on dependency...", c)
 				<-s
-				log.Infof("Parent dependency for %s has unblocked, proceeding.", c)
+				log.Infof("Dependency for %s has completed, proceeding.", c)
 			}
 
+			out.Status[c].Status = v1alpha2.InstallStatus_NONE
 			if len(m) != 0 {
-				errs = util.AppendErr(errs, h.ProcessManifest(m[0]))
+				out.Status[c].Status = v1alpha2.InstallStatus_HEALTHY
+				if err := h.ProcessManifest(m[0]); err != nil {
+					out.Status[c].Error = err.Error()
+					out.Status[c].Status = v1alpha2.InstallStatus_ERROR
+				}
 			}
 
 			// Signal all the components that depend on us.
-			for _, ch := range deps[name.ComponentName(c)] {
-				log.Infof("unblocking child dependency %s.", ch)
+			for _, ch := range deps[cn] {
+				log.Infof("Unblocking dependency %s.", ch)
 				dch[ch] <- struct{}{}
 			}
 			wg.Done()
@@ -146,7 +156,7 @@ func (h *HelmReconciler) processRecursive(manifests ChartManifestsMap) util.Erro
 	}
 	wg.Wait()
 
-	return errs
+	return out
 }
 
 // Delete resources associated with the custom resource instance
@@ -192,12 +202,12 @@ func (h *HelmReconciler) GetClient() client.Client {
 	return h.client
 }
 
-// GetClient returns the customizer associated with this HelmReconciler
+// GetCustomizer returns the customizer associated with this HelmReconciler
 func (h *HelmReconciler) GetCustomizer() RenderingCustomizer {
 	return h.customizer
 }
 
-// GetClient returns the instance associated with this HelmReconciler
+// GetInstance returns the instance associated with this HelmReconciler
 func (h *HelmReconciler) GetInstance() runtime.Object {
 	return h.instance
 }

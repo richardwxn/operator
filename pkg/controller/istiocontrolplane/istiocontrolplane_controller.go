@@ -54,7 +54,7 @@ func Add(mgr manager.Manager) error {
 }
 
 // newReconciler returns a new reconcile.Reconciler
-func newReconciler(mgr manager.Manager, apiVersion string) reconcile.Reconciler {
+func newReconciler(mgr manager.Manager, _ string) reconcile.Reconciler {
 	factory := &helmreconciler.Factory{CustomizerFactory: &IstioRenderingCustomizerFactory{}}
 	return &ReconcileIstioControlPlane{client: mgr.GetClient(), scheme: mgr.GetScheme(), factory: factory}
 }
@@ -92,10 +92,9 @@ var _ reconcile.Reconciler = &ReconcileIstioControlPlane{}
 type ReconcileIstioControlPlane struct {
 	// This client, initialized using mgr.Client() above, is a split client
 	// that reads objects from the cache and writes to the apiserver
-	client   client.Client
-	scheme   *runtime.Scheme
-	factory  *helmreconciler.Factory
-	instance runtime.Object
+	client  client.Client
+	scheme  *runtime.Scheme
+	factory *helmreconciler.Factory
 }
 
 // Reconcile reads that state of the cluster for a IstioControlPlane object and makes changes based on the state read

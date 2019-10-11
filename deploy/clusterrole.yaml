@@ -59,6 +59,7 @@ rules:
   - configmaps
   - secrets
   - namespaces
+  - poddisruptionbudgets
   verbs:
   - '*'
 - apiGroups:

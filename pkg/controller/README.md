@@ -1,16 +1,18 @@
-### Controller local test
-#### Run inside the cluster
-1.run make docker.all to push image with your HUB and TAG
+## Controller local test
+### Run inside the cluster
 
-2.update deploy/operator.yaml to point to your image
+Step 1.2 are required only when you make changes locally
+1. run make docker.all to push image with your env $HUB and $TAG set.
 
-3.run kubectl apply --recursive deploy/
+1. update deploy/operator.yaml to point to your image.
 
-#### Run outside the cluster
+1. run kubectl apply -k deploy/
+
+### Run outside the cluster
 
 1. Install [Operator SDK CLI](#https://github.com/operator-framework/operator-sdk/blob/master/doc/user/install-operator-sdk.md)
 
-2. then run
+1. then run
 ```
 operator-sdk up local --namespace=istio-operator --operator-flags "server"
 ```

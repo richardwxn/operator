@@ -23,8 +23,6 @@ spec:
                 fieldRef:
                   apiVersion: v1
                   fieldPath: metadata.namespace
-            - name: GODEBUG
-              value: gctrace=1
             - name: PILOT_TRACE_SAMPLING
               value: "1"
             - name: CONFIG_NAMESPACE
@@ -83,8 +81,6 @@ spec:
                 fieldRef:
                   apiVersion: v1
                   fieldPath: metadata.namespace
-            - name: GODEBUG
-              value: "gctrace=1"
           strategy:
             rollingUpdate:
               maxSurge: "100%"
@@ -103,8 +99,6 @@ spec:
               fieldRef:
                 apiVersion: v1
                 fieldPath: metadata.namespace
-          - name: GODEBUG
-            value: "gctrace=1"
           - name: GOMAXPROCS
             value: "6"
           hpaSpec:
@@ -360,8 +354,7 @@ spec:
       traceSampling: 1.0
       configNamespace: istio-config
       appNamespaces: []
-      env:
-        GODEBUG: gctrace=1
+      env: {}
       cpu:
         targetAverageUtilization: 80
       nodeSelector: {}
@@ -369,6 +362,8 @@ spec:
       podAntiAffinityLabelSelector: []
       podAntiAffinityTermLabelSelector: []
       keepaliveMaxServerConnectionAge: 30m
+      enableProtocolSniffingForOutbound: true
+      enableProtocolSniffingForInbound: false
       deploymentLabels:
       meshNetworks:
         networks: {}
@@ -422,11 +417,15 @@ spec:
 
       policy:
         image: mixer
+        sessionAffinityEnabled: false
         adapters:
           kubernetesenv:
+            useAdapterCRDs: false
             enabled: true
 
     galley:
+      image: galley
+      enableAnalysis: false
 
     security:
       image: citadel
@@ -526,6 +525,9 @@ spec:
       rewriteAppHTTPProbe: false
       selfSigned: false
       injectLabel: istio-injection
+      objectSelector:
+        enabled: false
+        autoInject: true
 
     prometheus:
       enabled: true
@@ -553,7 +555,7 @@ spec:
       replicaCount: 1
       image:
         repository: grafana/grafana
-        tag: 6.1.6
+        tag: 6.3.6
       persist: false
       storageClassName: ""
       accessMode: ReadWriteMany
@@ -606,7 +608,7 @@ spec:
       podAntiAffinityTermLabelSelector: []
       jaeger:
         hub: docker.io/jaegertracing
-        tag: "1.12"
+        tag: "1.14"
         memory:
           max_traces: 50000
         spanStorageType: badger
@@ -644,7 +646,7 @@ spec:
             enable_tracing: true
       service:
         annotations: {}
-        name: http
+        name: http-query
         type: ClusterIP
         externalPort: 9411
       ingress:
@@ -652,12 +654,17 @@ spec:
         hosts:
         annotations:
         tls:
+    istiocoredns:
+      enabled: false
+      coreDNSImage: coredns/coredns
+      coreDNSTag: 1.6.2
+      coreDNSPluginImage: istio/coredns-plugin:0.2-istio-1.1
 
     kiali:
       enabled: false
       replicaCount: 1
       hub: docker.io/kiali
-      tag: v1.1.0
+      tag: v1.4.2
       contextPath: /kiali
       nodeSelector: {}
       podAntiAffinityLabelSelector: []
@@ -678,7 +685,7 @@ spec:
       prometheusNamespace:
       createDemoSecret: true
       security:
-        enabled: true
+        enabled: false
         cert_file: /kiali-cert/cert-chain.pem
         private_key_file: /kiali-cert/key.pem
 

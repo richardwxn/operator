@@ -770,7 +770,7 @@ spec:
       destination_principal: destination.principal | "unknown"
       destination_app: destination.labels["app"] | "unknown"
       destination_version: destination.labels["version"] | "unknown"
-      destination_service: destination.service.host | "unknown"
+      destination_service: destination.service.host | request.host | "unknown"
       destination_service_name: destination.service.name | "unknown"
       destination_service_namespace: destination.service.namespace | "unknown"
       request_protocol: api.protocol | context.protocol | "unknown"
@@ -807,13 +807,13 @@ spec:
       destination_principal: destination.principal | "unknown"
       destination_app: destination.labels["app"] | "unknown"
       destination_version: destination.labels["version"] | "unknown"
-      destination_service: destination.service.host | "unknown"
+      destination_service: destination.service.host | request.host | "unknown"
       destination_service_name: destination.service.name | "unknown"
       destination_service_namespace: destination.service.namespace | "unknown"
       request_protocol: api.protocol | context.protocol | "unknown"
       response_code: response.code | 200
       response_flags: context.proxy_error_code | "-"
-      permissive_response_code: rbac.permissive.response_code | "none" 
+      permissive_response_code: rbac.permissive.response_code | "none"
       permissive_response_policyid: rbac.permissive.effective_policy_id | "none"
       connection_security_policy: conditional((context.reporter.kind | "inbound") == "outbound", "unknown", conditional(connection.mtls | false, "mutual_tls", "none"))
     monitored_resource_type: '"UNSPECIFIED"'
@@ -844,13 +844,13 @@ spec:
       destination_principal: destination.principal | "unknown"
       destination_app: destination.labels["app"] | "unknown"
       destination_version: destination.labels["version"] | "unknown"
-      destination_service: destination.service.host | "unknown"
+      destination_service: destination.service.host | request.host | "unknown"
       destination_service_name: destination.service.name | "unknown"
       destination_service_namespace: destination.service.namespace | "unknown"
       request_protocol: api.protocol | context.protocol | "unknown"
       response_code: response.code | 200
       response_flags: context.proxy_error_code | "-"
-      permissive_response_code: rbac.permissive.response_code | "none" 
+      permissive_response_code: rbac.permissive.response_code | "none"
       permissive_response_policyid: rbac.permissive.effective_policy_id | "none"
       connection_security_policy: conditional((context.reporter.kind | "inbound") == "outbound", "unknown", conditional(connection.mtls | false, "mutual_tls", "none"))
     monitored_resource_type: '"UNSPECIFIED"'
@@ -881,13 +881,13 @@ spec:
       destination_principal: destination.principal | "unknown"
       destination_app: destination.labels["app"] | "unknown"
       destination_version: destination.labels["version"] | "unknown"
-      destination_service: destination.service.host | "unknown"
+      destination_service: destination.service.host | request.host | "unknown"
       destination_service_name: destination.service.name | "unknown"
       destination_service_namespace: destination.service.namespace | "unknown"
       request_protocol: api.protocol | context.protocol | "unknown"
       response_code: response.code | 200
       response_flags: context.proxy_error_code | "-"
-      permissive_response_code: rbac.permissive.response_code | "none" 
+      permissive_response_code: rbac.permissive.response_code | "none"
       permissive_response_policyid: rbac.permissive.effective_policy_id | "none"
       connection_security_policy: conditional((context.reporter.kind | "inbound") == "outbound", "unknown", conditional(connection.mtls | false, "mutual_tls", "none"))
     monitored_resource_type: '"UNSPECIFIED"'
@@ -918,7 +918,7 @@ spec:
       destination_principal: destination.principal | "unknown"
       destination_app: destination.labels["app"] | "unknown"
       destination_version: destination.labels["version"] | "unknown"
-      destination_service: destination.service.host | "unknown"
+      destination_service: destination.service.host | request.host | "unknown"
       destination_service_name: destination.service.name | "unknown"
       destination_service_namespace: destination.service.namespace | "unknown"
       connection_security_policy: conditional((context.reporter.kind | "inbound") == "outbound", "unknown", conditional(connection.mtls | false, "mutual_tls", "none"))
@@ -951,7 +951,7 @@ spec:
       destination_principal: destination.principal | "unknown"
       destination_app: destination.labels["app"] | "unknown"
       destination_version: destination.labels["version"] | "unknown"
-      destination_service: destination.service.host | "unknown"
+      destination_service: destination.service.host | request.host | "unknown"
       destination_service_name: destination.service.name | "unknown"
       destination_service_namespace: destination.service.namespace | "unknown"
       connection_security_policy: conditional((context.reporter.kind | "inbound") == "outbound", "unknown", conditional(connection.mtls | false, "mutual_tls", "none"))
@@ -984,7 +984,7 @@ spec:
       destination_principal: destination.principal | "unknown"
       destination_app: destination.labels["app"] | "unknown"
       destination_version: destination.labels["version"] | "unknown"
-      destination_service: destination.service.name | "unknown"
+      destination_service: destination.service.host | "unknown"
       destination_service_name: destination.service.name | "unknown"
       destination_service_namespace: destination.service.namespace | "unknown"
       connection_security_policy: conditional((context.reporter.kind | "inbound") == "outbound", "unknown", conditional(connection.mtls | false, "mutual_tls", "none"))
@@ -1017,7 +1017,7 @@ spec:
       destination_principal: destination.principal | "unknown"
       destination_app: destination.labels["app"] | "unknown"
       destination_version: destination.labels["version"] | "unknown"
-      destination_service: destination.service.name | "unknown"
+      destination_service: destination.service.host | "unknown"
       destination_service_name: destination.service.name | "unknown"
       destination_service_namespace: destination.service.namespace | "unknown"
       connection_security_policy: conditional((context.reporter.kind | "inbound") == "outbound", "unknown", conditional(connection.mtls | false, "mutual_tls", "none"))
@@ -1413,9 +1413,13 @@ spec:
   trafficPolicy:
     portLevelSettings:
     - port:
-        number: 15004
+        number: 15004 # grpc-mixer-mtls
       tls:
         mode: ISTIO_MUTUAL
+    - port:
+        number: 9091 # grpc-mixer
+      tls:
+        mode: DISABLE
     connectionPool:
       http:
         http2MaxRequests: 10000
@@ -1860,6 +1864,8 @@ spec:
             fieldRef:
               apiVersion: v1
               fieldPath: status.podIP
+        - name: SDS_ENABLED
+          value: "false"
         image: docker.io/istio/proxyv2:1.1.4
         imagePullPolicy: Always
         name: istio-proxy
@@ -1982,6 +1988,8 @@ spec:
     - istio-io
     - networking-istio-io
   scope: Namespaced
+  subresources:
+    status: {}
   versions:
     - name: v1alpha3
       served: true
@@ -2027,6 +2035,8 @@ spec:
     - istio-io
     - networking-istio-io
   scope: Namespaced
+  subresources:
+    status: {}
   versions:
     - name: v1alpha3
       served: true
@@ -2068,6 +2078,8 @@ spec:
     - istio-io
     - networking-istio-io
   scope: Namespaced
+  subresources:
+    status: {}
   versions:
     - name: v1alpha3
       served: true
@@ -2116,6 +2128,8 @@ spec:
     - istio-io
     - networking-istio-io
   scope: Namespaced
+  subresources:
+    status: {}
   versions:
     - name: v1alpha3
       served: true
@@ -2142,6 +2156,8 @@ spec:
     - istio-io
     - networking-istio-io
   scope: Namespaced
+  subresources:
+    status: {}
   versions:
     - name: v1alpha3
       served: true
@@ -2168,6 +2184,8 @@ spec:
     - istio-io
     - rbac-istio-io
   scope: Cluster
+  subresources:
+    status: {}
   versions:
     - name: v1alpha1
       served: true
@@ -2194,6 +2212,8 @@ spec:
     - istio-io
     - authentication-istio-io
   scope: Namespaced
+  subresources:
+    status: {}
   versions:
     - name: v1alpha1
       served: true
@@ -2221,6 +2241,8 @@ spec:
     - istio-io
     - authentication-istio-io
   scope: Cluster
+  subresources:
+    status: {}
   versions:
     - name: v1alpha1
       served: true
@@ -2247,6 +2269,8 @@ spec:
     - istio-io
     - apim-istio-io
   scope: Namespaced
+  subresources:
+    status: {}
   versions:
     - name: v1alpha2
       served: true
@@ -2273,6 +2297,8 @@ spec:
     - istio-io
     - apim-istio-io
   scope: Namespaced
+  subresources:
+    status: {}
   versions:
     - name: v1alpha2
       served: true
@@ -2299,6 +2325,8 @@ spec:
     - istio-io
     - apim-istio-io
   scope: Namespaced
+  subresources:
+    status: {}
   versions:
     - name: v1alpha2
       served: true
@@ -2325,6 +2353,8 @@ spec:
     - istio-io
     - apim-istio-io
   scope: Namespaced
+  subresources:
+    status: {}
   versions:
     - name: v1alpha2
       served: true
@@ -2353,6 +2383,8 @@ spec:
     - istio-io
     - policy-istio-io
   scope: Namespaced
+  subresources:
+    status: {}
   versions:
     - name: v1alpha2
       served: true
@@ -2381,6 +2413,8 @@ spec:
     - istio-io
     - policy-istio-io
   scope: Namespaced
+  subresources:
+    status: {}
   versions:
     - name: v1alpha2
       served: true
@@ -2409,6 +2443,8 @@ spec:
     - istio-io
     - rbac-istio-io
   scope: Namespaced
+  subresources:
+    status: {}
   versions:
     - name: v1alpha1
       served: true
@@ -2437,6 +2473,8 @@ spec:
     - istio-io
     - rbac-istio-io
   scope: Namespaced
+  subresources:
+    status: {}
   versions:
     - name: v1alpha1
       served: true
@@ -2465,6 +2503,8 @@ spec:
     - istio-io
     - rbac-istio-io
   scope: Namespaced
+  subresources:
+    status: {}
   versions:
     - name: v1alpha1
       served: true
@@ -2505,6 +2545,8 @@ spec:
     - istio-io
     - policy-istio-io
   scope: Namespaced
+  subresources:
+    status: {}
   versions:
     - name: v1alpha2
       served: true
@@ -2533,6 +2575,8 @@ spec:
     - istio-io
     - policy-istio-io
   scope: Namespaced
+  subresources:
+    status: {}
   versions:
     - name: v1alpha2
       served: true
@@ -2561,6 +2605,8 @@ spec:
     - istio-io
     - policy-istio-io
   scope: Namespaced
+  subresources:
+    status: {}
   versions:
     - name: v1alpha2
       served: true
@@ -2589,6 +2635,8 @@ spec:
     - istio-io
     - policy-istio-io
   scope: Namespaced
+  subresources:
+    status: {}
   versions:
     - name: v1alpha2
       served: true
@@ -2615,34 +2663,10 @@ spec:
     - istio-io
     - networking-istio-io
   scope: Namespaced
+  subresources:
+    status: {}
   versions:
     - name: v1alpha3
-      served: true
-      storage: true
----
-
-
-kind: CustomResourceDefinition
-apiVersion: apiextensions.k8s.io/v1beta1
-metadata:
-  name: authorizationpolicies.rbac.istio.io
-  labels:
-    app: istio-pilot
-    istio: rbac
-    heritage: Tiller
-    release: istio
-spec:
-  group: rbac.istio.io
-  names:
-    kind: AuthorizationPolicy
-    plural: authorizationpolicies
-    singular: authorizationpolicy
-    categories:
-      - istio-io
-      - rbac-istio-io
-  scope: Namespaced
-  versions:
-    - name: v1alpha1
       served: true
       storage: true
 ---
@@ -2667,6 +2691,8 @@ spec:
       - istio-io
       - security-istio-io
   scope: Namespaced
+  subresources:
+    status: {}
   versions:
     - name: v1beta1
       served: true

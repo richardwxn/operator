@@ -78,8 +78,6 @@ spec:
             fieldRef:
               apiVersion: v1
               fieldPath: metadata.namespace
-        - name: GODEBUG
-          value: gctrace=1
         - name: PILOT_TRACE_SAMPLING
           value: "1"
         - name: CONFIG_NAMESPACE
@@ -235,53 +233,6 @@ rules:
     - "certificatesigningrequests/approval"
     - "certificatesigningrequests/status"
   verbs: ["update", "create", "get", "delete"]
----
-apiVersion: policy/v1beta1
-kind: PodDisruptionBudget
-metadata:
-  name: istio-pilot
-  namespace: istio-control
-  labels:
-    app: pilot
-    release: istio
-    istio: pilot
-spec:
-  minAvailable: 1
-  selector:
-    matchLabels:
-      app: pilot
-      release: istio
-      istio: pilot
----
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: istio-pilot-service-account
-  namespace: istio-control
-  labels:
-    app: pilot
-    release: istio
----
-apiVersion: autoscaling/v2beta1
-kind: HorizontalPodAutoscaler
-metadata:
-  labels:
-    app: pilot
-    release: istio
-  name: istio-pilot
-  namespace: istio-control
-spec:
-  maxReplicas: 5
-  metrics:
-  - resource:
-      name: cpu
-      targetAverageUtilization: 80
-    type: Resource
-  minReplicas: 1
-  scaleTargetRef:
-    apiVersion: apps/v1
-    kind: Deployment
-    name: istio-pilot
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
@@ -467,6 +418,53 @@ data:
                               cluster: out.galley.15019
                               timeout: 0.000s
 ---
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
+metadata:
+  name: istio-pilot
+  namespace: istio-control
+  labels:
+    app: pilot
+    release: istio
+    istio: pilot
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: pilot
+      release: istio
+      istio: pilot
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: istio-pilot-service-account
+  namespace: istio-control
+  labels:
+    app: pilot
+    release: istio
+---
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  labels:
+    app: pilot
+    release: istio
+  name: istio-pilot
+  namespace: istio-control
+spec:
+  maxReplicas: 5
+  metrics:
+  - resource:
+      name: cpu
+      targetAverageUtilization: 80
+    type: Resource
+  minReplicas: 1
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: istio-pilot
+---
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -492,8 +490,7 @@ data:
     enableProtocolSniffingForInbound: false
     enableProtocolSniffingForOutbound: true
     enabled: true
-    env:
-      GODEBUG: gctrace=1
+    env: {}
     image: pilot
     ingress:
       ingressClass: istio
@@ -565,7 +562,7 @@ data:
     # If true, automatically configure client side mTLS settings to match the corresponding service's
     # server side mTLS authentication policy, when destination rule for that service does not specify
     # TLS settings.
-    enableAutoMtls: 
+    enableAutoMtls: false
     config_sources:
     - address: localhost:15019
 

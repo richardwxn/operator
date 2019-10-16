@@ -49,7 +49,7 @@ gateways:
         resources:
           limits:
             cpu: 2000m
-            memory: 256Mi
+            memory: 1024Mi
           requests:
             cpu: 10m
             memory: 40Mi
@@ -84,7 +84,7 @@ gateways:
             maxSurge: 100%
             maxUnavailable: 25%
   enabled: true
-hub: gcr.io/istio-release
+hub: gcr.io/istio-testing
 policy:
   components:
     policy:
@@ -96,8 +96,6 @@ policy:
             fieldRef:
               apiVersion: v1
               fieldPath: metadata.namespace
-        - name: GODEBUG
-          value: gctrace=1
         hpaSpec:
           maxReplicas: 5
           metrics:
@@ -135,7 +133,7 @@ security:
     nodeAgent:
       enabled: false
   enabled: true
-tag: master-latest-daily
+tag: latest
 telemetry:
   components:
     telemetry:
@@ -147,8 +145,6 @@ telemetry:
             fieldRef:
               apiVersion: v1
               fieldPath: metadata.namespace
-        - name: GODEBUG
-          value: gctrace=1
         - name: GOMAXPROCS
           value: "6"
         hpaSpec:
@@ -232,7 +228,9 @@ values:
     image: cert-manager-controller
     tag: v0.6.2
   clusterResources: true
-  galley: null
+  galley:
+    enableAnalysis: false
+    image: galley
   gateways:
     istio-egressgateway:
       autoscaleEnabled: false
@@ -253,6 +251,7 @@ values:
       - mountPath: /etc/istio/egressgateway-ca-certs
         name: egressgateway-ca-certs
         secretName: istio-egressgateway-ca-certs
+      type: ClusterIP
       zvpn:
         enabled: true
         suffix: global
@@ -297,6 +296,16 @@ values:
       - name: tls
         port: 15443
         targetPort: 15443
+      sds:
+        enabled: false
+        image: node-agent-k8s
+        resources:
+          limits:
+            cpu: 2000m
+            memory: 1024Mi
+          requests:
+            cpu: 100m
+            memory: 128Mi
       secretVolumes:
       - mountPath: /etc/istio/ingressgateway-certs
         name: ingressgateway-certs
@@ -304,6 +313,7 @@ values:
       - mountPath: /etc/istio/ingressgateway-ca-certs
         name: ingressgateway-ca-certs
         secretName: istio-ingressgateway-ca-certs
+      type: LoadBalancer
       zvpn:
         enabled: true
         suffix: global
@@ -339,9 +349,13 @@ values:
       useILB: false
     meshNetworks: {}
     mtls:
+      auto: false
       enabled: true
     multiCluster:
+      clusterName: ""
       enabled: false
+    network: ""
+    omitSidecarInjectorConfigMap: false
     oneNamespace: false
     outboundTrafficPolicy:
       mode: ALLOW_ANY
@@ -365,6 +379,17 @@ values:
         enabled: false
         host: null
         port: null
+        tcpKeepalive:
+          interval: 10s
+          probes: 3
+          time: 10s
+        tlsSettings:
+          caCertificates: null
+          clientCertificate: null
+          mode: DISABLE
+          privateKey: null
+          sni: null
+          subjectAltNames: []
       envoyStatsd:
         enabled: false
         host: null
@@ -378,7 +403,7 @@ values:
       kubevirtInterfaces: ""
       logLevel: warning
       privileged: false
-      protocolDetectionTimeout: 1s
+      protocolDetectionTimeout: 100ms
       readinessFailureThreshold: 30
       readinessInitialDelaySeconds: 1
       readinessPeriodSeconds: 2
@@ -392,7 +417,7 @@ values:
       statusPort: 15020
       tracer: zipkin
     proxy_init:
-      image: proxy_init
+      image: proxyv2
       resources:
         limits:
           cpu: 100m
@@ -438,7 +463,7 @@ values:
     envSecrets: {}
     image:
       repository: grafana/grafana
-      tag: 6.1.6
+      tag: 6.3.6
     ingress:
       annotations: null
       enabled: false
@@ -464,6 +489,11 @@ values:
       type: ClusterIP
     storageClassName: ""
     tolerations: []
+  istiocoredns:
+    coreDNSImage: coredns/coredns
+    coreDNSPluginImage: istio/coredns-plugin:0.2-istio-1.1
+    coreDNSTag: 1.6.2
+    enabled: false
   kiali:
     contextPath: /kiali
     createDemoSecret: true
@@ -489,9 +519,9 @@ values:
     replicaCount: 1
     security:
       cert_file: /kiali-cert/cert-chain.pem
-      enabled: true
+      enabled: false
       private_key_file: /kiali-cert/key.pem
-    tag: v1.1.0
+    tag: v1.4.2
   mixer:
     adapters:
       kubernetesenv:
@@ -516,8 +546,10 @@ values:
       adapters:
         kubernetesenv:
           enabled: true
+        useAdapterCRDs: false
       autoscaleEnabled: false
       image: mixer
+      sessionAffinityEnabled: false
     telemetry:
       autoscaleEnabled: false
       image: mixer
@@ -545,8 +577,9 @@ values:
     cpu:
       targetAverageUtilization: 80
     deploymentLabels: null
-    env:
-      GODEBUG: gctrace=1
+    enableProtocolSniffingForInbound: false
+    enableProtocolSniffingForOutbound: true
+    env: {}
     image: pilot
     ingress:
       ingressClass: istio
@@ -597,6 +630,9 @@ values:
     enableNamespacesByDefault: false
     image: sidecar_injector
     injectLabel: istio-injection
+    objectSelector:
+      autoInject: true
+      enabled: false
     rewriteAppHTTPProbe: false
     selfSigned: false
   tracing:
@@ -614,7 +650,7 @@ values:
       persist: false
       spanStorageType: badger
       storageClassName: ""
-      tag: "1.12"
+      tag: "1.14"
     nodeSelector: {}
     opencensus:
       exporters:
@@ -635,7 +671,7 @@ values:
     service:
       annotations: {}
       externalPort: 9411
-      name: http
+      name: http-query
       type: ClusterIP
     zipkin:
       hub: docker.io/openzipkin

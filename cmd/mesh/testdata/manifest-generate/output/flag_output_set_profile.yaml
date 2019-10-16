@@ -284,8 +284,7 @@ data:
     enableProtocolSniffingForInbound: false
     enableProtocolSniffingForOutbound: true
     enabled: true
-    env:
-      GODEBUG: gctrace=1
+    env: {}
     image: pilot
     ingress:
       ingressClass: istio
@@ -358,7 +357,7 @@ data:
     # If true, automatically configure client side mTLS settings to match the corresponding service's
     # server side mTLS authentication policy, when destination rule for that service does not specify
     # TLS settings.
-    enableAutoMtls: 
+    enableAutoMtls: false
     config_sources:
     - address: localhost:15019
 
@@ -496,8 +495,6 @@ spec:
             fieldRef:
               apiVersion: v1
               fieldPath: metadata.namespace
-        - name: GODEBUG
-          value: gctrace=1
         - name: PILOT_TRACE_SAMPLING
           value: "1"
         - name: CONFIG_NAMESPACE
@@ -506,7 +503,7 @@ spec:
           value: "true"
         - name: PILOT_ENABLE_PROTOCOL_SNIFFING_FOR_INBOUND
           value: "false"
-        image: gcr.io/istio-release/pilot:master-latest-daily
+        image: gcr.io/istio-testing/pilot:latest
         imagePullPolicy: Always
         name: discovery
         ports:
@@ -554,7 +551,7 @@ spec:
               fieldPath: status.podIP
         - name: SDS_ENABLED
           value: "false"
-        image: gcr.io/istio-release/proxyv2:master-latest-daily
+        image: gcr.io/istio-testing/proxyv2:latest
         imagePullPolicy: Always
         name: istio-proxy
         ports:

@@ -238,6 +238,10 @@ message EnvoyMetricsConfig {
 
   // Sets the destination Envoy Metrics Service port in Envoy.
   int32 port = 3;
+
+  TypeMapStringInterface tlsSettings = 4;
+
+  TypeMapStringInterface tcpKeepalive = 5;
 }
 
 // GalleyConfig is a set of Configuration for Galley.
@@ -459,6 +463,14 @@ message GlobalConfig {
   google.protobuf.BoolValue useMCP = 35;
 
   google.protobuf.BoolValue logAsJson = 36;
+
+  google.protobuf.BoolValue omitSidecarInjectorConfigMap = 38;
+
+  string network = 39;
+
+  TypeSliceOfMapStringInterface certificates = 40;
+
+  google.protobuf.BoolValue operatorManageWebhooks = 41;
 }
 
 // GlobalLoggingConfig specifies the global logging level settings for the Istio control plane components.
@@ -577,6 +589,11 @@ message IngressGatewaySdsConfig {
   // SDS server that watches kubernetes secrets and provisions credentials to ingress gateway.
   // This server runs in the same pod as ingress gateway.
   string image = 2;
+
+  // K8s resources settings.
+  //
+  // See https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container
+  Resources resources = 3;
 }
 
 // IngressGatewayZvpnConfig enables cross-cluster access using SNI matching.
@@ -628,6 +645,8 @@ enum mode {
 message MTLSConfig {
   // Enables MTLS for service to service traffic.
   google.protobuf.BoolValue enabled = 1;
+
+  google.protobuf.BoolValue auto = 2;
 }
 
 // Configuration for Istio mesh expansion to bare metal.
@@ -639,8 +658,26 @@ message MeshExpansionConfig {
   google.protobuf.BoolValue useILB = 2;
 }
 
-// Configuration for Mixer adapters.
-message MixerAdaptersConfig {
+// Configuration for Mixer Telemetry adapters.
+message MixerTelemetryAdaptersConfig {
+  // Configuration for Kubernetes environment adapter in mixer.
+  KubernetesEnvMixerAdapterConfig kubernetesenv = 1;
+
+  // Configuration for Prometheus adapter in mixer.
+  PrometheusMixerAdapterConfig prometheus = 2;
+
+  // Configuration for stdio adapter in mixer, recommended for debug usage only.
+  StdioMixerAdapterConfig stdio = 3;
+
+  //
+  StackdriverMixerAdapterConfig stackdriver = 4;
+
+  // Sets the --useAdapterCRDs mixer startup argument.
+  google.protobuf.BoolValue useAdapterCRDs = 5;
+}
+
+// Configuration for Mixer Policy adapters.
+message MixerPolicyAdaptersConfig {
   // Configuration for Kubernetes environment adapter in mixer.
   KubernetesEnvMixerAdapterConfig kubernetesenv = 1;
 
@@ -666,7 +703,7 @@ message MixerConfig {
   MixerTelemetryConfig telemetry = 2;
 
   // Configuration for different mixer adapters.
-  MixerAdaptersConfig adapters = 3;
+  MixerTelemetryAdaptersConfig adapters = 3;
 }
 
 // Configuration for Mixer Policy.
@@ -704,7 +741,7 @@ message MixerPolicyConfig {
   uint32 replicaCount = 8;
 
   // Configuration for different mixer adapters.
-  MixerAdaptersConfig adapters = 9;
+  MixerPolicyAdaptersConfig adapters = 9;
 
   // Controls whether to enable the sticky session setting when choosing backend pods.
   google.protobuf.BoolValue sessionAffinityEnabled = 10;
@@ -798,6 +835,8 @@ message MultiClusterConfig {
   // Enables the connection between two kubernetes clusters via their respective ingressgateway services.
   // Use if the pods in each cluster cannot directly talk to one another.
   google.protobuf.BoolValue enabled = 1;
+
+  string clusterName = 2;
 }
 
 // Configuration for Node Agent Daemonset.
@@ -1243,6 +1282,8 @@ message SDSConfig {
 
   // Enables SDS use of trustworthy JWT to request for certificates.
   google.protobuf.BoolValue useTrustworthyJwt = 4;
+
+  TypeMapStringInterface token = 5;
 }
 
 // Configuration for secret volume mounts.

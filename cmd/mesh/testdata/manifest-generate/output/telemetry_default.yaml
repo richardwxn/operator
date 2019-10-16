@@ -1805,8 +1805,6 @@ spec:
             fieldRef:
               apiVersion: v1
               fieldPath: metadata.namespace
-        - name: GODEBUG
-          value: gctrace=1
         - name: GOMAXPROCS
           value: "6"
         image: docker.io/istio/mixer:1.1.4

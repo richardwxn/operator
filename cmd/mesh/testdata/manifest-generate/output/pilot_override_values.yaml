@@ -284,8 +284,7 @@ data:
     enableProtocolSniffingForInbound: false
     enableProtocolSniffingForOutbound: true
     enabled: true
-    env:
-      GODEBUG: gctrace=1
+    env: {}
     image: pilot
     ingress:
       ingressClass: istio
@@ -357,7 +356,7 @@ data:
     # If true, automatically configure client side mTLS settings to match the corresponding service's
     # server side mTLS authentication policy, when destination rule for that service does not specify
     # TLS settings.
-    enableAutoMtls: 
+    enableAutoMtls: false
     config_sources:
     - address: localhost:15019
 
@@ -492,8 +491,6 @@ spec:
             fieldRef:
               apiVersion: v1
               fieldPath: metadata.namespace
-        - name: GODEBUG
-          value: gctrace=1
         - name: PILOT_TRACE_SAMPLING
           value: "1"
         - name: CONFIG_NAMESPACE

@@ -369,7 +369,14 @@ data:
     # The DNS certificate provisioning is enabled by default now so it get tested.
     # TODO (lei-tang): we'll decide whether enable it by default or not before Istio 1.4 Release.
     certificates:
-      null
+      - dnsNames:
+        - istio-galley.istio-system.svc
+        - istio-galley.istio-system
+        secretName: dns.istio-galley-service-account
+      - dnsNames:
+        - istio-sidecar-injector.istio-system.svc
+        - istio-sidecar-injector.istio-system
+        secretName: dns.istio-sidecar-injector-service-account
 
     defaultConfig:
       #
@@ -1011,7 +1018,7 @@ spec:
       serviceAccountName: prometheus
       containers:
         - name: prometheus
-          image: "docker.io/prom/prometheus:v2.8.0"
+          image: "docker.io/prom/prometheus:v2.12.0"
           imagePullPolicy: Always
           args:
             - '--storage.tsdb.retention=6h'

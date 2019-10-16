@@ -108,7 +108,6 @@ policy:
             apiVersion: apps/v1
             kind: Deployment
             name: istio-policy
-        replicaCount: 1
         strategy:
           rollingUpdate:
             maxSurge: 100%
@@ -316,6 +315,15 @@ values:
       amd64: 2
       ppc64le: 2
       s390x: 2
+    certificates:
+    - dnsNames:
+      - istio-galley.istio-system.svc
+      - istio-galley.istio-system
+      secretName: dns.istio-galley-service-account
+    - dnsNames:
+      - istio-sidecar-injector.istio-system.svc
+      - istio-sidecar-injector.istio-system
+      secretName: dns.istio-sidecar-injector-service-account
     configValidation: true
     controlPlaneSecurityEnabled: false
     defaultNodeSelector: {}
@@ -351,6 +359,7 @@ values:
     network: ""
     omitSidecarInjectorConfigMap: false
     oneNamespace: false
+    operatorManageWebhooks: false
     outboundTrafficPolicy:
       mode: ALLOW_ANY
     policyCheckFailOpen: false
@@ -543,6 +552,7 @@ values:
         kubernetesenv:
           enabled: true
         useAdapterCRDs: false
+      autoscaleEnabled: true
       image: mixer
       sessionAffinityEnabled: false
     telemetry:
@@ -616,7 +626,7 @@ values:
     scrapeInterval: 15s
     security:
       enabled: true
-    tag: v2.8.0
+    tag: v2.12.0
     tolerations: []
   security:
     dnsCerts:

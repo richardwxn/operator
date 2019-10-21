@@ -30,6 +30,7 @@ import (
 	"istio.io/operator/pkg/apis"
 	"istio.io/operator/pkg/controller"
 	"istio.io/operator/pkg/controller/istiocontrolplane"
+	"istio.io/operator/pkg/webhook"
 	"istio.io/pkg/ctrlz"
 	"istio.io/pkg/log"
 )
@@ -132,6 +133,10 @@ func run() {
 		log.Fatalf("Could not add all controllers to operator manager: %v", err)
 	}
 
+	// setup webhooks
+	if err := webhook.AddToManager(mgr); err != nil {
+		log.Fatalf("Could not add webhooks to operator manager: %v", err)
+	}
 	log.Info("Starting the Cmd.")
 
 	// Start the Cmd

@@ -16,13 +16,16 @@ package istiocontrolplane
 
 import (
 	"context"
-	"istio.io/operator/pkg/apis/istio/v1alpha2"
-	"istio.io/operator/pkg/validate"
+
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/webhook/admission"
+
+	"istio.io/operator/pkg/apis/istio/v1alpha2"
+	"istio.io/operator/pkg/validate"
 )
 
-// +kubebuilder:webhook:path=/validate-v1alpha2-istiocontrolplane,mutating=true,failurePolicy=fail,groups="install.istio.io",resources=IstioControlPlane,verbs=create;update,versions=v1alpha2,name=mistiocontrolplane.kb.io
+// +kubebuilder:webhook:path=/validate-v1alpha2-istiocontrolplane,mutating=true,failurePolicy=fail,
+// groups="install.istio.io",resources=IstioControlPlane,verbs=create;update,versions=v1alpha2,name=mistiocontrolplane.kb.io
 
 // podAnnotator annotates Pods
 type iscpValidator struct {

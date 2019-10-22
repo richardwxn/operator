@@ -28,7 +28,6 @@ func Add(mgr manager.Manager) error {
 func add(mgr manager.Manager) error {
 	log.Info("setting up webhook server")
 	webhookServer := mgr.GetWebhookServer()
-	//webhookServer.CertDir = "/tmp/cert"
 
 	webhookServer.Register("/validate-v1alpha2-istiocontrolplane",
 		&webhook.Admission{Handler: &iscpValidator{}})

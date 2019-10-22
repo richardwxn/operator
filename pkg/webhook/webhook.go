@@ -15,10 +15,10 @@
 package webhook
 
 import (
-	"istio.io/operator/pkg/webhook/istiocontrolplane"
 	"sigs.k8s.io/controller-runtime/pkg/manager"
-)
 
+	"istio.io/operator/pkg/webhook/istiocontrolplane"
+)
 
 // AddToManager adds all webhooks to the Manager
 func AddToManager(m manager.Manager) error {

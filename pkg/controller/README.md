@@ -15,7 +15,7 @@ Step 1 and Step 2 are required only when you make changes locally
 
 To use Remote debugging with IntelliJ, replace above step 2 with following:
 
-1. From $OPERATOR_ROOT/cmd/manager path run
+1. From ./cmd/manager path run
 `
 dlv debug --headless --listen=:2345 --api-version=2 -- server
 `.

@@ -534,7 +534,7 @@ func (t *ReverseTranslator) isEnablementPath(path util.Path) bool {
 	}
 
 	pstr := path.String()
-	if pstr == "mixer.policy.enabled" || pstr == "mixer.telemetry.enebaled" ||
+	if pstr == "mixer.policy.enabled" || pstr == "mixer.telemetry.enabled" ||
 		pstr == "gateways.istio-ingressgateway.enabled" || pstr == "gateways.istio-egressgateway.enabled" {
 		return true
 	}

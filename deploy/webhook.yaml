@@ -11,9 +11,9 @@ webhooks:
       service:
         name: istio-operator
         namespace: istio-operator
-        path: /validate-v1alpha2-istiocontrolplane
+        path: /validate-install-istio-io-v1alpha2-istiocontrolplane
     failurePolicy: Fail
-    name: mistiocontrolplane.kb.io
+    name: vistiocontrolplane.kb.io
     rules:
       - apiGroups:
           - install.istio.io
@@ -24,3 +24,26 @@ webhooks:
           - UPDATE
         resources:
           - istiocontrolplane
+
+---
+
+# Testing only, see if basic resource admission request can go to webserver
+apiVersion: admissionregistration.k8s.io/v1beta1
+kind: ValidatingWebhookConfiguration
+metadata:
+  name: validation-webhook-example-cfg
+  labels:
+    app: admission-webhook-example
+webhooks:
+  - name: required-labels.banzaicloud.com
+    clientConfig:
+      service:
+        name: istio-operator
+        namespace: istio-operator
+        path: "/validate"
+      caBundle: Cg==
+    rules:
+      - operations: [ "CREATE", "UPDATE" ]
+        apiGroups: ["apps", ""]
+        apiVersions: ["v1"]
+        resources: ["deployments","services"]

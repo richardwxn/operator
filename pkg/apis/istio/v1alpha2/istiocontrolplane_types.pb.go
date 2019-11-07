@@ -143,6 +143,8 @@ import (
 	v1 "k8s.io/api/core/v1"
 	v11 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	math "math"
+	"k8s.io/apimachinery/pkg/runtime"
+	"sigs.k8s.io/controller-runtime/pkg/webhook"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -204,6 +206,43 @@ type IstioControlPlane struct {
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
+}
+
+// +kubebuilder:webhook:path=/validate,mutating=true,failurePolicy=fail,
+// groups="install.istio.io",resources=IstioControlPlane,verbs=create;update,versions=v1alpha2,name=mistiocontrolplane.kb.io
+
+var _ webhook.Validator = &IstioControlPlane{}
+
+// ValidateCreate implements webhookutil.validator so a webhook will be registered for the type
+func (c *IstioControlPlane) ValidateCreate() error {
+	fmt.Printf("validating creation!")
+	return nil
+}
+
+// ValidateUpdate implements webhookutil.validator so a webhook will be registered for the type
+func (c *IstioControlPlane) ValidateUpdate(old runtime.Object) error {
+	fmt.Printf("validating update!")
+	return nil
+}
+
+// ValidateDelete implements webhookutil.validator so a webhook will be registered for the type
+func (c *IstioControlPlane) ValidateDelete() error {
+	fmt.Printf("validating deletion!")
+	return nil
+}
+
+// +kubebuilder:webhook:path=/validate,mutating=true,failurePolicy=fail,
+// groups="install.istio.io",resources=IstioControlPlane,verbs=create;update,versions=v1alpha2,name=mistiocontrolplane.kb.io
+
+var _ webhook.Defaulter = &IstioControlPlane{}
+
+// Default implements webhookutil.defaulter so a webhook will be registered for the type
+func (c *IstioControlPlane) Default() {
+	fmt.Printf("defaulter")
+}
+
+func init() {
+	SchemeBuilder.Register(&IstioControlPlane{}, &IstioControlPlaneList{})
 }
 
 func (m *IstioControlPlane) Reset()         { *m = IstioControlPlane{} }

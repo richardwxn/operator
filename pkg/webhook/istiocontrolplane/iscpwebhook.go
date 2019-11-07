@@ -28,13 +28,13 @@ import (
 // groups="install.istio.io",resources=IstioControlPlane,verbs=create;update,versions=v1alpha2,name=mistiocontrolplane.kb.io
 
 // podAnnotator annotates Pods
-type iscpValidator struct {
+type IscpValidator struct {
 	client  client.Client
 	decoder *admission.Decoder
 }
 
 // iscpValidator validates created IstioControlPlane CR.
-func (a *iscpValidator) Handle(ctx context.Context, req admission.Request) admission.Response {
+func (a *IscpValidator) Handle(ctx context.Context, req admission.Request) admission.Response {
 	icp := &v1alpha2.IstioControlPlane{}
 	err := a.decoder.Decode(req, icp)
 	if err != nil {
@@ -48,13 +48,13 @@ func (a *iscpValidator) Handle(ctx context.Context, req admission.Request) admis
 }
 
 // InjectClient injects the client.
-func (a *iscpValidator) InjectClient(c client.Client) error {
+func (a *IscpValidator) InjectClient(c client.Client) error {
 	a.client = c
 	return nil
 }
 
 // InjectDecoder injects the decoder.
-func (a *iscpValidator) InjectDecoder(d *admission.Decoder) error {
+func (a *IscpValidator) InjectDecoder(d *admission.Decoder) error {
 	a.decoder = d
 	return nil
 }

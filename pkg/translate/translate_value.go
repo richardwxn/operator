@@ -325,6 +325,13 @@ apiVersion: apps/v1
 kind: Deployment
 name: istio-%s`
 
+	// need to do special handling for gateways and mixer
+	// ex. deployment name should be istio-telemetry instead of istio-mixer.telemetry
+	if newPS == "mixer.policy" || newPS == "mixer.telemetry" ||
+		newPS == "gateways.istio-ingressgateway" || newPS == "gateways.istio-egressgateway" {
+		newPS = newP[1 : len(newP)-1].String()
+	}
+
 	stString := fmt.Sprintf(stVal, newPS)
 	if err := yaml.Unmarshal([]byte(stString), &st); err != nil {
 		return err
@@ -535,7 +542,7 @@ func (t *ReverseTranslator) isEnablementPath(path util.Path) bool {
 
 	pstr := path.String()
 	if pstr == "mixer.policy.enabled" || pstr == "mixer.telemetry.enabled" ||
-		pstr == "gateways.enabled" ||
+		pstr == "gateways.enabled" || pstr == "mixer.enabled" ||
 		pstr == "gateways.istio-ingressgateway.enabled" || pstr == "gateways.istio-egressgateway.enabled" {
 		return true
 	}

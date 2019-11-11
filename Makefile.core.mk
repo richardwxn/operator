@@ -45,7 +45,7 @@ gen-check: clean gen check-clean-repo
 
 clean: clean-values clean-types clean-vfs clean-charts
 
-update-charts: installer.sha
+update-charts: installer.sha clean-charts
 	@scripts/run_update_charts.sh `cat installer.sha`
 
 clean-charts:

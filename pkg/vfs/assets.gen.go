@@ -36909,17 +36909,11 @@ spec:
       pilot:
         enabled: true
         k8s:
+          affinity:
+            podAntiAffinity:
+              preferredDuringSchedulingIgnoredDuringExecution: []
+              requiredDuringSchedulingIgnoredDuringExecution: []
           env:
-            - name: POD_NAME
-              valueFrom:
-                fieldRef:
-                  apiVersion: v1
-                  fieldPath: metadata.name
-            - name: POD_NAMESPACE
-              valueFrom:
-                fieldRef:
-                  apiVersion: v1
-                  fieldPath: metadata.namespace
             - name: PILOT_TRACE_SAMPLING
               value: "1"
             - name: CONFIG_NAMESPACE
@@ -36936,13 +36930,8 @@ spec:
                 resource:
                   name: cpu
                   targetAverageUtilization: 80
-          readinessProbe:
-            httpGet:
-              path: /ready
-              port: 8080
-            initialDelaySeconds: 5
-            periodSeconds: 30
-            timeoutSeconds: 5
+          nodeSelector: {}
+          podAnnotations: {}
           resources:
             requests:
               cpu: 500m
@@ -36971,12 +36960,6 @@ spec:
                 resource:
                   name: cpu
                   targetAverageUtilization: 80
-          env:
-            - name: POD_NAMESPACE
-              valueFrom:
-                fieldRef:
-                  apiVersion: v1
-                  fieldPath: metadata.namespace
           strategy:
             rollingUpdate:
               maxSurge: "100%"
@@ -36989,12 +36972,11 @@ spec:
       telemetry:
         enabled: true
         k8s:
+          affinity:
+            podAntiAffinity:
+              preferredDuringSchedulingIgnoredDuringExecution: []
+              requiredDuringSchedulingIgnoredDuringExecution: []
           env:
-            - name: POD_NAMESPACE
-              valueFrom:
-                fieldRef:
-                  apiVersion: v1
-                  fieldPath: metadata.namespace
             - name: GOMAXPROCS
               value: "6"
           hpaSpec:
@@ -37009,6 +36991,8 @@ spec:
                 resource:
                   name: cpu
                   targetAverageUtilization: 80
+          nodeSelector: {}
+          podAnnotations: {}
           replicaCount: 1
           resources:
             requests:
@@ -37021,6 +37005,7 @@ spec:
             rollingUpdate:
               maxSurge: "100%"
               maxUnavailable: "25%"
+          tolerations: []
 
   # Security feature
   security:
@@ -37029,10 +37014,20 @@ spec:
       citadel:
         enabled: true
         k8s:
+          affinity:
+            podAntiAffinity:
+              preferredDuringSchedulingIgnoredDuringExecution: []
+              requiredDuringSchedulingIgnoredDuringExecution: []
+          env: []
+          nodeSelector: {}
+          podAnnotations: {}
+          replicaCount: 1
+          resources: {}
           strategy:
             rollingUpdate:
               maxSurge: "100%"
               maxUnavailable: "25%"
+          tolerations: []
       certManager:
         enabled: false
       nodeAgent:
@@ -37045,6 +37040,12 @@ spec:
       galley:
         enabled: true
         k8s:
+          affinity:
+            podAntiAffinity:
+              preferredDuringSchedulingIgnoredDuringExecution: []
+              requiredDuringSchedulingIgnoredDuringExecution: []
+          nodeSelector: {}
+          podAnnotations: {}
           replicaCount: 1
           resources:
             requests:
@@ -37053,6 +37054,7 @@ spec:
             rollingUpdate:
               maxSurge: "100%"
               maxUnavailable: "25%"
+          tolerations: []
 
   # Auto injection feature
   autoInjection:
@@ -37061,11 +37063,26 @@ spec:
       injector:
         enabled: true
         k8s:
+          affinity:
+            podAntiAffinity:
+              preferredDuringSchedulingIgnoredDuringExecution: []
+              requiredDuringSchedulingIgnoredDuringExecution: []
+          nodeSelector: {}
+          podAnnotations: {}
           replicaCount: 1
+          resources: {}
           strategy:
             rollingUpdate:
               maxSurge: "100%"
               maxUnavailable: "25%"
+          tolerations: []
+
+  # coreDNS feature
+  coreDNS:
+    components:
+      coreDNS:
+        enabled: false
+    enabled: false
 
   # Istio Gateway feature
   gateways:
@@ -37074,6 +37091,13 @@ spec:
       ingressGateway:
         enabled: true
         k8s:
+          affinity:
+            podAntiAffinity:
+              preferredDuringSchedulingIgnoredDuringExecution: []
+              requiredDuringSchedulingIgnoredDuringExecution: []
+          env:
+          - name: ISTIO_META_ROUTER_MODE
+            value: sni-dnat
           hpaSpec:
             maxReplicas: 5
             minReplicas: 1
@@ -37086,6 +37110,8 @@ spec:
                 resource:
                   name: cpu
                   targetAverageUtilization: 80
+          nodeSelector: {}
+          podAnnotations: {}
           resources:
             requests:
               cpu: 100m
@@ -37097,6 +37123,7 @@ spec:
             rollingUpdate:
               maxSurge: "100%"
               maxUnavailable: "25%"
+          tolerations: []
 
       egressGateway:
         enabled: false
@@ -37138,6 +37165,9 @@ spec:
         enabled: false
         gatewayName: ingressgateway
         enableHttps: false
+      createRemoteSvcEndpoints: false
+      defaultConfigVisibilitySettings: []
+      istioRemote: false
       proxy:
         image: proxyv2
         clusterDomain: "cluster.local"
@@ -37253,6 +37283,7 @@ spec:
         udsPath: ""
         token:
           aud: istio-ca
+      meshID: ""
       meshNetworks: {}
       localityLbSetting:
         enabled: true
@@ -37286,6 +37317,10 @@ spec:
         ingressClass: istio
       telemetry:
         enabled: true
+        v1:
+          enabled: false
+        v2:
+          enabled: true
       policy:
         enabled: false
       useMCP: true
@@ -37346,11 +37381,40 @@ spec:
       enableNamespacesByDefault: true
       dnsCerts:
         istio-pilot-service-account.istio-control: istio-pilot.istio-control
+        istio-pilot-service-account.istio-pilot11: istio-pilot.istio-system
+
+        istio-sidecar-injector-service-account.istio-remote: istio-sidecar-injector.istio-remote.svc
+        istio-sidecar-injector-service-account.istio-pilot11: istio-sidecar-injector.istio-pilot11.svc
+        istio-sidecar-injector-service-account.istio-control: istio-sidecar-injector.istio-control.svc
+        istio-sidecar-injector-service-account.istio-master: istio-sidecar-injector.istio-master.svc
+        istio-sidecar-injector-service-account.istio-control-master: istio-sidecar-injector.istio-control-master.svc
+
+        istio-galley-service-account.istio-pilot11: istio-galley.istio-pilot11.svc
+        istio-galley-service-account.istio-control: istio-galley.istio-control.svc
+
+        istio-galley-service-account.istio-master: istio-galley.istio-master.svc
+        istio-galley-service-account.istio-control-master: istio-galley.istio-control-master.svc
+
+        istio-galley-service-account.istio-config: istio-galley.istio-config.svc
 
     certmanager:
       hub: quay.io/jetstack
-      tag: v0.6.2
+      tag: v0.8.1
       image: cert-manager-controller
+      replicaCount: 1
+
+    cni:
+      cniBinDir: /opt/cni/bin
+      cniConfDir: /etc/cni/net.d
+      cniConfFileName: ""
+      excludeNamespaces:
+       - istio-system
+      hub: ""
+      image: install-cni
+      logLevel: info
+      psp_cluster_role: ""
+      pullPolicy: Always
+      tag: ""
 
     nodeagent:
       image: node-agent-k8s
@@ -37533,6 +37597,7 @@ spec:
       jaeger:
         hub: docker.io/jaegertracing
         tag: "1.14"
+        image: all-in-one
         memory:
           max_traces: 50000
         spanStorageType: badger
@@ -37542,6 +37607,7 @@ spec:
       zipkin:
         hub: docker.io/openzipkin
         tag: 2.14.2
+        image: zipkin
         probeStartupDelay: 200
         queryPort: 9411
         resources:
@@ -37575,9 +37641,7 @@ spec:
         externalPort: 9411
       ingress:
         enabled: false
-        hosts:
-        annotations:
-        tls:
+
     istiocoredns:
       enabled: false
       coreDNSImage: coredns/coredns
@@ -37606,7 +37670,6 @@ spec:
         viewOnlyMode: false
         grafanaURL:
         jaegerURL:
-      prometheusNamespace:
       createDemoSecret: false
       security:
         enabled: false

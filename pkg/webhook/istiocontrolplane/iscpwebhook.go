@@ -16,6 +16,7 @@ package istiocontrolplane
 
 import (
 	"context"
+	"fmt"
 
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/webhook/admission"
@@ -41,8 +42,10 @@ func (a *IscpValidator) Handle(ctx context.Context, req admission.Request) admis
 		return admission.Denied(err.Error())
 	}
 	//TODO: update to full validation including values part after values schema formalized.
-	if errs := validate.CheckIstioControlPlaneSpecExcludeValues(icp.Spec, true); len(errs) != 0 {
-		return admission.Denied(errs.Error())
+	if errs := validate.CheckIstioControlPlaneSpecExcludeValues(icp.Spec, false); len(errs) != 0 {
+		fmt.Printf("proceed with validation err: %v", errs.Error())
+		// TODO: allow the request now until we fully done the validation logic.
+		return admission.Allowed("IstioControlPlane schema validated with err")
 	}
 	return admission.Allowed("IstioControlPlane schema validated")
 }

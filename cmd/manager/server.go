@@ -15,22 +15,14 @@
 package main
 
 import (
-	"context"
 	"fmt"
 	"os"
 
-	"istio.io/operator/pkg/apis/istio/v1alpha2"
-	controllerruntime "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/webhook"
-	"sigs.k8s.io/controller-runtime/pkg/webhook/admission"
-
-	//"sigs.k8s.io/controller-runtime/pkg/webhook/admission"
-
 	// Import all Kubernetes client auth plugins (e.g. Azure, GCP, OIDC, etc.)
-	_ "k8s.io/client-go/plugin/pkg/client/auth"
-
 	drm "github.com/openshift/cluster-network-operator/pkg/util/k8s"
 	"github.com/spf13/cobra"
+	_ "k8s.io/client-go/plugin/pkg/client/auth"
 	"sigs.k8s.io/controller-runtime/pkg/client/config"
 	"sigs.k8s.io/controller-runtime/pkg/manager"
 	"sigs.k8s.io/controller-runtime/pkg/manager/signals"
@@ -38,6 +30,7 @@ import (
 	"istio.io/operator/pkg/apis"
 	"istio.io/operator/pkg/controller"
 	"istio.io/operator/pkg/controller/istiocontrolplane"
+	iscpwebhook "istio.io/operator/pkg/webhook/istiocontrolplane"
 	"istio.io/pkg/ctrlz"
 	"istio.io/pkg/log"
 )
@@ -142,30 +135,11 @@ func run() {
 
 	// setup webhooks
 	log.Info("setting up webhook server")
-
-	// Method 1
-	validatingHook := &webhook.Admission{
-		Handler: admission.HandlerFunc(func(ctx context.Context, req webhook.AdmissionRequest) webhook.AdmissionResponse {
-			log.Info("enterring admission handler!")
-			return webhook.Denied("Test only: none shall pass!")
-		}),
-	}
 	crv := mgr.GetWebhookServer()
 	crv.CertDir = "/tmp/k8s-webhook-server/serving-certs"
-	//crv.Port = 8443
-	crv.Register("/validate", validatingHook)
-
-	// method 2
-//crv.Register("/validate-install-istio-io-v1alpha2-istiocontrolplane",
-//	&webhook.Admission{Handler: &iscpwebhook.IscpValidator{}})
-
-	// Method3(implement the validator inside v1alpha2.IstioControlPlane)
-/*	err = controllerruntime.NewWebhookManagedBy(mgr).
-	For(&v1alpha2.IstioControlPlane{}).
-	Complete()
-if err != nil {
-	os.Exit(1)
-}*/
+	crv.Port = 8443
+	crv.Register("/validate-install-istio-io-v1alpha2-istiocontrolplane",
+		&webhook.Admission{Handler: &iscpwebhook.IscpValidator{}})
 
 	log.Info("Starting the Cmd.")
 

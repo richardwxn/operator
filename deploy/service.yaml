@@ -10,7 +10,7 @@ spec:
   ports:
   - port: 443
     name: webhook
-    targetPort: 443
+    targetPort: 8443
   - name: http-metrics
     port: 8383
     targetPort: 8383

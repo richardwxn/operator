@@ -81,13 +81,13 @@ var (
 	// Feature enablement mapping. Ex: "{{.ValueComponent}}.enabled": {"{{.FeatureName}}.enabled}", nil},
 	componentEnablementPattern = "{{.FeatureName}}.Components.{{.ComponentName}}.Enabled"
 	// specialComponentPath lists cases of component path of values.yaml we need to have special treatment.
-	specialComponentPath = map[string]string{
-		"mixer":                         "",
-		"mixer.policy":                  "",
-		"mixer.telemetry":               "",
-		"gateways":                      "",
-		"gateways.istio-ingressgateway": "",
-		"gateways.istio-egressgateway":  "",
+	specialComponentPath = map[string]bool{
+		"mixer":                         true,
+		"mixer.policy":                  true,
+		"mixer.telemetry":               true,
+		"gateways":                      true,
+		"gateways.istio-ingressgateway": true,
+		"gateways.istio-egressgateway":  true,
 	}
 )
 
@@ -336,7 +336,7 @@ name: istio-%s`
 
 	// need to do special handling for gateways and mixer
 	// ex. because deployment name should be istio-telemetry instead of istio-mixer.telemetry, we need to get rid of the prefix mixer part.
-	if _, exist := specialComponentPath[newPS]; exist && len(newP) > 2 {
+	if specialComponentPath[newPS] && len(newP) > 2 {
 		newPS = newP[1 : len(newP)-1].String()
 	}
 
@@ -549,7 +549,7 @@ func (t *ReverseTranslator) isEnablementPath(path util.Path) bool {
 	}
 
 	pf := path[:len(path)-1].String()
-	if _, exist := specialComponentPath[pf]; exist {
+	if specialComponentPath[pf] {
 		return true
 	}
 

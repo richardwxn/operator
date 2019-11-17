@@ -96,15 +96,24 @@ message CertManagerConfig {
   // Image name for the CertManager Deployment.
   string image = 4;
 
+  uint32 replicaCount = 5;
+
+  string email = 6;
+
+  repeated string extraArgs = 7;
   // K8s node selector.
   //
   // See https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector
-  TypeMapStringInterface nodeSelector = 5;
+  TypeMapStringInterface nodeSelector = 8;
 
   // K8s resources settings.
   //
   // See https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container
-  Resources resources = 6;
+  Resources resources = 9;
+
+  string podDnsPolicy = 10;
+
+  TypeMapStringInterface podDnsConfig = 11;
 }
 
 // Mirrors Resources for unmarshaling.
@@ -142,6 +151,18 @@ message CoreDNSConfig {
   //
   // See https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container
   Resources resources = 8;
+
+  // K8s rolling update strategy
+  TypeIntOrStringForPB rollingMaxSurge = 9;
+
+  // K8s rolling update strategy
+  TypeIntOrStringForPB rollingMaxUnavailable = 10;
+
+  TypeSliceOfMapStringInterface podAntiAffinityLabelSelector = 11;
+
+  TypeSliceOfMapStringInterface podAntiAffinityTermLabelSelector = 12;
+
+  TypeSliceOfMapStringInterface tolerations = 13;
 }
 
 // DefaultPodDisruptionBudgetConfig specifies the default pod disruption budget configuration.
@@ -295,6 +316,12 @@ message GalleyConfig {
 
   // Enable analysis and status update in Galley
   google.protobuf.BoolValue enableAnalysis = 8;
+
+  // K8s rolling update strategy
+  TypeIntOrStringForPB rollingMaxSurge = 9;
+
+  // K8s rolling update strategy
+  TypeIntOrStringForPB rollingMaxUnavailable = 10;
 }
 
 // GatewayLabelsConfig is a set of Configuration for gateway labels.
@@ -326,6 +353,8 @@ message GlobalConfig {
 
   // Specifies the namespace for the configuration and validation component.
   string configNamespace = 2;
+
+  string configRootNamespace = 50;
 
   // Controls whether the server-side validation is enabled.
   google.protobuf.BoolValue configValidation = 3;
@@ -517,7 +546,7 @@ message GlobalConfig {
   // Specifies the Istio control plane’s telemetry Pod IP address or remote cluster DNS resolvable hostname
   string remoteTelemetryAddress = 49;
 
-  // The next available key is 50
+  // The next available key is 51
 }
 
 // GlobalLoggingConfig specifies the global logging level settings for the Istio control plane components.
@@ -906,6 +935,12 @@ message NodeAgentConfig {
   //
   // See https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector
   TypeMapStringInterface nodeSelector = 4;
+
+  TypeSliceOfMapStringInterface tolerations = 5;
+
+  TypeSliceOfMapStringInterface podAntiAffinityLabelSelector = 6;
+
+  TypeSliceOfMapStringInterface podAntiAffinityTermLabelSelector = 7;
 }
 
 // OutboundTrafficPolicyConfig controls the default behavior of the sidecar for handling outbound traffic from the application.
@@ -1319,6 +1354,24 @@ message EnvoyAccessLogConfig {
   string host = 2;
 
   string port = 3;
+
+  EnvoyAccessLogtlsSettings tlsSettings = 4;
+
+  TypeMapStringInterface tcpKeepalive = 5;
+}
+
+message EnvoyAccessLogtlsSettings {
+  string mode = 1;
+
+  string clientCertificate = 2;
+
+  string privateKey = 3;
+
+  string caCertificates = 4;
+
+  string sni = 5;
+
+  repeated string subjectAltNames = 6;
 }
 
 // Configuration for proxy_init container which sets the pods' networking to intercept the inbound/outbound traffic.
@@ -1398,23 +1451,24 @@ message SecurityConfig {
   // Setting to true creates the mesh-wide authentication policy with name "default".
   google.protobuf.BoolValue createMeshPolicy = 7;
 
-  //
-  google.protobuf.BoolValue enableNamespacesByDefault = 9;
+  google.protobuf.BoolValue enableNamespacesByDefault = 8;
+
+  google.protobuf.BoolValue citadelHealthCheck = 9;
 
   // K8s node selector.
   //
   // See https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector
-  TypeMapStringInterface nodeSelector = 8;
+  TypeMapStringInterface nodeSelector = 10;
 
   TypeMapStringInterface env = 10;
 
   // K8s annotations for pods.
   //
   // See: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
-  TypeMapStringInterface podAnnotations = 11;
+  TypeMapStringInterface podAnnotations = 12;
 
   // How long workload certs are valid for
-  string workloadCertTtl = 12;
+  string workloadCertTtl = 13;
 }
 
 // ServiceConfig is described in istio.io documentation.

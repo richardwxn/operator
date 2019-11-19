@@ -2,7 +2,7 @@
 title: v1alpha1
 layout: protoc-gen-docs
 generator: protoc-gen-docs
-number_of_entries: 84
+number_of_entries: 85
 ---
 <h2 id="AddonIngressConfig">AddonIngressConfig</h2>
 <section>
@@ -315,6 +315,33 @@ No
 No
 </td>
 </tr>
+<tr id="CertManagerConfig-replicaCount">
+<td><code>replicaCount</code></td>
+<td><code>uint32</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="CertManagerConfig-email">
+<td><code>email</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="CertManagerConfig-extraArgs">
+<td><code>extraArgs</code></td>
+<td><code>string[]</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
 <tr id="CertManagerConfig-nodeSelector">
 <td><code>nodeSelector</code></td>
 <td><code><a href="#TypeMapStringInterface">TypeMapStringInterface</a></code></td>
@@ -336,6 +363,24 @@ No
 
 <p>See https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container</p>
 
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="CertManagerConfig-podDnsPolicy">
+<td><code>podDnsPolicy</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="CertManagerConfig-podDnsConfig">
+<td><code>podDnsConfig</code></td>
+<td><code><a href="#TypeMapStringInterface">TypeMapStringInterface</a></code></td>
+<td>
 </td>
 <td>
 No
@@ -443,6 +488,55 @@ No
 
 <p>See https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container</p>
 
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="CoreDNSConfig-rollingMaxSurge">
+<td><code>rollingMaxSurge</code></td>
+<td><code><a href="#TypeIntOrStringForPB">TypeIntOrStringForPB</a></code></td>
+<td>
+<p>K8s rolling update strategy</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="CoreDNSConfig-rollingMaxUnavailable">
+<td><code>rollingMaxUnavailable</code></td>
+<td><code><a href="#TypeIntOrStringForPB">TypeIntOrStringForPB</a></code></td>
+<td>
+<p>K8s rolling update strategy</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="CoreDNSConfig-podAntiAffinityLabelSelector">
+<td><code>podAntiAffinityLabelSelector</code></td>
+<td><code><a href="#TypeSliceOfMapStringInterface">TypeSliceOfMapStringInterface</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="CoreDNSConfig-podAntiAffinityTermLabelSelector">
+<td><code>podAntiAffinityTermLabelSelector</code></td>
+<td><code><a href="#TypeSliceOfMapStringInterface">TypeSliceOfMapStringInterface</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="CoreDNSConfig-tolerations">
+<td><code>tolerations</code></td>
+<td><code><a href="#TypeSliceOfMapStringInterface">TypeSliceOfMapStringInterface</a></code></td>
+<td>
 </td>
 <td>
 No
@@ -801,6 +895,93 @@ No
 No
 </td>
 </tr>
+<tr id="EnvoyAccessLogConfig-tlsSettings">
+<td><code>tlsSettings</code></td>
+<td><code><a href="#EnvoyAccessLogtlsSettings">EnvoyAccessLogtlsSettings</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="EnvoyAccessLogConfig-tcpKeepalive">
+<td><code>tcpKeepalive</code></td>
+<td><code><a href="#TypeMapStringInterface">TypeMapStringInterface</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="EnvoyAccessLogtlsSettings">EnvoyAccessLogtlsSettings</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="EnvoyAccessLogtlsSettings-mode">
+<td><code>mode</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="EnvoyAccessLogtlsSettings-clientCertificate">
+<td><code>clientCertificate</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="EnvoyAccessLogtlsSettings-privateKey">
+<td><code>privateKey</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="EnvoyAccessLogtlsSettings-caCertificates">
+<td><code>caCertificates</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="EnvoyAccessLogtlsSettings-sni">
+<td><code>sni</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="EnvoyAccessLogtlsSettings-subjectAltNames">
+<td><code>subjectAltNames</code></td>
+<td><code>string[]</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -980,6 +1161,28 @@ No
 No
 </td>
 </tr>
+<tr id="GalleyConfig-rollingMaxSurge">
+<td><code>rollingMaxSurge</code></td>
+<td><code><a href="#TypeIntOrStringForPB">TypeIntOrStringForPB</a></code></td>
+<td>
+<p>K8s rolling update strategy</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="GalleyConfig-rollingMaxUnavailable">
+<td><code>rollingMaxUnavailable</code></td>
+<td><code><a href="#TypeIntOrStringForPB">TypeIntOrStringForPB</a></code></td>
+<td>
+<p>K8s rolling update strategy</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -1097,12 +1300,30 @@ No
 No
 </td>
 </tr>
+<tr id="GlobalConfig-certificates">
+<td><code>certificates</code></td>
+<td><code><a href="#TypeSliceOfMapStringInterface">TypeSliceOfMapStringInterface</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
 <tr id="GlobalConfig-configNamespace">
 <td><code>configNamespace</code></td>
 <td><code>string</code></td>
 <td>
 <p>Specifies the namespace for the configuration and validation component.</p>
 
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="GlobalConfig-configRootNamespace">
+<td><code>configRootNamespace</code></td>
+<td><code>string</code></td>
+<td>
 </td>
 <td>
 No
@@ -1125,6 +1346,15 @@ No
 <td>
 <p>Controls whether the MTLS for communication between the control plane components is enabled.</p>
 
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="GlobalConfig-defaultConfigVisibilitySettings">
+<td><code>defaultConfigVisibilitySettings</code></td>
+<td><code>string[]</code></td>
+<td>
 </td>
 <td>
 No
@@ -1286,6 +1516,15 @@ No
 No
 </td>
 </tr>
+<tr id="GlobalConfig-logAsJson">
+<td><code>logAsJson</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">BoolValue</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
 <tr id="GlobalConfig-logging">
 <td><code>logging</code></td>
 <td><code><a href="#GlobalLoggingConfig">GlobalLoggingConfig</a></code></td>
@@ -1303,6 +1542,15 @@ No
 <td>
 <p>Specifies the Configuration for Istio mesh expansion to bare metal.</p>
 
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="GlobalConfig-meshID">
+<td><code>meshID</code></td>
+<td><code>string</code></td>
+<td>
 </td>
 <td>
 No
@@ -1377,6 +1625,15 @@ No
 No
 </td>
 </tr>
+<tr id="GlobalConfig-network">
+<td><code>network</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
 <tr id="GlobalConfig-podDNSSearchNamespaces">
 <td><code>podDNSSearchNamespaces</code></td>
 <td><code>string[]</code></td>
@@ -1392,6 +1649,15 @@ set of DNS settings than the normal application pods (e.g. in multicluster scena
 No
 </td>
 </tr>
+<tr id="GlobalConfig-omitSidecarInjectorConfigMap">
+<td><code>omitSidecarInjectorConfigMap</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">BoolValue</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
 <tr id="GlobalConfig-oneNamespace">
 <td><code>oneNamespace</code></td>
 <td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">BoolValue</a></code></td>
@@ -1399,6 +1665,15 @@ No
 <p>Controls whether to restrict the applications namespace the controller manages;
 If set it to false, the controller watches all namespaces.</p>
 
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="GlobalConfig-operatorManageWebhooks">
+<td><code>operatorManageWebhooks</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">BoolValue</a></code></td>
+<td>
 </td>
 <td>
 No
@@ -1445,6 +1720,15 @@ No
 
 <p>See https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass</p>
 
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="GlobalConfig-prometheusNamespace">
+<td><code>prometheusNamespace</code></td>
+<td><code>string</code></td>
+<td>
 </td>
 <td>
 No
@@ -1549,56 +1833,12 @@ No
 No
 </td>
 </tr>
-<tr id="GlobalConfig-logAsJson">
-<td><code>logAsJson</code></td>
-<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">BoolValue</a></code></td>
-<td>
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="GlobalConfig-omitSidecarInjectorConfigMap">
-<td><code>omitSidecarInjectorConfigMap</code></td>
-<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">BoolValue</a></code></td>
-<td>
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="GlobalConfig-network">
-<td><code>network</code></td>
-<td><code>string</code></td>
-<td>
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="GlobalConfig-certificates">
-<td><code>certificates</code></td>
-<td><code><a href="#TypeSliceOfMapStringInterface">TypeSliceOfMapStringInterface</a></code></td>
-<td>
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="GlobalConfig-operatorManageWebhooks">
-<td><code>operatorManageWebhooks</code></td>
-<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">BoolValue</a></code></td>
-<td>
-</td>
-<td>
-No
-</td>
-</tr>
 <tr id="GlobalConfig-istioRemote">
 <td><code>istioRemote</code></td>
 <td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">BoolValue</a></code></td>
 <td>
-<p>Controls whether to use the Istio remote control plane</p>
+<p>Settings for remote cluster.
+Controls whether to use the Istio remote control plane</p>
 
 </td>
 <td>
@@ -3381,6 +3621,33 @@ No
 No
 </td>
 </tr>
+<tr id="NodeAgentConfig-tolerations">
+<td><code>tolerations</code></td>
+<td><code><a href="#TypeSliceOfMapStringInterface">TypeSliceOfMapStringInterface</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="NodeAgentConfig-podAntiAffinityLabelSelector">
+<td><code>podAntiAffinityLabelSelector</code></td>
+<td><code><a href="#TypeSliceOfMapStringInterface">TypeSliceOfMapStringInterface</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="NodeAgentConfig-podAntiAffinityTermLabelSelector">
+<td><code>podAntiAffinityTermLabelSelector</code></td>
+<td><code><a href="#TypeSliceOfMapStringInterface">TypeSliceOfMapStringInterface</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -4996,7 +5263,15 @@ No
 <td><code>enableNamespacesByDefault</code></td>
 <td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">BoolValue</a></code></td>
 <td>
-
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="SecurityConfig-citadelHealthCheck">
+<td><code>citadelHealthCheck</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">BoolValue</a></code></td>
+<td>
 </td>
 <td>
 No

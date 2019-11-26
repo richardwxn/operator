@@ -72,6 +72,8 @@ message CNIConfig {
   TypeMapStringInterface podAnnotations = 10 [deprecated=true];
 
   string psp_cluster_role = 11;
+
+  string logLevel = 12;
 }
 
 // Configuration for CPU target utilization for HorizontalPodAutoscaler target.

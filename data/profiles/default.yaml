@@ -397,7 +397,15 @@ spec:
     telemetry:
       enabled: true
       v2:
-        enabled: false
+        enabled: true
+        prometheus:
+          enabled: true
+        stackdriver:
+          enabled: false
+          logging: false
+          monitoring: false
+          topology: false
+          configOverride: {}
 
     mixer:
       adapters:

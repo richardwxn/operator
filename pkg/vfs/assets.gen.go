@@ -96,7 +96,6 @@
 // ../../data/charts/istio-control/istio-discovery/templates/poddisruptionbudget.yaml
 // ../../data/charts/istio-control/istio-discovery/templates/service.yaml
 // ../../data/charts/istio-control/istio-discovery/templates/serviceaccount.yaml
-// ../../data/charts/istio-control/istio-discovery/templates/telemetryv2.yaml
 // ../../data/charts/istio-control/istio-discovery/templates/telemetryv2_1.4.yaml
 // ../../data/charts/istio-control/istio-discovery/templates/telemetryv2_1.5.yaml
 // ../../data/charts/istio-control/istio-discovery/values.yaml
@@ -12793,149 +12792,6 @@ func chartsIstioControlIstioDiscoveryTemplatesServiceaccountYaml() (*asset, erro
 	}
 
 	info := bindataFileInfo{name: "charts/istio-control/istio-discovery/templates/serviceaccount.yaml", size: 0, mode: os.FileMode(0), modTime: time.Unix(0, 0)}
-	a := &asset{bytes: bytes, info: info}
-	return a, nil
-}
-
-var _chartsIstioControlIstioDiscoveryTemplatesTelemetryv2Yaml = []byte(`{{- if and .Values.telemetry.enabled .Values.telemetry.v2.enabled }}
-apiVersion: networking.istio.io/v1alpha3
-kind: EnvoyFilter
-metadata:
-  name: metadata-exchange
-{{- if .Values.global.configRootNamespace }}
-  namespace: {{ .Values.global.configRootNamespace }}
-{{- else }}
-  namespace: {{ .Release.Namespace }}
-{{- end }}
-spec:
-  configPatches:
-    - applyTo: HTTP_FILTER
-      match:
-        context: ANY # inbound, outbound, and gateway
-        listener:
-          filterChain:
-            filter:
-              name: "envoy.http_connection_manager"
-      patch:
-        operation: INSERT_BEFORE
-        value:
-          name: envoy.filters.http.wasm
-          config:
-            config:
-              configuration: envoy.wasm.metadata_exchange
-              vm_config:
-                runtime: envoy.wasm.runtime.null
-                code:
-                  local:
-                    inline_string: envoy.wasm.metadata_exchange
----
-apiVersion: networking.istio.io/v1alpha3
-kind: EnvoyFilter
-metadata:
-  name: stats-filter
-{{- if .Values.global.configRootNamespace }}
-  namespace: {{ .Values.global.configRootNamespace }}
-{{- else }}
-  namespace: {{ .Release.Namespace }}
-{{- end }}
-spec:
-  configPatches:
-    - applyTo: HTTP_FILTER
-      match:
-        context: SIDECAR_OUTBOUND
-        listener:
-          filterChain:
-            filter:
-              name: "envoy.http_connection_manager"
-              subFilter:
-                name: "envoy.router"
-      patch:
-        operation: INSERT_BEFORE
-        value:
-          name: envoy.filters.http.wasm
-          config:
-            config:
-              root_id: stats_outbound
-              configuration: |
-                {
-                  "debug": "false",
-                  "stat_prefix": "istio",
-                }
-              vm_config:
-                vm_id: stats_outbound
-                runtime: envoy.wasm.runtime.null
-                code:
-                  local:
-                    inline_string: envoy.wasm.stats
-    - applyTo: HTTP_FILTER
-      match:
-        context: SIDECAR_INBOUND
-        listener:
-          filterChain:
-            filter:
-              name: "envoy.http_connection_manager"
-              subFilter:
-                name: "envoy.router"
-      patch:
-        operation: INSERT_BEFORE
-        value:
-          name: envoy.filters.http.wasm
-          config:
-            config:
-              root_id: stats_inbound
-              configuration: |
-                {
-                  "debug": "false",
-                  "stat_prefix": "istio",
-                }
-              vm_config:
-                vm_id: stats_inbound
-                runtime: envoy.wasm.runtime.null
-                code:
-                  local:
-                    inline_string: envoy.wasm.stats
-    - applyTo: HTTP_FILTER
-      match:
-        context: GATEWAY
-        listener:
-          filterChain:
-            filter:
-              name: "envoy.http_connection_manager"
-              subFilter:
-                name: "envoy.router"
-      patch:
-        operation: INSERT_BEFORE
-        value:
-          name: envoy.filters.http.wasm
-          config:
-            config:
-              root_id: stats_outbound
-              configuration: |
-                {
-                  "debug": "false",
-                  "stat_prefix": "istio",
-                }
-              vm_config:
-                vm_id: stats_outbound
-                runtime: envoy.wasm.runtime.null
-                code:
-                  local:
-                    inline_string: envoy.wasm.stats
-{{- end }}
-
-`)
-
-func chartsIstioControlIstioDiscoveryTemplatesTelemetryv2YamlBytes() ([]byte, error) {
-	return _chartsIstioControlIstioDiscoveryTemplatesTelemetryv2Yaml, nil
-}
-
-func chartsIstioControlIstioDiscoveryTemplatesTelemetryv2Yaml() (*asset, error) {
-	bytes, err := chartsIstioControlIstioDiscoveryTemplatesTelemetryv2YamlBytes()
-	if err != nil {
-		return nil, err
-	}
-
-	info := bindataFileInfo{name: "charts/istio-control/istio-discovery/templates/telemetryv2.yaml", size: 0, mode: os.FileMode(0), modTime: time.Unix(0, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -39870,7 +39726,6 @@ var _bindata = map[string]func() (*asset, error){
 	"charts/istio-control/istio-discovery/templates/poddisruptionbudget.yaml":             chartsIstioControlIstioDiscoveryTemplatesPoddisruptionbudgetYaml,
 	"charts/istio-control/istio-discovery/templates/service.yaml":                         chartsIstioControlIstioDiscoveryTemplatesServiceYaml,
 	"charts/istio-control/istio-discovery/templates/serviceaccount.yaml":                  chartsIstioControlIstioDiscoveryTemplatesServiceaccountYaml,
-	"charts/istio-control/istio-discovery/templates/telemetryv2.yaml":                     chartsIstioControlIstioDiscoveryTemplatesTelemetryv2Yaml,
 	"charts/istio-control/istio-discovery/templates/telemetryv2_1.4.yaml":                 chartsIstioControlIstioDiscoveryTemplatesTelemetryv2_14Yaml,
 	"charts/istio-control/istio-discovery/templates/telemetryv2_1.5.yaml":                 chartsIstioControlIstioDiscoveryTemplatesTelemetryv2_15Yaml,
 	"charts/istio-control/istio-discovery/values.yaml":                                    chartsIstioControlIstioDiscoveryValuesYaml,
@@ -40185,7 +40040,6 @@ var _bintree = &bintree{nil, map[string]*bintree{
 					"poddisruptionbudget.yaml": &bintree{chartsIstioControlIstioDiscoveryTemplatesPoddisruptionbudgetYaml, map[string]*bintree{}},
 					"service.yaml":             &bintree{chartsIstioControlIstioDiscoveryTemplatesServiceYaml, map[string]*bintree{}},
 					"serviceaccount.yaml":      &bintree{chartsIstioControlIstioDiscoveryTemplatesServiceaccountYaml, map[string]*bintree{}},
-					"telemetryv2.yaml":         &bintree{chartsIstioControlIstioDiscoveryTemplatesTelemetryv2Yaml, map[string]*bintree{}},
 					"telemetryv2_1.4.yaml":     &bintree{chartsIstioControlIstioDiscoveryTemplatesTelemetryv2_14Yaml, map[string]*bintree{}},
 					"telemetryv2_1.5.yaml":     &bintree{chartsIstioControlIstioDiscoveryTemplatesTelemetryv2_15Yaml, map[string]*bintree{}},
 				}},

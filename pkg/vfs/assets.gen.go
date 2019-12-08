@@ -97,6 +97,8 @@
 // ../../data/charts/istio-control/istio-discovery/templates/service.yaml
 // ../../data/charts/istio-control/istio-discovery/templates/serviceaccount.yaml
 // ../../data/charts/istio-control/istio-discovery/templates/telemetryv2.yaml
+// ../../data/charts/istio-control/istio-discovery/templates/telemetryv2_1.4.yaml
+// ../../data/charts/istio-control/istio-discovery/templates/telemetryv2_1.5.yaml
 // ../../data/charts/istio-control/istio-discovery/values.yaml
 // ../../data/charts/istio-policy/Chart.yaml
 // ../../data/charts/istio-policy/templates/_affinity.tpl
@@ -8225,7 +8227,7 @@ spec:
     hosts:
     - "*"
 {{ end }}
----    
+---
 {{ end }}
 
 
@@ -9328,9 +9330,13 @@ var _chartsIstioControlIstioAutoinjectFilesInjectionTemplateYaml = []byte(`templ
     - name: ISTIO_META_POD_PORTS
       value: |-
         [
+        {{- $first := true }}
         {{- range $index1, $c := .Spec.Containers }}
           {{- range $index2, $p := $c.Ports }}
-            {{if or (ne $index1 0) (ne $index2 0)}},{{end}}{{ structToJSON $p }}
+            {{- if (structToJSON $p) }}
+            {{if not $first}},{{end}}{{ structToJSON $p }}
+            {{- $first = false }}
+            {{- end }}
           {{- end}}
         {{- end}}
         ]
@@ -12036,15 +12042,15 @@ data:
     {{- else }}
 
     {{- if .Values.global.controlPlaneSecurityEnabled }}
-    mixerCheckServer: istio-policy.{{ .Values.global.policyNamespace }}.svc.cluster.local:15004
+    mixerCheckServer: istio-policy.{{ .Values.global.policyNamespace }}.svc.{{ .Values.global.proxy.clusterDomain }}:15004
     {{- else }}
-    mixerCheckServer: istio-policy.{{ .Values.global.policyNamespace }}.svc.cluster.local:9091
+    mixerCheckServer: istio-policy.{{ .Values.global.policyNamespace }}.svc.{{ .Values.global.proxy.clusterDomain }}:9091
     {{- end }}
     {{- if .Values.telemetry.enabled }}
     {{- if .Values.global.controlPlaneSecurityEnabled }}
-    mixerReportServer: istio-telemetry.{{ .Values.global.telemetryNamespace }}.svc.cluster.local:15004
+    mixerReportServer: istio-telemetry.{{ .Values.global.telemetryNamespace }}.svc.{{ .Values.global.proxy.clusterDomain }}:15004
     {{- else }}
-    mixerReportServer: istio-telemetry.{{ .Values.global.telemetryNamespace }}.svc.cluster.local:9091
+    mixerReportServer: istio-telemetry.{{ .Values.global.telemetryNamespace }}.svc.{{ .Values.global.proxy.clusterDomain }}:9091
     {{- end }}
     {{- end }}
 
@@ -12093,6 +12099,16 @@ data:
 
     {{- end }}
 
+    # Automatic protocol detection uses a set of heuristics to
+    # determine whether the connection is using TLS or not (on the
+    # server side), as well as the application protocol being used
+    # (e.g., http vs tcp). These heuristics rely on the client sending
+    # the first bits of data. For server first protocols like MySQL,
+    # MongoDB, etc., Envoy will timeout on the protocol detection after
+    # the specified period, defaulting to non mTLS plain TCP
+    # traffic. Set this field to tweak the period that Envoy will wait
+    # for the client to send the first bits of data. (MUST BE >=1ms)
+    protocolDetectionTimeout: {{ .Values.global.proxy.protocolDetectionTimeout }}
 
     # This is the k8s ingress service name, update if you used a different name
     {{- if .Values.pilot.ingress }}
@@ -12924,6 +12940,511 @@ func chartsIstioControlIstioDiscoveryTemplatesTelemetryv2Yaml() (*asset, error) 
 	return a, nil
 }
 
+var _chartsIstioControlIstioDiscoveryTemplatesTelemetryv2_14Yaml = []byte(`{{- if and .Values.telemetry.enabled .Values.telemetry.v2.enabled }}
+apiVersion: networking.istio.io/v1alpha3
+kind: EnvoyFilter
+metadata:
+  name: metadata-exchange-1.4
+  {{- if .Values.global.configRootNamespace }}
+  namespace: {{ .Values.global.configRootNamespace }}
+  {{- else }}
+  namespace: {{ .Release.Namespace }}
+  {{- end }}
+spec:
+  configPatches:
+    - applyTo: HTTP_FILTER
+      match:
+        context: ANY # inbound, outbound, and gateway
+        proxy:
+          proxyVersion: '1\.4.*'
+        listener:
+          filterChain:
+            filter:
+              name: "envoy.http_connection_manager"
+      patch:
+        operation: INSERT_BEFORE
+        value:
+          name: envoy.filters.http.wasm
+          config:
+            config:
+              configuration: envoy.wasm.metadata_exchange
+              vm_config:
+                runtime: envoy.wasm.runtime.null
+                code:
+                  inline_string: envoy.wasm.metadata_exchange
+---
+{{- if .Values.telemetry.v2.prometheus.enabled }}
+apiVersion: networking.istio.io/v1alpha3
+kind: EnvoyFilter
+metadata:
+  name: stats-filter-1.4
+  {{- if .Values.global.configRootNamespace }}
+  namespace: {{ .Values.global.configRootNamespace }}
+  {{- else }}
+  namespace: {{ .Release.Namespace }}
+  {{- end }}
+spec:
+  configPatches:
+    - applyTo: HTTP_FILTER
+      match:
+        context: SIDECAR_OUTBOUND
+        proxy:
+          proxyVersion: '1\.4.*'
+        listener:
+          filterChain:
+            filter:
+              name: "envoy.http_connection_manager"
+              subFilter:
+                name: "envoy.router"
+      patch:
+        operation: INSERT_BEFORE
+        value:
+          name: envoy.filters.http.wasm
+          config:
+            config:
+              root_id: stats_outbound
+              configuration: |
+                {
+                  "debug": "false",
+                  "stat_prefix": "istio",
+                }
+              vm_config:
+                vm_id: stats_outbound
+                runtime: envoy.wasm.runtime.null
+                code:
+                  inline_string: envoy.wasm.stats
+    - applyTo: HTTP_FILTER
+      match:
+        context: SIDECAR_INBOUND
+        proxy:
+          proxyVersion: '1\.4.*'
+        listener:
+          filterChain:
+            filter:
+              name: "envoy.http_connection_manager"
+              subFilter:
+                name: "envoy.router"
+      patch:
+        operation: INSERT_BEFORE
+        value:
+          name: envoy.filters.http.wasm
+          config:
+            config:
+              root_id: stats_inbound
+              configuration: |
+                {
+                  "debug": "false",
+                  "stat_prefix": "istio",
+                }
+              vm_config:
+                vm_id: stats_inbound
+                runtime: envoy.wasm.runtime.null
+                code:
+                  inline_string: envoy.wasm.stats
+    - applyTo: HTTP_FILTER
+      match:
+        context: GATEWAY
+        proxy:
+          proxyVersion: '1\.4.*'
+        listener:
+          filterChain:
+            filter:
+              name: "envoy.http_connection_manager"
+              subFilter:
+                name: "envoy.router"
+      patch:
+        operation: INSERT_BEFORE
+        value:
+          name: envoy.filters.http.wasm
+          config:
+            config:
+              root_id: stats_outbound
+              configuration: |
+                {
+                  "debug": "false",
+                  "stat_prefix": "istio",
+                }
+              vm_config:
+                vm_id: stats_outbound
+                runtime: envoy.wasm.runtime.null
+                code:
+                  inline_string: envoy.wasm.stats
+---
+{{- end }}
+{{- if .Values.telemetry.v2.stackdriver.enabled }}
+apiVersion: networking.istio.io/v1alpha3
+kind: EnvoyFilter
+metadata:
+  name: stackdriver-filter-1.4
+  {{- if .Values.global.configRootNamespace }}
+  namespace: {{ .Values.global.configRootNamespace }}
+  {{- else }}
+  namespace: {{ .Release.Namespace }}
+  {{- end }}
+spec:
+  configPatches:
+    - applyTo: HTTP_FILTER
+      match:
+        context: SIDECAR_OUTBOUND
+        proxy:
+          proxyVersion: '1\.4.*'
+        listener:
+          filterChain:
+            filter:
+              name: "envoy.http_connection_manager"
+              subFilter:
+                name: "envoy.router"
+      patch:
+        operation: INSERT_BEFORE
+        value:
+          name: envoy.filters.http.wasm
+          config:
+            config:
+              root_id: stackdriver_outbound
+              configuration: |
+                {{- if not .Values.telemetry.v2.stackdriver.configOverride }}
+                {"enable_mesh_edges_reporting": {{ .Values.telemetry.v2.stackdriver.topology }}, "disable_server_access_logging": {{ not .Values.telemetry.v2.stackdriver.logging }}, "meshEdgesReportingDuration": "600s"}
+                {{- else }}
+                {{ toJson .Values.telemetry.v2.stackdriver.configOverride | indent 8 }}
+                {{- end }}
+              vm_config:
+                vm_id: stackdriver_outbound
+                runtime: envoy.wasm.runtime.null
+                code:
+                  inline_string: envoy.wasm.null.stackdriver
+    - applyTo: HTTP_FILTER
+      match:
+        context: SIDECAR_INBOUND
+        proxy:
+          proxyVersion: '1\.4.*'
+        listener:
+          filterChain:
+            filter:
+              name: "envoy.http_connection_manager"
+              subFilter:
+                name: "envoy.router"
+      patch:
+        operation: INSERT_BEFORE
+        value:
+          name: envoy.filters.http.wasm
+          config:
+            config:
+              root_id: stackdriver_inbound
+              configuration: |
+                {{- if not .Values.telemetry.v2.stackdriver.configOverride }}
+                {"enable_mesh_edges_reporting": {{ .Values.telemetry.v2.stackdriver.topology }}, "disable_server_access_logging": {{ not .Values.telemetry.v2.stackdriver.logging }}, "meshEdgesReportingDuration": "600s"}
+                {{- else }}
+                {{ toJson .Values.telemetry.v2.stackdriver.configOverride | indent 16 }}
+                {{- end }}
+              vm_config:
+                vm_id: stackdriver_inbound
+                runtime: envoy.wasm.runtime.null
+                code:
+                  inline_string: envoy.wasm.null.stackdriver
+    - applyTo: HTTP_FILTER
+      match:
+        context: GATEWAY
+        proxy:
+          proxyVersion: '1\.4.*'
+        listener:
+          filterChain:
+            filter:
+              name: "envoy.http_connection_manager"
+              subFilter:
+                name: "envoy.router"
+      patch:
+        operation: INSERT_BEFORE
+        value:
+          name: envoy.filters.http.wasm
+          config:
+            config:
+              root_id: stackdriver_outbound
+              configuration: |
+                {{- if not .Values.telemetry.v2.stackdriver.configOverride }}
+                {"enable_mesh_edges_reporting": {{ .Values.telemetry.v2.stackdriver.topology }}, "disable_server_access_logging": {{ not .Values.telemetry.v2.stackdriver.logging }}, "meshEdgesReportingDuration": "600s", "disable_host_header_fallback": true}
+                {{- else }}
+                {{ toJson .Values.telemetry.v2.stackdriver.configOverride | indent 16 }}
+                {{- end }}
+              vm_config:
+                vm_id: stackdriver_outbound
+                runtime: envoy.wasm.runtime.null
+                code:
+                  inline_string: envoy.wasm.null.stackdriver
+---
+{{- end}}
+{{- end}}
+`)
+
+func chartsIstioControlIstioDiscoveryTemplatesTelemetryv2_14YamlBytes() ([]byte, error) {
+	return _chartsIstioControlIstioDiscoveryTemplatesTelemetryv2_14Yaml, nil
+}
+
+func chartsIstioControlIstioDiscoveryTemplatesTelemetryv2_14Yaml() (*asset, error) {
+	bytes, err := chartsIstioControlIstioDiscoveryTemplatesTelemetryv2_14YamlBytes()
+	if err != nil {
+		return nil, err
+	}
+
+	info := bindataFileInfo{name: "charts/istio-control/istio-discovery/templates/telemetryv2_1.4.yaml", size: 0, mode: os.FileMode(0), modTime: time.Unix(0, 0)}
+	a := &asset{bytes: bytes, info: info}
+	return a, nil
+}
+
+var _chartsIstioControlIstioDiscoveryTemplatesTelemetryv2_15Yaml = []byte(`{{- if and .Values.telemetry.enabled .Values.telemetry.v2.enabled }}
+apiVersion: networking.istio.io/v1alpha3
+kind: EnvoyFilter
+metadata:
+  name: metadata-exchange-1.5
+  {{- if .Values.global.configRootNamespace }}
+  namespace: {{ .Values.global.configRootNamespace }}
+  {{- else }}
+  namespace: {{ .Release.Namespace }}
+  {{- end }}
+spec:
+  configPatches:
+    - applyTo: HTTP_FILTER
+      match:
+        context: ANY # inbound, outbound, and gateway
+        proxy:
+          proxyVersion: '1\.5.*'
+        listener:
+          filterChain:
+            filter:
+              name: "envoy.http_connection_manager"
+      patch:
+        operation: INSERT_BEFORE
+        value:
+          name: envoy.filters.http.wasm
+          config:
+            config:
+              configuration: envoy.wasm.metadata_exchange
+              vm_config:
+                runtime: envoy.wasm.runtime.null
+                code:
+                  local:
+                    inline_string: envoy.wasm.stats
+---
+{{- if .Values.telemetry.v2.prometheus.enabled }}
+apiVersion: networking.istio.io/v1alpha3
+kind: EnvoyFilter
+metadata:
+  name: stats-filter-1.5
+  {{- if .Values.global.configRootNamespace }}
+  namespace: {{ .Values.global.configRootNamespace }}
+  {{- else }}
+  namespace: {{ .Release.Namespace }}
+  {{- end }}
+spec:
+  configPatches:
+    - applyTo: HTTP_FILTER
+      match:
+        context: SIDECAR_OUTBOUND
+        proxy:
+          proxyVersion: '1\.5.*'
+        listener:
+          filterChain:
+            filter:
+              name: "envoy.http_connection_manager"
+              subFilter:
+                name: "envoy.router"
+      patch:
+        operation: INSERT_BEFORE
+        value:
+          name: envoy.filters.http.wasm
+          config:
+            config:
+              root_id: stats_outbound
+              configuration: |
+                {
+                  "debug": "false",
+                  "stat_prefix": "istio",
+                }
+              vm_config:
+                vm_id: stats_outbound
+                runtime: envoy.wasm.runtime.null
+                code:
+                  local:
+                    inline_string: envoy.wasm.stats
+    - applyTo: HTTP_FILTER
+      match:
+        context: SIDECAR_INBOUND
+        proxy:
+          proxyVersion: '1\.5.*'
+        listener:
+          filterChain:
+            filter:
+              name: "envoy.http_connection_manager"
+              subFilter:
+                name: "envoy.router"
+      patch:
+        operation: INSERT_BEFORE
+        value:
+          name: envoy.filters.http.wasm
+          config:
+            config:
+              root_id: stats_inbound
+              configuration: |
+                {
+                  "debug": "false",
+                  "stat_prefix": "istio",
+                }
+              vm_config:
+                vm_id: stats_inbound
+                runtime: envoy.wasm.runtime.null
+                code:
+                  local:
+                    inline_string: envoy.wasm.stats
+    - applyTo: HTTP_FILTER
+      match:
+        context: GATEWAY
+        proxy:
+          proxyVersion: '1\.5.*'
+        listener:
+          filterChain:
+            filter:
+              name: "envoy.http_connection_manager"
+              subFilter:
+                name: "envoy.router"
+      patch:
+        operation: INSERT_BEFORE
+        value:
+          name: envoy.filters.http.wasm
+          config:
+            config:
+              root_id: stats_outbound
+              configuration: |
+                {
+                  "debug": "false",
+                  "stat_prefix": "istio",
+                }
+              vm_config:
+                vm_id: stats_outbound
+                runtime: envoy.wasm.runtime.null
+                code:
+                  local:
+                    inline_string: envoy.wasm.stats
+---
+{{- end }}
+
+{{- if .Values.telemetry.v2.stackdriver.enabled }}
+apiVersion: networking.istio.io/v1alpha3
+kind: EnvoyFilter
+metadata:
+  name: stackdriver-filter-1.5
+  {{- if .Values.global.configRootNamespace }}
+  namespace: {{ .Values.global.configRootNamespace }}
+  {{- else }}
+  namespace: {{ .Release.Namespace }}
+  {{- end }}
+spec:
+  configPatches:
+    - applyTo: HTTP_FILTER
+      match:
+        context: SIDECAR_OUTBOUND
+        proxy:
+          proxyVersion: '1\.5.*'
+        listener:
+          filterChain:
+            filter:
+              name: "envoy.http_connection_manager"
+              subFilter:
+                name: "envoy.router"
+      patch:
+        operation: INSERT_BEFORE
+        value:
+          name: envoy.filters.http.wasm
+          config:
+            config:
+              root_id: stackdriver_outbound
+              configuration: |
+                {{- if not .Values.telemetry.v2.stackdriver.configOverride }}
+                {"enable_mesh_edges_reporting": {{ .Values.telemetry.v2.stackdriver.topology }}, "disable_server_access_logging": {{ not .Values.telemetry.v2.stackdriver.logging }}, "meshEdgesReportingDuration": "600s"}
+                {{- else }}
+                {{ toJson .Values.telemetry.v2.stackdriver.configOverride | indent 8 }}
+                {{- end }}
+              vm_config:
+                vm_id: stackdriver_outbound
+                runtime: envoy.wasm.runtime.null
+                code:
+                  local: { inline_string: envoy.wasm.null.stackdriver }
+    - applyTo: HTTP_FILTER
+      match:
+        context: SIDECAR_INBOUND
+        proxy:
+          proxyVersion: '1\.5.*'
+        listener:
+          filterChain:
+            filter:
+              name: "envoy.http_connection_manager"
+              subFilter:
+                name: "envoy.router"
+      patch:
+        operation: INSERT_BEFORE
+        value:
+          name: envoy.filters.http.wasm
+          config:
+            config:
+              root_id: stackdriver_inbound
+              configuration: |
+                {{- if not .Values.telemetry.v2.stackdriver.configOverride }}
+                {"enable_mesh_edges_reporting": {{ .Values.telemetry.v2.stackdriver.topology }}, "disable_server_access_logging": {{ not .Values.telemetry.v2.stackdriver.logging }}, "meshEdgesReportingDuration": "600s"}
+                {{- else }}
+                {{ toJson .Values.telemetry.v2.stackdriver.configOverride | indent 16 }}
+                {{- end }}
+              vm_config:
+                vm_id: stackdriver_inbound
+                runtime: envoy.wasm.runtime.null
+                code:
+                  local: { inline_string: envoy.wasm.null.stackdriver }
+    - applyTo: HTTP_FILTER
+      match:
+        context: GATEWAY
+        proxy:
+          proxyVersion: '1\.5.*'
+        listener:
+          filterChain:
+            filter:
+              name: "envoy.http_connection_manager"
+              subFilter:
+                name: "envoy.router"
+      patch:
+        operation: INSERT_BEFORE
+        value:
+          name: envoy.filters.http.wasm
+          config:
+            config:
+              root_id: stackdriver_outbound
+              configuration: |
+                {{- if not .Values.telemetry.v2.stackdriver.configOverride }}
+                {"enable_mesh_edges_reporting": {{ .Values.telemetry.v2.stackdriver.topology }}, "disable_server_access_logging": {{ not .Values.telemetry.v2.stackdriver.logging }}, "meshEdgesReportingDuration": "600s", "disable_host_header_fallback": true}
+                {{- else }}
+                {{ toJson .Values.telemetry.v2.stackdriver.configOverride | indent 16 }}
+                {{- end }}
+              vm_config:
+                vm_id: stackdriver_outbound
+                runtime: envoy.wasm.runtime.null
+                code:
+                  local: { inline_string: envoy.wasm.null.stackdriver }
+---
+{{- end}}
+{{- end}}
+`)
+
+func chartsIstioControlIstioDiscoveryTemplatesTelemetryv2_15YamlBytes() ([]byte, error) {
+	return _chartsIstioControlIstioDiscoveryTemplatesTelemetryv2_15Yaml, nil
+}
+
+func chartsIstioControlIstioDiscoveryTemplatesTelemetryv2_15Yaml() (*asset, error) {
+	bytes, err := chartsIstioControlIstioDiscoveryTemplatesTelemetryv2_15YamlBytes()
+	if err != nil {
+		return nil, err
+	}
+
+	info := bindataFileInfo{name: "charts/istio-control/istio-discovery/templates/telemetryv2_1.5.yaml", size: 0, mode: os.FileMode(0), modTime: time.Unix(0, 0)}
+	a := &asset{bytes: bytes, info: info}
+	return a, nil
+}
+
 var _chartsIstioControlIstioDiscoveryValuesYaml = []byte(`#.Values.pilot for discovery and mesh wide config
 
 ## Discovery Settings
@@ -13063,7 +13584,24 @@ telemetry:
   v2:
     # For Null VM case now. If enabled, will set disableMixerHttpReports to true and not define mixerReportServer
     # also enable metadata exchange and stats filter.
-    enabled: false
+    enabled: true
+    # Indicate if prometheus stats filter is enabled or not
+    prometheus:
+      enabled: true
+    # stackdriver filter settings.
+    stackdriver:
+      enabled: false
+      logging: false
+      monitoring: false
+      topology: false
+      #  configOverride parts give you the ability to override the low level configuration params passed to envoy filter.
+
+      configOverride: {}
+      #  e.g.
+      #  enable_mesh_edges_reporting: true
+      #  disable_server_access_logging: false
+      #  meshEdgesReportingDuration: 500s
+      #  disable_host_header_fallback: true
 `)
 
 func chartsIstioControlIstioDiscoveryValuesYamlBytes() ([]byte, error) {
@@ -13985,7 +14523,6 @@ spec:
   selector:
     matchLabels:
       app: policy
-      release: {{ .Release.Name }}
       istio: mixer
       istio-mixer-type: policy
 ---
@@ -30980,9 +31517,9 @@ data:
               generate_request_id: true
               http_filters:
               - config:
-                  default_destination_service: istio-telemetry.{{ .Release.Namespace }}.svc.cluster.local
+                  default_destination_service: istio-telemetry.{{ .Release.Namespace }}.svc.{{ .Values.global.proxy.clusterDomain }}
                   service_configs:
-                    istio-telemetry.{{ .Release.Namespace }}.svc.cluster.local:
+                    istio-telemetry.{{ .Release.Namespace }}.svc.{{ .Values.global.proxy.clusterDomain }}:
                       disable_check_calls: true
     {{"{{"}}- if .DisableReportCalls {{"}}"}}
                       disable_report_calls: true
@@ -30990,7 +31527,7 @@ data:
                       mixer_attributes:
                         attributes:
                           destination.service.host:
-                            string_value: istio-telemetry.{{ .Release.Namespace }}.svc.cluster.local
+                            string_value: istio-telemetry.{{ .Release.Namespace }}.svc.{{ .Values.global.proxy.clusterDomain }}
                           destination.service.uid:
                             string_value: istio://{{ .Release.Namespace }}/services/istio-telemetry
                           destination.service.name:
@@ -31019,7 +31556,7 @@ data:
                 virtual_hosts:
                 - domains:
                   - '*'
-                  name: istio-telemetry.{{ .Release.Namespace }}.svc.cluster.local
+                  name: istio-telemetry.{{ .Release.Namespace }}.svc.{{ .Values.global.proxy.clusterDomain }}
                   routes:
                   - decorator:
                       operation: Report
@@ -31060,9 +31597,9 @@ data:
               generate_request_id: true
               http_filters:
               - config:
-                  default_destination_service: istio-telemetry.{{ .Release.Namespace }}.svc.cluster.local
+                  default_destination_service: istio-telemetry.{{ .Release.Namespace }}.svc.{{ .Values.global.proxy.clusterDomain }}
                   service_configs:
-                    istio-telemetry.{{ .Release.Namespace }}.svc.cluster.local:
+                    istio-telemetry.{{ .Release.Namespace }}.svc.{{ .Values.global.proxy.clusterDomain }}:
                       disable_check_calls: true
     {{"{{"}}- if .DisableReportCalls {{"}}"}}
                       disable_report_calls: true
@@ -31070,7 +31607,7 @@ data:
                       mixer_attributes:
                         attributes:
                           destination.service.host:
-                            string_value: istio-telemetry.{{ .Release.Namespace }}.svc.cluster.local
+                            string_value: istio-telemetry.{{ .Release.Namespace }}.svc.{{ .Values.global.proxy.clusterDomain }}
                           destination.service.uid:
                             string_value: istio://{{ .Release.Namespace }}/services/istio-telemetry
                           destination.service.name:
@@ -31099,7 +31636,7 @@ data:
                 virtual_hosts:
                 - domains:
                   - '*'
-                  name: istio-telemetry.{{ .Release.Namespace }}.svc.cluster.local
+                  name: istio-telemetry.{{ .Release.Namespace }}.svc.{{ .Values.global.proxy.clusterDomain }}
                   routes:
                   - decorator:
                       operation: Report
@@ -31425,7 +31962,6 @@ spec:
   selector:
     matchLabels:
       app: telemetry
-      release: {{ .Release.Name }}
       istio: mixer
       istio-mixer-type: telemetry
 ---
@@ -31549,6 +32085,7 @@ spec:
     {{- if .Values.mixer.adapters.stackdriver.auth.appCredentials }}
     appCredentials: {{ .Values.mixer.adapters.stackdriver.auth.appCredentials }}
     {{- end }}
+    {{- if .Values.mixer.adapters.stackdriver.metrics.enabled }}
     metricInfo:
       server-request-count.instance.{{ .Release.Namespace }}:
         # Due to a bug in gogoproto deserialization, Enums in maps must be
@@ -31632,6 +32169,8 @@ spec:
         kind: 3 # CUMULATIVE
         value: 2 # INT64
         metric_type: "istio.io/service/client/sent_bytes_count"
+    {{- end }}
+    {{- if .Values.mixer.adapters.stackdriver.logging.enabled }}
     logInfo:
       server-accesslog-stackdriver.instance.{{ .Release.Namespace }}:
         labelNames:
@@ -31701,7 +32240,9 @@ spec:
         - sent_bytes
         - total_received_bytes
         - total_sent_bytes
+      {{- end }}
 ---
+{{- if .Values.mixer.adapters.stackdriver.metrics.enabled }}
 #################################################
 ############## Metric Config ####################
 #################################################
@@ -32230,7 +32771,9 @@ spec:
       namespace_name: source.workload.namespace | "unknown"
       location: '""'
       pod_name: source.name | "unknown"
+{{- end }}
 ---
+{{- if .Values.mixer.adapters.stackdriver.logging.enabled }}
 apiVersion: "config.istio.io/v1alpha2"
 kind: instance
 metadata:
@@ -32370,6 +32913,7 @@ spec:
   - handler: stackdriver
     instances:
     - server-tcp-accesslog-stackdriver
+{{- end }}
 ---
 {{- if .Values.mixer.adapters.stackdriver.tracer.enabled }}
 apiVersion: "config.istio.io/v1alpha2"
@@ -32518,6 +33062,12 @@ var _chartsIstioTelemetryMixerTelemetryValuesYaml = []byte(`mixer:
 
       contextGraph:
         enabled: false
+
+      logging:
+        enabled: true
+
+      metrics:
+        enabled: true
 
     # Setting this to false sets the useAdapterCRDs mixer startup argument to false
     useAdapterCRDs: false
@@ -32925,6 +33475,19 @@ data:
       - source_labels: [__meta_kubernetes_service_name, __meta_kubernetes_endpoint_port_name]
         action: keep
         regex: istio-citadel;http-monitoring
+
+    - job_name: 'sidecar-injector'
+
+      kubernetes_sd_configs:
+      - role: endpoints
+        namespaces:
+          names:
+          - {{ .Release.Namespace }}
+
+      relabel_configs:
+      - source_labels: [__meta_kubernetes_service_name, __meta_kubernetes_endpoint_port_name]
+        action: keep
+        regex: istio-sidecar-injector;http-monitoring
 
     # scrape config for API servers
     - job_name: 'kubernetes-apiservers'
@@ -33792,7 +34355,7 @@ spec:
   jobLabel: istio
   selector:
     matchExpressions:
-      - {key: istio, operator: In, values: [mixer,pilot,galley,citadel]}
+      - {key: istio, operator: In, values: [mixer,pilot,galley,citadel,sidecar-injector]}
   namespaceSelector:
     any: true
   endpoints:
@@ -34709,6 +35272,25 @@ spec:
   selector:
     app: jaeger
   type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jaeger-collector-headless
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: jaeger
+    jaeger-infra: collector-service
+    release: {{ .Release.Name }}
+spec:
+  ports:
+  - name: jaeger-collector-grpc
+    port: 14250
+    targetPort: 14250
+    protocol: TCP
+  selector:
+    app: jaeger
+  clusterIP: None
 ---
 apiVersion: v1
 kind: Service
@@ -37940,7 +38522,15 @@ spec:
     telemetry:
       enabled: true
       v2:
-        enabled: false
+        enabled: true
+        prometheus:
+          enabled: true
+        stackdriver:
+          enabled: false
+          logging: false
+          monitoring: false
+          topology: false
+          configOverride: {}
 
     mixer:
       adapters:
@@ -39281,6 +39871,8 @@ var _bindata = map[string]func() (*asset, error){
 	"charts/istio-control/istio-discovery/templates/service.yaml":                         chartsIstioControlIstioDiscoveryTemplatesServiceYaml,
 	"charts/istio-control/istio-discovery/templates/serviceaccount.yaml":                  chartsIstioControlIstioDiscoveryTemplatesServiceaccountYaml,
 	"charts/istio-control/istio-discovery/templates/telemetryv2.yaml":                     chartsIstioControlIstioDiscoveryTemplatesTelemetryv2Yaml,
+	"charts/istio-control/istio-discovery/templates/telemetryv2_1.4.yaml":                 chartsIstioControlIstioDiscoveryTemplatesTelemetryv2_14Yaml,
+	"charts/istio-control/istio-discovery/templates/telemetryv2_1.5.yaml":                 chartsIstioControlIstioDiscoveryTemplatesTelemetryv2_15Yaml,
 	"charts/istio-control/istio-discovery/values.yaml":                                    chartsIstioControlIstioDiscoveryValuesYaml,
 	"charts/istio-policy/Chart.yaml":                                                      chartsIstioPolicyChartYaml,
 	"charts/istio-policy/templates/_affinity.tpl":                                         chartsIstioPolicyTemplates_affinityTpl,
@@ -39594,6 +40186,8 @@ var _bintree = &bintree{nil, map[string]*bintree{
 					"service.yaml":             &bintree{chartsIstioControlIstioDiscoveryTemplatesServiceYaml, map[string]*bintree{}},
 					"serviceaccount.yaml":      &bintree{chartsIstioControlIstioDiscoveryTemplatesServiceaccountYaml, map[string]*bintree{}},
 					"telemetryv2.yaml":         &bintree{chartsIstioControlIstioDiscoveryTemplatesTelemetryv2Yaml, map[string]*bintree{}},
+					"telemetryv2_1.4.yaml":     &bintree{chartsIstioControlIstioDiscoveryTemplatesTelemetryv2_14Yaml, map[string]*bintree{}},
+					"telemetryv2_1.5.yaml":     &bintree{chartsIstioControlIstioDiscoveryTemplatesTelemetryv2_15Yaml, map[string]*bintree{}},
 				}},
 				"values.yaml": &bintree{chartsIstioControlIstioDiscoveryValuesYaml, map[string]*bintree{}},
 			}},

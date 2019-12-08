@@ -632,7 +632,15 @@ values:
   telemetry:
     enabled: true
     v2:
-      enabled: false
+      enabled: true
+      prometheus:
+        enabled: true
+      stackdriver:
+        configOverride: {}
+        enabled: false
+        logging: false
+        monitoring: false
+        topology: false
   tracing:
     enabled: false
     ingress:

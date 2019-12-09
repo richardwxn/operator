@@ -38042,9 +38042,10 @@ spec:
         # For Null VM case now. If enabled, will set disableMixerHttpReports to true and not define mixerReportServer
         # also enable metadata exchange and stats filter.
         enabled: false
-        # Indicate if prometheus stats filter is enabled or not
+        # prometheus stats filter settings.
         prometheus:
-          enabled: false
+          # stats filter would be enabled when telemetry and v2 is enabled.
+          enabled: true
         # stackdriver filter settings.
         stackdriver:
           enabled: false

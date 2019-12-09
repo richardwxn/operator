@@ -634,7 +634,7 @@ values:
     v2:
       enabled: false
       prometheus:
-        enabled: false
+        enabled: true
       stackdriver:
         configOverride: {}
         enabled: false

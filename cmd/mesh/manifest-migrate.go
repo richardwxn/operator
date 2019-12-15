@@ -19,6 +19,8 @@ import (
 	"fmt"
 	"path/filepath"
 
+	"istio.io/operator/pkg/helm"
+
 	"github.com/ghodss/yaml"
 	"github.com/gogo/protobuf/jsonpb"
 	"github.com/spf13/cobra"
@@ -31,17 +33,22 @@ import (
 )
 
 const (
-	defaultNamespace = "istio-system"
+	defaultNamespace   = "istio-system"
+	defaultProfileName = "default"
 )
 
 type manifestMigrateArgs struct {
 	// namespace is the namespace to get the in cluster configMap
 	namespace string
+	// profile is the base profile used when translating values.yaml
+	profile string
 }
 
 func addManifestMigrateFlags(cmd *cobra.Command, args *manifestMigrateArgs) {
 	cmd.PersistentFlags().StringVarP(&args.namespace, "namespace", "n", defaultNamespace,
 		" Default namespace for output IstioControlPlane CustomResource")
+	cmd.PersistentFlags().StringVarP(&args.profile, "profile", "p", defaultProfileName,
+		" Default base profile name")
 }
 
 func manifestMigrateCmd(rootArgs *rootArgs, mmArgs *manifestMigrateArgs) *cobra.Command {
@@ -62,7 +69,7 @@ func manifestMigrateCmd(rootArgs *rootArgs, mmArgs *manifestMigrateArgs) *cobra.
 				return migrateFromClusterConfig(rootArgs, mmArgs, l)
 			}
 
-			return migrateFromFiles(rootArgs, args, l)
+			return migrateFromFiles(rootArgs, args, mmArgs, l)
 		}}
 }
 
@@ -71,7 +78,7 @@ func valueFileFilter(path string) bool {
 }
 
 // migrateFromFiles handles migration for local values.yaml files
-func migrateFromFiles(rootArgs *rootArgs, args []string, l *Logger) error {
+func migrateFromFiles(rootArgs *rootArgs, args []string, mmArgs *manifestMigrateArgs, l *Logger) error {
 	initLogsOrExit(rootArgs)
 	value, err := util.ReadFilesWithFilter(args[0], valueFileFilter)
 	if err != nil {
@@ -81,21 +88,32 @@ func migrateFromFiles(rootArgs *rootArgs, args []string, l *Logger) error {
 		l.logAndPrint("no valid value.yaml file specified")
 		return nil
 	}
-	return translateFunc([]byte(value), l)
+	return translateFunc([]byte(value), mmArgs.profile, l)
 }
 
 // translateFunc translates the input values and output the result
-func translateFunc(values []byte, l *Logger) error {
+func translateFunc(values []byte, profile string, l *Logger) error {
 	ts, err := translate.NewReverseTranslator(binversion.OperatorBinaryVersion.MinorVersion)
 	if err != nil {
 		return fmt.Errorf("error creating values.yaml translator: %s", err)
 	}
 
-	isCPSpec, err := ts.TranslateFromValueToSpec(values)
+	translatedYAML, _, err := ts.TranslateFromValueToSpec(values)
 	if err != nil {
 		return fmt.Errorf("error translating values.yaml: %s", err)
 	}
-	isCP := &v1alpha2.IstioControlPlane{Spec: isCPSpec, Kind: "IstioControlPlane", ApiVersion: "install.istio.io/v1alpha2"}
+	profileYAML, err := genICPSFromProfile(profile, "")
+	if err != nil {
+		return fmt.Errorf("error generating profile yaml: %s", err)
+	}
+	mergedYAML, err := util.OverlayYAML(profileYAML, translatedYAML)
+
+	mergedICPS, err := unmarshalAndValidateICPS(mergedYAML, true, l)
+	if err != nil {
+		return err
+	}
+
+	isCP := &v1alpha2.IstioControlPlane{Spec: mergedICPS, Kind: "IstioControlPlane", ApiVersion: "install.istio.io/v1alpha2"}
 
 	ms := jsonpb.Marshaler{}
 	gotString, err := ms.MarshalToString(isCP)
@@ -103,13 +121,64 @@ func translateFunc(values []byte, l *Logger) error {
 		return fmt.Errorf("error marshaling translated IstioControlPlane: %s", err)
 	}
 
-	isCPYaml, _ := yaml.JSONToYAML([]byte(gotString))
+	isCPYaml, err := yaml.JSONToYAML([]byte(gotString))
 	if err != nil {
 		return fmt.Errorf("error converting JSON: %s\n%s", gotString, err)
 	}
 
 	l.print(string(isCPYaml) + "\n")
 	return nil
+}
+
+func genICPSFromProfile(profile string, ver string) (string, error) {
+	overlayYAML := ""
+
+	if ver != "" && !util.IsFilePath(profile) {
+		pkgPath, err := fetchInstallPackage(helm.InstallURLFromVersion(ver))
+		if err != nil {
+			return "", err
+		}
+		if helm.IsDefaultProfile(profile) {
+			profile = filepath.Join(pkgPath, helm.ProfilesFilePath, helm.DefaultProfileFilename)
+		} else {
+			profile = filepath.Join(pkgPath, helm.ProfilesFilePath, profile+YAMLSuffix)
+		}
+	}
+
+	// This contains the IstioControlPlane CR.
+	baseCRYAML, err := helm.ReadProfileYAML(profile)
+	if err != nil {
+		return "", fmt.Errorf("could not read the profile values for %s: %s", profile, err)
+	}
+
+	if !helm.IsDefaultProfile(profile) {
+		// Profile definitions are relative to the default profile, so read that first.
+		dfn, err := helm.DefaultFilenameForProfile(profile)
+		if err != nil {
+			return "", err
+		}
+		defaultYAML, err := helm.ReadProfileYAML(dfn)
+		if err != nil {
+			return "", fmt.Errorf("could not read the default profile values for %s: %s", dfn, err)
+		}
+		baseCRYAML, err = util.OverlayYAML(defaultYAML, baseCRYAML)
+		if err != nil {
+			return "", fmt.Errorf("could not overlay the profile over the default %s: %s", profile, err)
+		}
+	}
+
+	_, baseYAML, err := unmarshalAndValidateICP(baseCRYAML, true)
+	if err != nil {
+		return "", err
+	}
+
+	// Merge base and overlay.
+	mergedYAML, err := util.OverlayYAML(baseYAML, overlayYAML)
+	if err != nil {
+		return "", fmt.Errorf("could not overlay user config over base: %s", err)
+	}
+
+	return mergedYAML, nil
 }
 
 // migrateFromClusterConfig handles migration for in cluster config.
@@ -142,6 +211,6 @@ func migrateFromClusterConfig(rootArgs *rootArgs, mmArgs *manifestMigrateArgs, l
 	if err != nil {
 		return fmt.Errorf("error marshaling untyped map to YAML: %s", err)
 	}
-
-	return translateFunc(res, l)
+	// no concept of profile when translating in-cluster configs
+	return translateFunc(res, "", l)
 }

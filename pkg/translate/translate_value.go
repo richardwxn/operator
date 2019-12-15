@@ -182,7 +182,7 @@ func (t *ReverseTranslator) TranslateFromValueToSpec(values []byte) (translatedY
 // TranslateTree translates input value.yaml Tree to ControlPlaneSpec Tree.
 func (t *ReverseTranslator) TranslateTree(valueTree map[string]interface{}, cpSpecTree map[string]interface{}, path util.Path) error {
 	// translate enablement and namespace
-	err := t.setEnablementAndNamespacesFromValue(valueTree, cpSpecTree)
+	err := t.setEnablementFromValue(valueTree, cpSpecTree)
 	if err != nil {
 		return fmt.Errorf("error when translating enablement and namespace from value.yaml tree: %v", err)
 	}
@@ -210,9 +210,9 @@ func (t *ReverseTranslator) TranslateTree(valueTree map[string]interface{}, cpSp
 	return nil
 }
 
-// setEnablementAndNamespaces translates the enablement and namespace value of each component in the baseYAML values
+// setEnablementFromValue translates the enablement value of components in the values.yaml
 // tree, based on feature/component inheritance relationship.
-func (t *ReverseTranslator) setEnablementAndNamespacesFromValue(valueSpec map[string]interface{}, root map[string]interface{}) error {
+func (t *ReverseTranslator) setEnablementFromValue(valueSpec map[string]interface{}, root map[string]interface{}) error {
 	for cnv, cni := range t.ValuesToComponentName {
 		enabled, pathExist, err := name.IsComponentEnabledFromValue(cnv, valueSpec)
 		if err != nil {
@@ -247,21 +247,6 @@ func (t *ReverseTranslator) setEnablementAndNamespacesFromValue(valueSpec map[st
 		}
 	}
 
-	// set namespace
-	for vp, nsList := range t.NamespaceMapping {
-		namespace, err := name.NamespaceFromValue(vp, valueSpec)
-		if err != nil {
-			return err
-		}
-		if namespace == "" {
-			return nil
-		}
-		for _, ns := range nsList {
-			if err := tpath.WriteNode(root, util.ToYAMLPath(ns), namespace); err != nil {
-				return err
-			}
-		}
-	}
 	return nil
 }
 

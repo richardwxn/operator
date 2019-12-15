@@ -108,7 +108,8 @@ func translateFunc(values []byte, profile string, l *Logger) error {
 	}
 	mergedYAML, err := util.OverlayYAML(profileYAML, translatedYAML)
 
-	mergedICPS, err := unmarshalAndValidateICPS(mergedYAML, true, l)
+	mergedICPS := &v1alpha2.IstioControlPlaneSpec{}
+	err = util.UnmarshalWithJSONPB(mergedYAML, mergedICPS)
 	if err != nil {
 		return err
 	}

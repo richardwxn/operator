@@ -231,7 +231,6 @@ configManagement:
   enabled: true 
 security:
   components:
-    namespace: istio-system
     certManager:
       enabled: true
     nodeAgent:

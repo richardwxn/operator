@@ -114,6 +114,12 @@ message CertManagerConfig {
   string podDnsPolicy = 10;
 
   TypeMapStringInterface podDnsConfig = 11;
+
+  TypeSliceOfMapStringInterface podAntiAffinityLabelSelector = 12 [deprecated=true];
+
+  TypeSliceOfMapStringInterface podAntiAffinityTermLabelSelector = 13 [deprecated=true];
+
+  TypeSliceOfMapStringInterface tolerations = 14 [deprecated=true];
 }
 
 // Mirrors Resources for unmarshaling.

@@ -16,13 +16,6 @@ spec:
               maxUnavailable: 25%
           tolerations: []
     enabled: true
-  base:
-    components:
-      base:
-        enabled: true
-    enabled: true
-  cni:
-    enabled: false
   configManagement:
     components:
       galley:
@@ -44,7 +37,6 @@ spec:
       coreDNS:
         enabled: false
     enabled: false
-  defaultNamespace: istio-system
   gateways:
     components:
       egressGateway:
@@ -165,14 +157,6 @@ spec:
       telemetry:
         enabled: true
         k8s:
-          env:
-          - name: POD_NAMESPACE
-            valueFrom:
-              fieldRef:
-                apiVersion: v1
-                fieldPath: metadata.namespace
-          - name: GOMAXPROCS
-            value: "6"
           hpaSpec:
             maxReplicas: 5
             metrics:
@@ -221,13 +205,6 @@ spec:
               kind: Deployment
               name: istio-pilot
           nodeSelector: {}
-          readinessProbe:
-            httpGet:
-              path: /ready
-              port: 8080
-            initialDelaySeconds: 5
-            periodSeconds: 30
-            timeoutSeconds: 5
           replicaCount: 1
           resources:
             requests:
@@ -248,19 +225,14 @@ spec:
       replicaCount: 1
       tag: v0.6.2
       tolerations: []
-    clusterResources: true
     galley:
-      enableAnalysis: false
       image: galley
       podAntiAffinityLabelSelector: []
       podAntiAffinityTermLabelSelector: []
     gateways:
       istio-egressgateway:
-        autoscaleEnabled: true
         connectTimeout: 10s
         drainDuration: 45s
-        env:
-          ISTIO_META_ROUTER_MODE: sni-dnat
         podAntiAffinityLabelSelector: []
         podAntiAffinityTermLabelSelector: []
         ports:
@@ -284,11 +256,8 @@ spec:
           suffix: global
       istio-ingressgateway:
         applicationPorts: ""
-        autoscaleEnabled: true
         debug: info
         domain: ""
-        env:
-          ISTIO_META_ROUTER_MODE: sni-dnat
         externalIPs: []
         loadBalancerIP: ""
         loadBalancerSourceRanges: []
@@ -380,10 +349,8 @@ spec:
         amd64: 2
         ppc64le: 2
         s390x: 2
-      certificates: []
       configValidation: true
       controlPlaneSecurityEnabled: false
-      defaultNodeSelector: {}
       defaultPodDisruptionBudget:
         enabled: true
       defaultResources:
@@ -401,27 +368,18 @@ spec:
         gatewayName: ingressgateway
       localityLbSetting:
         enabled: true
-      logAsJson: false
       logging:
         level: default:info
       meshExpansion:
         enabled: false
         useILB: false
       meshID: ""
-      meshNetworks: {}
       monitoringPort: 15014
       mtls:
-        auto: true
         enabled: false
       multiCluster:
-        clusterName: ""
         enabled: false
-      network: ""
-      omitSidecarInjectorConfigMap: false
       oneNamespace: false
-      operatorManageWebhooks: false
-      outboundTrafficPolicy:
-        mode: ALLOW_ANY
       policyCheckFailOpen: false
       priorityClassName: ""
       proxy:
@@ -437,8 +395,6 @@ spec:
         enableCoreDumpImage: ubuntu:xenial
         envoyAccessLogService:
           enabled: false
-          host: null
-          port: null
           tcpKeepalive:
             interval: 10s
             probes: 3
@@ -448,23 +404,8 @@ spec:
             subjectAltNames: []
         envoyMetricsService:
           enabled: false
-          host: null
-          port: null
-          tcpKeepalive:
-            interval: 10s
-            probes: 3
-            time: 10s
-          tlsSettings:
-            caCertificates: null
-            clientCertificate: null
-            mode: DISABLE
-            privateKey: null
-            sni: null
-            subjectAltNames: []
         envoyStatsd:
           enabled: false
-          host: null
-          port: null
         excludeIPRanges: ""
         excludeInboundPorts: ""
         excludeOutboundPorts: ""
@@ -497,17 +438,8 @@ spec:
         tracer: zipkin
       proxy_init:
         image: proxy_init
-        resources:
-          limits:
-            cpu: 100m
-            memory: 50Mi
-          requests:
-            cpu: 10m
-            memory: 10Mi
       sds:
         enabled: false
-        token:
-          aud: istio-ca
         udsPath: ""
       tracer:
         datadog:
@@ -536,16 +468,6 @@ spec:
                 path: /var/lib/grafana/dashboards/istio
               orgId: 1
               type: file
-        dashboardproviders.yaml:
-          apiVersion: 1
-          providers:
-          - disableDeletion: false
-            folder: istio
-            name: istio
-            options:
-              path: /var/lib/grafana/dashboards/istio
-            orgId: 1
-            type: file
       datasources:
         datasources:
           yaml:
@@ -560,22 +482,14 @@ spec:
               orgId: 1
               type: prometheus
               url: http://prometheus:9090
-        datasources.yaml:
-          apiVersion: 1
-          datasources: null
       enabled: false
-      env: {}
-      envSecrets: {}
       image:
         repository: grafana/grafana
         tag: 6.1.6
       ingress:
-        annotations: null
         enabled: false
         hosts:
         - grafana.local
-        tls: null
-      nodeSelector: {}
       persist: false
       podAntiAffinityLabelSelector: []
       podAntiAffinityTermLabelSelector: []
@@ -586,10 +500,7 @@ spec:
         secretName: grafana
         usernameKey: username
       service:
-        annotations: {}
         externalPort: 3000
-        loadBalancerIP: null
-        loadBalancerSourceRanges: null
         name: http
         type: ClusterIP
       storageClassName: ""
@@ -607,8 +518,6 @@ spec:
     istiocoredns:
       coreDNSImage: coredns/coredns:1.1.2
       coreDNSPluginImage: istio/coredns-plugin:0.2-istio-1.1
-      coreDNSTag: 1.6.2
-      enabled: false
       podAntiAffinityLabelSelector: []
       podAntiAffinityTermLabelSelector: []
       replicaCount: 1
@@ -619,26 +528,18 @@ spec:
       dashboard:
         auth:
           strategy: login
-        grafanaURL: null
-        jaegerURL: null
-        passphraseKey: passphrase
         secretName: kiali
-        usernameKey: username
         viewOnlyMode: false
       enabled: false
       hub: quay.io/kiali
       image: kiali
       ingress:
-        annotations: null
         enabled: false
         hosts:
         - kiali.local
-        tls: null
-      nodeSelector: {}
       podAntiAffinityLabelSelector: []
       podAntiAffinityTermLabelSelector: []
       prometheusAddr: http://prometheus:9090
-      prometheusNamespace: null
       replicaCount: 1
       security:
         cert_file: /kiali-cert/cert-chain.pem
@@ -647,51 +548,23 @@ spec:
       tag: v1.1.0
       tolerations: []
     mixer:
-      adapters:
-        kubernetesenv:
-          enabled: true
-        prometheus:
-          enabled: true
-          metricsExpiryDuration: 10m
-        stackdriver:
-          auth:
-            apiKey: ""
-            appCredentials: false
-            serviceAccountPath: ""
-          enabled: false
-          tracer:
-            enabled: false
-            sampleProbability: 1
-        stdio:
-          enabled: false
-          outputAsJson: false
-        useAdapterCRDs: false
       policy:
         adapters:
           kubernetesenv:
             enabled: true
-          useAdapterCRDs: false
-        autoscaleEnabled: true
         image: mixer
         podAntiAffinityLabelSelector: []
         podAntiAffinityTermLabelSelector: []
-        sessionAffinityEnabled: false
       telemetry:
-        autoscaleEnabled: true
-        env:
-          GOMAXPROCS: "6"
         image: mixer
         loadshedding:
           latencyThreshold: 100ms
           mode: enforce
-        nodeSelector: {}
         podAntiAffinityLabelSelector: []
         podAntiAffinityTermLabelSelector: []
-        replicaCount: 1
         reportBatchMaxEntries: 100
         reportBatchMaxTime: 1s
         sessionAffinityEnabled: false
-        tolerations: []
         useMCP: true
     nodeagent:
       env:
@@ -704,34 +577,20 @@ spec:
       tolerations: []
     pilot:
       appNamespaces: []
-      autoscaleEnabled: true
-      autoscaleMax: 5
-      autoscaleMin: 1
       configMap: true
       configNamespace: istio-config
-      cpu:
-        targetAverageUtilization: 80
-      deploymentLabels: null
-      enableProtocolSniffingForInbound: false
-      enableProtocolSniffingForOutbound: true
-      env: {}
       image: pilot
       ingress:
         ingressClass: istio
         ingressControllerMode: "OFF"
         ingressService: istio-ingressgateway
       keepaliveMaxServerConnectionAge: 30m
-      meshNetworks:
-        networks: {}
-      nodeSelector: {}
       podAntiAffinityLabelSelector: []
       podAntiAffinityTermLabelSelector: []
       policy:
         enabled: false
-      replicaCount: 1
       telemetry:
         enabled: true
-      tolerations: []
       traceSampling: 1
       useMCP: true
     prometheus:
@@ -740,12 +599,9 @@ spec:
       hub: docker.io/prom
       image: prometheus
       ingress:
-        annotations: null
         enabled: false
         hosts:
         - prometheus.local
-        tls: null
-      nodeSelector: {}
       podAntiAffinityLabelSelector: []
       podAntiAffinityTermLabelSelector: []
       replicaCount: 1
@@ -770,7 +626,6 @@ spec:
         istio-pilot-service-account:
           istio-control: istio-pilot-service-account.istio-control
           istio-pilot11: istio-pilot-service-account.istio-system
-        istio-pilot-service-account.istio-control: istio-pilot.istio-control
         istio-sidecar-injector-service-account:
           istio-control: istio-sidecar-injector.istio-control.svc
           istio-control-master: istio-sidecar-injector.istio-control-master.svc
@@ -790,24 +645,14 @@ spec:
       image: sidecar_injector
       injectLabel: istio-injection
       neverInjectSelector: []
-      objectSelector:
-        autoInject: true
-        enabled: false
       podAntiAffinityLabelSelector: []
       podAntiAffinityTermLabelSelector: []
       rewriteAppHTTPProbe: false
       selfSigned: false
-    telemetry:
-      enabled: true
-      v2:
-        enabled: false
     tracing:
       enabled: false
       ingress:
-        annotations: null
         enabled: false
-        hosts: null
-        tls: null
       jaeger:
         accessMode: ReadWriteMany
         hub: docker.io/jaegertracing
@@ -818,25 +663,10 @@ spec:
         spanStorageType: badger
         storageClassName: ""
         tag: 1.12
-      nodeSelector: {}
-      opencensus:
-        exporters:
-          stackdriver:
-            enable_tracing: true
-        hub: docker.io/omnition
-        resources:
-          limits:
-            cpu: "1"
-            memory: 2Gi
-          requests:
-            cpu: 200m
-            memory: 400Mi
-        tag: 0.1.9
       podAntiAffinityLabelSelector: []
       podAntiAffinityTermLabelSelector: []
       provider: jaeger
       service:
-        annotations: {}
         externalPort: 9411
         name: http
         type: ClusterIP
@@ -858,5 +688,4 @@ spec:
             cpu: 150m
             memory: 900Mi
         tag: 2.14.2
-    version: ""
 

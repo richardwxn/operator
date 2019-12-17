@@ -187,11 +187,11 @@ values:
     controlPlaneSecurityEnabled: false
     mtls:
       enabled: false
+    proxy:
+      readinessInitialDelaySeconds: 2
   pilot:
     image: pilot
     traceSampling: 1
-  proxy:
-    readinessInitialDelaySeconds: 2
     podAntiAffinityLabelSelector:
     - key: istio
       operator: In

@@ -16,6 +16,11 @@ spec:
               maxUnavailable: 25%
           tolerations: []
     enabled: true
+  cni:
+    components:
+      cni:
+        enabled: false
+    enabled: false
   configManagement:
     components:
       galley:
@@ -225,6 +230,15 @@ spec:
       replicaCount: 1
       tag: v0.6.2
       tolerations: []
+    cni:
+      cniBinDir: /opt/cni/bin
+      cniConfDir: /etc/cni/net.d
+      excludeNamespaces:
+      - istio-system
+      hub: gcr.io/istio-release
+      logLevel: info
+      pullPolicy: Always
+      tag: master-latest-daily
     galley:
       image: galley
       podAntiAffinityLabelSelector: []
@@ -505,16 +519,6 @@ spec:
         type: ClusterIP
       storageClassName: ""
       tolerations: []
-    istio_cni:
-      cniBinDir: /opt/cni/bin
-      cniConfDir: /etc/cni/net.d
-      enabled: false
-      excludeNamespaces:
-      - istio-system
-      hub: gcr.io/istio-release
-      logLevel: info
-      pullPolicy: Always
-      tag: master-latest-daily
     istiocoredns:
       coreDNSImage: coredns/coredns:1.1.2
       coreDNSPluginImage: istio/coredns-plugin:0.2-istio-1.1

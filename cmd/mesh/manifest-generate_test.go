@@ -148,7 +148,7 @@ func TestManifestGenerateOrdered(t *testing.T) {
 		}
 
 		if got1 != got2 {
-			t.Errorf("stable_manifest: Manifest generation is not producing stable text output.")
+			t.Errorf("stable_manifest: Manifest geinneration is not producing stable text output.")
 		}
 	})
 }

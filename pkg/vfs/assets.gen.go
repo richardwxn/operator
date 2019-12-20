@@ -40465,6 +40465,8 @@ kubernetesMapping:
     outPath: "[{{.ResourceType}}:{{.ResourceName}}].spec.strategy"
   "{{.FeatureName}}.Components.{{.ComponentName}}.K8S.Tolerations":
     outPath: "[{{.ResourceType}}:{{.ResourceName}}].spec.template.spec.tolerations"
+  "{{.FeatureName}}.Components.{{.ComponentName}}.K8S.Service":
+    outPath: "[Service:{{.ResourceName}}].spec"
 toFeature:
     Base:               Base
     Pilot:              TrafficManagement

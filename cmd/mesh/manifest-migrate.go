@@ -98,7 +98,7 @@ func translateFunc(values []byte, l *logger) {
 	translatedICPS := &v1alpha2.IstioControlPlaneSpec{}
 	err = util.UnmarshalWithJSONPB(translatedYAML, translatedICPS)
 	if err != nil {
-		return err
+		l.logAndFatal("error unmarshaling translated IstioControlPlane YAML: ", err.Error())
 	}
 
 	isCP := &v1alpha2.IstioControlPlane{Spec: translatedICPS, Kind: "IstioControlPlane", ApiVersion: "install.istio.io/v1alpha2"}
@@ -144,5 +144,5 @@ func migrateFromClusterConfig(rootArgs *rootArgs, mmArgs *manifestMigrateArgs, l
 		l.logAndFatal("error marshaling untyped map to YAML: ", err.Error())
 	}
 
-	return translateFunc(res, l)
+	translateFunc(res, l)
 }

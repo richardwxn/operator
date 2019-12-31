@@ -56,8 +56,6 @@ const (
 	// Operator components
 	IstioOperatorComponentName      ComponentName = "IstioOperator"
 	IstioOperatorCustomResourceName ComponentName = "IstioOperatorCustomResource"
-
-
 )
 
 var (
@@ -74,9 +72,10 @@ var (
 		CNIComponentName,
 	}
 	allComponentNamesMap = make(map[ComponentName]bool)
-	// TODO: merge this with the componentMaps defined in translateConfig
+
 	// ComponentNameToHelmComponentPath defines mapping from component name to helm component root path.
-	ComponentNameToHelmComponentPath = map[ComponentName]string {
+	// TODO: merge this with the componentMaps defined in translateConfig
+	ComponentNameToHelmComponentPath = map[ComponentName]string{
 		PilotComponentName:           "pilot",
 		GalleyComponentName:          "galley",
 		SidecarInjectorComponentName: "sidecarInjectorWebhook",
@@ -119,9 +118,15 @@ func (cn ComponentName) IsAddon() bool {
 // IsComponentEnabledInSpec assumes that controlPlaneSpec has been validated.
 // TODO: remove extra validations when comfort level is high enough.
 func IsComponentEnabledInSpec(componentName ComponentName, controlPlaneSpec *v1alpha1.IstioOperatorSpec) (bool, error) {
-	// if component enablement path is defined and found in Values part, return it first, otherwise check from ISCP.
+	// for addon components, enablement is defined in values part.
+	if componentName == AddonComponentName {
+		enabled, _, err := IsComponentEnabledFromValue(string(componentName), controlPlaneSpec.Values)
+		return enabled, err
+	}
+	// for Istio components, check whether override path exist in values part first then ISCP.
 	valuePath := ComponentNameToHelmComponentPath[componentName]
 	enabled, pathExist, err := IsComponentEnabledFromValue(valuePath, controlPlaneSpec.Values)
+	// only return value when path exists
 	if err == nil && pathExist {
 		return enabled, nil
 	}
@@ -165,7 +170,7 @@ func IsComponentEnabledFromValue(valuePath string, valueSpec map[string]interfac
 			return false, false, err
 		}
 		if found {
-			return true, true, nil
+			return true, false, nil
 		}
 		return false, false, nil
 	}

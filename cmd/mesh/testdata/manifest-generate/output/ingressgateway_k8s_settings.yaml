@@ -214,6 +214,9 @@ metadata:
 spec:
   externalTrafficPolicy: Local
   ports:
+  - name: foo
+    port: 1234
+    targetPort: 1234
   - name: status-port
     port: 15020
     targetPort: 15020

@@ -121,6 +121,8 @@ spec:
           value: kubernetes://apis/apps/v1/namespaces/istio-control/deployments/istio-ingressgateway
         - name: ISTIO_META_MESH_ID
           value: cluster.local
+        - name: ISTIO_AUTO_MTLS_ENABLED
+          value: "true"
         - name: ISTIO_META_POD_NAME
           valueFrom:
             fieldRef:

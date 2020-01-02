@@ -16,6 +16,7 @@ package translate
 
 import (
 	"fmt"
+	"istio.io/operator/pkg/vfs"
 
 	"github.com/ghodss/yaml"
 
@@ -39,8 +40,6 @@ type ReverseTranslator struct {
 	KubernetesMapping map[string]*Translation
 	// ValuesToFeatureComponentName defines mapping from value path to feature and component name in API paths.
 	ValuesToComponentName map[string]name.ComponentName
-	// NamespaceMapping maps namespace defined in value.yaml to that in API spec. Not every components have namespace defined in value.yaml tree.
-	NamespaceMapping map[string][]string
 }
 
 var (
@@ -65,12 +64,6 @@ var (
 			},
 			KubernetesMapping:     map[string]*Translation{},
 			ValuesToComponentName: map[string]name.ComponentName{},
-			NamespaceMapping: map[string][]string{
-				"global.istioNamespace":     {"security.components.namespace"},
-				"global.telemetryNamespace": {"telemetry.components.namespace"},
-				"global.policyNamespace":    {"policy.components.namespace"},
-				"global.configNamespace":    {"configManagement.components.namespace"},
-			},
 		},
 	}
 	// Component enablement mapping. Ex "{{.ValueComponent}}.enabled": {"{{.FeatureName}}.Components.{{.ComponentName}}.enabled}", nil},
@@ -142,8 +135,10 @@ func NewReverseTranslator(minorVersion version.MinorVersion) (*ReverseTranslator
 }
 
 func newReverseTranslator(minorVersion version.MinorVersion, fallbackNum uint) (*ReverseTranslator, error) {
-	t := ReverseTranslators[minorVersion]
-	if t == nil {
+	v := fmt.Sprintf("%s.%d", minorVersion.MajorVersion, minorVersion.Minor)
+	f := "translateConfig/reverseTranslateConfig-" + v + ".yaml"
+	b, err := vfs.ReadFile(f)
+	if err != nil {
 		if fallbackNum > 0 && minorVersion.Minor > 0 {
 			major := minorVersion.Major
 			minor := minorVersion.Minor - 1
@@ -154,12 +149,17 @@ func newReverseTranslator(minorVersion version.MinorVersion, fallbackNum uint) (
 		}
 		return nil, fmt.Errorf("no value.yaml translator available for version %s", minorVersion)
 	}
-	err := t.initAPIAndComponentMapping(minorVersion)
+	rt := &ReverseTranslator{}
+	err = yaml.Unmarshal(b, rt)
+	if err != nil {
+		return nil, fmt.Errorf("could not Unmarshal reverseTranslateConfig file %s: %s", f, err)
+	}
+	err = rt.initAPIAndComponentMapping(minorVersion)
 	if err != nil {
 		return nil, fmt.Errorf("error initialize API mapping: %s", err)
 	}
-	t.Version = minorVersion
-	return t, nil
+	rt.Version = minorVersion
+	return rt, nil
 }
 
 // TranslateFromValueToSpec translates from values.yaml value to IstioControlPlaneSpec.

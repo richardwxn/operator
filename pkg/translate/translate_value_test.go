@@ -365,8 +365,8 @@ func TestNewReverseTranslator(t *testing.T) {
 		{
 			name:         "version 1.5",
 			minorVersion: version.NewMinorVersion(1, 5),
-			wantVer: "1.5",
-			wantErr: false,
+			wantVer:      "1.5",
+			wantErr:      false,
 		},
 		{
 			name:         "version 1.6",

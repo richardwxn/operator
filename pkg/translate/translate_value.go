@@ -16,7 +16,6 @@ package translate
 
 import (
 	"fmt"
-	"istio.io/operator/pkg/vfs"
 
 	"github.com/ghodss/yaml"
 
@@ -25,6 +24,7 @@ import (
 	"istio.io/operator/pkg/tpath"
 	"istio.io/operator/pkg/util"
 	"istio.io/operator/pkg/version"
+	"istio.io/operator/pkg/vfs"
 	"istio.io/pkg/log"
 )
 

@@ -227,8 +227,8 @@ func TestNewTranslator(t *testing.T) {
 		{
 			name:         "version 1.6",
 			minorVersion: version.NewMinorVersion(1, 6),
-			wantVer:      "",
-			wantErr:      true,
+			wantVer:      "1.5",
+			wantErr:      false,
 		},
 	}
 	for _, tt := range tests {

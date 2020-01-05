@@ -33,39 +33,16 @@ type ReverseTranslator struct {
 	Version version.MinorVersion
 	// APIMapping is Values.yaml path to API path mapping using longest prefix match. If the path is a non-leaf node,
 	// the output path is the matching portion of the path, plus any remaining output path.
-	APIMapping map[string]*Translation
+	APIMapping map[string]*Translation `yaml:"apiMapping,omitempty"`
 	// KubernetesPatternMapping defines mapping patterns from k8s resource paths to IstioControlPlane API paths.
-	KubernetesPatternMapping map[string]string
+	KubernetesPatternMapping map[string]string `yaml:"kubernetesPatternMapping,omitempty"`
 	// KubernetesMapping defines actual k8s mappings generated from KubernetesPatternMapping before each translation.
-	KubernetesMapping map[string]*Translation
+	KubernetesMapping map[string]*Translation `yaml:"kubernetesMapping,omitempty"`
 	// ValuesToFeatureComponentName defines mapping from value path to feature and component name in API paths.
-	ValuesToComponentName map[string]name.ComponentName
+	ValuesToComponentName map[string]name.ComponentName `yaml:"valuesToComponentName,omitempty"`
 }
 
 var (
-	// ReverseTranslators maps a minor version to a corresponding ReverseTranslator.
-	ReverseTranslators = map[version.MinorVersion]*ReverseTranslator{
-		version.NewMinorVersion(1, 4): {
-			APIMapping: map[string]*Translation{},
-			KubernetesPatternMapping: map[string]string{
-				"{{.ValueComponentName}}.env":                   "{{.FeatureName}}.Components.{{.ComponentName}}.K8s.Env",
-				"{{.ValueComponentName}}.autoscaleEnabled":      "{{.FeatureName}}.Components.{{.ComponentName}}.K8s.HpaSpec",
-				"{{.ValueComponentName}}.imagePullPolicy":       "{{.FeatureName}}.Components.{{.ComponentName}}.K8s.ImagePullPolicy",
-				"{{.ValueComponentName}}.nodeSelector":          "{{.FeatureName}}.Components.{{.ComponentName}}.K8s.NodeSelector",
-				"{{.ValueComponentName}}.tolerations":           "{{.FeatureName}}.Components.{{.ComponentName}}.K8s.Tolerations",
-				"{{.ValueComponentName}}.podDisruptionBudget":   "{{.FeatureName}}.Components.{{.ComponentName}}.K8s.PodDisruptionBudget",
-				"{{.ValueComponentName}}.podAnnotations":        "{{.FeatureName}}.Components.{{.ComponentName}}.K8s.PodAnnotations",
-				"{{.ValueComponentName}}.priorityClassName":     "{{.FeatureName}}.Components.{{.ComponentName}}.K8s.PriorityClassName",
-				"{{.ValueComponentName}}.readinessProbe":        "{{.FeatureName}}.Components.{{.ComponentName}}.K8s.ReadinessProbe",
-				"{{.ValueComponentName}}.replicaCount":          "{{.FeatureName}}.Components.{{.ComponentName}}.K8s.ReplicaCount",
-				"{{.ValueComponentName}}.resources":             "{{.FeatureName}}.Components.{{.ComponentName}}.K8s.Resources",
-				"{{.ValueComponentName}}.rollingMaxSurge":       "{{.FeatureName}}.Components.{{.ComponentName}}.K8s.Strategy",
-				"{{.ValueComponentName}}.rollingMaxUnavailable": "{{.FeatureName}}.Components.{{.ComponentName}}.K8s.Strategy",
-			},
-			KubernetesMapping:     map[string]*Translation{},
-			ValuesToComponentName: map[string]name.ComponentName{},
-		},
-	}
 	// Component enablement mapping. Ex "{{.ValueComponent}}.enabled": {"{{.FeatureName}}.Components.{{.ComponentName}}.enabled}", nil},
 	// Feature enablement mapping. Ex: "{{.ValueComponent}}.enabled": {"{{.FeatureName}}.enabled}", nil},
 	componentEnablementPattern = "{{.FeatureName}}.Components.{{.ComponentName}}.Enabled"
@@ -86,6 +63,9 @@ func (t *ReverseTranslator) initAPIAndComponentMapping(vs version.MinorVersion) 
 	if err != nil {
 		return err
 	}
+	t.APIMapping = make(map[string]*Translation)
+	t.KubernetesMapping = make(map[string]*Translation)
+	t.ValuesToComponentName = make(map[string]name.ComponentName)
 	for valKey, outVal := range ts.APIMapping {
 		t.APIMapping[outVal.OutPath] = &Translation{valKey, nil}
 	}
